@@ -14,13 +14,30 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_SHARED_LIBS ON)                     # ON-SHARED 生成SHARED; OFF-STATIC 生成lib; https://ifmet.cn/posts/29f14999/
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+set(qt_moduls Widgets)                        # Network Multimedia WebSockets
+set(qt_version_moduls)
+foreach(it ${qt_moduls})
+    list(APPEND qt_version_moduls Qt${QT_VERSION_MAJOR}::${it})
+    message("--->qt_moduls:" Qt${QT_VERSION_MAJOR}::${it})
+endforeach()
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${qt_moduls})
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls})
 
 set(src_files
+    # base
     include/xwidgets_global.h
     include/xwidgets.h
-    source/xwidgets.cpp
+    include/xtextwidget.h
+    include/chatinputedit.h
+    include/xkeysequenceedit.h
+    source/base/xwidgets.cpp
+    source/base/xtextwidget.cpp
+    source/base/chatinputedit.cpp
+    source/base/xkeysequenceedit.cpp
+
+    # composition
+    # source/composition/xx
 )
 
 set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                              # default root path curr path （CMakeList.txt）
@@ -31,7 +48,8 @@ source_group(TREE ${src_root_path} FILES ${source_lists})
 
 add_library(${project_name} ${src_files})
 
-target_link_libraries(${project_name} PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)     # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
+target_link_libraries(${project_name} PRIVATE ${qt_version_moduls})
 target_compile_definitions(${project_name} PRIVATE XWIDGETS_LIBRARY)
 
 

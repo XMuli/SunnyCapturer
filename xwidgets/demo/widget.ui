@@ -6,14 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>730</width>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>XWidgetsDemo</string>
   </property>
+  <widget class="ChatInputEdit" name="plainTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>320</y>
+     <width>591</width>
+     <height>91</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ChatInputEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>chatinputedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

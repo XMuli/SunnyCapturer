@@ -2,7 +2,6 @@
 #define XWIDGETS_H
 
 #include "xwidgets_global.h"
-#include <QDebug>
 
 // 对于类， .h 声明， .cpp 实现; 在外部函数中，是可以直接调用的；
 class XWIDGETS_EXPORT Xwidgets

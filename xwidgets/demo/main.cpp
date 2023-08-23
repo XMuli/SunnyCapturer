@@ -1,8 +1,8 @@
-#include "widget.h"
 #include <QApplication>
 #include <QDebug>
+#include "widget.h"
 #include "xwidgets.h"
-//#include "xwidgets_global.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -19,5 +19,6 @@ int main(int argc, char *argv[])
 
     Widget w;
     w.show();
+
     return a.exec();
 }
