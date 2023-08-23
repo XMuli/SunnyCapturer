@@ -12,16 +12,22 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(BUILD_SHARED_LIBS ON)                                            # ON-SHARED 生成SHARED; OFF-STATIC 生成lib; https://ifmet.cn/posts/29f14999/
+set(BUILD_SHARED_LIBS ON)                     # ON-SHARED 生成SHARED; OFF-STATIC 生成lib; https://ifmet.cn/posts/29f14999/
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 set(src_files
-    xwidgets_global.h
-    xwidgets.cpp
-    xwidgets.h
+    include/xwidgets_global.h
+    include/xwidgets.h
+    source/xwidgets.cpp
 )
+
+set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                              # default root path curr path （CMakeList.txt）
+file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
+    "${src_root_path}/*.cpp"
+    "${src_root_path}/*.h")
+source_group(TREE ${src_root_path} FILES ${source_lists})
 
 add_library(${project_name} ${src_files})
 

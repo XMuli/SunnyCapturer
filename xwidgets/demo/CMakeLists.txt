@@ -23,10 +23,21 @@ set(src_files
     widget.ui
 )
 
+set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                              # default root path curr path （CMakeList.txt）
+file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
+    "${src_root_path}/*.cpp"
+    "${src_root_path}/*.h")
+source_group(TREE ${src_root_path} FILES ${source_lists})
+
+
+# 调用动态库 xwidgetsd 【debug 版本，4步骤】
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src/include/)                          # ①设置头文件目录
+link_directories(${trage_runtime_output_dir})                                             # ②添加链接库路径
+# 这部分要在 add_executable 之前写，然后在 target_link_libraries链接时候加上此 dll 的名字；有时候若是编译失败，还需要将 .lib 放置与和 dll 的同一个路径上;
+
 add_executable(${project_name} ${src_files} )
-
-
-target_link_libraries(${project_name} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+add_dependencies(${project_name} xwidgets)                                                # ③添加依赖顺序，确保先构建依赖，此处是 工程名称，而非 dll 名称(没有后缀d)
+target_link_libraries(${project_name} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets xwidgetsd)   # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
 
 set_target_properties(${project_name} PROPERTIES
     ${BUNDLE_ID_OPTION}
@@ -42,6 +53,10 @@ if(MSVC)
     set_target_properties(${project_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${trage_runtime_output_dir}")
     set_target_properties(${project_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${trage_runtime_output_dir}")
     set_target_properties(${project_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${trage_runtime_output_dir}")
+    set_target_properties(${project_name} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${trage_archive_output_dir}")
+    set_target_properties(${project_name} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${trage_archive_output_dir}")
+    set_target_properties(${project_name} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_MINSIZEREL "${trage_archive_output_dir}")
+    set_target_properties(${project_name} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELWITHDEBINFO "${trage_archive_output_dir}")
 
     # 开启 MSVC 终端上的中文不乱码
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
