@@ -1,6 +1,7 @@
 #ifndef COLORPICKER_H
 #define COLORPICKER_H
 
+#include "xwidget_global.h"
 #include <QColor>
 #include <QWidget>
 #include <QPointer>

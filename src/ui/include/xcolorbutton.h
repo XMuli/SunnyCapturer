@@ -1,6 +1,7 @@
 #ifndef XCOLORBUTTON_H
 #define XCOLORBUTTON_H
 
+#include "xwidget_global.h"
 #include <QToolButton>
 #include <QPainter>
 #include <QPaintEvent>

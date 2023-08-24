@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>General</class>
- <widget class="QWidget" name="General">
+ <class>Paste</class>
+ <widget class="QWidget" name="Paste">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>763</width>
-    <height>513</height>
+    <width>745</width>
+    <height>356</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,56 +41,69 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Maximum size:</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="cbbLanguage">
+       <widget class="QSpinBox" name="sbOpacity">
         <property name="minimumSize">
          <size>
-          <width>100</width>
+          <width>80</width>
           <height>0</height>
          </size>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="cbbLogLevel"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="btnFont">
-        <property name="text">
-         <string/>
+        <property name="suffix">
+         <string notr="true">%</string>
         </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Font:</string>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="singleStep">
+         <number>10</number>
+        </property>
+        <property name="value">
+         <number>100</number>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Language:</string>
+         <string>Opacity:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="cbAutostart">
-        <property name="text">
-         <string>Autostart</string>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="sbMaxSize">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Log Level:</string>
+        <property name="suffix">
+         <string notr="true">px</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="singleStep">
+         <number>50</number>
+        </property>
+        <property name="value">
+         <number>10000</number>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
-       <spacer name="horizontalSpacer_2">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -113,7 +126,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>414</height>
+       <height>303</height>
       </size>
      </property>
     </spacer>

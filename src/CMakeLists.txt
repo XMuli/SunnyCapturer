@@ -25,16 +25,21 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls})
 
 set(custom_ui_files
     #  h common_widgets
+    ui/include/xwidget_global.h
     ui/include/xcolorbutton.h
+    ui/include/xkeysequenceedit.h
     # h composite_widgets
     ui/include/colorpicker.h
     ui/include/resetui.h
     ui/include/general.h
     ui/include/interface.h
     ui/include/output.h
-
+    ui/include/paste.h
+    ui/include/hotkeys.h
+    ui/include/about.h
     #  cpp common_widgets
     ui/common_widgets/xcolorbutton.cpp
+    ui/common_widgets/xkeysequenceedit.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -45,6 +50,12 @@ set(custom_ui_files
     ui/composite_widgets/interface.ui
     ui/composite_widgets/output.cpp
     ui/composite_widgets/output.ui
+    ui/composite_widgets/hotkeys.cpp
+    ui/composite_widgets/hotkeys.ui
+    ui/composite_widgets/about.cpp
+    ui/composite_widgets/about.ui
+    ui/composite_widgets/paste.cpp
+    ui/composite_widgets/paste.ui
 )
 
 set(src_files
@@ -55,6 +66,9 @@ set(src_files
     ui/setting/abssettingui.h
     ui/setting/abssettingui.cpp
     ui/setting/abssettingui.ui
+    ui/screenshot/screenshot.h
+    ui/screenshot/screenshot.cpp
+
     resources.qrc
 )
 
@@ -63,7 +77,7 @@ file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
     "${src_root_path}/*.cpp"
     "${src_root_path}/*.h")
 source_group(TREE ${src_root_path} FILES ${source_lists})
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/setting/composite_widgets")            # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")            # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
 
 add_executable(${project_name}
     ${src_files}
@@ -72,6 +86,7 @@ add_executable(${project_name}
 
 target_link_libraries(${project_name} PRIVATE ${qt_version_moduls})
 target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui/include)           # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
+target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY)                                  # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出
 
 message("-------> ${CMAKE_CURRENT_SOURCE_DIR}/ui/include")
 

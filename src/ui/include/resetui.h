@@ -1,6 +1,7 @@
 #ifndef RESETUI_H
 #define RESETUI_H
 
+#include "xwidget_global.h"
 #include <QWidget>
 
 namespace Ui {

@@ -1,6 +1,7 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
+#include "xwidget_global.h"
 #include <QWidget>
 
 namespace Ui {
