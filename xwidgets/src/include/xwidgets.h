@@ -1,4 +1,4 @@
-#ifndef XWIDGETS_H
+﻿#ifndef XWIDGETS_H
 #define XWIDGETS_H
 
 #include "xwidgets_global.h"

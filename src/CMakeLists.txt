@@ -13,14 +13,49 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+set(qt_moduls Widgets)                        # Network Multimedia WebSockets
+set(qt_version_moduls)
+foreach(it ${qt_moduls})
+    list(APPEND qt_version_moduls Qt${QT_VERSION_MAJOR}::${it})
+    message("--->qt_moduls:" Qt${QT_VERSION_MAJOR}::${it})
+endforeach()
 
-set(PROJECT_SOURCES
-        main.cpp
-        sidesettingui.cpp
-        sidesettingui.h
-        sidesettingui.ui
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${qt_moduls})
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls})
+
+set(custom_ui_files
+    #  h common_widgets
+    ui/include/xcolorbutton.h
+    # h composite_widgets
+    ui/include/colorpicker.h
+    ui/include/resetui.h
+    ui/include/general.h
+    ui/include/interface.h
+    ui/include/output.h
+
+    #  cpp common_widgets
+    ui/common_widgets/xcolorbutton.cpp
+    #  cpp composite_widgets
+    ui/composite_widgets/colorpicker.cpp
+    ui/composite_widgets/resetui.cpp
+    ui/composite_widgets/resetui.ui
+    ui/composite_widgets/general.cpp
+    ui/composite_widgets/general.ui
+    ui/composite_widgets/interface.cpp
+    ui/composite_widgets/interface.ui
+    ui/composite_widgets/output.cpp
+    ui/composite_widgets/output.ui
+)
+
+set(src_files
+    main.cpp
+    ui/setting/sidesettingui.cpp
+    ui/setting/sidesettingui.h
+    ui/setting/sidesettingui.ui
+    ui/setting/abssettingui.h
+    ui/setting/abssettingui.cpp
+    ui/setting/abssettingui.ui
+    resources.qrc
 )
 
 set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                              # default root path curr path （CMakeList.txt）
@@ -28,12 +63,17 @@ file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
     "${src_root_path}/*.cpp"
     "${src_root_path}/*.h")
 source_group(TREE ${src_root_path} FILES ${source_lists})
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/setting/composite_widgets")            # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
 
 add_executable(${project_name}
-    ${PROJECT_SOURCES}
+    ${src_files}
+    ${custom_ui_files}
 )
 
-target_link_libraries(${project_name} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${project_name} PRIVATE ${qt_version_moduls})
+target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui/include)           # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
+
+message("-------> ${CMAKE_CURRENT_SOURCE_DIR}/ui/include")
 
 set_target_properties(${project_name} PROPERTIES
     ${BUNDLE_ID_OPTION}

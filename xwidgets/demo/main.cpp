@@ -1,4 +1,4 @@
-#include <QApplication>
+﻿#include <QApplication>
 #include <QDebug>
 #include "widget.h"
 #include "xwidgets.h"

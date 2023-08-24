@@ -1,4 +1,4 @@
-#include "xwidgets.h"
+﻿#include "xwidgets.h"
 
 Xwidgets::Xwidgets()
 {
