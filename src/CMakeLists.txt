@@ -66,8 +66,12 @@ set(src_files
     ui/setting/abssettingui.h
     ui/setting/abssettingui.cpp
     ui/setting/abssettingui.ui
+    ui/screenshot/monitors.h
+    ui/screenshot/monitors.cpp
     ui/screenshot/screenshot.h
     ui/screenshot/screenshot.cpp
+    ui/screenshot/tray.h
+    ui/screenshot/tray.cpp
 
     resources.qrc
 )
@@ -82,6 +86,9 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")            # ä¿®å¤
 add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
+
+
+
 )
 
 target_link_libraries(${project_name} PRIVATE ${qt_version_moduls})
