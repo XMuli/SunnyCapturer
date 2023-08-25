@@ -1,2 +1,6 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/">
+        <file>resources/screenshot_ui/logo/logo.svg</file>
+        <file>resources/screenshot_ui/screenshot/board_circle.svg</file>
+    </qresource>
+</RCC>

@@ -13,6 +13,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_definitions(HALF_SCRN_DEV) # 半屏幕开发模式，便于调试
+
 set(qt_moduls Widgets)                        # Network Multimedia WebSockets
 set(qt_version_moduls)
 foreach(it ${qt_moduls})
@@ -66,8 +68,8 @@ set(src_files
     ui/setting/abssettingui.h
     ui/setting/abssettingui.cpp
     ui/setting/abssettingui.ui
-    ui/screenshot/monitors.h
-    ui/screenshot/monitors.cpp
+    ui/screenshot/capturehelper.h
+    ui/screenshot/capturehelper.cpp
     ui/screenshot/screenshot.h
     ui/screenshot/screenshot.cpp
     ui/screenshot/tray.h
@@ -86,6 +88,8 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")            # 修�
 add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
+
+
 
 
 
