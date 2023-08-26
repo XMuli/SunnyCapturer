@@ -12,20 +12,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(NOT CMAKE_DEBUG_POSTFIX)  # 好像仅添加到 库文件 的后缀
+#           动态库      静态库           # Ref： https://blog.csdn.net/liuzehn/article/details/78424972
+# Windows    .dll       .lib
+# Linux      .so        .a
+# Mac        .dylib     .a             (.framework 即可能是动态库、也可能是静态库)
+
+if(NOT CMAKE_DEBUG_POSTFIX)                     # 好像仅添加到 库文件 的后缀
     if(WIN32)
         set(CMAKE_DEBUG_POSTFIX d)
     else()
         set(CMAKE_DEBUG_POSTFIX _debug)
     endif()
 endif()
-
-#           动态库      静态库           # Ref： https://blog.csdn.net/liuzehn/article/details/78424972
-# Windows    .dll       .lib
-# Linux      .so        .a
-# Mac        .dylib     .a             (.framework 即可能是动态库、也可能是静态库)
-
-
 
 # 获取 CPU 核心数量，开启 IDE 多核编译
 include(ProcessorCount)
@@ -44,5 +42,6 @@ elseif(UNIX)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(windows_rect)
 add_subdirectory(xwidgets)
 #add_subdirectory(common)

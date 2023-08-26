@@ -85,19 +85,29 @@ file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
 source_group(TREE ${src_root_path} FILES ${source_lists})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")            # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
 
+#************************************************************************
+#调用 WindowsRect DLL 共4步骤
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/windows_rect/include/)                          # ①设置头文件目录
+link_directories(${trage_runtime_output_dir})
+#************************************************************************
+
 add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
-
-
-
-
-
 )
 
-target_link_libraries(${project_name} PRIVATE ${qt_version_moduls})
-target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui/include)           # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
-target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY)                                  # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出
+# 依据不同 build type, 生成实际 link 的 real dll 名
+set(dependent_dll_name WindowsRect)
+set(dependent_dll_real_name ${dependent_dll_name})
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(dependent_dll_real_name "${dependent_dll_name}${CMAKE_DEBUG_POSTFIX}")
+endif()
+message("--> CMAKE_DEBUG_POSTFIX:${CMAKE_DEBUG_POSTFIX}  dependent_dll_name:${dependent_dll_name} dependent_dll_real_name:${dependent_dll_real_name}")
+
+add_dependencies(${project_name} ${dependent_dll_name})
+target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name})
+target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui/include)  # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
+target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY)                         # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装
 
 message("-------> ${CMAKE_CURRENT_SOURCE_DIR}/ui/include")
 

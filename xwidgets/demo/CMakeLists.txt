@@ -36,8 +36,17 @@ link_directories(${trage_runtime_output_dir})                                   
 # 这部分要在 add_executable 之前写，然后在 target_link_libraries链接时候加上此 dll 的名字；有时候若是编译失败，还需要将 .lib 放置与和 dll 的同一个路径上;
 
 add_executable(${project_name} ${src_files} )
-add_dependencies(${project_name} xwidgets)                                                # ③添加依赖顺序，确保先构建依赖，此处是 工程名称，而非 dll 名称(没有后缀d)
-target_link_libraries(${project_name} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets xwidgetsd)   # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
+
+# 依据不同 build type, 生成实际 link 的 real dll 名
+set(dependent_dll_name xwidgets)
+set(dependent_dll_real_name ${dependent_dll_name})
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(dependent_dll_real_name "${dependent_dll_name}${CMAKE_DEBUG_POSTFIX}")
+endif()
+message("--> CMAKE_DEBUG_POSTFIX:${CMAKE_DEBUG_POSTFIX}  dependent_dll_name:${dependent_dll_name} dependent_dll_real_name:${dependent_dll_real_name}")
+
+add_dependencies(${project_name} ${dependent_dll_name})                                                    # ③添加依赖顺序，确保先构建依赖，此处是 工程名称，而非 dll 名称(没有后缀d)
+target_link_libraries(${project_name} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${dependent_dll_real_name})   # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
 
 set_target_properties(${project_name} PROPERTIES
     ${BUNDLE_ID_OPTION}
