@@ -1,4 +1,4 @@
-#include "interface.h"
+﻿#include "interface.h"
 #include "ui_interface.h"
 
 Interface::Interface(QWidget *parent) :

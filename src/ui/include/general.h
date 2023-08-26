@@ -1,4 +1,4 @@
-#ifndef GENERAL_H
+﻿#ifndef GENERAL_H
 #define GENERAL_H
 
 #include "xwidget_global.h"

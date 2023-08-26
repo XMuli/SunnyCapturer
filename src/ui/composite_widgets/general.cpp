@@ -1,4 +1,4 @@
-#include "general.h"
+﻿#include "general.h"
 #include "ui_general.h"
 
 General::General(QWidget *parent)

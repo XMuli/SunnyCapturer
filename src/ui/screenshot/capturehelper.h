@@ -1,4 +1,4 @@
-#ifndef CAPTUREHELPER_H
+﻿#ifndef CAPTUREHELPER_H
 #define CAPTUREHELPER_H
 
 #include <QObject>
@@ -11,9 +11,10 @@
 // https://blog.csdn.net/luckysym/article/details/1666114
 enum class ActionType {
     AT_wait,
-    AT_detection_windows_rect,
-    AT_select_picked_rect,     // 当前框选的窗口
-    AT_select_drawn_shape,     // 选择已绘画的图形(不算当前正在绘画中的)
+    AT_picking_detection_windows_rect,   // 采摘自动检测到的矩形
+    AT_picking_custom_rect,              // 采摘自定义的矩形
+    AT_select_picked_rect,               // 选中当前 框选的边框 矩形
+    AT_select_drawn_shape,               // 选择已绘画的图形(不算当前正在绘画中的)
     AT_drawing_shap,
     AT_move_drawn_shape,
     AT_move_picked_rect,
@@ -21,6 +22,7 @@ enum class ActionType {
     AT_stretch_picked_rect
 };
 
+QString actionTypeToString(ActionType actionType);
 
 struct PainterEnv
 {

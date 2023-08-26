@@ -103,10 +103,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(dependent_dll_real_name "${dependent_dll_name}${CMAKE_DEBUG_POSTFIX}")
 endif()
 message("--> CMAKE_DEBUG_POSTFIX:${CMAKE_DEBUG_POSTFIX}  dependent_dll_name:${dependent_dll_name} dependent_dll_real_name:${dependent_dll_real_name}")
+message("---@2--> ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include")
 
 add_dependencies(${project_name} ${dependent_dll_name})
 target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name})
-target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui/include)  # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
+target_include_directories(${project_name} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include
+)  # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
 target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY)                         # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装
 
 message("-------> ${CMAKE_CURRENT_SOURCE_DIR}/ui/include")

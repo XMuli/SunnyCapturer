@@ -1,10 +1,9 @@
-#ifndef WINDOWSRECT_H
+﻿#ifndef WINDOWSRECT_H
 #define WINDOWSRECT_H
 
 #include "windowsrect_global.h"
 #include <iostream>
 #include <string>
-using namespace std;
 
 #ifdef _WIN32
     #include <Windows.h>
@@ -28,8 +27,8 @@ using namespace std;
 struct RectNode
 {
     RECT rect;
-    wstring title;
-    wstring notes; // 备注
+    std::wstring title;
+    std::wstring notes; // 备注
 
     HWND ntHWnd;            // NT OS
     unsigned long x11HWnd;  // Linux OS
@@ -44,9 +43,13 @@ public:
     ~WindowsRect();
 
     void detectionWindowsRect();
-
-
     RectNode rectNode() const;
+
+#ifdef _WIN32
+    bool startWindowsHook();
+    bool endWindowsHook();
+#endif
+
 
 private:
     RectNode m_rectNode;

@@ -1,4 +1,4 @@
-#ifndef XCOLORBUTTON_H
+﻿#ifndef XCOLORBUTTON_H
 #define XCOLORBUTTON_H
 
 #include "xwidget_global.h"

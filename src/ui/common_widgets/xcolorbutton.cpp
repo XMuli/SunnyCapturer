@@ -1,4 +1,4 @@
-#include "xcolorbutton.h"
+﻿#include "xcolorbutton.h"
 
 #include <QPainter>
 #include <QConicalGradient>

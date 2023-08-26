@@ -1,4 +1,4 @@
-#ifndef COLORPICKER_H
+﻿#ifndef COLORPICKER_H
 #define COLORPICKER_H
 
 #include "xwidget_global.h"

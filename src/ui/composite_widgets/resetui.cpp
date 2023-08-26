@@ -1,4 +1,4 @@
-#include "resetui.h"
+﻿#include "resetui.h"
 #include "ui_resetui.h"
 
 ResetUI::ResetUI(QWidget *parent) :

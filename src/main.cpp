@@ -2,6 +2,7 @@
 #include "ui/screenshot/tray.h"
 
 // test
+#include <QWidget>
 #include "colorpicker.h"
 #include "ui/setting/sidesettingui.h"
 

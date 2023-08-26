@@ -1,4 +1,4 @@
-#ifndef ABSSETTINGUI_H
+﻿#ifndef ABSSETTINGUI_H
 #define ABSSETTINGUI_H
 
 #include <QWidget>

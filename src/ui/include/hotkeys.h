@@ -1,4 +1,4 @@
-#ifndef HOTKEYS_H
+﻿#ifndef HOTKEYS_H
 #define HOTKEYS_H
 
 #include "xwidget_global.h"

@@ -1,4 +1,4 @@
-#include "screenshot.h"
+﻿#include "screenshot.h"
 #include <QApplication>
 #include <QGuiApplication>
 #include <QDesktopWidget>
@@ -7,6 +7,9 @@
 #include <QPainter>
 #include <QDebug>
 #include <QIcon>
+#include "windowsrect.h"
+
+WindowsRect g_windowsRect;
 
 ScreenShot::ScreenShot(QWidget *parent)
     : QWidget(parent)
@@ -14,10 +17,25 @@ ScreenShot::ScreenShot(QWidget *parent)
     , m_screens(qGuiApp->screens())
     , m_origPix()
     , m_vdRect()
-    , m_actionType(ActionType::AT_detection_windows_rect)
+    , m_bAutoDetectRect(true)
+    , m_actionType(ActionType::AT_wait)
 {
     initUI();
+
+    setMouseTracking(true);
+    if (m_actionType == ActionType::AT_wait) {
+        if (m_node.pickedRect.isEmpty())
+            m_actionType = m_bAutoDetectRect ? ActionType::AT_picking_detection_windows_rect : ActionType::AT_picking_custom_rect;
+
+        if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+            #if defined(Q_OS_WIN)
+                g_windowsRect.startWindowsHook();
+            #endif
+        }
+
+    }
 }
+
 
 ScreenShot::~ScreenShot()
 {
@@ -27,7 +45,6 @@ ScreenShot::~ScreenShot()
 void ScreenShot::capture()
 {
     originalPixmap();
-
     show();
 }
 
@@ -39,6 +56,12 @@ void ScreenShot::initUI()
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
 //    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | windowFlags());  // | Qt::WindowStaysOnTopHint
+
+    // linux下鼠标穿透要放在后面两行代码的全前面，否则无效(但是鼠标穿透了会导致一些奇怪的问题，如窗口显示不全，所以这里不使用)
+    // windows下如果不设置鼠标穿透则只能捕获到当前窗口
+    setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    // setAttribute(Qt::WA_TranslucentBackground);                         // 背景透明
+    setWindowOpacity(0.4);
 #ifdef HALF_SCRN_DEV
     m_vdRect = currentScreen()->geometry();
     setWindowFlag(Qt::WindowStaysOnTopHint, false);
@@ -274,8 +297,12 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
     if (m_actionType == ActionType::AT_wait) {
-    } else if (m_actionType == ActionType::AT_detection_windows_rect) {
+        if (m_node.pickedRect.isEmpty())
+            m_actionType = m_bAutoDetectRect ? ActionType::AT_picking_detection_windows_rect : ActionType::AT_picking_custom_rect;
+
+    } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         setMouseTracking(true);
+    } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
@@ -293,7 +320,12 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
     qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
-    } else if (m_actionType == ActionType::AT_detection_windows_rect) {
+    } else if (m_actionType == ActionType::AT_picking_custom_rect) {
+        m_actionType = ActionType::AT_wait;
+    } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+#if defined(Q_OS_WIN)
+        g_windowsRect.endWindowsHook();
+#endif
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
@@ -308,13 +340,23 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
 void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
 {
-    if (m_actionType == ActionType::AT_wait) {
-    } else if (m_actionType == ActionType::AT_detection_windows_rect) {
-        m_node.p3 = e->pos();
-        m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
-        m_node.trackPos.emplace_back(e->pos());
-        qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
+    m_node.p3 = e->pos();
 
+    if (m_actionType == ActionType::AT_wait) {
+
+    } else if (m_actionType == ActionType::AT_picking_custom_rect) {
+        m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
+        m_node.trackPos.emplace_back(m_node.p3);
+        qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
+    } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+        g_windowsRect.detectionWindowsRect();
+        const auto&& t(g_windowsRect.rectNode().rect);
+        const QRect detectRect(t.left, t.top, t.right - t.left, t.bottom - t.top);
+
+        qDebug() << "detectRectL" << detectRect << "title" << g_windowsRect.rectNode().title;
+
+        // 显示 QWidget 并获取它的 HWND
+//        HWND hwnd = static_cast<HWND>(this->winId())
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
@@ -386,15 +428,19 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
 
     pa.save();
-    pa.setPen(Qt::white);
-    const int tbegin = 20;
-    const int tHight = 20;
-    pa.drawText(QPoint(0, tbegin), QString("m_node:"));
+    pa.setPen(QPen(Qt::green, 2));
+    const int tTextX = 0;
+    const int tTextY = 20;
+    const int tAddHight = 20;
+    pa.drawText(QPoint(tTextX, tTextY), QString("m_node:"));
     const auto& tP1 = m_node.p1;
     const auto& tP2 = m_node.p2;
     const auto& tP3 = m_node.p3;
     const auto& tPickedRect = m_node.pickedRect;
-    pa.drawText(QPoint(0, tbegin + tHight * 1), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)  pickedRect:(%7, %8, %9 * %10)")
+
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * 1), QString("hasMouseTracking:%1 ActionType:%2")
+                                                            .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * 2), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)  pickedRect:(%7, %8, %9 * %10)")
                                            .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y())
                                            .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height()));
     pa.restore();

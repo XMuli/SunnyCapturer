@@ -1,4 +1,4 @@
-#include "output.h"
+﻿#include "output.h"
 #include "ui_output.h"
 
 Output::Output(QWidget *parent) :

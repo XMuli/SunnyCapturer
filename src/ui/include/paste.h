@@ -1,4 +1,4 @@
-#ifndef PASTE_H
+﻿#ifndef PASTE_H
 #define PASTE_H
 
 #include "xwidget_global.h"

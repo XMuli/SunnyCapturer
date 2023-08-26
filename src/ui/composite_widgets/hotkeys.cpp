@@ -1,4 +1,4 @@
-#include "hotkeys.h"
+﻿#include "hotkeys.h"
 #include "ui_hotkeys.h"
 
 Hotkeys::Hotkeys(QWidget *parent) :

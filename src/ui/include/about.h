@@ -1,4 +1,4 @@
-#ifndef ABOUT_H
+﻿#ifndef ABOUT_H
 #define ABOUT_H
 
 #include <QWidget>

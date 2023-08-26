@@ -1,4 +1,4 @@
-#ifndef OUTPUT_H
+﻿#ifndef OUTPUT_H
 #define OUTPUT_H
 
 #include "xwidget_global.h"

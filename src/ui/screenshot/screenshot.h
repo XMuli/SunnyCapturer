@@ -1,4 +1,4 @@
-#ifndef SCREENSHOT_H
+﻿#ifndef SCREENSHOT_H
 #define SCREENSHOT_H
 
 #include <QWidget>
@@ -52,6 +52,7 @@ private:
     QPixmap              m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
     QRect                m_vdRect;             // virtual Desktop Rect;
 
+    bool                 m_bAutoDetectRect;    // 是否自动监测矩形
     ActionType           m_actionType;         // 当前的操作状态
     PainterEnv           m_paEnv;              // 绘画环境
     Node                 m_node;               // 一次操作的集合

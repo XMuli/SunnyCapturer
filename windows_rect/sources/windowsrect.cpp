@@ -1,7 +1,37 @@
-#include "windowsrect.h"
+﻿#include "windowsrect.h"
+
+
+#ifdef _WIN32
+static HHOOK g_hook = nullptr;
+
+// 处理鼠标事件的回调函数
+LRESULT CALLBACK CallBackProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    switch (wParam) {
+        case WM_LBUTTONDOWN: {
+            POINT pos;
+            bool ret = GetCursorPos(&pos);
+            if(ret) std::wcout << pos.x << L" " << pos.y;
+
+            std::wcout << L"鼠标左键按下" << std::endl;
+            break;
+        } default: {
+            break;
+        }
+    }
+
+    return CallNextHookEx(nullptr, nCode, wParam, lParam);   // 注意这一行一定不能少，否则会出大问题
+}
+#elif linux
+
+#elif __APPLE__ || __MACH__
+#endif
+
+
 
 WindowsRect::WindowsRect()
 {
+
 }
 
 WindowsRect::~WindowsRect()
@@ -18,14 +48,17 @@ void WindowsRect::detectionWindowsRect()
 
     HWND hwnd = nullptr;
     hwnd = WindowFromPoint(pos);                // 通过鼠标位置获取窗口句柄
-    wcout << L"hwnd:" << hwnd << L"  pos:(" << pos.x << L", " << pos.x << L")" << endl;
+    std::wcout << L"hwnd:" << hwnd << L"  pos:(" << pos.x << L", " << pos.x << L")" << std::endl;
     if(!hwnd) return;
 
     RECT rect;
     bool ret = GetWindowRect(hwnd, &rect);     //获取窗口位置
-    if(!ret) return;
+
+    wchar_t windowText[MAX_PATH] = L"";
+    GetWindowText(hwnd, windowText, MAX_PATH);
 
     m_rectNode.ntHWnd = hwnd;
+    m_rectNode.title = windowText;
     m_rectNode.rect = rect;
 
 #elif linux
@@ -42,9 +75,34 @@ RectNode WindowsRect::rectNode() const
     return m_rectNode;
 }
 
+#ifdef _WIN32
+bool WindowsRect::startWindowsHook()
+{
+    g_hook = SetWindowsHookExW(WH_MOUSE_LL, CallBackProc, GetModuleHandleW(nullptr), 0);  // 挂载全局鼠标钩子
+    g_hook ? std::wcout <<  L"鼠标钩子挂接成功,线程ID:" << GetCurrentThreadId() << std::endl :  std::wcout <<  L"鼠标钩子挂接失败,error:" << GetLastError() << std::endl;
+    return g_hook ? true : false;
+}
+
+bool WindowsRect::endWindowsHook()
+{
+    if (g_hook) {
+        bool ret = UnhookWindowsHookEx(g_hook);
+        ret ? std::wcout <<  L"卸载鼠标钩子,线程ID:" << GetCurrentThreadId() << std::endl :  std::wcout <<  L"卸载鼠标钩子失败,error:" << GetLastError() << std::endl;
+
+        return ret;
+    }
+
+    std::wcout <<  L"g_hook is nullptr" << std::endl;
+    return false;
+}
+#endif
+
 void RectNode::printf()
 {
-    wcout << L"rect(" << rect.left << L", " << rect.top << L", " << rect.right - rect.left << L" * " << rect.bottom - rect.top << L")" << endl;
-    wcout << L"title:[" << title << L"]\n notes:[" << notes << L"]" << endl;
-    wcout << L"ntHWnd:[" << ntHWnd << L"]\n x11HWnd:[" << x11HWnd << L"]" << endl;
+    std::wcout << L"---------------------------printf Start-------------------------------" << std::endl;
+    std::wcout << L"rect(" << rect.left << L", " << rect.top << L", " << rect.right - rect.left << L" * " << rect.bottom - rect.top << L")" << std::endl;
+    std::wcout << L"title:[" << title << L"]\n notes:[" << notes << L"]" << std::endl;
+    std::wcout << L"ntHWnd:[" << ntHWnd << L"]\n x11HWnd:[" << x11HWnd << L"]" << std::endl;
+    std::wcout << L"---------------------------printf End-------------------------------" << std::endl << std::endl;
+
 }

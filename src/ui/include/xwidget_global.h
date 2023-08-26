@@ -1,4 +1,4 @@
-#ifndef XWIDGET_GLOBAL_H
+﻿#ifndef XWIDGET_GLOBAL_H
 #define XWIDGET_GLOBAL_H
 
 #include <QtCore/qglobal.h>

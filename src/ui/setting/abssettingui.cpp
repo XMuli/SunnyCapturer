@@ -1,4 +1,4 @@
-#include "abssettingui.h"
+﻿#include "abssettingui.h"
 #include "ui_abssettingui.h"
 
 AbsSettingUI::AbsSettingUI(QWidget *parent) :

@@ -1,4 +1,4 @@
-#include "paste.h"
+﻿#include "paste.h"
 #include "ui_paste.h"
 
 Paste::Paste(QWidget *parent) :
