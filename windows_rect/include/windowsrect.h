@@ -4,9 +4,11 @@
 #include "windowsrect_global.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 #ifdef _WIN32
     #include <Windows.h>
+
     #include <windef.h>
     #include <winuser.h>
 #elif linux
@@ -26,12 +28,15 @@
 
 struct RectNode
 {
-    RECT rect;
+    RECT rect;             // 显示器坐标
+    RECT relativelyRect;   // 相对窗口坐标
     std::wstring title;
     std::wstring notes; // 备注
 
-    HWND ntHWnd;            // NT OS
     unsigned long x11HWnd;  // Linux OS
+
+    HWND  ntHWnd;            // NT OS
+    DWORD ntPocessId;
 
     void printf();
 };
@@ -42,6 +47,7 @@ public:
     WindowsRect();
     ~WindowsRect();
 
+// 思路1-------------------
     void detectionWindowsRect();
     RectNode rectNode() const;
 
@@ -49,10 +55,21 @@ public:
     bool startWindowsHook();
     bool endWindowsHook();
 #endif
+// 思路2-------------------
 
+
+
+// end-------------------
 
 private:
     RectNode m_rectNode;
 };
+
+
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
+BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam);
+
+//WINDOWSRECT_EXPORT
+extern "C" __declspec(dllexport)  const RectNode enumWindowsRect(std::vector<RectNode>& rectNodes);
 
 #endif // WINDOWSRECT_H

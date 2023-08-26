@@ -10,6 +10,7 @@
 #include <QPaintEvent>
 #include <QRect>
 #include "capturehelper.h"
+#include "windowsrect.h"
 
 class ScreenShot : public QWidget
 {
@@ -19,7 +20,6 @@ public:
     virtual ~ScreenShot();
 
     void capture();
-
 
 private:
     void initUI();
@@ -33,6 +33,9 @@ private:
 
     void preDestruction();             // 销毁对象之前的清理工作
     void monitorsInfo() const;
+    void rectNodesMapFromGlobal();
+
+
 
     void dealMousePressEvent(QMouseEvent *e);
     void dealMouseReleaseEvent(QMouseEvent *e);
@@ -56,6 +59,17 @@ private:
     ActionType           m_actionType;         // 当前的操作状态
     PainterEnv           m_paEnv;              // 绘画环境
     Node                 m_node;               // 一次操作的集合
+
+    std::vector<RectNode> m_rectNodes;
 };
+
+
+#if defined(Q_OS_WIN)
+    const QRect rectToQRect(const RECT& rect);
+#elif defined(Q_OS_LINUX)
+
+#elif defined(Q_OS_MAC)
+#endif
+
 
 #endif // SCREENSHOT_H

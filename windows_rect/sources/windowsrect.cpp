@@ -28,6 +28,8 @@ LRESULT CALLBACK CallBackProc(int nCode, WPARAM wParam, LPARAM lParam)
 #endif
 
 
+static std::vector<RectNode> g_rectNodes;
+
 
 WindowsRect::WindowsRect()
 {
@@ -105,4 +107,62 @@ void RectNode::printf()
     std::wcout << L"ntHWnd:[" << ntHWnd << L"]\n x11HWnd:[" << x11HWnd << L"]" << std::endl;
     std::wcout << L"---------------------------printf End-------------------------------" << std::endl << std::endl;
 
+}
+
+
+
+BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
+{
+    POINT pos;
+    pos.x = ((int)(short)LOWORD(lParam));
+    pos.y = ((int)(short)HIWORD(lParam));
+
+    RectNode node;
+    RECT& rect = node.rect;
+
+    if (IsWindowVisible(hwnd)) {
+        wchar_t windowText[MAX_PATH] = L"";
+        GetWindowText(hwnd, windowText, MAX_PATH);
+        node.title = windowText;
+
+        GetWindowRect(hwnd, &rect);
+        const int x = rect.left;
+        const int y = rect.top;
+        const int width = rect.right - rect.left;
+        const int height = rect.bottom - rect.top;
+
+        if (node.title != L"Sunny") {
+            static int i = 1;
+            g_rectNodes.push_back(node);
+            std::wcout << L"--->i" << i++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
+                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]" << std::endl;
+        }
+    }
+    return TRUE;
+}
+
+
+BOOL EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
+{
+    return TRUE;
+}
+
+const RectNode enumWindowsRect(std::vector<RectNode>& rectNodes)
+{
+    POINT pos;
+    GetCursorPos(&pos);
+
+    std::wcout << L"--->pos(" << pos.x << L", " << pos.y << L")" << std::endl;
+    g_rectNodes.clear();
+    EnumWindows(EnumWindowsProc, MAKELPARAM(pos.x, pos.y));
+
+    rectNodes = g_rectNodes;
+
+    RectNode rectNode;
+//    if (g_rectNodes.size()) {
+//        rectNode = g_rectNodes.at(0);
+//        g_rectNodes.clear();
+//    }
+
+    return rectNode;
 }

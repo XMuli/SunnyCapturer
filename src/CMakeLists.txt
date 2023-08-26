@@ -13,7 +13,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_definitions(HALF_SCRN_DEV) # 半屏幕开发模式，便于调试
+#add_compile_definitions(HALF_SCRN_DEV) # 半屏幕开发模式，便于调试
 
 set(qt_moduls Widgets)                        # Network Multimedia WebSockets
 set(qt_version_moduls)

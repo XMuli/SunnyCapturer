@@ -56,4 +56,6 @@ public:
     static QRect rectFromTowPos(const QPoint& p1, const QPoint& p2);
 };
 
+
+
 #endif // CAPTUREHELPER_H

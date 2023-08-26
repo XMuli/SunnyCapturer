@@ -9,6 +9,8 @@
 #include "ui/include/colorpicker.h"
 #include "ui/screenshot/screenshot.h"
 
+
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
