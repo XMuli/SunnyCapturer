@@ -17,15 +17,20 @@ ScreenShot::ScreenShot(QWidget *parent)
     , m_screens(qGuiApp->screens())
     , m_origPix()
     , m_vdRect()
+    , m_bFistPressed(false)
     , m_bAutoDetectRect(true)
     , m_actionType(ActionType::AT_wait)
 {
     initUI();
 
-    setMouseTracking(true);
+
     if (m_actionType == ActionType::AT_wait) {
-        if (m_node.pickedRect.isEmpty())
-            m_actionType = m_bAutoDetectRect ? ActionType::AT_picking_detection_windows_rect : ActionType::AT_picking_custom_rect;
+        if (m_bAutoDetectRect) {
+            m_actionType = ActionType::AT_picking_detection_windows_rect;
+            setMouseTracking(true);
+        } else {
+            m_actionType = ActionType::AT_picking_custom_rect;
+        };
     }
 }
 
@@ -49,14 +54,17 @@ void ScreenShot::initUI()
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
     setWindowFlags(Qt::FramelessWindowHint | windowFlags());  // | Qt::WindowStaysOnTopHint
-
-    // linux下鼠标穿透要放在后面两行代码的全前面，否则无效(但是鼠标穿透了会导致一些奇怪的问题，如窗口显示不全，所以这里不使用)
-    // windows下如果不设置鼠标穿透则只能捕获到当前窗口
-    setAttribute(Qt::WA_TransparentForMouseEvents, true);
-#ifdef HALF_SCRN_DEV
-    m_vdRect = currentScreen()->geometry();
-    setWindowFlag(Qt::WindowStaysOnTopHint, false);
-    if (m_screens.size() == 1) m_vdRect.setWidth(m_vdRect.width() / 2);
+#ifdef HALF_SCRN_DEVELOP
+    if (m_screens.size() == 1) {
+        m_vdRect.setWidth(m_vdRect.width() / 2);
+    } else {
+        for (const auto& it: m_screens) {
+            if (currentScreen() != it) {
+                m_vdRect = it->geometry();
+                break;
+            }
+        }
+    }
 #endif
 
     resize(m_vdRect.size());
@@ -65,7 +73,7 @@ void ScreenShot::initUI()
     QRect geom = curScrn(QCursor::pos())->geometry();
     m_captureScrnRt = geom;
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);   // 窗口置顶 + 隐藏标题栏
-#ifdef HALF_SCRN_DEV
+#ifdef HALF_SCRN_DEVELOP
     if (m_scrns.size() == 1)
         geom.setWidth(geom.width() / 2);
 #endif
@@ -281,6 +289,95 @@ void ScreenShot::monitorsInfo() const
     qInfo() << "---------------m_screens[] Info END----------------";
 }
 
+void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
+{
+    pa.save();
+    pa.setPen(QPen(Qt::green, 2));
+    const int tTextX = 0;
+    const int tTextY = 300;
+    const int tAddHight = 20;
+    pa.drawText(QPoint(tTextX, tTextY), QString("m_node:"));
+    const auto& tP1 = m_node.p1;
+    const auto& tP2 = m_node.p2;
+    const auto& tP3 = m_node.p3;
+    const auto& tPickedRect = m_node.pickedRect;
+
+    int tCount = 1;
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
+                                                                   .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)  pickedRect:(%7, %8, %9 * %10)")
+                                                                   .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y())
+                                                                   .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height()));
+
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_rectNodes.size():%1").arg(m_rectNodes.size()));
+    int idx = 0;
+    for (const auto& it : m_rectNodes) {
+        const auto& rect = rectToQRect(it.rect);
+        const auto& relativelyRect = rectToQRect(it.relativelyRect);
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//idx:%1-------------------------\n").arg(idx++));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++),  QString("it.rect(%1, %2, %3 * %4) it.relativelyRect(%5, %6, %7 * %8)")
+                                                                       .arg(rect.x())
+                                                                       .arg(rect.y())
+                                                                       .arg(rect.width())
+                                                                       .arg(rect.height())
+                                                                       .arg(relativelyRect.x())
+                                                                       .arg(relativelyRect.y())
+                                                                       .arg(relativelyRect.width())
+                                                                       .arg(relativelyRect.height()));
+
+
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString::fromStdWString(it.title));
+        quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
+        QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
+    }
+    pa.restore();
+}
+
+void ScreenShot::prinftWindowsRects(QPainter& pa)
+{
+    pa.save();
+    pa.setPen(Qt::red);
+    pa.setBrush(Qt::NoBrush);
+
+#if LOG_CURR_POS_IN_RECTS
+    for (const auto& it : m_rectNodes) {
+        const auto& rect = rectToQRect(it.rect);
+        const auto& relativelyRect = rectToQRect(it.relativelyRect);
+#else
+    QRect rect;
+    QRect relativelyRect;
+    if (m_rectNodes.size()) {
+        const RectNode it = m_rectNodes.at(0);
+        rect = rectToQRect(it.rect);
+        relativelyRect = rectToQRect(it.relativelyRect);
+
+#endif
+        pa.drawRect(relativelyRect);
+        pa.drawText(relativelyRect.topLeft() + QPoint(0, 20),  QString("it.rect(%1, %2, %3 * %4)")
+                                                                  .arg(rect.x())
+                                                                  .arg(rect.y())
+                                                                  .arg(rect.width())
+                                                                  .arg(rect.height()));
+
+        pa.drawText(relativelyRect.topLeft() + QPoint(0, 40),  QString("it.relativelyRect(%1, %2, %3 * %4)")
+                                                                  .arg(relativelyRect.x())
+                                                                  .arg(relativelyRect.y())
+                                                                  .arg(relativelyRect.width())
+                                                                  .arg(relativelyRect.height()));
+
+        pa.drawText(relativelyRect.topLeft() + QPoint(0, 60), QString::fromStdWString(it.title));
+
+        //        HWND hwndDesktop = GetDesktopWindow();
+        //        std::wcout << L"hwndDesktop:" << hwndDesktop << L"  it.ntHWnd:" << it.ntHWnd;
+        quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
+        QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
+        pa.drawText(relativelyRect.topLeft() + QPoint(0, 80), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
+    }
+    pa.restore();
+}
+
+
 void ScreenShot::rectNodesMapFromGlobal()
 {
     for (auto& it : m_rectNodes) {
@@ -293,21 +390,40 @@ void ScreenShot::rectNodesMapFromGlobal()
     }
 }
 
+void ScreenShot::firstRectNodesAssignmentNode()
+{
+    if (m_rectNodes.size() == 0) return;
+    const auto& it = m_rectNodes.at(0);
+    const auto& relativelyRect = rectToQRect(it.relativelyRect);
+
+    m_node.p1 = relativelyRect.topLeft();
+    m_node.p2 = relativelyRect.bottomRight();
+    m_node.p3 = relativelyRect.bottomRight();
+    m_node.pickedRect = relativelyRect;
+}
+
+// length = 3 px 之内都看作是点击的这个已存在的 检测矩形，合理误差
+bool ScreenShot::allowableRangeError(const QPoint &p1, const QPoint &p2, int length)
+{
+    if (qAbs(p1.x() - p1.x()) <= length &&  qAbs(p2.y() - p1.y()) <= length)
+        return true;
+    else
+        return false;
+}
+
 void ScreenShot::dealMousePressEvent(QMouseEvent *e)
 {
     setMouseTracking(false);
     m_node.p1 = e->pos();
     qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
-    m_rectNodes.clear();
     if (m_actionType == ActionType::AT_wait) {
-        if (m_node.pickedRect.isEmpty())
-            m_actionType = m_bAutoDetectRect ? ActionType::AT_picking_detection_windows_rect : ActionType::AT_picking_custom_rect;
-
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         setMouseTracking(true);
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
-
+        m_node.pt = e->pos();
+        setMouseTracking(true);
+        m_bFistPressed = true;
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
@@ -326,8 +442,15 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
     if (m_actionType == ActionType::AT_wait) {
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
+        m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p2);
+        m_node.trackPos.emplace_back(m_node.p3);
         m_actionType = ActionType::AT_wait;
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+        // 此时已经滑动和已经被按下过了，所以一定是结束的标记
+        if (allowableRangeError(m_node.p1, m_node.p2)) {
+            firstRectNodesAssignmentNode();
+        }
+        m_actionType = ActionType::AT_wait;
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
@@ -336,6 +459,7 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
     } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
     }
+
 
     setMouseTracking(false);
 }
@@ -343,29 +467,25 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
 {
     m_node.p3 = e->pos();
+    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
-
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
         m_node.trackPos.emplace_back(m_node.p3);
-        qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
-        enumWindowsRect(m_rectNodes);
-        rectNodesMapFromGlobal();
+        if (m_bFistPressed) {
+            if (!allowableRangeError(m_node.p3, m_node.pt)) {
+                m_actionType = ActionType::AT_picking_custom_rect;
+            }
+
+        } else {
+            enumWindowsRect(m_rectNodes);
+            rectNodesMapFromGlobal();
+            firstRectNodesAssignmentNode();
+        }
 
 
-//        const RectNode rectNode = enumWindowsRect();
-//                const auto& t(rectNode.rect);
-//                const QRect detectRect(t.left, t.top, t.right - t.left, t.bottom - t.top);
-
-//        const RectNode rectNode = enumWindowsRect();
-//        const auto& t(rectNode.rect);
-//        const QRect detectRect(t.left, t.top, t.right - t.left, t.bottom - t.top);
-
-//        qDebug() << "detectRectL" << detectRect << "title" << rectNode.title;
-
-//        m_node.pickedRect = detectRect;
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
@@ -374,7 +494,6 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
     } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
     }
-
 }
 
 void ScreenShot::mousePressEvent(QMouseEvent *e)
@@ -416,6 +535,7 @@ void ScreenShot::keyReleaseEvent(QKeyEvent *e)
     }
 }
 
+
 void ScreenShot::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
@@ -423,7 +543,6 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     const auto& pickedRect = m_node.pickedRect;
     QPainter pa(this);     // 始终从相对本窗口的坐标 (0, 0) 开始绘画
     pa.setBrush(Qt::NoBrush);
-
     pa.setPen(Qt::NoPen);
 
 
@@ -432,55 +551,15 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     }
 
     drawShadowOverlay(rect(), pickedRect, pa);
+
 //    drawBorderMacOS(pa, pickedRect);
 //    drawBorderDDE(pa, pickedRect);
     drawBorderFlipped(pa, pickedRect);
 
-    pa.setPen(Qt::red);
-    pa.setBrush(Qt::NoBrush);
-    for (const auto& it : m_rectNodes) {
-        const auto& rect = rectToQRect(it.rect);
-        const auto& relativelyRect = rectToQRect(it.relativelyRect);
 
-        pa.drawRect(relativelyRect);
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 20),  QString("it.rect(%1, %2, %3 * %4)")
-                                                              .arg(rect.x())
-                                                              .arg(rect.y())
-                                                              .arg(rect.width())
-                                                              .arg(rect.height()));
-
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 40),  QString("it.relativelyRect(%1, %2, %3 * %4)")
-                                                                  .arg(relativelyRect.x())
-                                                                  .arg(relativelyRect.y())
-                                                                  .arg(relativelyRect.width())
-                                                                  .arg(relativelyRect.height()));
-
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 60), QString::fromStdWString(it.title));
-
-//        HWND hwndDesktop = GetDesktopWindow();
-//        std::wcout << L"hwndDesktop:" << hwndDesktop << L"  it.ntHWnd:" << it.ntHWnd;
-        quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
-        QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 80), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
-    }
-
-    pa.save();
-    pa.setPen(QPen(Qt::green, 2));
-    const int tTextX = 0;
-    const int tTextY = 20;
-    const int tAddHight = 20;
-    pa.drawText(QPoint(tTextX, tTextY), QString("m_node:"));
-    const auto& tP1 = m_node.p1;
-    const auto& tP2 = m_node.p2;
-    const auto& tP3 = m_node.p3;
-    const auto& tPickedRect = m_node.pickedRect;
-
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * 1), QString("hasMouseTracking:%1 ActionType:%2")
-                                                            .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * 2), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)  pickedRect:(%7, %8, %9 * %10)")
-                                           .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y())
-                                           .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height()));
-    pa.restore();
+    // 以下部分都是 printf 一些调试参数的部分
+    prinftWindowsRects(pa);
+    printfDevelopProjectInfo(pa);
 }
 
 #if defined(Q_OS_WIN)

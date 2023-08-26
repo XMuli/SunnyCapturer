@@ -40,6 +40,7 @@ struct Node
     QPoint p1;                                  // 起点
     QPoint p2;                                  // 终点
     QPoint p3;                                  // 轨迹点
+    QPoint pt;                                  // 临时保存一下(上一个新的点)
     std::vector<QPoint>   trackPos;             // move 累计的点
     QRect  pickedRect;                          // 初始绘画位置: 由 p1、p2 构成
 

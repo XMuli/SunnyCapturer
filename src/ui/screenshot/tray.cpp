@@ -37,6 +37,9 @@ void Tray::onCapture()
 {
     if (!m_scrnShot) m_scrnShot = new ScreenShot();
     m_scrnShot->capture();
+
+    if(!m_scrnShot->isActiveWindow())
+        m_scrnShot->activateWindow();
 }
 
 void Tray::onSetting()

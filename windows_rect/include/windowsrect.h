@@ -20,12 +20,6 @@
 // 在其他平台下的代码
 #endif
 
-//union RectHWnd
-//{
-//    void* ntHWnd;              // NT OS
-//    unsigned long x11HWnd;     // Linux OS
-//};
-
 struct RectNode
 {
     RECT rect;             // 显示器坐标
@@ -69,7 +63,6 @@ private:
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
 BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam);
 
-//WINDOWSRECT_EXPORT
-extern "C" __declspec(dllexport)  const RectNode enumWindowsRect(std::vector<RectNode>& rectNodes);
+extern "C" WINDOWSRECT_EXPORT bool enumWindowsRect(std::vector<RectNode>& rectNodes);
 
 #endif // WINDOWSRECT_H

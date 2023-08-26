@@ -23,8 +23,6 @@ LRESULT CALLBACK CallBackProc(int nCode, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(nullptr, nCode, wParam, lParam);   // 注意这一行一定不能少，否则会出大问题
 }
 #elif linux
-
-#elif __APPLE__ || __MACH__
 #endif
 
 
@@ -110,6 +108,11 @@ void RectNode::printf()
 }
 
 
+// 自定义的一些过滤
+bool WindowsRectFilter(HWND hwnd)
+{
+    return false;
+}
 
 BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
@@ -131,10 +134,10 @@ BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
         const int width = rect.right - rect.left;
         const int height = rect.bottom - rect.top;
 
-        if (node.title != L"Sunny") {
-            static int i = 1;
+        int idx = 0;
+        if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
             g_rectNodes.push_back(node);
-            std::wcout << L"--->i" << i++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
+            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
                        << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]" << std::endl;
         }
     }
@@ -147,22 +150,15 @@ BOOL EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-const RectNode enumWindowsRect(std::vector<RectNode>& rectNodes)
+bool enumWindowsRect(std::vector<RectNode>& rectNodes)
 {
     POINT pos;
     GetCursorPos(&pos);
 
     std::wcout << L"--->pos(" << pos.x << L", " << pos.y << L")" << std::endl;
+    rectNodes = g_rectNodes;
     g_rectNodes.clear();
     EnumWindows(EnumWindowsProc, MAKELPARAM(pos.x, pos.y));
 
-    rectNodes = g_rectNodes;
-
-    RectNode rectNode;
-//    if (g_rectNodes.size()) {
-//        rectNode = g_rectNodes.at(0);
-//        g_rectNodes.clear();
-//    }
-
-    return rectNode;
+    return g_rectNodes.size() ? true : false;
 }

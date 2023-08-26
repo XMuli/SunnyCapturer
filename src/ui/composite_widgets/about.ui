@@ -46,19 +46,34 @@
         <property name="text">
          <string>LOGO</string>
         </property>
+        <property name="icon">
+         <iconset resource="../../resources.qrc">
+          <normaloff>:/resources/screenshot_ui/logo/logo.svg</normaloff>:/resources/screenshot_ui/logo/logo.svg</iconset>
+        </property>
         <property name="iconSize">
          <size>
-          <width>20</width>
-          <height>20</height>
+          <width>80</width>
+          <height>60</height>
          </size>
         </property>
         <property name="autoRepeat">
          <bool>true</bool>
         </property>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <bold>true</bold>
+          <strikeout>false</strikeout>
+          <kerning>true</kerning>
+         </font>
+        </property>
         <property name="text">
          <string>Sunny</string>
         </property>
@@ -199,6 +214,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
