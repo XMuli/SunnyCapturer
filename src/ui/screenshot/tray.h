@@ -35,7 +35,7 @@ public:
 
 protected:
     explicit Tray(QObject *parent = nullptr);
-    virtual ~Tray() = default;
+    virtual ~Tray();
 
 private:
     QPointer<ScreenShot>             m_scrnShot;

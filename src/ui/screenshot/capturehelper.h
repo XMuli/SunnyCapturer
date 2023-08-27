@@ -24,6 +24,36 @@ enum class ActionType {
 
 QString actionTypeToString(ActionType actionType);
 
+// 判断某个点在 pickedRect 中的方位
+enum class OrientationType {
+    OT_empty,
+    OT_internal,
+
+    OT_left,
+    OT_top,
+    OT_right,
+    OT_bottom,
+
+    OT_topLeft,
+    OT_topRight,
+    OT_bottomLeft,
+    OT_bottomRight
+};
+
+void ensurePositiveSize(QRect &rect);                                         // 若宽度或高度为负数，重新生成一个矩形，确保左上角和右下角坐标正确
+OrientationType containsForRect(const QRect& rect, const QPoint& pt);         // 判断点在矩形区域的方位
+QRect largestRect(const QRect& rect, const QPoint& pt);                       // 获取公共的最大矩形, 通过3个点
+QRect largestRect(const QPoint& p1, const QPoint& p2, const QPoint& pt);      // 获取公共的最大矩形, 通过3个点
+QRect largestRect(const QPoint& p1, const QPoint& p2);                        // 获取公共的最大矩形, 通过2个点
+
+void stretchRect(QRect &rect, const QPoint& pt, const OrientationType& type);
+//void setMovePickedRect(QRect &rect, const QPoint& pt);                           // 移动矩形的位置
+
+bool allowableRangeErrorForPoint(const QPoint& p1, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
+bool allowableRangeErrorForLine(const QPoint& p1, const QPoint& p2, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
+bool allowableRangeErrorForLine(const QLine& line, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
+
+
 struct PainterEnv
 {
     PainterEnv() {}
@@ -40,7 +70,7 @@ struct Node
     QPoint p1;                                  // 起点
     QPoint p2;                                  // 终点
     QPoint p3;                                  // 轨迹点
-    QPoint pt;                                  // 临时保存一下(上一个新的点)
+    QPoint pt;                                  // 临时保存一下(上一个新的点); 只要使用全程是同一个枚举，即可以放心使用
     std::vector<QPoint>   trackPos;             // move 累计的点
     QRect  pickedRect;                          // 初始绘画位置: 由 p1、p2 构成
 

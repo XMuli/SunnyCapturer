@@ -20,6 +20,7 @@ ScreenShot::ScreenShot(QWidget *parent)
     , m_bFistPressed(false)
     , m_bAutoDetectRect(true)
     , m_actionType(ActionType::AT_wait)
+    , m_stretchPickedRectOrieType(OrientationType::OT_empty)
 {
     initUI();
 
@@ -236,6 +237,26 @@ void ScreenShot::originalPixmap()
     }
 }
 
+void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
+{
+    if (m_actionType == ActionType::AT_wait) {
+        if (type == OrientationType::OT_internal) {
+            setCursor(Qt::SizeAllCursor);
+        } else if (type == OrientationType::OT_left || type == OrientationType::OT_right) {
+            setCursor(Qt::SizeHorCursor);
+        } else if (type == OrientationType::OT_top || type == OrientationType::OT_bottom) {
+            setCursor(Qt::SizeVerCursor);
+        } else if (type == OrientationType::OT_topLeft || type == OrientationType::OT_bottomRight) {
+            setCursor(Qt::SizeFDiagCursor);
+        } else if (type == OrientationType::OT_topRight || type == OrientationType::OT_bottomLeft) {
+            setCursor(Qt::SizeBDiagCursor);
+        } else {
+            qDebug() << "---->" << int(m_actionType);
+            setCursor(Qt::WhatsThisCursor); // 一般都不会触发
+        }
+    }
+}
+
 QScreen *ScreenShot::currentScreen(const QPoint &pos) const
 {
     QScreen* scrn = qGuiApp->screenAt(pos);
@@ -300,13 +321,16 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
     const auto& tP1 = m_node.p1;
     const auto& tP2 = m_node.p2;
     const auto& tP3 = m_node.p3;
+    const auto& tPt = m_node.pt;
     const auto& tPickedRect = m_node.pickedRect;
 
     int tCount = 1;
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
                                                                    .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)  pickedRect:(%7, %8, %9 * %10)")
-                                                                   .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y())
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
+                                                                   .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6)")
+                                                                   .arg(tPt.x()).arg(tPt.y())
                                                                    .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height()));
 
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_rectNodes.size():%1").arg(m_rectNodes.size()));
@@ -402,15 +426,6 @@ void ScreenShot::firstRectNodesAssignmentNode()
     m_node.pickedRect = relativelyRect;
 }
 
-// length = 3 px 之内都看作是点击的这个已存在的 检测矩形，合理误差
-bool ScreenShot::allowableRangeError(const QPoint &p1, const QPoint &p2, int length)
-{
-    if (qAbs(p1.x() - p1.x()) <= length &&  qAbs(p2.y() - p1.y()) <= length)
-        return true;
-    else
-        return false;
-}
-
 void ScreenShot::dealMousePressEvent(QMouseEvent *e)
 {
     setMouseTracking(false);
@@ -418,6 +433,19 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
     if (m_actionType == ActionType::AT_wait) {
+        const auto& orieType = containsForRect(m_node.pickedRect, m_node.p1);
+
+        if (orieType == OrientationType::OT_internal) {
+            m_actionType = ActionType::AT_move_picked_rect;
+            m_node.pt = e->pos();
+            setMouseTracking(true);
+        } else {
+            m_actionType = ActionType::AT_stretch_picked_rect;
+            m_stretchPickedRectOrieType = orieType;
+            m_node.pickedRect = largestRect(m_node.pickedRect, m_node.p1);
+            setMouseTracking(true);
+        }
+
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         setMouseTracking(true);
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
@@ -437,7 +465,6 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
 void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
-    m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p2);
     qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
@@ -446,22 +473,42 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         m_node.trackPos.emplace_back(m_node.p3);
         m_actionType = ActionType::AT_wait;
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+
+        m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p2);
         // 此时已经滑动和已经被按下过了，所以一定是结束的标记
-        if (allowableRangeError(m_node.p1, m_node.p2)) {
+        if (allowableRangeErrorForPoint(m_node.p1, m_node.p2)) {
             firstRectNodesAssignmentNode();
         }
+
         m_actionType = ActionType::AT_wait;
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
+        setMovePickedRect();
+        setMouseTracking(true);
+        m_actionType = ActionType::AT_wait;
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
     } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
+        m_node.p3 = e->pos();
+        qDebug() << "----@MouseReleas0->" << m_node.p1 << m_node.p2 << m_node.p3 << m_node.pickedRect;
+        stretchRect(m_node.pickedRect, m_node.p3, m_stretchPickedRectOrieType);
+        ensurePositiveSize(m_node.pickedRect);
+        m_node.p1 = m_node.pickedRect.topLeft();
+        m_node.p2 = m_node.pickedRect.bottomRight();
+        m_actionType = ActionType::AT_wait;
     }
+}
 
-
-    setMouseTracking(false);
+// 对 m_node.pickedRect 进行偏移，且  pickedRect 同步给 p1，p2
+void ScreenShot::setMovePickedRect()
+{
+    const auto& px = m_node.p3 - m_node.pt;
+    m_node.pickedRect.translate(px);
+    m_node.pt = m_node.p3;
+    m_node.p1 = m_node.pickedRect.topLeft();
+    m_node.p2 = m_node.pickedRect.bottomRight();
 }
 
 void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
@@ -470,29 +517,33 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
     qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
+        const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
+        setCursorShape(orieType, m_node.p3);
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
         m_node.trackPos.emplace_back(m_node.p3);
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
         if (m_bFistPressed) {
-            if (!allowableRangeError(m_node.p3, m_node.pt)) {
+            if (!allowableRangeErrorForPoint(m_node.p3, m_node.pt)) {
                 m_actionType = ActionType::AT_picking_custom_rect;
             }
-
         } else {
             enumWindowsRect(m_rectNodes);
             rectNodesMapFromGlobal();
             firstRectNodesAssignmentNode();
         }
 
-
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
+        setMovePickedRect();
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
     } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
+        stretchRect(m_node.pickedRect, m_node.p3, m_stretchPickedRectOrieType);
+        m_node.p1 = m_node.pickedRect.topLeft();
+        m_node.p2 = m_node.pickedRect.bottomRight();
     }
 }
 

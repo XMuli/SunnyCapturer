@@ -28,13 +28,14 @@ private:
     void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) const;
     void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) const;
     void originalPixmap();
+    void setCursorShape(const OrientationType &type, const QPoint &pt);
+    void setMovePickedRect();
 
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
     void preDestruction();             // 销毁对象之前的清理工作
     void monitorsInfo() const;
     void rectNodesMapFromGlobal();
     void firstRectNodesAssignmentNode();  // 枚举遍历的窗口信息，将第一个赋值给 m_node
-    bool allowableRangeError(const QPoint& p1, const QPoint& p2, int range = 3); // 允许的误差，比如手抖偏移几个像素
 
     void printfDevelopProjectInfo(QPainter &pa);
     void prinftWindowsRects(QPainter &pa);
@@ -64,7 +65,10 @@ private:
     PainterEnv           m_paEnv;              // 绘画环境
     Node                 m_node;               // 一次操作的集合
 
+    OrientationType      m_stretchPickedRectOrieType;
+
     std::vector<RectNode> m_rectNodes;
+
 
 };
 

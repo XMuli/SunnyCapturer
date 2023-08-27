@@ -3,6 +3,8 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QIcon>
+#include <QKeySequence>
+#include <QShortcut>
 
 void Tray::init()
 {
@@ -64,4 +66,12 @@ Tray::Tray(QObject *parent)
     , m_trayIcon(new QSystemTrayIcon(this))
 {
     init();
+}
+
+Tray::~Tray()
+{
+    if (m_scrnShot) m_scrnShot->deleteLater();
+    if (m_setting) m_setting->deleteLater();
+    if (m_trayMenu) m_trayMenu->deleteLater();
+    if (m_trayIcon) m_trayIcon->deleteLater();
 }
