@@ -2,5 +2,35 @@
     <qresource prefix="/">
         <file>resources/screenshot_ui/logo/logo.svg</file>
         <file>resources/screenshot_ui/screenshot/board_circle.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/arrow.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/cancel.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/ellipse.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/finish.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/mosaic.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/pencil.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/pin.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/rectangle.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/save.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/serial.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/text.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/marker_pen.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/redo.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_btn/undo.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/arrow.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/arrow_bloken.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/bold.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/ellipse.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/ellipse_fill.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/italic.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/line.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/outline.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/rectangle.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/rectangle_fill.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/strikeout_line.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/underline.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/blur.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/mosaic.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_ellipse.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_rectangle.svg</file>
     </qresource>
 </RCC>

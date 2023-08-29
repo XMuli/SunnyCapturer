@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)  # 便于调试, 当前光标所在的所有 窗口矩形 的信息
 
-set(qt_moduls Widgets)                        # Network Multimedia WebSockets
+set(qt_moduls Widgets Xml Svg)                        # Network Multimedia WebSockets
 set(qt_version_moduls)
 foreach(it ${qt_moduls})
     list(APPEND qt_version_moduls Qt${QT_VERSION_MAJOR}::${it})
@@ -31,6 +31,9 @@ set(custom_ui_files
     ui/include/xwidget_global.h
     ui/include/xcolorbutton.h
     ui/include/xkeysequenceedit.h
+    ui/include/horspacerline.h
+    ui/include/verspacerline.h
+    ui/include/absbtnsctrl.h
     # h composite_widgets
     ui/include/colorpicker.h
     ui/include/resetui.h
@@ -43,6 +46,9 @@ set(custom_ui_files
     #  cpp common_widgets
     ui/common_widgets/xcolorbutton.cpp
     ui/common_widgets/xkeysequenceedit.cpp
+    ui/common_widgets/horspacerline.cpp
+    ui/common_widgets/verspacerline.cpp
+    ui/common_widgets/absbtnsctrl.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -59,6 +65,13 @@ set(custom_ui_files
     ui/composite_widgets/about.ui
     ui/composite_widgets/paste.cpp
     ui/composite_widgets/paste.ui
+
+    ui/paint_bar/painttoolbar.h
+    ui/paint_bar/painttoolbar.cpp
+    ui/paint_bar/paintbarhelper.h
+    ui/paint_bar/paintbarhelper.cpp
+    ui/paint_bar/paintctrlbar.h
+    ui/paint_bar/paintctrlbar.cpp
 )
 
 set(src_files
