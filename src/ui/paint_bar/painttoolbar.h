@@ -8,8 +8,6 @@
 #include "paintctrlbar.h"
 #include "paintbarhelper.h"
 
-
-
 class PaintToolBar : public QWidget
 {
     Q_OBJECT
@@ -20,19 +18,40 @@ public:
 private:
     void initUI();
     void initBtns();
-    void paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
+    bool paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
+    void toPaintBtn(const QToolButton* btn);
+    void setLayoutSpacing(int horSpace = 10, int verSpace = 100);
+    void setPaintCtrlBarToLayout(const bool& hadBtnChecked = true);
+    bool bOnlyOneRowOrCol();
+
+
+
+//    void onBtnRectangle();
+//    void onBtnEllipse();
+//    void onBtnArrow();
+//    void onBtnPencil();
+//    void onBtnMosaic();
+//    void onBtnMarkerPen();
+//    void onBtnText();
+//    void onBtnSerial();
+//    void onBtnPin();
+//    void onBtnUndo();
+//    void onBtnRedo();
+//    void onBtnSave();
+//    void onBtnCancel();
+//    void onBtnFinis();
 
 public slots:
-    void onBtnReleased();
+    void onPaintBtnReleased();
 
 signals:
+    void sigBtnRelease(const PaintType& type);
 
 
 private:
     QGridLayout*          m_layout;
     std::vector<PaintBtn> m_btns;
     Qt::Orientation       m_orie;
-
     QPointer<PaintCtrlBar> m_paintCtrlBar;
 };
 

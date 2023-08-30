@@ -1,8 +1,7 @@
 #include "painttoolbar.h"
 #include <QDebug>
+#include <QVariant>
 #include "paintbarhelper.h"
-
-
 
 PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -20,6 +19,8 @@ void PaintToolBar::initUI()
     setLayout(m_layout);
 
     initBtns();
+
+    connect(this, &PaintToolBar::sigBtnRelease, m_paintCtrlBar, &PaintCtrlBar::onPaintBtnRelease);
 }
 
 void PaintToolBar::initBtns()
@@ -51,7 +52,7 @@ void PaintToolBar::initBtns()
 
         tb = new QToolButton();
         tb->setObjectName(it.name);
-        tb->setProperty(PROPERTY_PAINT_TYPR, static_cast<int>(it.type));
+        tb->setProperty(PROPERTY_PAINT_TYPR, QVariant::fromValue(it.type));
         tb->setChecked(false);
         tb->setAutoRaise(true);
         tb->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -71,32 +72,26 @@ void PaintToolBar::initBtns()
             m_layout->addWidget(tb, count, 0, Qt::AlignCenter);
         }
         if (it.bAddSpacer) addSpacerLine(m_layout, m_orie);
-        connect(tb, &QToolButton::released, this, &PaintToolBar::onBtnReleased);
+        connect(tb, &QToolButton::released, this, &PaintToolBar::onPaintBtnReleased);
     }
 
-    QSpacerItem *spacer = nullptr;
-    int horSpace = 0;
-    int verSpace = 0;
+    // 结尾添加弹簧进行压缩
     int count = countItemsformLayout(m_layout, m_orie);
-
     if (m_orie == Qt::Horizontal)  {
-        verSpace = 10;
-        spacer = new QSpacerItem(0, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
-        m_layout->addItem(spacer, 0, count++);
-        m_layout->addWidget(m_paintCtrlBar, 1, 0, 1, count);
+        m_layout->addItem(new QSpacerItem(0, 1, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, count++);
     } else if (m_orie == Qt::Vertical) {
-        horSpace = 10;
-        spacer = new QSpacerItem(1, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-        m_layout->addItem(spacer, count++, 0);
-        m_layout->addWidget(m_paintCtrlBar, 0, 1, count, 1);
+        m_layout->addItem(new QSpacerItem(1, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), count++, 0);
     }
-    m_layout->setHorizontalSpacing(horSpace);
-    m_layout->setVerticalSpacing(verSpace);
+
+    // 这两行顺序很重要
+    setLayoutSpacing();
+    setPaintCtrlBarToLayout(false);
 }
 
-// bSpik: true-btn需要跳过的, false-全部都设置为回复默认
-void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik)
+// bSpik: true-btn需要跳过统一逻辑，单独执行自己的逻辑修改 icon, false-全部都设置为回复默认; ret: true-有按钮处理选中按下  false-全部都没有按下
+bool PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik)
 {
+    bool ret = false;
     for (int i = 0; i < m_btns.size(); ++i) {
         auto& it = m_btns.at(i);
         auto& btn = it.btn;
@@ -114,14 +109,120 @@ void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik
                 btn->setIcon(QIcon(origIcon));
             }
 
+            if (btn->isChecked()) ret = true;
+
+        } else {
+            continue;
+        }
+    }
+
+    return ret;
+}
+
+void PaintToolBar::toPaintBtn(const QToolButton *btn)
+{
+
+}
+
+void PaintToolBar::setLayoutSpacing(int horSpace, int verSpace)
+{
+    bool bClearnSpace = m_layout->rowCount() == 1 || m_layout->columnCount() == 1;
+    if (m_orie == Qt::Horizontal)  {
+        if (bClearnSpace) verSpace = 0;
+    } else if (m_orie == Qt::Vertical) {
+        if (bClearnSpace) horSpace = 0;
+    }
+
+    m_layout->setHorizontalSpacing(horSpace);
+    m_layout->setVerticalSpacing(verSpace);
+}
+
+// 添加 m_paintCtrlBar 到整体的布局里面
+void PaintToolBar::setPaintCtrlBarToLayout(const bool &hadBtnChecked)
+{
+    int count = countItemsformLayout(m_layout, m_orie);
+//    bool onlyHadRowOrCol = bOnlyOneRowOrCol();  // [需要调整逻辑， 只要被添加过，那么就是]   这里还是有问题 ！！！
+
+
+    qDebug() << "m_layout->rowCount():" << m_layout->rowCount() << "m_layout->columnCount():" << m_layout->columnCount();
+    // 【 需要调整 bOnlyOneRowOrCol 不存在时候的 逻辑】
+    if (m_orie == Qt::Horizontal)  {
+        if (onlyHadRowOrCol) {
+            if (hadBtnChecked) {
+                m_layout->addWidget(m_paintCtrlBar, 1, 0, 1, count);
+                m_paintCtrlBar->show();
+            } else {
+                m_layout->removeWidget(m_paintCtrlBar);
+                m_paintCtrlBar->setParent(nullptr);
+                m_paintCtrlBar->hide();
+            }
+        }
+    } else if (m_orie == Qt::Vertical) {
+        if (onlyHadRowOrCol) {
+            if (hadBtnChecked) {
+                m_layout->addWidget(m_paintCtrlBar, 0, 1, count, 1);
+                m_paintCtrlBar->show();
+            } else {
+                m_layout->removeWidget(m_paintCtrlBar);
+                m_paintCtrlBar->setParent(nullptr);
+                m_paintCtrlBar->hide();
+            }
         }
     }
 }
 
-void PaintToolBar::onBtnReleased()
+bool PaintToolBar::bOnlyOneRowOrCol()
+{
+    // 检查第二行和第二列是否有元素
+    bool hasItemInSecondRow = false;
+    bool hasItemInSecondColumn = false;
+
+    if (m_orie == Qt::Horizontal && m_layout->rowCount() >= 2)  {
+        for (int col = 0; col < m_layout->columnCount(); ++col) {
+            QLayoutItem *item = m_layout->itemAtPosition(1, col);
+            if (item) {
+                hasItemInSecondRow = true;
+                break;
+            }
+        }
+
+        return hasItemInSecondRow;
+    } else if (m_orie == Qt::Vertical && m_layout->columnCount() >= 2) {
+        for (int row = 0; row < m_layout->rowCount(); ++row) {
+            QLayoutItem *item = m_layout->itemAtPosition(row, 1);
+            if (item) {
+                hasItemInSecondColumn = true;
+                break;
+            }
+        }
+
+        return hasItemInSecondColumn;
+    } else {
+        return true;
+    }
+}
+
+
+
+
+void PaintToolBar::onPaintBtnReleased()
 {
     QToolButton* btn = qobject_cast<QToolButton*>(sender());
-    paintBtnsExclusive(btn, true);
+    static bool prevHadBtnChecked = false;
+    const bool& hadBtnChecked = paintBtnsExclusive(btn, true);
 
-    qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked();
+    const PaintType& type = btn->property(PROPERTY_PAINT_TYPR).value<PaintType>();
+    emit sigBtnRelease(type);
+
+////    虽然理论是更加标准的做法，但是好像没有必要，属于额外的？？
+
+    if (prevHadBtnChecked != hadBtnChecked) {
+        setPaintCtrlBarToLayout(hadBtnChecked);
+    }
+
+    qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked()
+             << "prevHadBtnChecked:" << prevHadBtnChecked << "hadBtnChecked:" << hadBtnChecked;
+    prevHadBtnChecked = hadBtnChecked;
+    adjustSize();
+
 }

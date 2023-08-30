@@ -1,11 +1,15 @@
 #ifndef PAINTCTRLBAR_H
 #define PAINTCTRLBAR_H
-#include <QGridLayout>
+
 #include <QPointer>
 #include <QWidget>
+#include <QSlider>
 #include <QBoxLayout>
+#include <QGridLayout>
+#include <QFontComboBox>
 #include "colorpicker.h"
 #include "common/absbtnsctrl.h"
+#include "paintbarhelper.h"
 
 class PaintCtrlBar : public QWidget
 {
@@ -18,9 +22,13 @@ public:
 private:
     void initUI();
     void initBtns();
+    void hideAllBtnsCtrl();
 
-private slots:
+    void addWidget(QWidget *w, const bool& bAddSpaceLine = true, int stretch = 0, Qt::Alignment alignment = Qt::AlignCenter);
+
+public slots:
     void onIdReleased(int idx);
+    void onPaintBtnRelease(const PaintType& type);
 
 signals:
 
@@ -36,6 +44,9 @@ private:
     QPointer<AbsBtnsCtrl>    m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>    m_lienWidthBar;                  // 线宽
     QPointer<ColorPicker>    m_colorPicker;                   // 取色板
+    QPointer<QFontComboBox>  m_fontFamily;
+    QPointer<QComboBox>      m_fontScale;
+    QPointer<QSlider>        m_scrollBar;
 
 };
 

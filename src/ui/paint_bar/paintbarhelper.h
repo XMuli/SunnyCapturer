@@ -8,7 +8,8 @@
 #include <QGridLayout>
 #include <QPointer>
 #include "common/absbtnsctrl.h"
-
+#include "horspacerline.h"
+#include "verspacerline.h"
 
 #define PROPERTY_PAINT_TYPR "PaintType"
 #define ICON_SIZE 32
@@ -32,7 +33,8 @@ enum class PaintType
     PT_cancel,
     PT_finish
 };
-Q_DECLARE_FLAGS(PaintTypeFlass, PaintType)       // 枚举 PaintType 生成宏 PaintTypeFlass
+Q_DECLARE_METATYPE(PaintType)                     // 可以被 QVariant 类型存储
+Q_DECLARE_FLAGS(PaintTypeFlass, PaintType)        // 枚举 PaintType 生成宏 PaintTypeFlass
 //Q_DECLARE_OPERATORS_FOR_FLAGS(PaintTypeFlass)   // 重载宏 PaintTypeFlass 的 |() 函数
 
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
@@ -51,7 +53,7 @@ struct PaintBtn
     {}
 
     QToolButton* btn;
-    PaintType    type;    // 对应枚举
+    PaintType    type;         // 对应枚举
     QString      name;         // objectName
     QString      tooltip;
     bool         bCheckable;

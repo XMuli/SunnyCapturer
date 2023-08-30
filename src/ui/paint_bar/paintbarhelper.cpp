@@ -12,8 +12,7 @@
 #include <QButtonGroup>
 #include <QString>
 #include <QSpacerItem>
-#include "horspacerline.h"
-#include "verspacerline.h"
+
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
 {
@@ -65,8 +64,8 @@ void addSpacerLine(QBoxLayout *layout, const Qt::Orientation &orie, const int &l
 {
     if (!layout) return;
     const int& count = layout->count();
-    if (orie == Qt::Horizontal) layout->addWidget(new VerSpacerLine(length), count, Qt::AlignCenter);
-    else if (orie == Qt::Vertical) layout->addWidget(new HorSpacerLine(length + 5), count, Qt::AlignCenter);
+    if (orie == Qt::Horizontal) layout->addWidget(new VerSpacerLine(length), 0, Qt::AlignCenter);
+    else if (orie == Qt::Vertical) layout->addWidget(new HorSpacerLine(length + 5), 0, Qt::AlignCenter);
 }
 
 int countItemsformLayout(const QGridLayout *layout, const Qt::Orientation &orie, const int &idx)
