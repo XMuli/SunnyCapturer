@@ -33,7 +33,6 @@ set(custom_ui_files
     ui/include/xkeysequenceedit.h
     ui/include/horspacerline.h
     ui/include/verspacerline.h
-    ui/include/absbtnsctrl.h
     # h composite_widgets
     ui/include/colorpicker.h
     ui/include/resetui.h
@@ -48,7 +47,6 @@ set(custom_ui_files
     ui/common_widgets/xkeysequenceedit.cpp
     ui/common_widgets/horspacerline.cpp
     ui/common_widgets/verspacerline.cpp
-    ui/common_widgets/absbtnsctrl.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -66,6 +64,9 @@ set(custom_ui_files
     ui/composite_widgets/paste.cpp
     ui/composite_widgets/paste.ui
 
+
+    ui/paint_bar/common/absbtnsctrl.h
+    ui/paint_bar/common/absbtnsctrl.cpp
     ui/paint_bar/painttoolbar.h
     ui/paint_bar/painttoolbar.cpp
     ui/paint_bar/paintbarhelper.h

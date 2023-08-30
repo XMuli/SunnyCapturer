@@ -19,17 +19,16 @@ int main(int argc, char *argv[])
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
     TRAY; // 启动托盘
 
-
     PaintToolBar paintToolBar(Qt::Horizontal); // Horizontal Vertical
     paintToolBar.show();
 
-    PaintCtrlBar paintCtrlBar(Qt::Horizontal);
-    paintCtrlBar.show();
+//    PaintCtrlBar paintCtrlBar(Qt::Horizontal);
+//    paintCtrlBar.show();
 
 //    SideSettingUI w;
 //    w.show();
 //    ColorPicker colorPicker;
-//    colorPicker.setColorPickerType(ColorPickerType::Grid);
+//    colorPicker.setColorPickerType(ColorPickerType::CT_grid_horizontal);
 //    colorPicker.show();
 //    AbsSettingUI absW;
 //    absW.show();

@@ -20,6 +20,7 @@ public:
 private:
     void initUI();
     void initBtns();
+    void paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
 
 public slots:
     void onBtnReleased();

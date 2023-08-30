@@ -4,7 +4,8 @@
 #include <QPointer>
 #include <QWidget>
 #include <QBoxLayout>
-#include "absbtnsctrl.h"
+#include "colorpicker.h"
+#include "common/absbtnsctrl.h"
 
 class PaintCtrlBar : public QWidget
 {
@@ -34,7 +35,8 @@ private:
     QPointer<AbsBtnsCtrl>    m_textCtrl;                      // 文本
     QPointer<AbsBtnsCtrl>    m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>    m_lienWidthBar;                  // 线宽
-//    QPointer<ColorParaBar> m_colorBar;                     // 取色板
+    QPointer<ColorPicker>    m_colorPicker;                   // 取色板
+
 };
 
 #endif // PAINTCTRLBAR_H

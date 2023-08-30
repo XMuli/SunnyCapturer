@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QSize>
 #include "paintbarhelper.h"
 
 PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
@@ -17,6 +18,7 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_textCtrl(nullptr)
     , m_serialCtrl(nullptr)
     , m_lienWidthBar(nullptr)
+    , m_colorPicker(new ColorPicker(QSize(12, 12), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
 {
     initUI();
 }
@@ -30,12 +32,21 @@ PaintCtrlBar::~PaintCtrlBar()
     m_textCtrl->deleteLater();
     m_serialCtrl->deleteLater();
     m_lienWidthBar->deleteLater();
+    m_colorPicker->deleteLater();
 }
 
 void PaintCtrlBar::initUI()
 {
-    if (m_orie == Qt::Horizontal) m_layout = new QHBoxLayout(this);
-    else m_layout = new QVBoxLayout(this);
+    if (m_orie == Qt::Horizontal) {
+        m_layout = new QHBoxLayout(this);
+//        m_colorPicker->setColorPickerType(ColorPickerType::CT_grid_horizontal);
+    } else if (m_orie == Qt::Vertical) {
+        m_layout = new QVBoxLayout(this);
+//        m_colorPicker->setColorPickerType(ColorPickerType::CT_grid_horizontal);
+    }
+
+//    m_colorPicker->setSize(QSize(100, 100));
+//    m_colorPicker->adjustSize();
     setContentsMargins(0, 0, 0, 0);
     m_layout->setContentsMargins(0, 0, 0 ,0);
     setLayout(m_layout);
@@ -43,18 +54,17 @@ void PaintCtrlBar::initUI()
     initBtns();
 }
 
-/****************************************************************************************************
-// 控件布局
-*********************************************************************************************
-*                                                                                           *
-*  ************************  ************************  ************************             *
-*  * btn  btn （弹簧/分割线） *  * btn  btn （弹簧/分割线） *  * btn  btn （弹簧/分割线） *   弹簧       *
-*  ************************  ************************  ************************             *
-*                                                                                           *
-*********************************************************************************************
+/************************************************控件布局************************************************
 
-****************************************************************************************************/
+********************************************************************************************************
+*                                                                                                      *
+*  ************************         ************************        ************************           *
+*  * btn  btn  弹簧/分割线 *   弹簧   * btn  btn  弹簧/分割线  *   弹簧  * btn  btn  弹簧/分割线 *   弹簧     *
+*  ************************         ************************        ************************           *
+*                                                                                                      *
+********************************************************************************************************
 
+*******************************************************************************************************/
 void PaintCtrlBar::initBtns()
 {
     const QString& dir(":/resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/");
@@ -77,6 +87,9 @@ void PaintCtrlBar::initBtns()
     m_layout->addWidget(m_textCtrl, 0, Qt::AlignCenter);
     addSpacerLine(m_layout, m_orie);
     m_layout->addWidget(m_serialCtrl, 0, Qt::AlignCenter);
+    addSpacerLine(m_layout, m_orie);
+    m_layout->addWidget(m_colorPicker, 0, Qt::AlignCenter);
+
     addSpacerItem(m_layout, m_orie); // 实际是有效果的，被子组合控件的弹簧所影响了
 }
 

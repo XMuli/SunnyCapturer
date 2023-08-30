@@ -94,15 +94,34 @@ void PaintToolBar::initBtns()
     m_layout->setVerticalSpacing(verSpace);
 }
 
+// bSpik: true-btn需要跳过的, false-全部都设置为回复默认
+void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik)
+{
+    for (int i = 0; i < m_btns.size(); ++i) {
+        auto& it = m_btns.at(i);
+        auto& btn = it.btn;
+
+        // 仅传入进来的 tBtn 状态相反变化，而其余的都需要置为未选中状态
+        if (btn->isCheckable()) {
+            const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_btn/" + btn->objectName() + ".svg";
+            const QIcon origIcon(path);
+            const QIcon newIcon(changedSVGColor(path, QColor(Qt::green).name(), btn->iconSize()));
+
+            if (bSpik && tBtn && tBtn == btn) {
+                btn->setIcon(btn->isChecked() ? newIcon : origIcon);
+            } else {
+                btn->setChecked(false);
+                btn->setIcon(QIcon(origIcon));
+            }
+
+        }
+    }
+}
+
 void PaintToolBar::onBtnReleased()
 {
     QToolButton* btn = qobject_cast<QToolButton*>(sender());
-
-    const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_btn/" + btn->objectName() + ".svg";
-    const QIcon origIcon(path);
-    const QIcon icon(changedSVGColor(path, QColor(Qt::green).name(), btn->iconSize()));
-
-    if (btn->isCheckable()) btn->setIcon(btn->isChecked() ? icon : origIcon);
+    paintBtnsExclusive(btn, true);
 
     qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked();
 }

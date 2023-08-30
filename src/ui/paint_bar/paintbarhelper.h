@@ -7,11 +7,11 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QPointer>
-#include "absbtnsctrl.h"
+#include "common/absbtnsctrl.h"
 
 
 #define PROPERTY_PAINT_TYPR "PaintType"
-#define ICON_SIZE 48
+#define ICON_SIZE 32
 
 enum class PaintType
 {
@@ -65,15 +65,5 @@ void addSpacerLine(QBoxLayout *layout, const Qt::Orientation &orie, const int &l
 void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = 0);    // 添加弹簧
 int countItemsformLayout(const QGridLayout* layout, const Qt::Orientation& orie, const int& idx = 0);
 
-
-class PaintBarHelper : public QObject
-{
-    Q_OBJECT
-public:
-    explicit PaintBarHelper(QObject *parent = nullptr);
-
-signals:
-
-};
 
 #endif // PAINTBARHELPER_H

@@ -15,13 +15,6 @@
 #include "horspacerline.h"
 #include "verspacerline.h"
 
-
-PaintBarHelper::PaintBarHelper(QObject *parent)
-    : QObject{parent}
-{
-
-}
-
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
 {
     // if it has the tagname then overwritte desired attribute
