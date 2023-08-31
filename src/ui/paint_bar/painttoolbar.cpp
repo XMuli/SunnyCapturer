@@ -1,4 +1,4 @@
-#include "painttoolbar.h"
+﻿#include "painttoolbar.h"
 #include <QDebug>
 #include <QVariant>
 #include "paintbarhelper.h"
@@ -26,6 +26,9 @@ void PaintToolBar::initUI()
 void PaintToolBar::initBtns()
 {
 //    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | windowFlags());  // | Qt::WindowStaysOnTopHint
+    setWindowFlags(Qt::WindowMinMaxButtonsHint | windowFlags());  // | Qt::WindowStaysOnTopHint  【】
+//    【Qt bug，】 水平布局下，属于 Qt 的bug，去掉 Qt::FramelessWindowHint 属性，就完美了; 且可以使用如下 来查看验证； 反之带上，则需要手动拖曳一下，才会发现界面被刷新是正常的。
+//    qDebug() << "-----@3---->rowCount:" << m_layout->rowCount()  << "columnCount:" << m_layout->columnCount() << "" << m_layout->count();
 
     m_btns.reserve(13);
     m_btns.emplace_back(nullptr, PaintType::PT_rectangle, "rectangle", tr("Rectangle"), true, false);
@@ -208,6 +211,7 @@ void PaintToolBar::onPaintBtnReleased()
     }
 
 
+    qDebug() << "-----@3---->rowCount:" << m_layout->rowCount()  << "columnCount:" << m_layout->columnCount() << "" << m_layout->count();
 
 
     adjustSize();
