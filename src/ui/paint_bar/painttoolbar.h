@@ -18,11 +18,13 @@ public:
 private:
     void initUI();
     void initBtns();
-    bool paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
-    void toPaintBtn(const QToolButton* btn);
-    void setLayoutSpacing(int horSpace = 10, int verSpace = 100);
-    void setPaintCtrlBarToLayout(const bool& hadBtnChecked = true);
-    bool bOnlyOneRowOrCol();
+    void paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
+    void setLayoutSpacing(int horSpace = 3, int verSpace = 3);
+    void setPaintCtrlBarToLayout();
+    bool hadPaintBtnChecked();
+//    bool bOnlyOneRowOrCol();
+
+    void printfAllItems(const QString& prompted);
 
 
 
