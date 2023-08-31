@@ -1,4 +1,4 @@
-#include "absbtnsctrl.h"
+﻿#include "absbtnsctrl.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "horspacerline.h"

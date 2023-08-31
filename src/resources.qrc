@@ -30,7 +30,12 @@
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/underline.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/blur.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/mosaic.svg</file>
-        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_ellipse.svg</file>
-        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_rectangle.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/point_large.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/point_medium.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/point_small.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_letter_ellipse.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_letter_rectangle.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_number_ellipse.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_number_rectangle.svg</file>
     </qresource>
 </RCC>

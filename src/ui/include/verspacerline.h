@@ -1,4 +1,4 @@
-#ifndef VERSPACERLINE_H
+﻿#ifndef VERSPACERLINE_H
 #define VERSPACERLINE_H
 
 #include <QFrame>

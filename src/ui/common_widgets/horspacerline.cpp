@@ -1,4 +1,4 @@
-#include "horspacerline.h"
+﻿#include "horspacerline.h"
 
 //frameRect:    QRect       //控件矩形
 //frameWidth:   const int   //框架的宽度

@@ -1,4 +1,4 @@
-#ifndef ABSBTNSCTRL_H
+﻿#ifndef ABSBTNSCTRL_H
 #define ABSBTNSCTRL_H
 
 #include <QBoxLayout>

@@ -14,7 +14,8 @@ PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
 
 void PaintToolBar::initUI()
 {
-    setContentsMargins(0, 0, 0, 0);
+    const int& margin = 2;
+    setContentsMargins(margin, margin, margin, margin);
     m_layout->setContentsMargins(0, 0, 0 ,0);
     setLayout(m_layout);
 
@@ -25,8 +26,7 @@ void PaintToolBar::initUI()
 
 void PaintToolBar::initBtns()
 {
-//    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | windowFlags());  // | Qt::WindowStaysOnTopHint
-    setWindowFlags(Qt::WindowMinMaxButtonsHint | windowFlags());  // | Qt::WindowStaysOnTopHint  【】
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | windowFlags());  // | Qt::WindowStaysOnTopHint
 //    【Qt bug，】 水平布局下，属于 Qt 的bug，去掉 Qt::FramelessWindowHint 属性，就完美了; 且可以使用如下 来查看验证； 反之带上，则需要手动拖曳一下，才会发现界面被刷新是正常的。
 //    qDebug() << "-----@3---->rowCount:" << m_layout->rowCount()  << "columnCount:" << m_layout->columnCount() << "" << m_layout->count();
 
@@ -35,8 +35,8 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_ellipse, "ellipse", tr("Ellipse"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_arrow, "arrow", tr("Arrow"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_pencil, "pencil", tr("Pencil"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_mosaic, "mosaic", tr("Mosaic/Blur"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_marker_pen, "marker_pen", tr("Marker pen"), true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_mosaic, "mosaic", tr("Mosaic/Blur"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_text, "text", tr("Text"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin"), false, true);

@@ -6,7 +6,7 @@
 ColorPicker::ColorPicker(QWidget *parent)
     : QWidget(parent)
     , m_bRainbow(false)
-    , m_size(QSize(16, 16))
+    , m_size(QSize(23, 23))
     , m_gridLayout(new QGridLayout(this))
     , m_pickedBtn(nullptr)
     , m_colorPickerType(ColorPickerType::CT_horizontal)

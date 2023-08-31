@@ -1,4 +1,4 @@
-#include "verspacerline.h"
+﻿#include "verspacerline.h"
 
 VerSpacerLine::VerSpacerLine(int length, QWidget *parent, Qt::WindowFlags f)
 {

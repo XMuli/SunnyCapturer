@@ -1,4 +1,4 @@
-#ifndef HORSPACERLINE_H
+﻿#ifndef HORSPACERLINE_H
 #define HORSPACERLINE_H
 
 #include <QFrame>

@@ -1,4 +1,4 @@
-#include "paintbarhelper.h"
+﻿#include "paintbarhelper.h"
 #include <map>
 #include <QFile>
 #include <QIODevice>
@@ -104,7 +104,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
         const QSize size(ICON_SIZE, ICON_SIZE);
         btn->setIconSize(size);
         btn->setFixedSize(size);
-        btn->setObjectName(QString("btn%1").arg(i));
+        btn->setObjectName(items.at(i));
         const QString& path = dir + items.at(i) + ".svg";
         btn->setIcon(QIcon(path));
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -123,6 +123,14 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
         } else {
             absBtnsCtrl->addWidget(btn, false);
         }
+
+        QObject::connect(btn, &QToolButton::toggled, [btn]() {
+
+            const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/" + btn->objectName() + ".svg";
+            const QIcon origIcon(path);
+            const QIcon newIcon(changedSVGColor(path, QColor(Qt::green).name(), btn->iconSize()));
+            btn->setIcon(btn->isChecked() ? newIcon : origIcon);
+        });
 
     }
 

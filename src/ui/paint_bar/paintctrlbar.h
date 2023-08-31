@@ -1,4 +1,4 @@
-#ifndef PAINTCTRLBAR_H
+﻿#ifndef PAINTCTRLBAR_H
 #define PAINTCTRLBAR_H
 
 #include <QPointer>
@@ -27,14 +27,14 @@ private:
     void addWidget(QWidget *w, const bool& bAddSpaceLine = true, int stretch = 0, Qt::Alignment alignment = Qt::AlignCenter);
 
 public slots:
-    void onIdReleased(int idx);
+    void onIdReleased(int id);
     void onPaintBtnRelease(const PaintType& type);
 
 signals:
 
 private:
-    QBoxLayout*          m_layout;
-    Qt::Orientation       m_orie;
+    QBoxLayout*              m_layout;
+    Qt::Orientation          m_orie;
 
     QPointer<AbsBtnsCtrl>    m_rectCtrl;                      // 矩形
     QPointer<AbsBtnsCtrl>    m_ellipseCtrl;                   // 圆形
@@ -42,7 +42,8 @@ private:
     QPointer<AbsBtnsCtrl>    m_mosaicCtrl;                    // 马赛克
     QPointer<AbsBtnsCtrl>    m_textCtrl;                      // 文本
     QPointer<AbsBtnsCtrl>    m_serialCtrl;                    // 序号图形
-    QPointer<AbsBtnsCtrl>    m_lienWidthBar;                  // 线宽
+    QPointer<AbsBtnsCtrl>    m_pointCtrl;                  // 线宽
+    QPointer<AbsBtnsCtrl>    m_markerPenBar;                  // 记号笔
     QPointer<ColorPicker>    m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>  m_fontFamily;
     QPointer<QComboBox>      m_fontScale;

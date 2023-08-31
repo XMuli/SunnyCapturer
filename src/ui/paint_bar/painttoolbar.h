@@ -1,4 +1,4 @@
-#ifndef PAINTTOOLBAR_H
+﻿#ifndef PAINTTOOLBAR_H
 #define PAINTTOOLBAR_H
 #include <vector>
 #include <QToolButton>

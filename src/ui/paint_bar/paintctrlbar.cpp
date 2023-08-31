@@ -1,10 +1,11 @@
-#include "paintctrlbar.h"
+﻿#include "paintctrlbar.h"
 #include <QDebug>
 #include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QSize>
+#include <QButtonGroup>
 #include "paintbarhelper.h"
 
 PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
@@ -17,8 +18,9 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_mosaicCtrl(nullptr)
     , m_textCtrl(nullptr)
     , m_serialCtrl(nullptr)
-    , m_lienWidthBar(nullptr)
-    , m_colorPicker(new ColorPicker(QSize(16, 16), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
+    , m_pointCtrl(nullptr)
+    , m_markerPenBar(nullptr)
+    , m_colorPicker(new ColorPicker(QSize(20, 20), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
     , m_scrollBar(new QSlider(m_orie, this))
@@ -34,7 +36,8 @@ PaintCtrlBar::~PaintCtrlBar()
     m_mosaicCtrl->deleteLater();
     m_textCtrl->deleteLater();
     m_serialCtrl->deleteLater();
-    m_lienWidthBar->deleteLater();
+    m_pointCtrl->deleteLater();
+    m_markerPenBar->deleteLater();
     m_colorPicker->deleteLater();
 
     m_fontFamily->deleteLater();
@@ -85,16 +88,18 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line" << "arrow_bloken"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_rectangle" << "serial_ellipse"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-//    connect(creatorAbsBtnsCtrl(m_orie, m_lienWidthBar, dir, QStringList() << "lienWidth1" << "lienWidth2" << "lienWidth3"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_letter_rectangle" << "serial_number_rectangle" << "serial_letter_ellipse" << "serial_number_ellipse"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenBar, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
 
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
 //    addWidget(m_arrowCtrl);
 //    addWidget(m_mosaicCtrl);
+//    addWidget(m_pointCtrl);
 //    addWidget(m_scrollBar);
-
 //    addWidget(m_textCtrl);
+
 //    addWidget(m_fontFamily);
 //    addWidget(m_fontScale);
 //    addWidget(m_colorPicker);
@@ -139,11 +144,12 @@ void PaintCtrlBar::hideAllBtnsCtrl()
     m_mosaicCtrl->hide();
     m_textCtrl->hide();
     m_serialCtrl->hide();
-//    m_lienWidthBar->hide();
+    m_markerPenBar->hide();
     m_colorPicker->hide();
     m_fontFamily->hide();
     m_fontScale->hide();
     m_scrollBar->hide();
+    m_pointCtrl->hide();
 
     for (int i = 0; i < m_layout->count(); ++i) {
         QLayoutItem *item = m_layout->itemAt(i);
@@ -158,14 +164,34 @@ void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch,
     w->show();
 }
 
-void PaintCtrlBar::onIdReleased(int idx)
+void PaintCtrlBar::onIdReleased(int id)
 {
-    qDebug() << "----sender（）:" << sender() << "   idx:" << idx ;
+    qDebug() << "----sender（）:" << sender() << "   id:" << id ;
+
+    QButtonGroup *buttonGroup = qobject_cast<QButtonGroup*>(sender());
+    if (buttonGroup) {
+
+        for (auto& it : buttonGroup->buttons()) {
+            qDebug() << "Button" << it << "isCheckable():" << it->isCheckable() << "isChecked():" << it->isChecked();
+
+        }
+
+        QToolButton *btn = qobject_cast<QToolButton*>(buttonGroup->button(id));
+        if (btn) {
+
+
+
+        }
+    }
+
+
+
 }
 
 void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
 {    
     hideAllBtnsCtrl();
+    bool bPointCtrlShow = true;
     bool bColorPickerShow = true;
     if (type == PaintType::PT_rectangle) {
         addWidget(m_rectCtrl);
@@ -174,17 +200,22 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
     } else if (type == PaintType::PT_arrow) {
         addWidget(m_arrowCtrl);
     } else if (type == PaintType::PT_pencil) {
+        addWidget(m_pointCtrl);
+    } else if (type == PaintType::PT_marker_pen) {
+        addWidget(m_markerPenBar);
     } else if (type == PaintType::PT_mosaic) {
         addWidget(m_mosaicCtrl);
-        addWidget(m_scrollBar);
+        addWidget(m_scrollBar, false);
+        bPointCtrlShow = false;
         bColorPickerShow = false;
-    } else if (type == PaintType::PT_marker_pen) {
     } else if (type == PaintType::PT_text) {
         addWidget(m_textCtrl);
         addWidget(m_fontFamily, false);
         addWidget(m_fontScale, false);
+        bPointCtrlShow = false;
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
+
     } else if (type == PaintType::PT_pin) {
 
     } else if (type == PaintType::PT_undo) {
@@ -196,6 +227,9 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
     } else {
         qDebug() << "type is unknow PaintType!";
     }
+
+    if (bPointCtrlShow) addWidget(m_pointCtrl);
+    else m_pointCtrl->hide();
 
     if (bColorPickerShow)  {
         addWidget(m_colorPicker, false);

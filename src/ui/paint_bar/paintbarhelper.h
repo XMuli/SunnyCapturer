@@ -1,4 +1,4 @@
-#ifndef PAINTBARHELPER_H
+﻿#ifndef PAINTBARHELPER_H
 #define PAINTBARHELPER_H
 
 #include <QObject>
@@ -12,7 +12,7 @@
 #include "verspacerline.h"
 
 #define PROPERTY_PAINT_TYPR "PaintType"
-#define ICON_SIZE 32
+#define ICON_SIZE 48 // 32
 
 enum class PaintType
 {
