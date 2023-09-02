@@ -1,7 +1,10 @@
 ﻿#include "painttoolbar.h"
 #include <QDebug>
+#include <QMouseEvent>
 #include <QVariant>
+#include <QApplication>
 #include "paintbarhelper.h"
+#include "communication.h"
 
 PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -20,7 +23,6 @@ void PaintToolBar::initUI()
     setLayout(m_layout);
 
     initBtns();
-
     connect(this, &PaintToolBar::sigBtnRelease, m_paintCtrlBar, &PaintCtrlBar::onPaintBtnRelease);
 }
 
@@ -66,6 +68,8 @@ void PaintToolBar::initBtns()
         tb->setFixedSize(size);
         tb->setToolTip(it.tooltip);
         tb->setCheckable(it.bCheckable);
+
+        if (tb->isCheckable()) tb->installEventFilter(this);
 //        tb->show();  // 提前显示的话，添加到 ScreenShot 中，会显示批量 show 的时候被生成捕捉看到阴影，造成 bug
 
         const int& count = countItemsformLayout(m_layout, m_orie);
@@ -210,9 +214,42 @@ void PaintToolBar::onPaintBtnReleased()
 
     }
 
-
+    adjustSize();
     qDebug() << "-----@3---->rowCount:" << m_layout->rowCount()  << "columnCount:" << m_layout->columnCount() << "" << m_layout->count();
 
-
-    adjustSize();
 }
+
+bool PaintToolBar::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched && event->type() == QEvent::MouseButtonRelease) {
+
+        const auto t = qobject_cast<QToolButton*>(watched);
+        bool trageBtnRelease = t ? t->isCheckable() : false;
+
+        qDebug() << "trageBtnRelease:" << trageBtnRelease << "t:" << t << "event->type():" << event->type();
+
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+
+
+        // 创建一个与原始事件相似的事件对象
+        QMouseEvent wEvent(
+            mouseEvent->type(),
+            mouseEvent->localPos(),
+            mouseEvent->windowPos(),
+            mouseEvent->screenPos(),
+            mouseEvent->button(),
+            mouseEvent->buttons(),
+            mouseEvent->modifiers()
+            );
+
+
+        qDebug()  << "------#222----->watched:" << watched << "mouseEvent:" << mouseEvent << "COMM.screenShotPtr():" << COMM.screenShotPtr();
+
+        if (COMM.screenShotPtr()) qApp->sendEvent(COMM.screenShotPtr(), &wEvent);  // 发送事件给 screenShotPtr
+    }
+
+    // 继续处理事件
+    return QObject::eventFilter(watched, event);
+}
+
+

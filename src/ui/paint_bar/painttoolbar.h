@@ -49,12 +49,14 @@ public slots:
 signals:
     void sigBtnRelease(const PaintType& type);
 
+public:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
-    QGridLayout*          m_layout;
-    std::vector<PaintBtn> m_btns;
-    Qt::Orientation       m_orie;
-    QPointer<PaintCtrlBar> m_paintCtrlBar;
+    QGridLayout*             m_layout;
+    std::vector<PaintBtn>    m_btns;
+    Qt::Orientation          m_orie;
+    QPointer<PaintCtrlBar>   m_paintCtrlBar;
 };
 
 #endif // PAINTTOOLBAR_H

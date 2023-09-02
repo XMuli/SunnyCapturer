@@ -40,6 +40,15 @@ enum class OrientationType {
     OT_bottomRight
 };
 
+
+// 自定义控件
+enum class CustomWidgetType {
+    CWT_paint_btns_bar,
+    CWT_magnifying_glass,
+    CWT_picked_rect_tooptip,      // 选中矩形尺寸预览
+    CWT_point_changed_tooptip     // 线宽 px 改变
+};
+
 void ensurePositiveSize(QRect &rect);                                         // 若宽度或高度为负数，重新生成一个矩形，确保左上角和右下角坐标正确
 OrientationType containsForRect(const QRect& rect, const QPoint& pt);         // 判断点在矩形区域的方位
 QRect largestRect(const QRect& rect, const QPoint& pt);                       // 获取公共的最大矩形, 通过3个点
@@ -47,12 +56,10 @@ QRect largestRect(const QPoint& p1, const QPoint& p2, const QPoint& pt);      //
 QRect largestRect(const QPoint& p1, const QPoint& p2);                        // 获取公共的最大矩形, 通过2个点
 QRect toAbsoluteRect(const QRect& rect);                                      // 将一个为负的 width/height 的 rect 转化为其为正的；  eg: m_node.pickedRect -> m_node.absoluteRect
 
-void stretchRect(QRect &rect, const QPoint& pt, const OrientationType& type);
-//void setMovePickedRect(QRect &rect, const QPoint& pt);                           // 移动矩形的位置
-
-bool allowableRangeErrorForPoint(const QPoint& p1, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
+void stretchRect(QRect &rect, const QPoint& pt, const OrientationType& type);                                 // 将一个传入 rect 矩形拉伸变大变小
+bool allowableRangeErrorForPoint(const QPoint& p1, const QPoint& pt, const int& length = 3);                  // 允许的误差，比如手抖偏移几个像素
 bool allowableRangeErrorForLine(const QPoint& p1, const QPoint& p2, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
-bool allowableRangeErrorForLine(const QLine& line, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
+bool allowableRangeErrorForLine(const QLine& line, const QPoint& pt, const int& length = 3);                  // 允许的误差，比如手抖偏移几个像素
 
 
 struct PainterEnv

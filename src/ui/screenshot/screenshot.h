@@ -17,7 +17,7 @@ class ScreenShot : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ScreenShot(QWidget *parent = nullptr);
+    explicit ScreenShot(const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);  // Horizontal Vertical
     virtual ~ScreenShot();
 
     void capture();
@@ -38,6 +38,7 @@ private:
     void monitorsInfo() const;
     void rectNodesMapFromGlobal();
     void firstRectNodesAssignmentNode();  // 枚举遍历的窗口信息，将第一个赋值给 m_node
+    QPoint customWidgetShowPositionRule(const CustomWidgetType& cwt);
 
     void printfDevelopProjectInfo(QPainter &pa);
     void prinftWindowsRects(QPainter &pa);
@@ -68,9 +69,8 @@ private:
     Node                     m_node;               // 一次操作的集合
     QPointer<PaintToolBar>   m_paintBar;           // paintToolBar
 
-    OrientationType          m_stretchPickedRectOrieType;
-    Qt::Orientations         m_orie;
-
+    OrientationType          m_stretchPickedRectOrieType;    
+    Qt::Orientation          m_orie;
     std::vector<RectNode>    m_rectNodes;
 
 
