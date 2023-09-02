@@ -45,6 +45,7 @@ OrientationType containsForRect(const QRect& rect, const QPoint& pt);         //
 QRect largestRect(const QRect& rect, const QPoint& pt);                       // 获取公共的最大矩形, 通过3个点
 QRect largestRect(const QPoint& p1, const QPoint& p2, const QPoint& pt);      // 获取公共的最大矩形, 通过3个点
 QRect largestRect(const QPoint& p1, const QPoint& p2);                        // 获取公共的最大矩形, 通过2个点
+QRect toAbsoluteRect(const QRect& rect);                                      // 将一个为负的 width/height 的 rect 转化为其为正的；  eg: m_node.pickedRect -> m_node.absoluteRect
 
 void stretchRect(QRect &rect, const QPoint& pt, const OrientationType& type);
 //void setMovePickedRect(QRect &rect, const QPoint& pt);                           // 移动矩形的位置
@@ -73,6 +74,7 @@ struct Node
     QPoint pt;                                  // 临时保存一下(上一个新的点); 只要使用全程是同一个枚举，即可以放心使用
     std::vector<QPoint>   trackPos;             // move 累计的点
     QRect  pickedRect;                          // 初始绘画位置: 由 p1、p2 构成
+    QRect  absoluteRect;                        // 绝对值矩形: 如拉伸时 pickedRect 的widget/height 可能为负数，此时就需要依靠它开show paintBtnsBar 等作为基准参考点
 
     QPen pen = QPen(Qt::red, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);

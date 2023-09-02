@@ -190,3 +190,13 @@ void ensurePositiveSize(QRect &rect)
 }
 
 
+// 当前使用者:当前是拉伸窗口时，放widget/height为负数时候，确保 paintBtnsBar 能显示在正确的位置上
+QRect toAbsoluteRect(const QRect &rect)
+{
+    QRect ret(rect);
+
+    if (rect.width() < 0 || rect.height() < 0)
+        ret = largestRect(rect.topLeft(), rect.bottomRight());
+
+    return ret;
+}

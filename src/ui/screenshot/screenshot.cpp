@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QIcon>
+#include <QMessageBox>
 #include "windowsrect.h"
 
 WindowsRect g_windowsRect;
@@ -20,7 +21,9 @@ ScreenShot::ScreenShot(QWidget *parent)
     , m_bFistPressed(false)
     , m_bAutoDetectRect(true)
     , m_actionType(ActionType::AT_wait)
+    , m_paintBar(new PaintToolBar(Qt::Horizontal, nullptr))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
+    , m_orie(Qt::Horizontal)
 {
     initUI();
 
@@ -51,6 +54,8 @@ void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     m_vdRect = m_primaryScreen->virtualGeometry();
+    m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
+    m_paintBar->hide();
     monitorsInfo();
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
@@ -269,16 +274,21 @@ QScreen *ScreenShot::currentScreen(const QPoint &pos) const
 
     //if (!scrn) curScrn = qGuiApp->primaryScreen();
 
-    if (!scrn) qDebug() << "Gets that the current screen is empty";
+    if (!scrn) {
+        QMessageBox::warning(nullptr, "ScreenShot::currentScreen", "Gets that the current screen is empty!");
+        qDebug() << "Gets that the current screen is empty";
+    }
 
     return scrn;
 }
 
 void ScreenShot::preDestruction()
 {
-    if (!m_origPix.isNull()) {
-        m_origPix = QPixmap();
-    }
+    m_primaryScreen = nullptr;
+    if (m_screens.size()) m_screens.clear();
+    if (!m_origPix.isNull()) m_origPix = QPixmap();
+    if (m_paintBar) m_paintBar->deleteLater();
+    if (m_rectNodes.size()) m_rectNodes.clear();
 }
 
 void ScreenShot::monitorsInfo() const
@@ -430,6 +440,8 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
 {
     setMouseTracking(false);
     m_node.p1 = e->pos();
+    m_node.p2 = e->pos();
+    m_node.p3 = e->pos();
     qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
     if (m_actionType == ActionType::AT_wait) {
@@ -460,11 +472,14 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
     } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
     }
+
+    m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
 }
 
 void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
+    m_node.p3 = e->pos();
     qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
@@ -499,20 +514,14 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         m_node.p2 = m_node.pickedRect.bottomRight();
         m_actionType = ActionType::AT_wait;
     }
-}
 
-// 对 m_node.pickedRect 进行偏移，且  pickedRect 同步给 p1，p2
-void ScreenShot::setMovePickedRect()
-{
-    const auto& px = m_node.p3 - m_node.pt;
-    m_node.pickedRect.translate(px);
-    m_node.pt = m_node.p3;
-    m_node.p1 = m_node.pickedRect.topLeft();
-    m_node.p2 = m_node.pickedRect.bottomRight();
+    m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
+    m_node.p1 = m_node.p2 = QPoint(); // 完成一次操作后，就重置
 }
 
 void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
 {
+    m_node.p2 = e->pos();
     m_node.p3 = e->pos();
     qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
@@ -545,12 +554,54 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
         m_node.p1 = m_node.pickedRect.topLeft();
         m_node.p2 = m_node.pickedRect.bottomRight();
     }
+
+    m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
+}
+
+// 对 m_node.pickedRect 进行偏移，且  pickedRect 同步给 p1，p2
+void ScreenShot::setMovePickedRect()
+{
+    const auto& px = m_node.p3 - m_node.pt;
+    m_node.pickedRect.translate(px);
+    m_node.pt = m_node.p3;
+    m_node.p1 = m_node.pickedRect.topLeft();
+    m_node.p2 = m_node.pickedRect.bottomRight();
+}
+
+// 设置 w 的显示位置
+void ScreenShot::showCustomWidget(QWidget *w)
+{
+    if (!w && m_node.pickedRect.isEmpty()) return;
+
+    if (w == m_paintBar) {
+        const QRect& pickedRect(m_node.absoluteRect);
+        const QRect& wRect(w->rect());
+
+        QPoint pt(pickedRect.right(), pickedRect.bottom());
+        if (m_orie == Qt::Horizontal) {
+            auto t = pt + QPoint(-1 * wRect.width(), 20);
+            w->move(t);
+            bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
+
+            qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect
+                     << "t:" << t;
+            if (isShow) {
+                w->show();
+            } else {
+                w->hide();
+            }
+
+
+        } else if (m_orie == Qt::Vertical) {
+        }
+    }
 }
 
 void ScreenShot::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
     dealMousePressEvent(e);
+    showCustomWidget(m_paintBar);
     update();
 }
 
@@ -558,12 +609,14 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
     dealMouseReleaseEvent(e);
+    showCustomWidget(m_paintBar);  // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
     update();
 }
 
 void ScreenShot::mouseMoveEvent(QMouseEvent *e)
 {
     dealMouseMoveEvent(e);
+    showCustomWidget(m_paintBar);
     update();
 }
 

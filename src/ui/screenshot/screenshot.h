@@ -11,6 +11,7 @@
 #include <QRect>
 #include "capturehelper.h"
 #include "windowsrect.h"
+#include "../paint_bar/painttoolbar.h"
 
 class ScreenShot : public QWidget
 {
@@ -30,6 +31,7 @@ private:
     void originalPixmap();
     void setCursorShape(const OrientationType &type, const QPoint &pt);
     void setMovePickedRect();
+    void showCustomWidget(QWidget* w);
 
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
     void preDestruction();             // 销毁对象之前的清理工作
@@ -54,20 +56,22 @@ protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    QScreen*             m_primaryScreen;
-    QList<QScreen *>     m_screens;
-    QPixmap              m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
-    QRect                m_vdRect;             // virtual Desktop Rect;
+    QScreen*                 m_primaryScreen;
+    QList<QScreen *>         m_screens;
+    QPixmap                  m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
+    QRect                    m_vdRect;             // virtual Desktop Rect;
 
-    bool                 m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
-    bool                 m_bAutoDetectRect;    // 是否自动监测矩形
-    ActionType           m_actionType;         // 当前的操作状态
-    PainterEnv           m_paEnv;              // 绘画环境
-    Node                 m_node;               // 一次操作的集合
+    bool                     m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
+    bool                     m_bAutoDetectRect;    // 是否自动监测矩形
+    ActionType               m_actionType;         // 当前的操作状态
+    PainterEnv               m_paEnv;              // 绘画环境
+    Node                     m_node;               // 一次操作的集合
+    QPointer<PaintToolBar>   m_paintBar;           // paintToolBar
 
-    OrientationType      m_stretchPickedRectOrieType;
+    OrientationType          m_stretchPickedRectOrieType;
+    Qt::Orientations         m_orie;
 
-    std::vector<RectNode> m_rectNodes;
+    std::vector<RectNode>    m_rectNodes;
 
 
 };

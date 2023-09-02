@@ -66,7 +66,7 @@ void PaintToolBar::initBtns()
         tb->setFixedSize(size);
         tb->setToolTip(it.tooltip);
         tb->setCheckable(it.bCheckable);
-        tb->show();
+//        tb->show();  // 提前显示的话，添加到 ScreenShot 中，会显示批量 show 的时候被生成捕捉看到阴影，造成 bug
 
         const int& count = countItemsformLayout(m_layout, m_orie);
         if (m_orie == Qt::Horizontal)  {
@@ -121,7 +121,7 @@ void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik
 
 void PaintToolBar::setLayoutSpacing(int horSpace, int verSpace)
 {
-    bool bClearnSpace = m_layout->rowCount() == 1 || m_layout->columnCount() == 1;
+    bool bClearnSpace = !hadPaintBtnChecked();
     if (m_orie == Qt::Horizontal)  {
         if (bClearnSpace) verSpace = 0;
     } else if (m_orie == Qt::Vertical) {

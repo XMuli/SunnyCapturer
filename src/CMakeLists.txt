@@ -13,7 +13,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+#add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)  # 便于调试, 当前光标所在的所有 窗口矩形 的信息
 
 set(qt_moduls Widgets Xml Svg)                        # Network Multimedia WebSockets

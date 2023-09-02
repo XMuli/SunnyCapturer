@@ -15,12 +15,20 @@
 
 int main(int argc, char *argv[])
 {
+#if(QT_VERSION > QT_VERSION_CHECK(5,6,0))
+    qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+
+    // 因多处使用 QSettings，故声明组织等信息
+    QCoreApplication::setOrganizationName(QStringLiteral("XMuli"));
+    QCoreApplication::setOrganizationDomain(QStringLiteral("github.com/XMuli"));
+
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
-//    TRAY; // 启动托盘
+    TRAY; // 启动托盘
 
-    PaintToolBar paintToolBar(Qt::Horizontal); // Horizontal Vertical
-    paintToolBar.show();
+//    PaintToolBar paintToolBar(Qt::Horizontal); // Horizontal Vertical
+//    paintToolBar.show();
 
 //    PaintCtrlBar paintCtrlBar(Qt::Horizontal);
 //    paintCtrlBar.show();
