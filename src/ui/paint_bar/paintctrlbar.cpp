@@ -67,6 +67,8 @@ void PaintCtrlBar::initUI()
     m_layout->setContentsMargins(0, 0, 0 ,0);
     setLayout(m_layout);
     initBtns();
+
+    connect(&COMM, &Communication::sigPaintBtnRelease, this, &PaintCtrlBar::onPaintBtnRelease);
 }
 
 
@@ -184,16 +186,14 @@ void PaintCtrlBar::onIdReleased(int id)
 
         }
     }
-
-
-
 }
 
-void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
-{    
-    hideAllBtnsCtrl();
+void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isCheckable)
+{
     bool bPointCtrlShow = true;
     bool bColorPickerShow = true;
+    if (isCheckable) hideAllBtnsCtrl();
+
     if (type == PaintType::PT_rectangle) {
         addWidget(m_rectCtrl);
     } else if (type == PaintType::PT_ellipse) {
@@ -201,7 +201,6 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
     } else if (type == PaintType::PT_arrow) {
         addWidget(m_arrowCtrl);
     } else if (type == PaintType::PT_pencil) {
-        addWidget(m_pointCtrl);
     } else if (type == PaintType::PT_marker_pen) {
         addWidget(m_markerPenBar);
     } else if (type == PaintType::PT_mosaic) {
@@ -216,18 +215,18 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
         bPointCtrlShow = false;
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
-
-    } else if (type == PaintType::PT_pin) {
-
-    } else if (type == PaintType::PT_undo) {
-    } else if (type == PaintType::PT_redo) {
-
-    } else if (type == PaintType::PT_save) {
-    } else if (type == PaintType::PT_cancel) {
-    } else if (type == PaintType::PT_finish) {
     } else {
-        qDebug() << "type is unknow PaintType!";
+        return;
     }
+//    if (type == PaintType::PT_undo) {
+//    } else if (type == PaintType::PT_redo) {
+
+//    } else if (type == PaintType::PT_save) {
+//    } else if (type == PaintType::PT_cancel) {
+//    } else if (type == PaintType::PT_finish) {
+//    } else {
+//        qDebug() << "type is unknow PaintType!";
+//    }
 
     if (bPointCtrlShow) addWidget(m_pointCtrl);
     else m_pointCtrl->hide();

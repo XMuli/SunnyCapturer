@@ -23,7 +23,21 @@ public:
     void capture();
 
 private:
+//    void btnPin();
+//    void btnUndo();
+//    void btnRedo();
+    void btnSave();
+    void btnCancel();
+    void btnFinish();
+    QPixmap finishPixmap();
+
+public slots:
+    void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
+
+
+private:
     void initUI();
+    void initConnect();
     void drawShadowOverlay(const QRect& fullRect, const QRect& pickedRect, QPainter& pa) const;
     void drawBorderFlipped(QPainter& pa, const QRect& rt) const;
     void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) const;

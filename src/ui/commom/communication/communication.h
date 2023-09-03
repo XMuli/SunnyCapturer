@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include "../../paint_bar/paintbarhelper.h"
 
 #define COMM Communication::instance()
 
@@ -16,6 +17,7 @@ public:
 
 signals:
     void sigWidgetResized();           // paintBtnsBar 控件布局变换完成
+    void sigPaintBtnRelease(const PaintType& type, const bool& isCheckable);
 
 private:
     explicit Communication(QObject *parent = nullptr);

@@ -9,6 +9,9 @@
 #include <QDebug>
 #include <QIcon>
 #include <QMessageBox>
+#include <QClipboard>
+#include <QDateTime>
+#include <QFileDialog>
 #include "windowsrect.h"
 #include "communication.h"
 
@@ -28,11 +31,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_orie(orie)
 {
     initUI();
-
-    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
-        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
-    });
-
+    initConnect();
 
     if (m_actionType == ActionType::AT_wait) {
         if (m_bAutoDetectRect) {
@@ -54,6 +53,68 @@ void ScreenShot::capture()
 {
     originalPixmap();
     show();
+}
+
+void ScreenShot::btnSave()
+{
+    const QPixmap& pixmap = finishPixmap();
+    if (pixmap.isNull()) return;
+
+    QDateTime dateTime = QDateTime::currentDateTime(); // 获取当前日期和时间
+    QString dateTimeString = dateTime.toString("yyyyMMdd_hhmmss");
+    const QString& imageName = QString("Sunny_%1").arg(dateTimeString);
+
+    const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
+    const QString& fileNmae = QFileDialog::getSaveFileName(this, tr("Save Files"), imageName, fileter);
+    if (fileNmae.isEmpty()) return;
+
+    qDebug() <<"fileNmae:" << fileNmae;
+
+    QTime startTime = QTime::currentTime();
+    pixmap.save(fileNmae);  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
+    QTime stopTime = QTime::currentTime();
+    int elapsed = startTime.msecsTo(stopTime);
+    qInfo() << "btnSave() pixmap save time: " << elapsed << " ms" << pixmap.size();
+    close();
+}
+
+void ScreenShot::btnCancel()
+{
+    close();
+}
+
+void ScreenShot::btnFinish()
+{
+    const QPixmap& pixmap = finishPixmap();
+
+    // 将新的QPixmap复制到剪贴板
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setPixmap(pixmap);
+    close();
+}
+
+// 深拷贝的 QPixmap，但在此情况下，您需要确保在调用该函数后适当地处理返回的 QPixmap 对象，以防止内存泄漏。
+// QPixmap 是 Qt 中的一个值对象，不需要手动分配或释放内存，它的内存管理是自动的。当QPixmap超出其作用域或不再被引用时，其内存将自动被释放。
+// QPixmap m_finshPix = m_origPix 的深拷贝 + 在上面绘画一些图案
+QPixmap ScreenShot::finishPixmap()
+{
+    return m_origPix.copy(m_node.absoluteRect);
+}
+
+void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckable)
+{
+    if (type == PaintType::PT_pin) {
+    } else if (type == PaintType::PT_undo) {
+    } else if (type == PaintType::PT_redo) {
+    } else if (type == PaintType::PT_save) {
+        btnSave();
+    } else if (type == PaintType::PT_cancel) {
+        btnCancel();
+    } else if (type == PaintType::PT_finish) {
+        btnFinish();
+    } else {
+        qDebug() << "type is unknow PaintType!";
+    }
 }
 
 void ScreenShot::initUI()
@@ -94,6 +155,15 @@ void ScreenShot::initUI()
     move(geom.topLeft());
     qDebug() << "#2-->" << geom << "   " << this->rect();
 #endif
+}
+
+void ScreenShot::initConnect()
+{
+    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
+        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
+    });
+
+    connect(&COMM, &Communication::sigPaintBtnRelease, this, &ScreenShot::onPaintBtnRelease);
 }
 
 void ScreenShot::drawShadowOverlay(const QRect &fullRect, const QRect &pickedRect, QPainter& pa) const

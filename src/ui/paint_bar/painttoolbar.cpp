@@ -23,7 +23,6 @@ void PaintToolBar::initUI()
     setLayout(m_layout);
 
     initBtns();
-    connect(this, &PaintToolBar::sigBtnRelease, m_paintCtrlBar, &PaintCtrlBar::onPaintBtnRelease);
 }
 
 void PaintToolBar::initBtns()
@@ -138,7 +137,6 @@ void PaintToolBar::setLayoutSpacing(int horSpace, int verSpace)
 void PaintToolBar::setPaintCtrlBarToLayout()
 {
     const int& count = countItemsformLayout(m_layout, m_orie);
-    // 【 需要调整 bOnlyOneRowOrCol 不存在时候的 逻辑】
     if (hadPaintBtnChecked()) {
         if (m_orie == Qt::Horizontal)  {
             m_layout->addWidget(m_paintCtrlBar, 1, 0, 1, count);
@@ -198,18 +196,17 @@ void PaintToolBar::printfAllItems(const QString &prompted)
 void PaintToolBar::onPaintBtnReleased()
 {
     QToolButton* btn = qobject_cast<QToolButton*>(sender());
+    if (!btn) return;
+    const PaintType& type = btn->property(PROPERTY_PAINT_TYPR).value<PaintType>();
+    emit COMM.sigPaintBtnRelease(type, btn->isCheckable());
 
     if (btn->isCheckable()) {
         paintBtnsExclusive(btn, true);
-        const PaintType& type = btn->property(PROPERTY_PAINT_TYPR).value<PaintType>();
-        emit sigBtnRelease(type);
         qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked();
 
         printfAllItems("执行 setPaintCtrlBarToLayout 之前");
         setPaintCtrlBarToLayout();
         printfAllItems("执行 setPaintCtrlBarToLayout 后");
-    } else { // Pin,Undo,Redo.. 的响应逻辑另写
-
     }
 
     adjustSize();

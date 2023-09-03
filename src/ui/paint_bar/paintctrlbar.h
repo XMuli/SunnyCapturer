@@ -28,10 +28,11 @@ private:
 
 public slots:
     void onIdReleased(int id);
-    void onPaintBtnRelease(const PaintType& type);
+    void onPaintBtnRelease(const PaintType& type, const bool &isCheckable);
 
 signals:
-    void sigWidgetResized();     // layout change completed
+    void sigWidgetResized();                              // layout change completed
+
 
 private:
     QBoxLayout*              m_layout;

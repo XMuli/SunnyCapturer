@@ -15,15 +15,14 @@ public:
     explicit PaintToolBar(const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);
     virtual ~PaintToolBar() = default;
 
+    bool hadPaintBtnChecked();
+
 private:
     void initUI();
     void initBtns();
     void paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
-    void setLayoutSpacing(int horSpace = 3, int verSpace = 3);
+    void setLayoutSpacing(int horSpace = 0, int verSpace = 0);   // fix: 当有两行时， 其会多一个 hor spaceing 长度；暂都设置为 0
     void setPaintCtrlBarToLayout();
-    bool hadPaintBtnChecked();
-//    bool bOnlyOneRowOrCol();
-
     void printfAllItems(const QString& prompted);
 
 //    void onBtnRectangle();
@@ -43,9 +42,6 @@ private:
 
 public slots:
     void onPaintBtnReleased();
-
-signals:
-    void sigBtnRelease(const PaintType& type);
 
 private:
     QGridLayout*             m_layout;
