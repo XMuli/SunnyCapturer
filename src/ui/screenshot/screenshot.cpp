@@ -675,6 +675,9 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
+        setMouseTracking(true);
+        m_node.trackPos.clear();
+        m_node.trackPos.emplace_back(m_node.p3);
         m_paintNode.node = m_node;
         m_paintNode.bShow = true;
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
@@ -709,9 +712,12 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
+        m_node.trackPos.emplace_back(m_node.p3);
         m_paintNode.node = m_node;
         m_paintNode.bShow = false;
         m_redo.push_back(m_paintNode);
+
+        m_node.trackPos.clear();
         qDebug() << "m_redo:" << m_redo.size();
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
@@ -758,9 +764,13 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
+        if (m_paintNode.bShow)
+            m_node.trackPos.emplace_back(m_node.p3);
         const auto& orieType = containsForRect(m_vdRect, m_node.p3);
         setCursorShape(orieType, m_node.p3);
         m_paintNode.node = m_node;
+
+        qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();

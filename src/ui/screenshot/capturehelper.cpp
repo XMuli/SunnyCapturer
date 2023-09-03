@@ -1,8 +1,11 @@
 ﻿#include "capturehelper.h"
-#include "qdebug.h"
+#include <QDebug>
 #include <QMetaEnum>
 #include <QMetaObject>
+#include <QPainterPath>
 #include <QPen>
+#include <QPointF>
+#include <QtMath>
 #include <QtGlobal>
 
 CaptureHelper::CaptureHelper(QObject *parent)
@@ -266,7 +269,55 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
         pa.drawEllipse(rect);
     } else if (paintNode.pst == PaintShapeType::PST_arrow) {
+        QPen pen(paintNode.pen);
+        pen.setWidth(paintNode.point);
+        pa.setPen(pen);
+        pa.setBrush(Qt::NoBrush);
+
+        drawArrow(pa, paintNode.node.p1, paintNode.node.p2);
+
+//        if (paintNode.id == 0) {
+
+//        } else if (paintNode.id == 1) {
+
+//        }
+
+
     } else if (paintNode.pst == PaintShapeType::PST_pen) {
+        QPen pen(paintNode.pen);
+        pen.setWidth(paintNode.point);
+        pa.setPen(pen);
+        pa.setBrush(Qt::NoBrush);
+
+        const auto& trackPos = paintNode.node.trackPos;
+
+        // 绘制平滑的轨迹
+        if (trackPos.size() >= 2) {
+            QPainterPath path;
+            path.moveTo(trackPos[0]);
+
+            for (int i = 1; i < trackPos.size(); ++i) {
+                int n = trackPos.size();
+                QPointF p0 = i == 1 ? trackPos[0] : trackPos[i - 2];
+                QPointF p1 = trackPos[i - 1];
+                QPointF p2 = trackPos[i];
+                QPointF p3 = (i == n - 1) ? p2 : trackPos[i + 1];
+
+                // 计算三次样条曲线控制点
+                QPointF ctrl1 = p1 + (p2 - p0) / 6.0;
+                QPointF ctrl2 = p2 - (p3 - p1) / 6.0;
+
+                path.cubicTo(ctrl1, ctrl2, p2);
+            }
+
+            pa.drawPath(path);
+        }
+
+        // 绘制原始点
+        for (const auto& point : trackPos) {
+            pa.drawPoint(point);
+        }
+
     } else if (paintNode.pst == PaintShapeType::PST_marker_pen) {
     } else if (paintNode.pst == PaintShapeType::PST_mosaic) {
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
@@ -282,3 +333,20 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 
 }
 
+
+void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize)
+{
+    QLineF line(p1, p2);
+    if (qFuzzyCompare(line.length(), qreal(0.)))
+        return;
+
+    pa.drawLine(line);
+    double angle = qAcos(line.dx() / line.length());
+    if (line.dy() >= 0) angle = 2.0 * M_PI - angle;
+
+    QPointF destArrowP1 = p2 + QPointF(qSin(angle - M_PI / 3) * arrowSize, qCos(angle - M_PI / 3) * arrowSize);
+    QPointF destArrowP2 = p2 + QPointF(qSin(angle - M_PI + M_PI / 3) * arrowSize, qCos(angle - M_PI + M_PI / 3) * arrowSize);
+
+    pa.drawLine(QLineF(destArrowP1, p2));
+    pa.drawLine(QLineF(destArrowP2, p2));
+}

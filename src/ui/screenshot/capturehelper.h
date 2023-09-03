@@ -111,7 +111,7 @@ struct PaintNode
 };
 
 void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
-
+void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize = 20);
 
 class CaptureHelper : public QObject
 {
