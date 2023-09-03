@@ -29,6 +29,10 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
 {
     initUI();
 
+    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
+        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
+    });
+
 
     if (m_actionType == ActionType::AT_wait) {
         if (m_bAutoDetectRect) {
@@ -50,7 +54,6 @@ void ScreenShot::capture()
 {
     originalPixmap();
     show();
-    emit COMM.sigScreenShotPtr(this);
 }
 
 void ScreenShot::initUI()
@@ -651,14 +654,8 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
     dealMouseReleaseEvent(e);
-//    showCustomWidget(m_paintBar);
+    showCustomWidget(m_paintBar);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
     update();
-
-    QTimer::singleShot(50, this, [this](){
-        // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
-        // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
-        showCustomWidget(m_paintBar);
-    });
 }
 
 void ScreenShot::mouseMoveEvent(QMouseEvent *e)

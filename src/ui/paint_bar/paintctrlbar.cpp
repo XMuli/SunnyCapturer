@@ -7,6 +7,7 @@
 #include <QSize>
 #include <QButtonGroup>
 #include "paintbarhelper.h"
+#include "communication.h"
 
 PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -238,6 +239,8 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type)
     }
 
     addSpacerItem(m_layout, m_orie); // 实际是有效果的，被子组合控件的弹簧所影响了
+
+    emit COMM.sigWidgetResized();
 
     for (int i = 0; i < m_layout->count(); ++i) {
         QLayoutItem *item = m_layout->itemAt(i);

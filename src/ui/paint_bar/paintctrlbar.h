@@ -31,6 +31,7 @@ public slots:
     void onPaintBtnRelease(const PaintType& type);
 
 signals:
+    void sigWidgetResized();     // layout change completed
 
 private:
     QBoxLayout*              m_layout;

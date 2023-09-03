@@ -6,11 +6,6 @@ Communication::Communication(QObject *parent)
     init();
 }
 
-QWidget *Communication::screenShotPtr() const
-{
-    return m_screenShotPtr;
-}
-
 Communication &Communication::instance()
 {
     static Communication ins;
@@ -19,10 +14,4 @@ Communication &Communication::instance()
 
 void Communication::init()
 {
-    connect(this, &Communication::sigScreenShotPtr, this, &Communication::onScreenShotPtr);
-}
-
-void Communication::onScreenShotPtr(QWidget *w)
-{
-    m_screenShotPtr = w;
 }

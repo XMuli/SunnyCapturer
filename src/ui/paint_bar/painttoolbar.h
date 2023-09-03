@@ -26,8 +26,6 @@ private:
 
     void printfAllItems(const QString& prompted);
 
-
-
 //    void onBtnRectangle();
 //    void onBtnEllipse();
 //    void onBtnArrow();
@@ -48,9 +46,6 @@ public slots:
 
 signals:
     void sigBtnRelease(const PaintType& type);
-
-public:
-    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     QGridLayout*             m_layout;

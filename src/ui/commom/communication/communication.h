@@ -14,14 +14,8 @@ public:
     static Communication& instance(); // signle
     void init();
 
-
-    QWidget *screenShotPtr() const;
-
 signals:
-    void sigScreenShotPtr(QWidget* w);                          // paintBtnsBar 控件布局变换完成
-
-public slots:
-    void onScreenShotPtr(QWidget *w);
+    void sigWidgetResized();           // paintBtnsBar 控件布局变换完成
 
 private:
     explicit Communication(QObject *parent = nullptr);
@@ -30,9 +24,6 @@ private:
     Communication& operator=(const Communication&) = delete;
     Communication(Communication&&) = delete;
     Communication& operator=(Communication&&) = delete;
-
-private:
-    QWidget* m_screenShotPtr;
 };
 
 #endif // COMMUNICATION_H
