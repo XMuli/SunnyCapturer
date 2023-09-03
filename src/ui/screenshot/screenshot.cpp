@@ -55,6 +55,22 @@ void ScreenShot::capture()
     show();
 }
 
+void ScreenShot::btnUndo()
+{
+    if (m_redo.empty()) return;
+
+    m_undo.emplace_back(std::move(m_redo.back())); // 在 m_undo 中构造新元素并移动
+    m_redo.pop_back(); // 从 m_redo 中移除最后一个元素
+}
+
+void ScreenShot::btnRedo()
+{
+    if (m_undo.empty()) return;
+
+    m_redo.emplace_back(std::move(m_undo.back())); // 移动最后一个元素到 m_redo
+    m_undo.pop_back(); // 从 m_undo 中移除最后一个元素
+}
+
 void ScreenShot::btnSave()
 {
     const QPixmap& pixmap = finishPixmap();
@@ -103,18 +119,62 @@ QPixmap ScreenShot::finishPixmap()
 
 void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckable)
 {
-    if (type == PaintType::PT_pin) {
-    } else if (type == PaintType::PT_undo) {
-    } else if (type == PaintType::PT_redo) {
-    } else if (type == PaintType::PT_save) {
-        btnSave();
-    } else if (type == PaintType::PT_cancel) {
-        btnCancel();
-    } else if (type == PaintType::PT_finish) {
-        btnFinish();
+    if (isCheckable) {
+
+        if (m_paintBar->hadPaintBtnChecked()) {
+            m_actionType = ActionType::AT_drawing_shap;
+
+            if (type == PaintType::PT_rectangle) {
+                m_paintNode.pst = PaintShapeType::PST_rect;
+            } else if (type == PaintType::PT_ellipse) {
+                m_paintNode.pst = PaintShapeType::PST_ellipse;
+            } else if (type == PaintType::PT_arrow) {
+                m_paintNode.pst = PaintShapeType::PST_arrow;
+            } else if (type == PaintType::PT_pencil) {
+                m_paintNode.pst = PaintShapeType::PST_pen;
+            } else if (type == PaintType::PT_marker_pen) {
+                m_paintNode.pst = PaintShapeType::PST_marker_pen;
+            } else if (type == PaintType::PT_mosaic) {
+                m_paintNode.pst = PaintShapeType::PST_mosaic;
+            } else if (type == PaintType::PT_text) {
+                m_paintNode.pst = PaintShapeType::PST_text;
+            } else if (type == PaintType::PT_serial) {
+                m_paintNode.pst = PaintShapeType::PST_serial;
+            } else {
+                m_paintNode.pst = PaintShapeType::PST_empty;
+            }
+        } else {
+            m_actionType = ActionType::AT_wait;
+            setMouseTracking(true);
+        }
+
     } else {
-        qDebug() << "type is unknow PaintType!";
+
+        if (type == PaintType::PT_pin) {
+        } else if (type == PaintType::PT_undo) {
+            btnUndo();
+            update();
+
+            qDebug() << "----#a-->m_undo.size():" << m_undo.size() << "m_redo.size():" << m_redo.size();
+        } else if (type == PaintType::PT_redo) {
+            btnRedo();
+            update();
+            qDebug() << "----#b-->m_undo.size():" << m_undo.size() << "m_redo.size():" << m_redo.size();
+        } else if (type == PaintType::PT_save) {
+            btnSave();
+        } else if (type == PaintType::PT_cancel) {
+            btnCancel();
+        } else if (type == PaintType::PT_finish) {
+            btnFinish();
+        } else {
+            qDebug() << "type is unknow PaintType!";
+        }
     }
+}
+
+void ScreenShot::onPaintCtrlRelease(const int &id)
+{
+    m_paintNode.id = id;
 }
 
 void ScreenShot::initUI()
@@ -164,6 +224,8 @@ void ScreenShot::initConnect()
     });
 
     connect(&COMM, &Communication::sigPaintBtnRelease, this, &ScreenShot::onPaintBtnRelease);
+    connect(&COMM, &Communication::sigPaintCtrlRelease, this, &ScreenShot::onPaintCtrlRelease);
+
 }
 
 void ScreenShot::drawShadowOverlay(const QRect &fullRect, const QRect &pickedRect, QPainter& pa) const
@@ -335,6 +397,8 @@ void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
             qDebug() << "---->" << int(m_actionType);
             setCursor(Qt::WhatsThisCursor); // 一般都不会触发
         }
+    } else if (m_actionType == ActionType::AT_drawing_shap) {
+        setCursor(Qt::CrossCursor);
     }
 }
 
@@ -403,23 +467,47 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
     const int tTextX = 0;
     const int tTextY = 300;
     const int tAddHight = 20;
-    pa.drawText(QPoint(tTextX, tTextY), QString("m_node:"));
-    const auto& tP1 = m_node.p1;
-    const auto& tP2 = m_node.p2;
-    const auto& tP3 = m_node.p3;
-    const auto& tPt = m_node.pt;
-    const auto& tPickedRect = m_node.pickedRect;
+    pa.drawText(QPoint(tTextX, tTextY), QString("//[m_node]----------------------------------------------------"));
+    QPoint tP1 = m_node.p1;
+    QPoint tP2 = m_node.p2;
+    QPoint tP3 = m_node.p3;
+    QPoint tPt = m_node.pt;
+    QRect tPickedRect = m_node.pickedRect;
+    QRect absoluteRect = m_node.absoluteRect;
 
     int tCount = 1;
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
                                                                    .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
                                                                    .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6)")
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
                                                                    .arg(tPt.x()).arg(tPt.y())
-                                                                   .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height()));
+                                                                   .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
+                                                                   .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
 
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_rectNodes.size():%1").arg(m_rectNodes.size()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//[m_paintNode]----------------------------------------------------"));
+    tP1 = m_paintNode.node.p1;
+    tP2 = m_paintNode.node.p2;
+    tP3 = m_paintNode.node.p3;
+    tPt = m_paintNode.node.pt;
+    tPickedRect = m_paintNode.node.pickedRect;
+    absoluteRect = m_node.absoluteRect;
+
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
+                                                                   .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
+                                                                   .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
+                                                                   .arg(tPt.x()).arg(tPt.y())
+                                                                   .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
+                                                                   .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 fuzzyRange:%4 point:%5")
+                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id).arg(m_paintNode.fuzzyRange).arg(m_paintNode.point));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("serial:[%1] serialText:%2 serialBackground:%3 pen:%4 brush:%5")
+                                                                   .arg(m_paintNode.serial).arg(m_paintNode.serialText.name()).arg(m_paintNode.serialBackground.name())
+                                                                   .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
+
+
     int idx = 0;
     for (const auto& it : m_rectNodes) {
         const auto& rect = rectToQRect(it.rect);
@@ -587,6 +675,8 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
+        m_paintNode.node = m_node;
+        m_paintNode.bShow = true;
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
@@ -619,6 +709,10 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
+        m_paintNode.node = m_node;
+        m_paintNode.bShow = false;
+        m_redo.push_back(m_paintNode);
+        qDebug() << "m_redo:" << m_redo.size();
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
@@ -661,10 +755,12 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
             rectNodesMapFromGlobal();
             firstRectNodesAssignmentNode();
         }
-
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
+        const auto& orieType = containsForRect(m_vdRect, m_node.p3);
+        setCursorShape(orieType, m_node.p3);
+        m_paintNode.node = m_node;
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
@@ -768,6 +864,18 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     if (!m_origPix.isNull()) {
         pa.drawPixmap(QPoint(0, 0), m_origPix);
     }
+
+    for (const auto& it : m_redo) {
+        drawShape(it, pa);
+    }
+
+    if (m_paintNode.bShow)
+        drawShape(m_paintNode, pa);
+
+//    pa.setPen(Qt::red);
+//    pa.drawRect(m_paintNode.node.absoluteRect);
+//    pa.drawRect(largestRect(m_paintNode.node.p1, m_paintNode.node.p2));
+//    pa.setPen(Qt::NoPen);
 
     drawShadowOverlay(rect(), pickedRect, pa);
 

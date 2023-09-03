@@ -24,8 +24,8 @@ public:
 
 private:
 //    void btnPin();
-//    void btnUndo();
-//    void btnRedo();
+    void btnUndo();
+    void btnRedo();
     void btnSave();
     void btnCancel();
     void btnFinish();
@@ -33,6 +33,7 @@ private:
 
 public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
+    void onPaintCtrlRelease(const int& id);
 
 
 private:
@@ -79,9 +80,12 @@ private:
     bool                     m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
     bool                     m_bAutoDetectRect;    // 是否自动监测矩形
     ActionType               m_actionType;         // 当前的操作状态
-    PainterEnv               m_paEnv;              // 绘画环境
     Node                     m_node;               // 一次操作的集合
     QPointer<PaintToolBar>   m_paintBar;           // paintToolBar
+
+    PaintNode                m_paintNode;          // 当前绘画元素
+    std::vector<PaintNode>   m_undo;               // 撤销-图案元素
+    std::vector<PaintNode>   m_redo;               // 重做-图案元素
 
     OrientationType          m_stretchPickedRectOrieType;    
     Qt::Orientation          m_orie;

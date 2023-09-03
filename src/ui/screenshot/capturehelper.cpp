@@ -1,5 +1,8 @@
 ﻿#include "capturehelper.h"
 #include "qdebug.h"
+#include <QMetaEnum>
+#include <QMetaObject>
+#include <QPen>
 #include <QtGlobal>
 
 CaptureHelper::CaptureHelper(QObject *parent)
@@ -45,6 +48,34 @@ QString actionTypeToString(ActionType actionType)
         return "AT_stretch_drawn_shape";
     case ActionType::AT_stretch_picked_rect:
         return "AT_stretch_picked_rect";
+    default:
+        return "Unknown";
+    }
+}
+
+QString paintShapeTypeToString(PaintShapeType pst)
+{
+    switch (pst) {
+    case PaintShapeType::PST_empty:
+        return "PST_empty";
+    case PaintShapeType::PST_rect:
+        return "PST_rect";
+    case PaintShapeType::PST_ellipse:
+        return "PST_ellipse";
+    case PaintShapeType::PST_arrow:
+        return "PST_arrow";
+    case PaintShapeType::PST_pen:
+        return "PST_pen";
+    case PaintShapeType::PST_marker_pen:
+        return "PST_marker_pen";
+    case PaintShapeType::PST_mosaic:
+        return "PST_mosaic";
+    case PaintShapeType::PST_text:
+        return "PST_text";
+    case PaintShapeType::PST_serial:
+        return "PST_serial";
+    case PaintShapeType::PST_point:
+        return "PST_point";
     default:
         return "Unknown";
     }
@@ -200,3 +231,54 @@ QRect toAbsoluteRect(const QRect &rect)
 
     return ret;
 }
+
+void drawShape(const PaintNode &paintNode, QPainter &pa)
+{
+    pa.save();
+    pa.setRenderHint(QPainter::Antialiasing);
+
+    if (paintNode.pst == PaintShapeType::PST_rect) {
+        QPen pen(paintNode.pen);
+        pen.setWidth(paintNode.point);
+        pa.setPen(pen);
+
+        if (paintNode.id == 0) {
+            pa.setBrush(Qt::NoBrush);
+        } else if (paintNode.id == 1) {
+            pa.setBrush(paintNode.pen.color());
+        }
+
+        const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
+        pa.drawRect(rect);
+//        pa.drawRect(paintNode.node.absoluteRect);
+
+    } else if (paintNode.pst == PaintShapeType::PST_ellipse) {
+        QPen pen(paintNode.pen);
+        pen.setWidth(paintNode.point);
+        pa.setPen(pen);
+
+        if (paintNode.id == 0) {
+            pa.setBrush(Qt::NoBrush);
+        } else if (paintNode.id == 1) {
+            pa.setBrush(paintNode.pen.color());
+        }
+
+        const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
+        pa.drawEllipse(rect);
+    } else if (paintNode.pst == PaintShapeType::PST_arrow) {
+    } else if (paintNode.pst == PaintShapeType::PST_pen) {
+    } else if (paintNode.pst == PaintShapeType::PST_marker_pen) {
+    } else if (paintNode.pst == PaintShapeType::PST_mosaic) {
+    } else if (paintNode.pst == PaintShapeType::PST_serial) {
+    } else if (paintNode.pst == PaintShapeType::PST_text) {
+    } else if (paintNode.pst == PaintShapeType::PST_serial) {
+    } else if (paintNode.pst == PaintShapeType::PST_point) {
+
+    } else {
+        qDebug() << "paintNode.pst is PST_empty!";
+    }
+
+    pa.restore();
+
+}
+

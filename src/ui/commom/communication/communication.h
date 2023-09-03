@@ -16,8 +16,9 @@ public:
     void init();
 
 signals:
-    void sigWidgetResized();           // paintBtnsBar 控件布局变换完成
-    void sigPaintBtnRelease(const PaintType& type, const bool& isCheckable);
+    void sigWidgetResized();                                                      // paintBtnsBar 控件布局变换完成
+    void sigPaintBtnRelease(const PaintType& type, const bool& isCheckable);      // paintBtnsBar 按钮被按下
+    void sigPaintCtrlRelease(const int& id);                                      // PaintCtrlBar 按钮被按下
 
 private:
     explicit Communication(QObject *parent = nullptr);

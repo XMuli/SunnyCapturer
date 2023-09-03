@@ -6,6 +6,8 @@
 #include <QPen>
 #include <QBrush>
 #include <QPainter>
+#include <QMetaEnum>
+
 
 // C++11 新增带作用域的枚举，用 enum class  或enum struct（两者等价）声明。
 // https://blog.csdn.net/luckysym/article/details/1666114
@@ -23,6 +25,22 @@ enum class ActionType {
 };
 
 QString actionTypeToString(ActionType actionType);
+
+// paint btn 绘画的图案枚举
+enum class PaintShapeType {
+    PST_empty,
+    PST_rect,
+    PST_ellipse,
+    PST_arrow,
+    PST_pen,
+    PST_marker_pen,
+    PST_mosaic,
+    PST_text,
+    PST_serial,
+    PST_point
+};
+
+QString paintShapeTypeToString(PaintShapeType pst);
 
 // 判断某个点在 pickedRect 中的方位
 enum class OrientationType {
@@ -61,17 +79,6 @@ bool allowableRangeErrorForPoint(const QPoint& p1, const QPoint& pt, const int& 
 bool allowableRangeErrorForLine(const QPoint& p1, const QPoint& p2, const QPoint& pt, const int& length = 3); // 允许的误差，比如手抖偏移几个像素
 bool allowableRangeErrorForLine(const QLine& line, const QPoint& pt, const int& length = 3);                  // 允许的误差，比如手抖偏移几个像素
 
-
-struct PainterEnv
-{
-    PainterEnv() {}
-
-    QPen     pen = QPen(Qt::red, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QBrush   brush = QBrush(Qt::red, Qt::SolidPattern);
-    QPainter painter;
-
-};
-
 // 每一次鼠标按下，到松开中，操作一次，所需要保存的信息
 struct Node
 {
@@ -83,9 +90,28 @@ struct Node
     QRect  pickedRect;                          // 初始绘画位置: 由 p1、p2 构成
     QRect  absoluteRect;                        // 绝对值矩形: 如拉伸时 pickedRect 的widget/height 可能为负数，此时就需要依靠它开show paintBtnsBar 等作为基准参考点
 
-    QPen pen = QPen(Qt::red, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+};
+
+struct PaintNode
+{
+    Node node;
+    PaintShapeType pst = PaintShapeType::PST_empty;             // 当前绘画的图案枚举
+    bool bShow = false;                                         // true-在 paintEvent 中绘画;反之则不绘画
+
+    int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
+    int     fuzzyRange = -1;                                    // PST_mosaic: mosaic、 blur    模糊值
+    int     point = 4;                                          // PST_pointCtrl 画笔宽度
+                                                                // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
+    QChar   serial;                                             // PST_serial 当前字符
+    QColor  serialText;                                         // 序号文字颜色
+    QColor  serialBackground;                                   // 序号背景颜色
+
+    QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
 };
+
+void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
+
 
 class CaptureHelper : public QObject
 {
