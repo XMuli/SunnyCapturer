@@ -4,6 +4,7 @@
 #include <QMetaObject>
 #include <QPainterPath>
 #include <QPen>
+#include <QCursor>
 #include <QPointF>
 #include <QtMath>
 #include <QtGlobal>
@@ -241,9 +242,7 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
     pa.setRenderHint(QPainter::Antialiasing);
 
     if (paintNode.pst == PaintShapeType::PST_rect) {
-        QPen pen(paintNode.pen);
-        pen.setWidth(paintNode.point);
-        pa.setPen(pen);
+        pa.setPen(paintNode.pen);
 
         if (paintNode.id == 0) {
             pa.setBrush(Qt::NoBrush);
@@ -256,9 +255,7 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 //        pa.drawRect(paintNode.node.absoluteRect);
 
     } else if (paintNode.pst == PaintShapeType::PST_ellipse) {
-        QPen pen(paintNode.pen);
-        pen.setWidth(paintNode.point);
-        pa.setPen(pen);
+        pa.setPen(paintNode.pen);
 
         if (paintNode.id == 0) {
             pa.setBrush(Qt::NoBrush);
@@ -269,26 +266,20 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
         pa.drawEllipse(rect);
     } else if (paintNode.pst == PaintShapeType::PST_arrow) {
-        QPen pen(paintNode.pen);
-        pen.setWidth(paintNode.point);
-        pa.setPen(pen);
+        pa.setPen(paintNode.pen);
         pa.setBrush(Qt::NoBrush);
 
-        drawArrow(pa, paintNode.node.p1, paintNode.node.p2);
-
-//        if (paintNode.id == 0) {
-
-//        } else if (paintNode.id == 1) {
-
-//        }
+        if (paintNode.id == 0) {
+            drawArrow(pa, paintNode.node.p1, paintNode.node.p2);
+        } else if (paintNode.id == 1) {
+            pa.drawLine(paintNode.node.p1, paintNode.node.p2);
+        } else if (paintNode.id == 2) {
+        }
 
 
     } else if (paintNode.pst == PaintShapeType::PST_pen) {
-        QPen pen(paintNode.pen);
-        pen.setWidth(paintNode.point);
-        pa.setPen(pen);
+        pa.setPen(paintNode.pen);
         pa.setBrush(Qt::NoBrush);
-
         const auto& trackPos = paintNode.node.trackPos;
 
         // 绘制平滑的轨迹
@@ -324,6 +315,9 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
     } else if (paintNode.pst == PaintShapeType::PST_text) {
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
     } else if (paintNode.pst == PaintShapeType::PST_point) {
+        pa.setPen(paintNode.pen);
+        pa.setBrush(Qt::NoBrush);
+        pa.drawPoint(QCursor::pos());
 
     } else {
         qDebug() << "paintNode.pst is PST_empty!";

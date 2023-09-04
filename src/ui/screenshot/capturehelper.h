@@ -100,7 +100,6 @@ struct PaintNode
 
     int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
     int     fuzzyRange = -1;                                    // PST_mosaic: mosaic、 blur    模糊值
-    int     point = 4;                                          // PST_pointCtrl 画笔宽度
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
     QChar   serial;                                             // PST_serial 当前字符
     QColor  serialText;                                         // 序号文字颜色

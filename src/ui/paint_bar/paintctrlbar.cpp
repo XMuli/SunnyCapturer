@@ -93,7 +93,7 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_letter_rectangle" << "serial_number_rectangle" << "serial_letter_ellipse" << "serial_number_ellipse"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, &COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl);
 
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
@@ -160,6 +160,39 @@ void PaintCtrlBar::hideAllBtnsCtrl()
     }
 }
 
+// 通过 absBtnsCtrl 的 group 来判断是哪一个 btn 处于开启状态
+int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable)
+{
+    int ret = -1;
+    QPointer<AbsBtnsCtrl> ctrl = nullptr;
+
+    if (isCheckable) {
+        if (type == PaintType::PT_rectangle) {
+            ctrl = m_rectCtrl;
+        } else if (type == PaintType::PT_ellipse) {
+            ctrl = m_ellipseCtrl;
+        } else if (type == PaintType::PT_arrow) {
+            ctrl = m_arrowCtrl;
+        } else if (type == PaintType::PT_pencil) {
+        } else if (type == PaintType::PT_marker_pen) {
+            ctrl = m_markerPenCtrl;
+        } else if (type == PaintType::PT_mosaic) {
+            ctrl = m_mosaicCtrl;
+        } else if (type == PaintType::PT_text) {
+            ctrl = m_textCtrl;
+        } else if (type == PaintType::PT_serial) {
+            ctrl = m_serialCtrl;
+        }
+
+        const auto& btns = ctrl->findChildren<QToolButton*>();
+        for (int i = 0; i < btns.count(); ++i) {
+            if (btns.at(i)->isChecked()) return i;
+        }
+    }
+
+    return ret;
+}
+
 void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch, Qt::Alignment alignment)
 {
     m_layout->addWidget(w, stretch, alignment);
@@ -169,22 +202,18 @@ void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch,
 
 void PaintCtrlBar::onIdReleased(int id)
 {
-    qDebug() << "----sender（）:" << sender() << "   id:" << id ;
-    emit COMM.sigPaintCtrlRelease(id);
+    qDebug() << "----sender（）:" << sender() << "parent():" << sender()->parent() << "   id:" << id ;
+    emit COMM.sigPaintCtrlIdReleased(id);
 
 //    QButtonGroup *buttonGroup = qobject_cast<QButtonGroup*>(sender());
 //    if (buttonGroup) {
 
 //        for (auto& it : buttonGroup->buttons()) {
 //            qDebug() << "Button" << it << "isCheckable():" << it->isCheckable() << "isChecked():" << it->isChecked();
-
 //        }
 
 //        QToolButton *btn = qobject_cast<QToolButton*>(buttonGroup->button(id));
 //        if (btn) {
-
-
-
 //        }
 //    }
 }
@@ -240,7 +269,9 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
 
     addSpacerItem(m_layout, m_orie); // 实际是有效果的，被子组合控件的弹簧所影响了
 
-    emit COMM.sigWidgetResized();
+    int id = btnIdIschecked(type, isCheckable);
+    emit COMM.sigPaintCtrlIdReleased(id);
+//    emit COMM.sigWidgetResized();
 
     for (int i = 0; i < m_layout->count(); ++i) {
         QLayoutItem *item = m_layout->itemAt(i);

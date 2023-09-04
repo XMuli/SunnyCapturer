@@ -23,6 +23,8 @@ private:
     void initUI();
     void initBtns();
     void hideAllBtnsCtrl();
+    int  btnIdIschecked(const PaintType& type, const bool &isCheckable);
+
 
     void addWidget(QWidget *w, const bool& bAddSpaceLine = true, int stretch = 0, Qt::Alignment alignment = Qt::AlignCenter);
 

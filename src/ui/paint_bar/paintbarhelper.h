@@ -25,6 +25,7 @@ enum class PaintType
     PT_text,
     PT_serial,
     PT_pin,
+    PT_point,
 
     PT_undo,
     PT_redo,

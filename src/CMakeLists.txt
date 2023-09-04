@@ -37,6 +37,7 @@ set(custom_ui_files
     ui/include/xkeysequenceedit.h
     ui/include/horspacerline.h
     ui/include/verspacerline.h
+    ui/include/tips.h
     # h composite_widgets
     ui/include/colorpicker.h
     ui/include/resetui.h
@@ -51,6 +52,7 @@ set(custom_ui_files
     ui/common_widgets/xkeysequenceedit.cpp
     ui/common_widgets/horspacerline.cpp
     ui/common_widgets/verspacerline.cpp
+    ui/include/tips.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp

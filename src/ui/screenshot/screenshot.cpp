@@ -28,6 +28,9 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_actionType(ActionType::AT_wait)
     , m_paintBar(new PaintToolBar(orie, nullptr))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
+    , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
+    , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
+    , m_timerPoint(new QTimer(this))
     , m_orie(orie)
 {
     initUI();
@@ -117,6 +120,22 @@ QPixmap ScreenShot::finishPixmap()
     return m_origPix.copy(m_node.absoluteRect);
 }
 
+
+void ScreenShot::showPointTips(const QString &text)
+{
+    const QScreen *scrn = currentScreen();
+    if (!scrn) scrn = m_primaryScreen;
+
+    m_pointTips->setText(text);
+    m_pointTips->move(scrn->geometry().topLeft());
+    m_pointTips->show();
+
+    m_timerPoint->setSingleShot(true);
+    m_timerPoint->stop();
+    m_timerPoint->start();
+    m_pointTips->update();
+}
+
 void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckable)
 {
     if (isCheckable) {
@@ -172,18 +191,48 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
     }
 }
 
-void ScreenShot::onPaintCtrlRelease(const int &id)
+void ScreenShot::onPaintCtrlIdReleased(const int &id)
 {
     m_paintNode.id = id;
+}
+
+void ScreenShot::onPaintCtrlIdReleasedFromPointCtrl(const int &id)
+{
+    int pointWidth = 2;
+    if (id == 0) {
+        pointWidth = 4;
+    } else if (id == 1) {
+        pointWidth = 6;
+    } else if (id == 2) {
+        pointWidth = 10;
+    }
+
+    m_paintNode.pen.setWidth(pointWidth);
+    showPointTips(QString::number(pointWidth));
+}
+
+void ScreenShot::onHidePointTips()
+{
+    if (m_pointTips)
+        m_pointTips->hide();
+    m_timerPoint->stop();
 }
 
 void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     m_vdRect = m_primaryScreen->virtualGeometry();
+    m_paintBar->raise();
+    m_pickedRectTips->raise();
+    m_pointTips->raise();
+
     m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_paintBar->hide();
+    m_pointTips->hide();
+    m_pickedRectTips->hide();
+    m_timerPoint->setInterval(5000);
     monitorsInfo();
+
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
     setWindowFlags(Qt::FramelessWindowHint | windowFlags());  // | Qt::WindowStaysOnTopHint
@@ -219,12 +268,14 @@ void ScreenShot::initUI()
 
 void ScreenShot::initConnect()
 {
+    connect(m_timerPoint, &QTimer::timeout, this, &ScreenShot::onHidePointTips);
     connect(&COMM, &Communication::sigWidgetResized, this, [this](){
         QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
     });
 
     connect(&COMM, &Communication::sigPaintBtnRelease, this, &ScreenShot::onPaintBtnRelease);
-    connect(&COMM, &Communication::sigPaintCtrlRelease, this, &ScreenShot::onPaintCtrlRelease);
+    connect(&COMM, &Communication::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
+    connect(&COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
 
 }
 
@@ -373,6 +424,11 @@ void ScreenShot::drawBorderDDE(QPainter &pa, const QRect &rt, int num) const
     pa.restore();
 }
 
+//void ScreenShot::drawPickedRectTips(QPainter &pa) const
+//{
+//    if (m_node.absoluteRect.isEmpty()) return;
+//}
+
 void ScreenShot::originalPixmap()
 {
     if (m_origPix.isNull()) {m_origPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
@@ -501,8 +557,8 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
                                                                    .arg(tPt.x()).arg(tPt.y())
                                                                    .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
                                                                    .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 fuzzyRange:%4 point:%5")
-                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id).arg(m_paintNode.fuzzyRange).arg(m_paintNode.point));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 fuzzyRange:%4 pen.width():%5")
+                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id).arg(m_paintNode.fuzzyRange).arg(m_paintNode.pen.width()));
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("serial:[%1] serialText:%2 serialBackground:%3 pen:%4 brush:%5")
                                                                    .arg(m_paintNode.serial).arg(m_paintNode.serialText.name()).arg(m_paintNode.serialBackground.name())
                                                                    .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
@@ -611,9 +667,10 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
     };
 
     QPoint pt;
+    const int space = 10; // 和 pickedRect 之间的间隔
     const QSize& size = m_paintBar->size();
     if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
-        const int space = 10; // 和 pickedRect 之间的间隔
+
         if (m_orie == Qt::Horizontal) {
             if(m_node.absoluteRect.bottom() + m_paintBar->height() <= currScrnRect(m_node.absoluteRect.bottomRight()).bottom()) {
                 pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * m_paintBar->width(), space);
@@ -635,13 +692,28 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 
     } else if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
     } else if (cwt == CustomWidgetType::CWT_picked_rect_tooptip) {
+
+        if(m_node.absoluteRect.top() - m_pickedRectTips->height() - space >= currScrnRect(m_node.absoluteRect.topLeft()).top()) {
+            pt = m_node.absoluteRect.topLeft() - QPoint(0, m_pickedRectTips->height() + space);
+        } else if (m_node.absoluteRect.bottom() + m_pickedRectTips->height() + space <= currScrnRect(m_node.absoluteRect.bottomLeft()).bottom()) {
+            pt = m_node.absoluteRect.bottomLeft() + QPoint(0, space);
+        } else {
+            pt = m_node.absoluteRect.topLeft() + QPoint(0, space);
+        }
+
     } else if (cwt == CustomWidgetType::CWT_point_changed_tooptip) {
     } else {
         qDebug() << "unknow CustomWidgetType!";
     }
 
-
     return pt;
+}
+
+void ScreenShot::showPickedRectTips()
+{
+    const auto& rect = m_node.absoluteRect;
+    m_pickedRectTips->setText(QString("%1, %2, %3 * %4").arg(rect.left()).arg(rect.top()).arg(rect.width()).arg(rect.height()));
+    showCustomWidget(m_pickedRectTips);
 }
 
 void ScreenShot::dealMousePressEvent(QMouseEvent *e)
@@ -798,23 +870,26 @@ void ScreenShot::setMovePickedRect()
 void ScreenShot::showCustomWidget(QWidget *w)
 {
     if (!w && m_node.pickedRect.isEmpty()) return;
+    w->raise(); // fix: 本窗口无 Qt::WindowStaysOnTopHint 属性， paintBtnsBar 出现后，在此点击便会消失不见的 bug；
+
+    const QRect& pickedRect(m_node.absoluteRect);
+    const QRect& wRect(w->rect());
+    QPoint pt;
 
     if (w == m_paintBar) {
-        const QRect& pickedRect(m_node.absoluteRect);
-        const QRect& wRect(w->rect());
-
-        const QPoint& pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
+        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
         w->move(pt);
         bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
 
         qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
+        isShow ? w->show() : w->hide();
 
-        if (isShow) {
-            w->raise(); // fix: 本窗口无 Qt::WindowStaysOnTopHint 属性， paintBtnsBar 出现后，在此点击便会消失不见的 bug；
-            w->show();
-        } else {
-            w->hide();
-        }
+    } else if (w == m_pickedRectTips) {
+
+        bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
+        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_picked_rect_tooptip);
+        w->move(pt);
+        pickedRect.isValid() && isShow ? w->show() : w->hide();
     }
 }
 
@@ -823,6 +898,7 @@ void ScreenShot::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton) return;
     dealMousePressEvent(e);
     showCustomWidget(m_paintBar);
+    showPickedRectTips();
     update();
 }
 
@@ -831,6 +907,7 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton) return;
     dealMouseReleaseEvent(e);
     showCustomWidget(m_paintBar);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
+    showPickedRectTips();
     update();
 }
 
@@ -838,13 +915,30 @@ void ScreenShot::mouseMoveEvent(QMouseEvent *e)
 {
     dealMouseMoveEvent(e);
     showCustomWidget(m_paintBar);
+    showPickedRectTips();
     update();
 }
 
-//void ScreenShot::wheelEvent(QWheelEvent *e)
-//{
+void ScreenShot::wheelEvent(QWheelEvent *e)
+{
+    // Note: On X11 this value is driver specific and unreliable, use angleDelta() instead
+    // QPoint numPixels = event->pixelDelta();
+    QPoint degrees = e->angleDelta() / 8;
+    if (degrees.isNull()) return;
+    QPoint step = degrees / 15;
 
-//}
+    const int min = 1;
+    const int max = 200;
+    int width = m_paintNode.pen.widthF();
+
+    width += step.y() > 0 ? 1 : -1;
+    width = qBound<int>(min, width, max);
+    m_paintNode.pen.setWidthF(width);
+
+    showPointTips(QString::number(width));
+
+    e->ignore();
+}
 
 void ScreenShot::keyReleaseEvent(QKeyEvent *e)
 {

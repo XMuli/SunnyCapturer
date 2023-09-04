@@ -2,6 +2,7 @@
 #include "ui/screenshot/tray.h"
 
 // test
+#include "tips.h"
 #include <QWidget>
 #include "colorpicker.h"
 #include "ui/setting/sidesettingui.h"
@@ -26,6 +27,15 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
     TRAY; // 启动托盘
+
+
+//    QString text = "27";
+//    Tips tips(text, TipsType::TT_point_changed_tips);
+//    tips.show();
+
+//    Tips tips2("1200, 1000, 1600 * 900", TipsType::TT_picked_rect_tips);
+//    tips2.show();
+
 
 //    PaintToolBar paintToolBar(Qt::Horizontal); // Horizontal Vertical
 //    paintToolBar.show();

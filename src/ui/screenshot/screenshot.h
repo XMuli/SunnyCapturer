@@ -9,6 +9,8 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QRect>
+#include <QPointer>
+#include "tips.h"
 #include "capturehelper.h"
 #include "windowsrect.h"
 #include "../paint_bar/painttoolbar.h"
@@ -31,10 +33,13 @@ private:
     void btnFinish();
     QPixmap finishPixmap();
 
+    void showPointTips(const QString &text);
+
 public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
-    void onPaintCtrlRelease(const int& id);
-
+    void onPaintCtrlIdReleased(const int& id);
+    void onPaintCtrlIdReleasedFromPointCtrl(const int& id);
+    void onHidePointTips();
 
 private:
     void initUI();
@@ -54,6 +59,7 @@ private:
     void rectNodesMapFromGlobal();
     void firstRectNodesAssignmentNode();  // 枚举遍历的窗口信息，将第一个赋值给 m_node
     QPoint customWidgetShowPositionRule(const CustomWidgetType& cwt);
+    void showPickedRectTips();
 
     void printfDevelopProjectInfo(QPainter &pa);
     void prinftWindowsRects(QPainter &pa);
@@ -67,7 +73,7 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
-//    void wheelEvent(QWheelEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
 
@@ -90,6 +96,10 @@ private:
     OrientationType          m_stretchPickedRectOrieType;    
     Qt::Orientation          m_orie;
     std::vector<RectNode>    m_rectNodes;
+
+    QPointer<Tips>           m_pointTips;
+    QPointer<Tips>           m_pickedRectTips;
+    QTimer*                  m_timerPoint;
 
 
 };

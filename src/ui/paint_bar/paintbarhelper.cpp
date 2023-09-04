@@ -96,7 +96,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
 {
     if (!absBtnsCtrl) absBtnsCtrl = new AbsBtnsCtrl(orie);
 
-    QButtonGroup* group = new QButtonGroup();
+    QButtonGroup* group = new QButtonGroup(absBtnsCtrl);
     group->setExclusive(exclusive);
     for (int i = 0; i < items.size(); ++i) {
         QToolButton* btn = new QToolButton();
