@@ -1,4 +1,5 @@
 ﻿#include <QApplication>
+#include "xlog.h"
 #include "ui/screenshot/tray.h"
 
 // test
@@ -13,9 +14,9 @@
 #include "ui/paint_bar/paintctrlbar.h"
 
 
-
 int main(int argc, char *argv[])
 {
+//    qInstallMessageHandler(XMessageOutput);
 #if(QT_VERSION > QT_VERSION_CHECK(5,6,0))
     qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif

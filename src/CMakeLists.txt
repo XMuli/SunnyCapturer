@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+#add_compile_definitions(LOG_MORE_INFO_DEVELOP)       # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)  # 便于调试, 当前光标所在的所有 窗口矩形 的信息
 
 set(qt_moduls Widgets Xml Svg)                        # Network Multimedia WebSockets
@@ -27,7 +28,10 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${qt_moduls})
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls})
 
 set(commom_files
-    commom/abstract_class/ISingleton.h
+    commom/include/xlog.h
+    commom/include/isingleton.h
+
+    commom/log/xlog.cpp
 )
 
 set(custom_ui_files
@@ -131,6 +135,7 @@ message("---@2--> ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include")
 add_dependencies(${project_name} ${dependent_dll_name})                                         # ③添加依赖顺序，确保先构建依赖，此处是 工程名称，而非 dll 名称(没有后缀d)
 target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name})  # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
 target_include_directories(${project_name} PRIVATE                                              # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
+    ${CMAKE_CURRENT_SOURCE_DIR}/commom/include
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/include
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/commom/communication
     ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include

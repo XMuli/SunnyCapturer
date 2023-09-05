@@ -8,6 +8,14 @@
 #include <QPointF>
 #include <QtMath>
 #include <QtGlobal>
+#include <QPixmap>
+#include <QPainter>
+#include <QRect>
+#include <QGraphicsBlurEffect>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+#include <QPainter>
+#include <QGuiApplication>
 
 CaptureHelper::CaptureHelper(QObject *parent)
     : QObject{parent}
@@ -236,6 +244,12 @@ QRect toAbsoluteRect(const QRect &rect)
     return ret;
 }
 
+/*!
+ * \brief drawShape
+ * \param paintNode
+ * \param pa
+ * \param pix      原始素材的 pixmap
+ */
 void drawShape(const PaintNode &paintNode, QPainter &pa)
 {
     pa.save();
@@ -311,13 +325,29 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 
     } else if (paintNode.pst == PaintShapeType::PST_marker_pen) {
     } else if (paintNode.pst == PaintShapeType::PST_mosaic) {
+
+        // TODO 2023.09.06: mouse event 中，如果为 马赛克绘画图形，则 记录此时的状态
+        // 思路一: 在 paintNode 存储一个全局的 m_origpix 或者 screenshot static函数可以获取，此时则直接将其图片进行模糊处理，然后贴图处理
+        // 思路二(推荐): 在 paintNode 存储 QPixmap* 马赛克后的图片和位置，在这里直接绘画到对应位置即可
+//        if (pix.isNull()) return;
+//        pa.setPen(Qt::NoPen);
+//        pa.setBrush(Qt::NoBrush);
+
+//        if (paintNode.id == 0) {
+//            pixelatedMosaic(pix);
+//        } else if (paintNode.id == 1) {
+//            smoothMosaic(pix);
+//        }
+
+//        pa.drawPixmap(paintNode.node.absoluteRect, drewPix);
+
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
     } else if (paintNode.pst == PaintShapeType::PST_text) {
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
     } else if (paintNode.pst == PaintShapeType::PST_point) {
         pa.setPen(paintNode.pen);
         pa.setBrush(Qt::NoBrush);
-        pa.drawPoint(QCursor::pos());
+        pa.drawPoint(QCursor::pos());  // 设置延长几秒钟比较好
 
     } else {
         qDebug() << "paintNode.pst is PST_empty!";
@@ -343,4 +373,53 @@ void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize)
 
     pa.drawLine(QLineF(destArrowP1, p2));
     pa.drawLine(QLineF(destArrowP2, p2));
+}
+
+void pixelatedMosaic(QPixmap &pixmap, const int& px)
+{
+    if (pixmap.isNull() || px <= 0) return;
+
+    QImage image = pixmap.toImage(); // 将QPixmap转换为QImage以进行像素级操作
+    for (int x = 0; x < image.width(); x += px) {
+        for (int y = 0; y < image.height(); y += px) {
+            QRect rect(x, y, px, px);
+
+            // 确保矩形区域在图像范围内
+            if (rect.right() >= image.width()) rect.setWidth(image.width() - x);
+            if (rect.bottom() >= image.height()) rect.setHeight(image.height() - y);
+
+            // 获取矩形区域的平均颜色
+            QRgb averageColor = image.copy(rect).scaled(1, 1, Qt::KeepAspectRatio, Qt::SmoothTransformation).pixel(0, 0);
+
+            // 将矩形区域填充为平均颜色
+            for (int i = x; i < x + rect.width(); i++) {
+                for (int j = y; j < y + rect.height(); j++) image.setPixel(i, j, averageColor);
+            }
+        }
+    }
+
+    pixmap = QPixmap::fromImage(image); // 将QImage转回QPixmap
+}
+
+void smoothMosaic(QPixmap &pixmap, int radius)
+{
+    if (pixmap.isNull() || radius <= 0) return;
+
+    radius = qMax<int>(10, radius);
+    QGraphicsBlurEffect* blur = new QGraphicsBlurEffect;
+    blur->setBlurRadius(radius);
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    item->setGraphicsEffect(blur);
+
+    QGraphicsScene scene;
+    scene.addItem(item);
+
+    QPainter painter(&pixmap);
+    const double& DPI = qGuiApp->devicePixelRatio();
+    const QRect tRt(pixmap.rect().topLeft() / DPI, pixmap.rect().size() / DPI);
+    scene.render(&painter, tRt, QRectF());
+
+    blur->setBlurRadius(radius + 2);
+    // multiple repeat for make blur effect stronger
+    scene.render(&painter, tRt, QRectF());
 }

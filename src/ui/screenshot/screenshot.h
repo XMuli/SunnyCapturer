@@ -32,6 +32,7 @@ private:
     void btnCancel();
     void btnFinish();
     QPixmap finishPixmap();
+    void originalPixmap();
 
 
 public slots:
@@ -47,7 +48,6 @@ private:
     void drawBorderFlipped(QPainter& pa, const QRect& rt) const;
     void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) const;
     void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) const;
-    void originalPixmap();
     void setCursorShape(const OrientationType &type, const QPoint &pt);
     void setMovePickedRect();
     void showCustomWidget(QWidget* w);

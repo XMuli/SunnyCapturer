@@ -107,6 +107,17 @@ void ScreenShot::btnFinish()
 {
     const QPixmap& pixmap = finishPixmap();
 
+    QPixmap tPix1 = finishPixmap();
+    QPixmap tPix2= finishPixmap();
+
+#if 1 // 测试效果代码
+    smoothMosaic(tPix1);
+    pixelatedMosaic(tPix2);
+
+    tPix1.save("D:/savePix1.png");
+    tPix2.save("D:/savePix2.png");
+#endif
+
     // 将新的QPixmap复制到剪贴板
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setPixmap(pixmap);
@@ -118,7 +129,18 @@ void ScreenShot::btnFinish()
 // QPixmap m_finshPix = m_origPix 的深拷贝 + 在上面绘画一些图案
 QPixmap ScreenShot::finishPixmap()
 {
+#if 1
     return m_origPix.copy(m_node.absoluteRect);
+#else
+    QPixmap finishPix = m_origPix.copy(m_node.absoluteRect);  // 左边是浅拷贝，右边是深拷贝
+
+    QPainter pa(&finishPix);
+    for (const auto& it : m_redo) drawShape(it, pa, QPixmap());
+    drawShape(m_paintNode, pa, QPixmap());
+    pa.end();
+
+    return finishPix;
+#endif
 }
 
 
@@ -667,12 +689,16 @@ void ScreenShot::firstRectNodesAssignmentNode()
 // 返回的相对窗口的坐标
 QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 {
-    // 根据 input pt 坐标，获取其所在的屏幕的矩形，作为判定条件
-    auto currScrnRect = [](const QPoint& pt) -> const QRect {
+    // 根据 input pt 坐标，获取其所在的屏幕的矩形，作为判定条件,返回相对于窗口的 rect 坐标
+    auto currScrnRect = [this](const QPoint& pt) -> const QRect {
         const QScreen* screen = QGuiApplication::screenAt(pt);
         if (!screen) qDebug() << "customWidgetShowPositionRule is failed! screen is nullptr";
         const QRect rect = screen ? screen->geometry() : QRect();
-        return rect;
+
+        QRect rt(mapFromGlobal(rect.topLeft()), rect.size());
+
+        qDebug() << "#-->rect:" << rect << "rt:" << rt;
+        return rt;
     };
 
     QPoint pt;
