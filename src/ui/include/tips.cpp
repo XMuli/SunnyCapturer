@@ -31,11 +31,12 @@ void Tips::paintEvent(QPaintEvent *event)
     pa.setRenderHint(QPainter::Antialiasing);
 
     pa.save();
-    pa.setPen(QPen(QColor(255, 255, 255, 0.4 * 255), 2));
+    const int penWidth = 1;
+    pa.setPen(QPen(QColor(255, 255, 255, 0.4 * 255), penWidth));
     pa.setBrush(QColor(0, 0, 0, 0.4 * 255));
     pa.drawRect(rect().adjusted(1, 1, -1, -1));
 
-    pa.setPen(QPen(QColor(255, 255, 255, 0.8 * 255), 2));
+    pa.setPen(QPen(QColor(255, 255, 255, 0.8 * 255), penWidth));
     if (m_type == TipsType::TT_picked_rect_tips) {
 
         QRect rt1 = textRect("px");
@@ -44,10 +45,10 @@ void Tips::paintEvent(QPaintEvent *event)
         const QPoint& p1 = rect().topRight() - QPoint(rt1.width(), 0);
         const QPoint& p2 = rect().bottomRight() - QPoint(rt1.width(), 0);
 
-        pa.setPen(QPen(QColor(255, 255, 255, 0.4 * 255), 2));
+        pa.setPen(QPen(QColor(255, 255, 255, 0.4 * 255), penWidth));
         pa.setBrush(Qt::NoBrush);
         pa.drawLine(p1, p2);
-        pa.setPen(QPen(QColor(255, 255, 255, 0.8 * 255), 2));
+        pa.setPen(QPen(QColor(255, 255, 255, 0.8 * 255), penWidth));
         pa.drawText(QRect(p1, rect().bottomRight()), Qt::AlignCenter, "px");
         pa.drawText(QRect(rect().topLeft(), p2), Qt::AlignCenter, m_text);
     } else if (m_type == TipsType::TT_point_changed_tips) {

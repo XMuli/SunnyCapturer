@@ -12,6 +12,7 @@
 #include <QClipboard>
 #include <QDateTime>
 #include <QFileDialog>
+#include <QCursor>
 #include "windowsrect.h"
 #include "communication.h"
 
@@ -127,7 +128,7 @@ void ScreenShot::showPointTips(const QString &text)
     if (!scrn) scrn = m_primaryScreen;
 
     m_pointTips->setText(text);
-    m_pointTips->move(scrn->geometry().topLeft());
+    m_pointTips->move(mapFromGlobal(scrn->geometry().topLeft()));
     m_pointTips->show();
 
     m_timerPoint->setSingleShot(true);
@@ -523,6 +524,14 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
     const int tTextX = 0;
     const int tTextY = 300;
     const int tAddHight = 20;
+    int tCount = 1;
+
+    const auto& currentScreenGeom = currentScreen()->geometry();
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) m_vdRect:(%3, %4, %5 * %6) currentScreenGeom:(%7, %8, %9 * %10)")
+                                                                   .arg(QCursor::pos().x()).arg(QCursor::pos().y())
+                                                                   .arg(m_vdRect.x()).arg(m_vdRect.y()).arg(m_vdRect.width()).arg(m_vdRect.height())
+                                                                   .arg(currentScreenGeom.x()).arg(currentScreenGeom.y()).arg(currentScreenGeom.width()).arg(currentScreenGeom.height()));
+
     pa.drawText(QPoint(tTextX, tTextY), QString("//[m_node]----------------------------------------------------"));
     QPoint tP1 = m_node.p1;
     QPoint tP2 = m_node.p2;
@@ -531,7 +540,6 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
     QRect tPickedRect = m_node.pickedRect;
     QRect absoluteRect = m_node.absoluteRect;
 
-    int tCount = 1;
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
                                                                    .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
@@ -656,6 +664,7 @@ void ScreenShot::firstRectNodesAssignmentNode()
     m_node.pickedRect = relativelyRect;
 }
 
+// 返回的相对窗口的坐标
 QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 {
     // 根据 input pt 坐标，获取其所在的屏幕的矩形，作为判定条件
@@ -672,13 +681,14 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
     if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
 
         if (m_orie == Qt::Horizontal) {
-            if(m_node.absoluteRect.bottom() + m_paintBar->height() <= currScrnRect(m_node.absoluteRect.bottomRight()).bottom()) {
-                pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * m_paintBar->width(), space);
-            } else if (m_node.absoluteRect.top() - m_paintBar->height() >= currScrnRect(m_node.absoluteRect.topRight()).top()) {
-                pt = m_node.absoluteRect.topRight() + QPoint(-1 * size.width(), -(space + size.height()));
+            if(m_node.absoluteRect.bottom() + m_paintBar->height() + space <= currScrnRect(m_node.absoluteRect.bottomRight()).bottom()) {
+                pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * size.width(), space);
+            } else if (m_node.absoluteRect.top() - m_paintBar->height() - space >= currScrnRect(m_node.absoluteRect.topRight()).top()) {
+                pt = m_node.absoluteRect.topRight() - QPoint(size.width(), space + size.height());
             } else {
                 pt = m_node.absoluteRect.topRight() + QPoint(-1 * size.width(), space);
             }
+
         } else if (m_orie == Qt::Vertical) {
 
             if(m_node.absoluteRect.right() + m_paintBar->width() <= currScrnRect(m_node.absoluteRect.topRight()).right()) {
@@ -878,10 +888,11 @@ void ScreenShot::showCustomWidget(QWidget *w)
 
     if (w == m_paintBar) {
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
-        w->move(pt);
+        const auto& globalPt = mapToGlobal(pt);
+        w->move(globalPt);
         bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
 
-        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
+        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "globalPt:" << globalPt << "pickedRect:" << pickedRect << "wRect:" << wRect;
         isShow ? w->show() : w->hide();
 
     } else if (w == m_pickedRectTips) {

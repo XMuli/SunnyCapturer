@@ -33,7 +33,6 @@ private:
     void btnFinish();
     QPixmap finishPixmap();
 
-    void showPointTips(const QString &text);
 
 public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
@@ -59,6 +58,7 @@ private:
     void rectNodesMapFromGlobal();
     void firstRectNodesAssignmentNode();  // 枚举遍历的窗口信息，将第一个赋值给 m_node
     QPoint customWidgetShowPositionRule(const CustomWidgetType& cwt);
+    void showPointTips(const QString &text);
     void showPickedRectTips();
 
     void printfDevelopProjectInfo(QPainter &pa);
