@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QMetaEnum>
 
+class ScreenShot;
 
 // C++11 新增带作用域的枚举，用 enum class  或enum struct（两者等价）声明。
 // https://blog.csdn.net/luckysym/article/details/1666114
@@ -100,6 +101,7 @@ struct PaintNode
 
     int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
     int     fuzzyRange = -1;                                    // PST_mosaic: mosaic、 blur    模糊值
+    QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
     QChar   serial;                                             // PST_serial 当前字符
     QColor  serialText;                                         // 序号文字颜色
@@ -107,12 +109,15 @@ struct PaintNode
 
     QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
+
+    void printf() const;
 };
 
 void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
 void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize = 20);
 void pixelatedMosaic(QPixmap &pixmap, const int& px = 20);
 void smoothMosaic(QPixmap& pixmap, int radius = 10);
+QPixmap monitoredDesktopPixmap(const QRect& rect);
 
 class CaptureHelper : public QObject
 {

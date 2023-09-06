@@ -1,4 +1,5 @@
 ﻿#include "capturehelper.h"
+#include "screenshot.h"
 #include <QDebug>
 #include <QMetaEnum>
 #include <QMetaObject>
@@ -15,7 +16,11 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QPainter>
+#include <QScreen>
 #include <QGuiApplication>
+#include <QApplication>
+#include <QDesktopWidget>
+#include "screenshot.h"
 
 CaptureHelper::CaptureHelper(QObject *parent)
     : QObject{parent}
@@ -325,21 +330,16 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 
     } else if (paintNode.pst == PaintShapeType::PST_marker_pen) {
     } else if (paintNode.pst == PaintShapeType::PST_mosaic) {
-
-        // TODO 2023.09.06: mouse event 中，如果为 马赛克绘画图形，则 记录此时的状态
-        // 思路一: 在 paintNode 存储一个全局的 m_origpix 或者 screenshot static函数可以获取，此时则直接将其图片进行模糊处理，然后贴图处理
-        // 思路二(推荐): 在 paintNode 存储 QPixmap* 马赛克后的图片和位置，在这里直接绘画到对应位置即可
-//        if (pix.isNull()) return;
-//        pa.setPen(Qt::NoPen);
-//        pa.setBrush(Qt::NoBrush);
-
-//        if (paintNode.id == 0) {
-//            pixelatedMosaic(pix);
-//        } else if (paintNode.id == 1) {
-//            smoothMosaic(pix);
-//        }
-
-//        pa.drawPixmap(paintNode.node.absoluteRect, drewPix);
+        /* 绘画马赛克/毛玻璃功能思路:
+         * 1. Mouse Press + drawing_shap(mosaic) 条件下,保存此刻整个屏幕的截图，备用
+         * 2. Mouse Move/Release 时刻，都通过深拷贝 pix = m_mosaicPix.copy(rect) 获取局部元素
+         * 3. 按照不同选项，进行 pixelatedMosaic / smoothMosaic 处理， 然后保存到成员变量 m_paintNode.pixmap = pix; 中
+         * 4. 在 Mouse Release时刻，确定最终完成 rect 范围(move 时其实也是实时确定); 进行 m_redo.push_back(m_paintNode) +  m_paintNode.pixmap = QPixmap(); 归为等操作
+         * 5. 就可以在函数中，直接进行绘画即可
+         */
+        const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
+        if (!paintNode.pixmap.isNull() && rect.isValid())
+            pa.drawPixmap(rect, paintNode.pixmap);
 
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
     } else if (paintNode.pst == PaintShapeType::PST_text) {
@@ -423,3 +423,39 @@ void smoothMosaic(QPixmap &pixmap, int radius)
     // multiple repeat for make blur effect stronger
     scene.render(&painter, tRt, QRectF());
 }
+
+// 返回此时此刻的桌面截图，作为马赛克原始素材使用
+QPixmap monitoredDesktopPixmap(const QRect &rect)
+{
+    QPixmap pixmap;
+    if (rect.isValid()) {
+        pixmap =  qGuiApp->primaryScreen()->grabWindow(qApp->desktop()->winId(), rect.x(), rect.y(), rect.width(), rect.height());
+        qDebug() << "monitoredDesktopPixmap(), &pixmap:" << &pixmap << "pixmap:" << pixmap;
+    }
+
+    return pixmap;
+}
+
+void PaintNode::printf() const
+{
+    qDebug() << "pst:" << paintShapeTypeToString(pst) << "bShow:" << bShow
+             << "&pixmap:" << &pixmap << "pixmap:" << pixmap;
+
+    const auto& p1 = node.p1;
+    const auto& p2 = node.p2;
+    const auto& p3 = node.p3;
+    const auto& pt = node.pt;
+    const auto& pickedRect = node.pickedRect;
+    const auto& absoluteRect = node.absoluteRect;
+
+    qDebug() << QString("p1(%1, %2) p2(%3, %4) p3(%5, %6) pt(%7, %8)")
+                    .arg(p1.x()).arg(p1.y())
+                    .arg(p2.x()).arg(p2.y())
+                    .arg(p3.x()).arg(p3.y())
+                    .arg(pt.x()).arg(pt.y());
+
+    qDebug() << QString("pickedRect(%1, %2, %3 * %4) absoluteRect(%5, %6, %7 * %8)\n\n")
+                    .arg(pickedRect.x()).arg(pickedRect.y()).arg(pickedRect.width()).arg(pickedRect.height())
+                    .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height());
+}
+

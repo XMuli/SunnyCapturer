@@ -33,6 +33,7 @@ private:
     void btnFinish();
     QPixmap finishPixmap();
     void originalPixmap();
+    void setMosaicPix();
 
 
 public slots:
@@ -48,6 +49,7 @@ private:
     void drawBorderFlipped(QPainter& pa, const QRect& rt) const;
     void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) const;
     void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) const;
+    void stashMosaicPixmap();           // 定格此刻的图片，用作打马赛克的素材
     void setCursorShape(const OrientationType &type, const QPoint &pt);
     void setMovePickedRect();
     void showCustomWidget(QWidget* w);
@@ -81,6 +83,7 @@ private:
     QScreen*                 m_primaryScreen;
     QList<QScreen *>         m_screens;
     QPixmap                  m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
+    QPixmap                  m_mosaicPix;          // 准备使用马赛克/完成截图相关功能时候
     QRect                    m_vdRect;             // virtual Desktop Rect;
 
     bool                     m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次

@@ -129,18 +129,8 @@ void ScreenShot::btnFinish()
 // QPixmap m_finshPix = m_origPix 的深拷贝 + 在上面绘画一些图案
 QPixmap ScreenShot::finishPixmap()
 {
-#if 1
-    return m_origPix.copy(m_node.absoluteRect);
-#else
-    QPixmap finishPix = m_origPix.copy(m_node.absoluteRect);  // 左边是浅拷贝，右边是深拷贝
-
-    QPainter pa(&finishPix);
-    for (const auto& it : m_redo) drawShape(it, pa, QPixmap());
-    drawShape(m_paintNode, pa, QPixmap());
-    pa.end();
-
-    return finishPix;
-#endif
+    setMosaicPix();
+    return m_mosaicPix.copy(m_node.absoluteRect);
 }
 
 
@@ -212,6 +202,11 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
             qDebug() << "type is unknow PaintType!";
         }
     }
+
+
+    // 优化, 不使用马赛克功能时候，就释放相关内存
+    if (type != PaintType::PT_mosaic && !m_mosaicPix.isNull())
+        m_mosaicPix = QPixmap();
 }
 
 void ScreenShot::onPaintCtrlIdReleased(const int &id)
@@ -459,6 +454,12 @@ void ScreenShot::originalPixmap()
     }
 }
 
+void ScreenShot::setMosaicPix()
+{
+    m_mosaicPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
+    qDebug() << "m_mosaicPix()， &m_mosaicPix:" << &m_mosaicPix << "m_mosaicPix:" << m_mosaicPix;
+}
+
 void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
 {
     if (m_actionType == ActionType::AT_wait) {
@@ -506,6 +507,7 @@ void ScreenShot::preDestruction()
     m_primaryScreen = nullptr;
     if (m_screens.size()) m_screens.clear();
     if (!m_origPix.isNull()) m_origPix = QPixmap();
+    if (!m_mosaicPix.isNull()) m_mosaicPix = QPixmap();
     if (m_paintBar) m_paintBar->deleteLater();
     if (m_rectNodes.size()) m_rectNodes.clear();
 }
@@ -783,11 +785,13 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
-        setMouseTracking(true);
+        setMouseTracking(false);
         m_node.trackPos.clear();
         m_node.trackPos.emplace_back(m_node.p3);
         m_paintNode.node = m_node;
         m_paintNode.bShow = true;
+
+        if (m_paintNode.pst == PaintShapeType::PST_mosaic) setMosaicPix();  // 此刻需要准备好马赛克的原始素材，无论是 move/release 都是需要它
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
@@ -823,10 +827,16 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         m_node.trackPos.emplace_back(m_node.p3);
         m_paintNode.node = m_node;
         m_paintNode.bShow = false;
+
+        stashMosaicPixmap();
         m_redo.push_back(m_paintNode);
 
+        // 归零可能会干扰下次操作的一些参数
         m_node.trackPos.clear();
+        m_paintNode.pixmap = QPixmap();    // fix: push_back 时候永远是最新的一个
         qDebug() << "m_redo:" << m_redo.size();
+
+        setMouseTracking(true);
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
@@ -845,6 +855,35 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
     m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
     m_node.p1 = m_node.p2 = QPoint(); // 完成一次操作后，就重置
+}
+
+// 只是将 准备 "素材原图 + 马赛克" 赋值 -> m_paintNode.pixmap
+void ScreenShot::stashMosaicPixmap()
+{
+    if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+        const auto& pickedrect = m_paintNode.node.absoluteRect;
+        const bool bRealValid = pickedrect.isValid() && !pickedrect.isNull(); // 绘图片矩形必须超过一个点大小，避免内存浪费
+
+        if (bRealValid) {
+            const auto& p1 = mapToGlobal(m_paintNode.node.p1);
+            const auto& p2 = mapToGlobal(m_paintNode.node.p2);
+            const auto& rect = largestRect(p1, p2);
+
+            if (m_mosaicPix.isNull()) return;
+            QPixmap pix = m_mosaicPix.copy(rect);
+
+//            qDebug() << "----#3---->rect:" << rect << "&m_mosaicPix:" << m_mosaicPix << "m_mosaicPix:" << m_mosaicPix << "pix:" << pix;
+//            static int idx = 0;
+
+//            pix.save(QString("D:/pix_%1.png").arg(QString::number(idx)));
+            if (m_paintNode.id == 0) pixelatedMosaic(pix);
+            else if (m_paintNode.id == 1) smoothMosaic(pix);
+//            pix.save(QString("D:/pixMosaic_%1.png").arg(QString::number(idx++)));
+
+            m_paintNode.pixmap = pix;
+//            qDebug() << "----#4---->rect:" << rect;
+        }
+    }
 }
 
 void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
@@ -878,6 +917,7 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
         setCursorShape(orieType, m_node.p3);
         m_paintNode.node = m_node;
 
+        stashMosaicPixmap();
         qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
@@ -1006,7 +1046,9 @@ void ScreenShot::paintEvent(QPaintEvent *e)
         pa.drawPixmap(QPoint(0, 0), m_origPix);
     }
 
+    qDebug() << "paintEvent m_redo:" << m_redo.size();
     for (const auto& it : m_redo) {
+        it.printf();
         drawShape(it, pa);
     }
 
@@ -1029,6 +1071,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     prinftWindowsRects(pa);
     printfDevelopProjectInfo(pa);
 }
+
 
 #if defined(Q_OS_WIN)
 const QRect rectToQRect(const RECT &rect)
