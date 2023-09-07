@@ -10,6 +10,7 @@ PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
     , m_layout(new QGridLayout(this))
     , m_orie(orie)
+    , m_blurEffect(std::make_unique<XBlurEffect>(this))
     , m_paintCtrlBar(new PaintCtrlBar(orie, this))
 {
     initUI();
@@ -21,6 +22,7 @@ void PaintToolBar::initUI()
     setContentsMargins(margin, margin, margin, margin);
     m_layout->setContentsMargins(0, 0, 0 ,0);
     setLayout(m_layout);
+    m_blurEffect->lower();
 
     initBtns();
 }
@@ -165,6 +167,14 @@ bool PaintToolBar::hadPaintBtnChecked()
     return false;
 }
 
+void PaintToolBar::setLowerBlurEffect(const QPixmap &pix, int radius)
+{
+    if (m_blurEffect) {
+        m_blurEffect->setPixmap(pix, radius);
+        m_blurEffect->lower();
+    }
+}
+
 void PaintToolBar::printfAllItems(const QString &prompted)
 {
     QLayoutItem *item;
@@ -190,8 +200,24 @@ void PaintToolBar::printfAllItems(const QString &prompted)
     qDebug() << QString("---%1---m_layout 的数量是:%2").arg(prompted).arg(m_layout->count()) << Qt::endl << Qt::endl << Qt::endl;
 }
 
+void PaintToolBar::resizeEvent(QResizeEvent *e)
+{
+    qDebug() << QString() << "-----------resizeEvent---parent():" << parent();
+    if (m_blurEffect) {
+        emit COMM.sigUpdateToolBarBlurPixmap();
+        m_blurEffect->setGeometry(0, 0, width(), height());
 
+    }
 
+    QWidget::resizeEvent(e);
+}
+
+void PaintToolBar::enterEvent(QEvent *e)
+{
+    setCursor(Qt::ArrowCursor);
+
+    QWidget::enterEvent(e);
+}
 
 void PaintToolBar::onPaintBtnReleased()
 {

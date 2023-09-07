@@ -27,7 +27,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_bFistPressed(false)
     , m_bAutoDetectRect(true)
     , m_actionType(ActionType::AT_wait)
-    , m_paintBar(new PaintToolBar(orie, nullptr))
+    , m_paintBar(new PaintToolBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
@@ -236,6 +236,11 @@ void ScreenShot::onHidePointTips()
     m_timerPoint->stop();
 }
 
+void ScreenShot::onUpdateToolBarBlurPixmap()
+{
+    showCustomWidget(m_paintBar);
+}
+
 void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -294,6 +299,7 @@ void ScreenShot::initConnect()
     connect(&COMM, &Communication::sigPaintBtnRelease, this, &ScreenShot::onPaintBtnRelease);
     connect(&COMM, &Communication::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
     connect(&COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
+    connect(&COMM, &Communication::sigUpdateToolBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
 
 }
 
@@ -449,7 +455,10 @@ void ScreenShot::drawBorderDDE(QPainter &pa, const QRect &rt, int num) const
 
 void ScreenShot::originalPixmap()
 {
-    if (m_origPix.isNull()) {m_origPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
+    if (m_origPix.isNull()) {
+        m_origPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
+
+
         qDebug() << "originalPixmap()， &m_origPix:" << &m_origPix << "m_origPix:" << m_origPix;
     }
 }
@@ -955,6 +964,10 @@ void ScreenShot::showCustomWidget(QWidget *w)
     if (w == m_paintBar) {
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
         const auto& globalPt = mapToGlobal(pt);
+
+        const auto& t = m_origPix.copy(QRect(globalPt, m_paintBar->rect().size()));
+        m_paintBar->setLowerBlurEffect(t, 30);
+
         w->move(globalPt);
         bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
 

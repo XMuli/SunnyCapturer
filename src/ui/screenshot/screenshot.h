@@ -41,6 +41,7 @@ public slots:
     void onPaintCtrlIdReleased(const int& id);
     void onPaintCtrlIdReleasedFromPointCtrl(const int& id);
     void onHidePointTips();
+    void onUpdateToolBarBlurPixmap();
 
 private:
     void initUI();

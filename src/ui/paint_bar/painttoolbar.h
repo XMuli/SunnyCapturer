@@ -1,6 +1,7 @@
 ﻿#ifndef PAINTTOOLBAR_H
 #define PAINTTOOLBAR_H
 #include <vector>
+#include <memory>
 #include <QToolButton>
 #include <QWidget>
 #include <QGridLayout>
@@ -16,6 +17,7 @@ public:
     virtual ~PaintToolBar() = default;
 
     bool hadPaintBtnChecked();
+    void setLowerBlurEffect(const QPixmap& pix, int radius);
 
 private:
     void initUI();
@@ -40,14 +42,20 @@ private:
 //    void onBtnCancel();
 //    void onBtnFinis();
 
+
+protected:
+    void resizeEvent(QResizeEvent *e) override;
+    void enterEvent(QEvent *e) override;
+
 public slots:
     void onPaintBtnReleased();
 
 private:
-    QGridLayout*             m_layout;
-    std::vector<PaintBtn>    m_btns;
-    Qt::Orientation          m_orie;
-    QPointer<PaintCtrlBar>   m_paintCtrlBar;
+    QGridLayout*                    m_layout;
+    std::vector<PaintBtn>           m_btns;
+    Qt::Orientation                 m_orie;
+    std::unique_ptr<XBlurEffect>    m_blurEffect;
+    QPointer<PaintCtrlBar>          m_paintCtrlBar;
 };
 
 #endif // PAINTTOOLBAR_H

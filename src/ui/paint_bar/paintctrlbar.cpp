@@ -46,6 +46,7 @@ PaintCtrlBar::~PaintCtrlBar()
     m_scrollBar->deleteLater();
 }
 
+
 void PaintCtrlBar::initUI()
 {
     if (m_orie == Qt::Horizontal) {
@@ -55,7 +56,6 @@ void PaintCtrlBar::initUI()
     }
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-
     m_fontFamily->setMaximumWidth(170);
     m_scrollBar->setTickPosition(QSlider::NoTicks);
     m_colorPicker->hide();

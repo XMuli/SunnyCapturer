@@ -20,6 +20,7 @@ signals:
     void sigPaintBtnRelease(const PaintType& type, const bool& isCheckable);      // paintBtnsBar 按钮被按下
     void sigPaintCtrlIdReleased(const int& id);                                      // PaintCtrlBar 按钮被按下
     void sigPaintCtrlIdReleasedFromPointCtrl(const int& id);
+    void sigUpdateToolBarBlurPixmap();
 
 
 private:
