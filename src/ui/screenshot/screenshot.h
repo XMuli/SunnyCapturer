@@ -32,6 +32,7 @@ private:
     void btnCancel();
     void btnFinish();
     QPixmap finishPixmap();
+    QPixmap finishDrewPixmap(const QRect& rect = QRect());
     void originalPixmap();
     void setMosaicPix();
 
@@ -40,6 +41,7 @@ public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
     void onPaintCtrlIdReleased(const int& id);
     void onPaintCtrlIdReleasedFromPointCtrl(const int& id);
+    void onMosaicSliderValueChanged(int val);
     void onHidePointTips();
     void onUpdateToolBarBlurPixmap();
 

@@ -249,12 +249,6 @@ QRect toAbsoluteRect(const QRect &rect)
     return ret;
 }
 
-/*!
- * \brief drawShape
- * \param paintNode
- * \param pa
- * \param pix      原始素材的 pixmap
- */
 void drawShape(const PaintNode &paintNode, QPainter &pa)
 {
     pa.save();
@@ -271,7 +265,6 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 
         const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
         pa.drawRect(rect);
-//        pa.drawRect(paintNode.node.absoluteRect);
 
     } else if (paintNode.pst == PaintShapeType::PST_ellipse) {
         pa.setPen(paintNode.pen);
@@ -329,6 +322,19 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         }
 
     } else if (paintNode.pst == PaintShapeType::PST_marker_pen) {
+
+        pa.setPen(Qt::NoPen);
+        QColor color = paintNode.brush.color();
+        color.setAlpha(0.3 * 255);
+        pa.setBrush(color);
+        const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
+
+        if (paintNode.id == 0) {
+            pa.drawEllipse(rect);
+        } else if (paintNode.id == 1) {
+            pa.drawRect(rect);
+        }
+
     } else if (paintNode.pst == PaintShapeType::PST_mosaic) {
         /* 绘画马赛克/毛玻璃功能思路:
          * 1. Mouse Press + drawing_shap(mosaic) 条件下,保存此刻整个屏幕的截图，备用

@@ -54,3 +54,8 @@ void AbsBtnsCtrl::addSpacerItem(const int &length)
 
     m_layout->addSpacerItem(spacer);
 }
+
+void AbsBtnsCtrl::setFixSpacing(const int &val)
+{
+    if (m_layout) m_layout->setSpacing(val);
+}

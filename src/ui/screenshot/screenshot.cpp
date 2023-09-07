@@ -133,6 +133,16 @@ QPixmap ScreenShot::finishPixmap()
     return m_mosaicPix.copy(m_node.absoluteRect);
 }
 
+QPixmap ScreenShot::finishDrewPixmap(const QRect &rect)
+{
+    QPixmap pix = m_origPix.copy(rect);  // 默认深拷贝全部大小
+    QPainter pa(&pix);
+    pa.restore();
+    for (const auto& it : m_redo) drawShape(it, pa);
+    pa.save();
+    return pix;
+}
+
 
 void ScreenShot::showPointTips(const QString &text)
 {
@@ -229,6 +239,15 @@ void ScreenShot::onPaintCtrlIdReleasedFromPointCtrl(const int &id)
     showPointTips(QString::number(pointWidth));
 }
 
+void ScreenShot::onMosaicSliderValueChanged(int val)
+{
+    if (m_paintNode.id == 0) {
+        m_paintNode.fuzzyValue = val;
+    } else if (m_paintNode.id == 1) {
+        m_paintNode.fuzzyValue = val;
+    }
+}
+
 void ScreenShot::onHidePointTips()
 {
     if (m_pointTips)
@@ -299,6 +318,7 @@ void ScreenShot::initConnect()
     connect(&COMM, &Communication::sigPaintBtnRelease, this, &ScreenShot::onPaintBtnRelease);
     connect(&COMM, &Communication::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
     connect(&COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
+    connect(&COMM, &Communication::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
     connect(&COMM, &Communication::sigUpdateToolBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
 
 }
@@ -598,8 +618,8 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
                                                                    .arg(tPt.x()).arg(tPt.y())
                                                                    .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
                                                                    .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 fuzzyRange:%4 pen.width():%5")
-                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id).arg(m_paintNode.fuzzyRange).arg(m_paintNode.pen.width()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 fuzzyValue:%4 pen.width():%5")
+                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id).arg(m_paintNode.fuzzyValue).arg(m_paintNode.pen.width()));
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("serial:[%1] serialText:%2 serialBackground:%3 pen:%4 brush:%5")
                                                                    .arg(m_paintNode.serial).arg(m_paintNode.serialText.name()).arg(m_paintNode.serialBackground.name())
                                                                    .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
@@ -885,8 +905,8 @@ void ScreenShot::stashMosaicPixmap()
 //            static int idx = 0;
 
 //            pix.save(QString("D:/pix_%1.png").arg(QString::number(idx)));
-            if (m_paintNode.id == 0) pixelatedMosaic(pix);
-            else if (m_paintNode.id == 1) smoothMosaic(pix);
+            if (m_paintNode.id == 0) pixelatedMosaic(pix, m_paintNode.fuzzyValue);
+            else if (m_paintNode.id == 1) smoothMosaic(pix, m_paintNode.fuzzyValue);
 //            pix.save(QString("D:/pixMosaic_%1.png").arg(QString::number(idx++)));
 
             m_paintNode.pixmap = pix;
@@ -965,7 +985,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
         const auto& globalPt = mapToGlobal(pt);
 
-        const auto& t = m_origPix.copy(QRect(globalPt, m_paintBar->rect().size()));
+        const auto& t = finishDrewPixmap().copy(QRect(globalPt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
         m_paintBar->setLowerBlurEffect(t, 30);
 
         w->move(globalPt);

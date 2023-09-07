@@ -13,6 +13,7 @@ public:
     void addWidget(QWidget *w, const bool& bAddSpacer = true);
     void addSpacerLine(const int &length = 30);
     void addSpacerItem(const int &length = 0);
+    void setFixSpacing(const int& val = 0);
 
 private:
     Qt::Orientations m_orien;

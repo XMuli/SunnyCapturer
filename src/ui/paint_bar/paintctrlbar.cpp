@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QSize>
 #include <QButtonGroup>
+#include <QLabel>
 #include "paintbarhelper.h"
 #include "communication.h"
 
@@ -24,7 +25,7 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_colorPicker(new ColorPicker(QSize(20, 20), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
-    , m_scrollBar(new QSlider(m_orie, this))
+    , m_mosaicSliderCtrl(initSliderCtrl())
 {
     initUI();
 }
@@ -43,7 +44,7 @@ PaintCtrlBar::~PaintCtrlBar()
 
     m_fontFamily->deleteLater();
     m_fontScale->deleteLater();
-    m_scrollBar->deleteLater();
+    m_mosaicSliderCtrl->deleteLater();
 }
 
 
@@ -57,11 +58,10 @@ void PaintCtrlBar::initUI()
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_fontFamily->setMaximumWidth(170);
-    m_scrollBar->setTickPosition(QSlider::NoTicks);
     m_colorPicker->hide();
     m_fontFamily->hide();
     m_fontScale->hide();
-    m_scrollBar->hide();
+    m_mosaicSliderCtrl->hide();
 
     setContentsMargins(0, 0, 0, 0);
     m_layout->setContentsMargins(0, 0, 0 ,0);
@@ -88,7 +88,7 @@ void PaintCtrlBar::initBtns()
     const QString& dir(":/resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/");
     connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line" << "arrow_bloken"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
@@ -100,7 +100,7 @@ void PaintCtrlBar::initBtns()
 //    addWidget(m_arrowCtrl);
 //    addWidget(m_mosaicCtrl);
 //    addWidget(m_pointCtrl);
-//    addWidget(m_scrollBar);
+//    addWidget(m_mosaicSliderCtrl);
 //    addWidget(m_textCtrl);
 
 //    addWidget(m_fontFamily);
@@ -151,7 +151,7 @@ void PaintCtrlBar::hideAllBtnsCtrl()
     m_colorPicker->hide();
     m_fontFamily->hide();
     m_fontScale->hide();
-    m_scrollBar->hide();
+    m_mosaicSliderCtrl->hide();
     m_pointCtrl->hide();
 
     for (int i = 0; i < m_layout->count(); ++i) {
@@ -191,6 +191,33 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable)
     }
 
     return ret;
+}
+
+AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
+{
+    QSlider* slider = new QSlider(m_orie, this);
+
+    if (m_orie == Qt::Horizontal) slider->setFixedWidth(120);
+    else if (m_orie == Qt::Vertical) slider->setFixedHeight(120);
+
+    slider->setTickPosition(QSlider::NoTicks);
+    slider->setValue(10);
+    slider->setRange(2, 30);
+    slider->setPageStep(5);
+    slider->setSingleStep(1);
+    slider->setTracking(true);
+    QLabel* labSlider = new QLabel(QString::number(slider->value()));
+    AbsBtnsCtrl* absBtnsCtrl = new AbsBtnsCtrl(m_orie, this);
+    absBtnsCtrl->setFixSpacing(10);
+    absBtnsCtrl->addWidget(slider, false);
+    absBtnsCtrl->addWidget(labSlider, false);
+
+    connect(slider, &QSlider::valueChanged, this, [labSlider](int val){
+        emit COMM.sigMosaicSliderValueChanged(val);
+        labSlider->setText(QString::number(val));
+    });
+
+    return absBtnsCtrl;
 }
 
 void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch, Qt::Alignment alignment)
@@ -235,7 +262,7 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
         addWidget(m_markerPenCtrl);
     } else if (type == PaintType::PT_mosaic) {
         addWidget(m_mosaicCtrl);
-        addWidget(m_scrollBar, false);
+        addWidget(m_mosaicSliderCtrl, false);
         bPointCtrlShow = false;
         bColorPickerShow = false;
     } else if (type == PaintType::PT_text) {

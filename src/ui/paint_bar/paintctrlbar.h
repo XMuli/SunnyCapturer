@@ -24,6 +24,7 @@ private:
     void initBtns();
     void hideAllBtnsCtrl();
     int  btnIdIschecked(const PaintType& type, const bool &isCheckable);
+    AbsBtnsCtrl *initSliderCtrl();
 
 
     void addWidget(QWidget *w, const bool& bAddSpaceLine = true, int stretch = 0, Qt::Alignment alignment = Qt::AlignCenter);
@@ -50,7 +51,9 @@ private:
     QPointer<ColorPicker>         m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;
-    QPointer<QSlider>             m_scrollBar;
+    QPointer<AbsBtnsCtrl>         m_mosaicSliderCtrl;
+
+
 };
 
 #endif // PAINTCTRLBAR_H
