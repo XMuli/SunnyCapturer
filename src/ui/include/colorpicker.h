@@ -8,7 +8,6 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QButtonGroup>
-#include "xwidget_global.h"
 #include "xcolorbutton.h"
 
 enum class ColorPickerType
@@ -31,16 +30,17 @@ public:
 
 private:
     void initUI();
+    void initPickupBtn(const QColor &color);
 
 public slots:
     void onPickedColor(QAbstractButton *btn);
+    void onPickupBtnReleased();
 
 private:
-    bool                     m_bRainbow;
     QSize                    m_size;
     QGridLayout*             m_gridLayout;
-    QToolButton*             m_pickedBtn;
     ColorPickerType          m_colorPickerType;
+    QPointer<XColorButton>   m_pickedBtn;    // 当前选中的效果
     QPointer<QButtonGroup>   m_colorsGroup;
 };
 

@@ -46,9 +46,9 @@ int main(int argc, char *argv[])
 
 //    SideSettingUI w;
 //    w.show();
-//    ColorPicker colorPicker;
+    ColorPicker colorPicker(QSize(100, 100), ColorPickerType::CT_grid_horizontal);
 //    colorPicker.setColorPickerType(ColorPickerType::CT_grid_horizontal);
-//    colorPicker.show();
+    colorPicker.show();
 //    AbsSettingUI absW;
 //    absW.show();
 //    ResetUI resetUI;

@@ -54,8 +54,8 @@ void PaintToolBar::initBtns()
     for (int i = 0; i < m_btns.size(); ++i) {
         auto& it = m_btns.at(i);
         auto& tb = it.btn;
-        const QSize size(ICON_SIZE, ICON_SIZE);
-
+        const double& scal = dpiScale();
+        const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
         tb = new QToolButton();
         tb->setObjectName(it.name);
         tb->setProperty(PROPERTY_PAINT_TYPR, QVariant::fromValue(it.type));

@@ -20,7 +20,6 @@
 #include <QGuiApplication>
 #include <QApplication>
 #include <QDesktopWidget>
-#include "screenshot.h"
 
 CaptureHelper::CaptureHelper(QObject *parent)
     : QObject{parent}
@@ -464,4 +463,6 @@ void PaintNode::printf() const
                     .arg(pickedRect.x()).arg(pickedRect.y()).arg(pickedRect.width()).arg(pickedRect.height())
                     .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height());
 }
+
+
 

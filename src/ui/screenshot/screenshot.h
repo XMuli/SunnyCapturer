@@ -41,9 +41,10 @@ public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
     void onPaintCtrlIdReleased(const int& id);
     void onPaintCtrlIdReleasedFromPointCtrl(const int& id);
-    void onMosaicSliderValueChanged(int val);
+    void onMosaicSliderValueChanged(int id, int val);
     void onHidePointTips();
     void onUpdateToolBarBlurPixmap();
+    void onPickedColor(const QColor& color);
 
 private:
     void initUI();

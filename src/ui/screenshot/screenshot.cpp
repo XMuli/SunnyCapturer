@@ -139,6 +139,8 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect)
     QPainter pa(&pix);
     pa.restore();
     for (const auto& it : m_redo) drawShape(it, pa);
+
+//    drawShape(m_paintNode, pa);
     pa.save();
     return pix;
 }
@@ -239,12 +241,12 @@ void ScreenShot::onPaintCtrlIdReleasedFromPointCtrl(const int &id)
     showPointTips(QString::number(pointWidth));
 }
 
-void ScreenShot::onMosaicSliderValueChanged(int val)
+void ScreenShot::onMosaicSliderValueChanged(int id, int val)
 {
-    if (m_paintNode.id == 0) {
-        m_paintNode.fuzzyValue = val;
-    } else if (m_paintNode.id == 1) {
-        m_paintNode.fuzzyValue = val;
+    if (id == 0) {
+        m_paintNode.pixelatedFuzzy = val;
+    } else if (id == 1) {
+        m_paintNode.smoothFuzzy = val;
     }
 }
 
@@ -258,6 +260,12 @@ void ScreenShot::onHidePointTips()
 void ScreenShot::onUpdateToolBarBlurPixmap()
 {
     showCustomWidget(m_paintBar);
+}
+
+void ScreenShot::onPickedColor(const QColor &color)
+{
+    m_paintNode.pen.setColor(color);
+    m_paintNode.brush.setColor(color);
 }
 
 void ScreenShot::initUI()
@@ -320,6 +328,7 @@ void ScreenShot::initConnect()
     connect(&COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
     connect(&COMM, &Communication::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
     connect(&COMM, &Communication::sigUpdateToolBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
+    connect(&COMM, &Communication::sigPickedColor, this, &ScreenShot::onPickedColor);
 
 }
 
@@ -574,8 +583,18 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
 {
     pa.save();
     pa.setPen(QPen(Qt::green, 2));
-    const int tTextX = 0;
-    const int tTextY = 300;
+
+    QScreen* scrn = m_primaryScreen;
+    for (const auto& it : m_screens) {
+        if (it != m_primaryScreen)
+            scrn = it;
+    }
+
+    QPoint tTextPt(0, 1500);
+    if (scrn) tTextPt = mapFromGlobal(scrn->geometry().topLeft());
+
+    const int tTextX = tTextPt.x();
+    const int tTextY = tTextPt.y() + 50;
     const int tAddHight = 20;
     int tCount = 1;
 
@@ -618,8 +637,9 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
                                                                    .arg(tPt.x()).arg(tPt.y())
                                                                    .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
                                                                    .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 fuzzyValue:%4 pen.width():%5")
-                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id).arg(m_paintNode.fuzzyValue).arg(m_paintNode.pen.width()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 pixelatedFuzzy:%4 smoothFuzzy:%5 pen.width():%6")
+                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id)
+                                                                   .arg(m_paintNode.pixelatedFuzzy).arg(m_paintNode.smoothFuzzy).arg(m_paintNode.pen.width()));
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("serial:[%1] serialText:%2 serialBackground:%3 pen:%4 brush:%5")
                                                                    .arg(m_paintNode.serial).arg(m_paintNode.serialText.name()).arg(m_paintNode.serialBackground.name())
                                                                    .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
@@ -720,7 +740,7 @@ void ScreenShot::firstRectNodesAssignmentNode()
 // 返回的相对窗口的坐标
 QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 {
-    // 根据 input pt 坐标，获取其所在的屏幕的矩形，作为判定条件,返回相对于窗口的 rect 坐标
+    // 根据 input pt 坐标，获取其所在的屏幕的矩形，作为判定条件,返回相对于 Sunny 窗口的相对 rect 坐标
     auto currScrnRect = [this](const QPoint& pt) -> const QRect {
         const QScreen* screen = QGuiApplication::screenAt(pt);
         if (!screen) qDebug() << "customWidgetShowPositionRule is failed! screen is nullptr";
@@ -738,9 +758,9 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
     if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
 
         if (m_orie == Qt::Horizontal) {
-            if(m_node.absoluteRect.bottom() + m_paintBar->height() + space <= currScrnRect(m_node.absoluteRect.bottomRight()).bottom()) {
+            if(m_node.absoluteRect.bottom() + m_paintBar->height() + space <= currScrnRect(mapToGlobal(m_node.absoluteRect.bottomRight())).bottom()) {
                 pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * size.width(), space);
-            } else if (m_node.absoluteRect.top() - m_paintBar->height() - space >= currScrnRect(m_node.absoluteRect.topRight()).top()) {
+            } else if (m_node.absoluteRect.top() - m_paintBar->height() - space >= currScrnRect(mapToGlobal(m_node.absoluteRect.topRight())).top()) {
                 pt = m_node.absoluteRect.topRight() - QPoint(size.width(), space + size.height());
             } else {
                 pt = m_node.absoluteRect.topRight() + QPoint(-1 * size.width(), space);
@@ -748,9 +768,9 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 
         } else if (m_orie == Qt::Vertical) {
 
-            if(m_node.absoluteRect.right() + m_paintBar->width() <= currScrnRect(m_node.absoluteRect.topRight()).right()) {
+            if(m_node.absoluteRect.right() + m_paintBar->width() <= currScrnRect(mapToGlobal(m_node.absoluteRect.topRight())).right()) {
                 pt = m_node.absoluteRect.topRight() + QPoint(space, 0);
-            } else if (m_node.absoluteRect.left() - m_paintBar->width() >= currScrnRect(m_node.absoluteRect.topLeft()).left()) {
+            } else if (m_node.absoluteRect.left() - m_paintBar->width() >= currScrnRect(mapToGlobal(m_node.absoluteRect.topLeft())).left()) {
                 pt = m_node.absoluteRect.topLeft() + QPoint(-(space + size.width()), 0);
             } else {
                 pt = m_node.absoluteRect.topLeft() + QPoint(space, 0);
@@ -760,9 +780,9 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
     } else if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
     } else if (cwt == CustomWidgetType::CWT_picked_rect_tooptip) {
 
-        if(m_node.absoluteRect.top() - m_pickedRectTips->height() - space >= currScrnRect(m_node.absoluteRect.topLeft()).top()) {
+        if(m_node.absoluteRect.top() - m_pickedRectTips->height() - space >= currScrnRect(mapToGlobal(m_node.absoluteRect.topLeft())).top()) {
             pt = m_node.absoluteRect.topLeft() - QPoint(0, m_pickedRectTips->height() + space);
-        } else if (m_node.absoluteRect.bottom() + m_pickedRectTips->height() + space <= currScrnRect(m_node.absoluteRect.bottomLeft()).bottom()) {
+        } else if (m_node.absoluteRect.bottom() + m_pickedRectTips->height() + space <= currScrnRect(mapToGlobal(m_node.absoluteRect.bottomLeft())).bottom()) {
             pt = m_node.absoluteRect.bottomLeft() + QPoint(0, space);
         } else {
             pt = m_node.absoluteRect.topLeft() + QPoint(0, space);
@@ -779,7 +799,17 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 void ScreenShot::showPickedRectTips()
 {
     const auto& rect = m_node.absoluteRect;
-    m_pickedRectTips->setText(QString("%1, %2, %3 * %4").arg(rect.left()).arg(rect.top()).arg(rect.width()).arg(rect.height()));
+    QString tips = QString("%1, %2, %3 * %4")
+                       .arg(rect.left()).arg(rect.top()).arg(rect.width()).arg(rect.height());
+
+
+//    QString tips = QString("tp(%1, %2), br(%3, %4), %5 * %6")
+//                       .arg(rect.left()).arg(rect.top()).arg(rect.right()).arg(rect.bottom()).arg(rect.width()).arg(rect.height());
+
+//    const auto& barRect = m_paintBar->rect();
+//    QString tips2 = QString(" -> tp(%1, %2), br(%3, %4), %5 * %6")
+//                       .arg(barRect.left()).arg(barRect.top()).arg(barRect.right()).arg(barRect.bottom()).arg(barRect.width()).arg(barRect.height());
+    m_pickedRectTips->setText(tips);
     showCustomWidget(m_pickedRectTips);
 }
 
@@ -894,8 +924,8 @@ void ScreenShot::stashMosaicPixmap()
         const bool bRealValid = pickedrect.isValid() && !pickedrect.isNull(); // 绘图片矩形必须超过一个点大小，避免内存浪费
 
         if (bRealValid) {
-            const auto& p1 = mapToGlobal(m_paintNode.node.p1);
-            const auto& p2 = mapToGlobal(m_paintNode.node.p2);
+            const auto& p1 = m_paintNode.node.p1;
+            const auto& p2 = m_paintNode.node.p2;
             const auto& rect = largestRect(p1, p2);
 
             if (m_mosaicPix.isNull()) return;
@@ -905,8 +935,8 @@ void ScreenShot::stashMosaicPixmap()
 //            static int idx = 0;
 
 //            pix.save(QString("D:/pix_%1.png").arg(QString::number(idx)));
-            if (m_paintNode.id == 0) pixelatedMosaic(pix, m_paintNode.fuzzyValue);
-            else if (m_paintNode.id == 1) smoothMosaic(pix, m_paintNode.fuzzyValue);
+            if (m_paintNode.id == 0) pixelatedMosaic(pix, m_paintNode.pixelatedFuzzy);
+            else if (m_paintNode.id == 1) smoothMosaic(pix, m_paintNode.smoothFuzzy);
 //            pix.save(QString("D:/pixMosaic_%1.png").arg(QString::number(idx++)));
 
             m_paintNode.pixmap = pix;
@@ -983,15 +1013,14 @@ void ScreenShot::showCustomWidget(QWidget *w)
 
     if (w == m_paintBar) {
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
-        const auto& globalPt = mapToGlobal(pt);
 
-        const auto& t = finishDrewPixmap().copy(QRect(globalPt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
+        const auto& t = finishDrewPixmap().copy(QRect(pt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
         m_paintBar->setLowerBlurEffect(t, 30);
 
-        w->move(globalPt);
+        w->move(pt);
         bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
 
-        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "globalPt:" << globalPt << "pickedRect:" << pickedRect << "wRect:" << wRect;
+        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
         isShow ? w->show() : w->hide();
 
     } else if (w == m_pickedRectTips) {

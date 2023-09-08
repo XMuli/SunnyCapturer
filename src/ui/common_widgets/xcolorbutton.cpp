@@ -1,52 +1,10 @@
-﻿#include "xcolorbutton.h"
+#include "xcolorbutton.h"
+#include <QDebug>
 
-#include <QPainter>
-#include <QConicalGradient>
-
-XColorButton::XColorButton(QWidget *parent)
+XColorButton::XColorButton(const QColor &color, QWidget *parent)
     : QToolButton(parent)
-    , m_color("#DB000F")
-    , m_bRainbow(false)
+    , m_color(color)
 {
-}
-
-void XColorButton::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event)
-    QPainter pa(this);
-    pa.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    // 矩形和内切圆此部分不用绘画 避免出现 拖曳时刻出现残影和交叉部分显示黑色
-
-    if (m_bRainbow) {
-        setConicalGradientColor(pa);
-    } else {
-        QColor colPen("#6B6B6B");
-        colPen.setAlphaF(0.5);
-        pa.setPen(colPen);
-        pa.setBrush(m_color);
-        pa.drawRect(rect());
-    }
-
-    if (isChecked()) {
-        int centerX = width() / 2;
-        int centerY = height() / 2;
-        const int side = rect().size().width() * 2 / 3;
-        const QRect rt(centerX - side / 2, centerY - side / 2, side, side);
-
-        pa.setPen(QPen(QColor("#FFFFFF"), 2));
-        pa.setBrush(Qt::NoBrush);
-        pa.drawRect(rt);
-    }
-}
-
-bool XColorButton::bRainbow() const
-{
-    return m_bRainbow;
-}
-
-void XColorButton::setBRainbow(bool newBRainbow)
-{
-    m_bRainbow = newBRainbow;
 }
 
 QColor XColorButton::color() const
@@ -59,24 +17,28 @@ void XColorButton::setColor(const QColor &newColor)
     m_color = newColor;
 }
 
-void XColorButton::setConicalGradientColor(QPainter &pa)
+void XColorButton::paintEvent(QPaintEvent *e)
 {
-    QConicalGradient conicalGradient(QPointF(contentsRect().center()), 300);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-    conicalGradient.setColorAt(0, QColor("#EB004A"));
-    conicalGradient.setColorAt(1 / 7.0, QColor("#FF0000"));
-    conicalGradient.setColorAt(2 / 7.0, QColor("#F800FC"));
-    conicalGradient.setColorAt(3 / 7.0, QColor("#4D00F3"));
-    conicalGradient.setColorAt(4 / 7.0, QColor("#1BB8F2"));
-    conicalGradient.setColorAt(5 / 7.0, QColor("#46EA48"));
-    conicalGradient.setColorAt(6 / 7.0, QColor("#FFDB34"));
-    conicalGradient.setColorAt(1, QColor("#EB004A"));
+    QColor wihte = QColor(255, 255, 255, 0.4 * 255);
+    QColor black = QColor(0, 0, 0, 0.7 * 255);
 
-    pa.save();
-    QColor colPen("#6B6B6B");
-    colPen.setAlphaF(0.5);
-    pa.setPen(colPen);
-    pa.setBrush(conicalGradient);
-    pa.drawRect(rect());
-    pa.restore();
+    if (underMouse()) {
+        // 如果鼠标悬停在按钮上，绘制升起效果
+        painter.setPen(QPen(wihte, 1));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawRect(rect().adjusted(1, 1, -1, -1));
+
+        painter.setPen(QPen(black, 1));
+        painter.setBrush(m_color);
+        painter.drawRect(rect().adjusted(2, 2, -2, -2));
+    } else {
+        // 在边框上绘制1px的黑色线
+        painter.setPen(QPen(black, 1));
+        painter.setBrush(m_color);
+        painter.drawRect(rect().adjusted(1, 1, -1, -1));
+    }
+
 }

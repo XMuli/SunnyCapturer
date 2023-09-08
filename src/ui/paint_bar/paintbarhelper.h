@@ -7,12 +7,12 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QPointer>
+#include <QScreen>
+#include <QGuiApplication>
 #include "common/absbtnsctrl.h"
-#include "horspacerline.h"
-#include "verspacerline.h"
 
 #define PROPERTY_PAINT_TYPR "PaintType"
-#define ICON_SIZE 48 // 32
+#define ICON_SIZE 32 // 32 48   在 100% 缩放上 32px 比较合适，然后实际大小乘以主屏幕的屏幕缩放比
 
 enum class PaintType
 {
@@ -67,6 +67,8 @@ void addSpacerLine(QGridLayout *layout, const Qt::Orientation &orie, const int &
 void addSpacerLine(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = 30);
 void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = 0);    // 添加弹簧
 int countItemsformLayout(const QGridLayout* layout, const Qt::Orientation& orie, const int& idx = 0);
+double dpiScale(const QScreen* scrn = qGuiApp->primaryScreen());
+
 
 
 #endif // PAINTBARHELPER_H

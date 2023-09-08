@@ -12,6 +12,8 @@
 #include <QButtonGroup>
 #include <QString>
 #include <QSpacerItem>
+#include "horspacerline.h"
+#include "verspacerline.h"
 
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
@@ -101,7 +103,8 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
     for (int i = 0; i < items.size(); ++i) {
         QToolButton* btn = new QToolButton();
         btn->setStyleSheet("border-style:none");
-        const QSize size(ICON_SIZE, ICON_SIZE);
+        const double& scal = dpiScale();
+        const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
         btn->setIconSize(size);
         btn->setFixedSize(size);
         btn->setObjectName(items.at(i));
@@ -147,4 +150,12 @@ void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &l
     }
 
     layout->addSpacerItem(spacer);
+}
+
+// 默认返回主屏幕的缩放比
+double dpiScale(const QScreen *scrn)
+{
+    double scal = scrn ? scrn->logicalDotsPerInch() / double(96) : 1;
+    qDebug() << "scrn:" << scrn << "DPIScale:" << scal;
+    return scal;
 }

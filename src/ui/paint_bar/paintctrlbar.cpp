@@ -9,6 +9,12 @@
 #include <QLabel>
 #include "paintbarhelper.h"
 #include "communication.h"
+#include "horspacerline.h"
+#include "verspacerline.h"
+
+#define PIXELATED_MOSAIC_VAL  "pixelatedMosaicValue"
+#define SMOOTH_MOSAIC_VAL  "smoothMosaicValue"
+#define MOSAIC_DEFAUTLE_VAL 10
 
 PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -46,7 +52,6 @@ PaintCtrlBar::~PaintCtrlBar()
     m_fontScale->deleteLater();
     m_mosaicSliderCtrl->deleteLater();
 }
-
 
 void PaintCtrlBar::initUI()
 {
@@ -90,7 +95,7 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_letter_rectangle" << "serial_number_rectangle" << "serial_letter_ellipse" << "serial_number_ellipse"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, &COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl);
@@ -200,9 +205,9 @@ AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
     if (m_orie == Qt::Horizontal) slider->setFixedWidth(120);
     else if (m_orie == Qt::Vertical) slider->setFixedHeight(120);
 
+    slider->setValue(MOSAIC_DEFAUTLE_VAL);
     slider->setTickPosition(QSlider::NoTicks);
-    slider->setValue(10);
-    slider->setRange(2, 30);
+    slider->setRange(3, 30);
     slider->setPageStep(5);
     slider->setSingleStep(1);
     slider->setTracking(true);
@@ -212,12 +217,63 @@ AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
     absBtnsCtrl->addWidget(slider, false);
     absBtnsCtrl->addWidget(labSlider, false);
 
-    connect(slider, &QSlider::valueChanged, this, [labSlider](int val){
-        emit COMM.sigMosaicSliderValueChanged(val);
+    absBtnsCtrl->setProperty(PIXELATED_MOSAIC_VAL, slider->value());
+    absBtnsCtrl->setProperty(SMOOTH_MOSAIC_VAL, slider->value());
+
+    connect(slider, &QSlider::valueChanged, this, [this, absBtnsCtrl, labSlider](int val){
+
+        int id = -1;
+        if (m_mosaicCtrl && m_mosaicSliderCtrl) {
+            const auto btns = m_mosaicCtrl->findChildren<QToolButton*>();
+            for (int i = 0; i < btns.size(); ++i) {
+                if (btns.at(i)->isChecked()) id = i;
+            }
+
+            if (id == 0) {
+                absBtnsCtrl->setProperty(PIXELATED_MOSAIC_VAL, val);
+                qDebug() << "btns:" << btns << "id == 0  aaa";
+            } else if (id == 1) {
+                absBtnsCtrl->setProperty(SMOOTH_MOSAIC_VAL, val);
+                qDebug() << "btns:" << btns << "id == 1  bbb";
+            } else  {
+                qDebug() << "btns:" << btns << "id:" << id;
+            }
+
+
+            auto slider = m_mosaicSliderCtrl->findChild<QSlider*>();
+            slider->setValue(val);
+        }
+
+        emit COMM.sigMosaicSliderValueChanged(id, val);
         labSlider->setText(QString::number(val));
     });
 
     return absBtnsCtrl;
+}
+
+void PaintCtrlBar::setCurrMosaicBtnfuzzyValue()
+{
+    if (m_mosaicCtrl && m_mosaicSliderCtrl) {
+        const auto btns = m_mosaicCtrl->findChildren<QToolButton*>();
+        int id = -1;
+        for (int i = 0; i < btns.size(); ++i) {
+            if (btns.at(i)->isChecked()) id = i;
+        }
+
+        int val = -1;
+        if (id == 0) {
+            val = m_mosaicSliderCtrl ? m_mosaicSliderCtrl->property(PIXELATED_MOSAIC_VAL).toInt() : MOSAIC_DEFAUTLE_VAL;
+            qDebug() << "btns:" << btns << "id == 0  aaa";
+        } else if (id == 1) {
+            val = m_mosaicSliderCtrl ? m_mosaicSliderCtrl->property(SMOOTH_MOSAIC_VAL).toInt() : MOSAIC_DEFAUTLE_VAL;
+        } else  {
+            qDebug() << "btns:" << btns << "id:" << id;
+        }
+
+        emit COMM.sigMosaicSliderValueChanged(id, val);
+        auto slider = m_mosaicSliderCtrl->findChild<QSlider*>();
+        slider->setValue(val);
+    }
 }
 
 void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch, Qt::Alignment alignment)
@@ -242,7 +298,13 @@ void PaintCtrlBar::onIdReleased(int id)
 //        QToolButton *btn = qobject_cast<QToolButton*>(buttonGroup->button(id));
 //        if (btn) {
 //        }
-//    }
+    //    }
+}
+
+void PaintCtrlBar::onMosaicCtrlIdReleased(int id)
+{
+    setCurrMosaicBtnfuzzyValue();
+    onIdReleased(id);
 }
 
 void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isCheckable)
