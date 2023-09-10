@@ -20,6 +20,7 @@
 #include <QGuiApplication>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QFontMetrics>
 
 CaptureHelper::CaptureHelper(QObject *parent)
     : QObject{parent}
@@ -287,7 +288,6 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         } else if (paintNode.id == 2) {
         }
 
-
     } else if (paintNode.pst == PaintShapeType::PST_pen) {
         pa.setPen(paintNode.pen);
         pa.setBrush(Qt::NoBrush);
@@ -346,9 +346,33 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         if (!paintNode.pixmap.isNull() && rect.isValid())
             pa.drawPixmap(rect, paintNode.pixmap);
 
-    } else if (paintNode.pst == PaintShapeType::PST_serial) {
     } else if (paintNode.pst == PaintShapeType::PST_text) {
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
+        QString str;
+        if (paintNode.id == 0) {
+            str = QString::number(paintNode.serialNode.number);
+        } else if (paintNode.id == 1) {
+            str = paintNode.serialNode.letter;
+        }
+
+        QFont font(pa.font());
+        font.setPointSize(15);
+        pa.setFont(font);
+
+        const QFontMetrics fm(pa.fontMetrics());
+        QRect boundingRect = fm.boundingRect(str);
+        const int& width = qMax<int>(boundingRect.width(), boundingRect.height());
+        boundingRect.setSize(QSize(width, width));
+        boundingRect.moveCenter(paintNode.node.p2);
+        const int margin = qMax<int>(width / 6, 4);
+        const QRect adjustRt = boundingRect.adjusted(-margin, -margin, margin, margin);
+
+        pa.setPen(/*paintNode.pen*/ QPen(Qt::white, 2));
+        pa.setBrush(paintNode.brush);
+        pa.drawRect(adjustRt);
+        pa.setPen(/*paintNode.pen*/ QPen(Qt::white, 2));
+        pa.drawText(boundingRect, Qt::AlignCenter, str);
+
     } else if (paintNode.pst == PaintShapeType::PST_point) {
         pa.setPen(paintNode.pen);
         pa.setBrush(Qt::NoBrush);

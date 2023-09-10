@@ -93,6 +93,15 @@ struct Node
 
 };
 
+
+struct SerialNode
+{
+    int number = 0;
+    QChar letter = 'a' - 1;
+    int pointSize;
+    QColor  background;
+};
+
 struct PaintNode
 {
     Node node;
@@ -106,9 +115,8 @@ struct PaintNode
 
     QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
-    QChar   serial;                                             // PST_serial 当前字符
-    QColor  serialText;                                         // 序号文字颜色
-    QColor  serialBackground;                                   // 序号背景颜色
+    SerialNode   serialNode;                                    // PST_serial 序号相关
+
 
     QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);

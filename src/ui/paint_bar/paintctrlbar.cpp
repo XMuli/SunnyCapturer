@@ -97,7 +97,7 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_letter_rectangle" << "serial_number_rectangle" << "serial_letter_ellipse" << "serial_number_ellipse"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number_rectangle" << "serial_letter_rectangle"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, &COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl);
 
 //    addWidget(m_rectCtrl);

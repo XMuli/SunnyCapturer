@@ -65,6 +65,16 @@ void ScreenShot::btnUndo()
 
     m_undo.emplace_back(std::move(m_redo.back())); // 在 m_undo 中构造新元素并移动
     m_redo.pop_back(); // 从 m_redo 中移除最后一个元素
+
+    // 被撤销时，序号自然减去一
+    if (m_paintNode.pst == PaintShapeType::PST_serial) {
+        if (m_paintNode.id == 0) {
+            m_paintNode.serialNode.number--;
+        } else if (m_paintNode.id == 1) {
+            QChar serialChar = m_paintNode.serialNode.letter.unicode() - 1;
+            m_paintNode.serialNode.letter = serialChar;
+        }
+    }
 }
 
 void ScreenShot::btnRedo()
@@ -477,10 +487,34 @@ void ScreenShot::drawBorderDDE(QPainter &pa, const QRect &rt, int num) const
     pa.restore();
 }
 
-//void ScreenShot::drawPickedRectTips(QPainter &pa) const
-//{
-//    if (m_node.absoluteRect.isEmpty()) return;
-//}
+// 只是将 准备 "素材原图 + 马赛克" 赋值 -> m_paintNode.pixmap
+void ScreenShot::stashMosaicPixmap()
+{
+    if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+        const auto& pickedrect = m_paintNode.node.absoluteRect;
+        const bool bRealValid = pickedrect.isValid() && !pickedrect.isNull(); // 绘图片矩形必须超过一个点大小，避免内存浪费
+
+        if (bRealValid) {
+            const auto& p1 = m_paintNode.node.p1;
+            const auto& p2 = m_paintNode.node.p2;
+            const auto& rect = largestRect(p1, p2);
+
+            if (m_mosaicPix.isNull()) return;
+            QPixmap pix = m_mosaicPix.copy(rect);
+
+            //            qDebug() << "----#3---->rect:" << rect << "&m_mosaicPix:" << m_mosaicPix << "m_mosaicPix:" << m_mosaicPix << "pix:" << pix;
+            //            static int idx = 0;
+
+            //            pix.save(QString("D:/pix_%1.png").arg(QString::number(idx)));
+            if (m_paintNode.id == 0) pixelatedMosaic(pix, m_paintNode.pixelatedFuzzy);
+            else if (m_paintNode.id == 1) smoothMosaic(pix, m_paintNode.smoothFuzzy);
+            //            pix.save(QString("D:/pixMosaic_%1.png").arg(QString::number(idx++)));
+
+            m_paintNode.pixmap = pix;
+            //            qDebug() << "----#4---->rect:" << rect;
+        }
+    }
+}
 
 void ScreenShot::originalPixmap()
 {
@@ -640,8 +674,8 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 pixelatedFuzzy:%4 smoothFuzzy:%5 pen.width():%6")
                                                                    .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id)
                                                                    .arg(m_paintNode.pixelatedFuzzy).arg(m_paintNode.smoothFuzzy).arg(m_paintNode.pen.width()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("serial:[%1] serialText:%2 serialBackground:%3 pen:%4 brush:%5")
-                                                                   .arg(m_paintNode.serial).arg(m_paintNode.serialText.name()).arg(m_paintNode.serialBackground.name())
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("SerialNode-number:[%1] SerialNode-letter:%2 background:%3 pen:%4 brush:%5")
+                                                                   .arg(m_paintNode.serialNode.number).arg(m_paintNode.serialNode.letter).arg(m_paintNode.serialNode.background.name())
                                                                    .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
 
 
@@ -850,6 +884,16 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
         m_paintNode.node = m_node;
         m_paintNode.bShow = true;
 
+        // 序号自增加
+        if (m_paintNode.pst == PaintShapeType::PST_serial) {
+            if (m_paintNode.id == 0) {
+                m_paintNode.serialNode.number++;
+            } else if (m_paintNode.id == 1) {
+                QChar serialChar = m_paintNode.serialNode.letter.unicode() + 1;
+                m_paintNode.serialNode.letter = serialChar;
+            }
+        }
+
         if (m_paintNode.pst == PaintShapeType::PST_mosaic) setMosaicPix();  // 此刻需要准备好马赛克的原始素材，无论是 move/release 都是需要它
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
@@ -890,11 +934,11 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         stashMosaicPixmap();
         m_redo.push_back(m_paintNode);
 
+
         // 归零可能会干扰下次操作的一些参数
         m_node.trackPos.clear();
         m_paintNode.pixmap = QPixmap();    // fix: push_back 时候永远是最新的一个
         qDebug() << "m_redo:" << m_redo.size();
-
         setMouseTracking(true);
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
@@ -914,35 +958,6 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
     m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
     m_node.p1 = m_node.p2 = QPoint(); // 完成一次操作后，就重置
-}
-
-// 只是将 准备 "素材原图 + 马赛克" 赋值 -> m_paintNode.pixmap
-void ScreenShot::stashMosaicPixmap()
-{
-    if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
-        const auto& pickedrect = m_paintNode.node.absoluteRect;
-        const bool bRealValid = pickedrect.isValid() && !pickedrect.isNull(); // 绘图片矩形必须超过一个点大小，避免内存浪费
-
-        if (bRealValid) {
-            const auto& p1 = m_paintNode.node.p1;
-            const auto& p2 = m_paintNode.node.p2;
-            const auto& rect = largestRect(p1, p2);
-
-            if (m_mosaicPix.isNull()) return;
-            QPixmap pix = m_mosaicPix.copy(rect);
-
-//            qDebug() << "----#3---->rect:" << rect << "&m_mosaicPix:" << m_mosaicPix << "m_mosaicPix:" << m_mosaicPix << "pix:" << pix;
-//            static int idx = 0;
-
-//            pix.save(QString("D:/pix_%1.png").arg(QString::number(idx)));
-            if (m_paintNode.id == 0) pixelatedMosaic(pix, m_paintNode.pixelatedFuzzy);
-            else if (m_paintNode.id == 1) smoothMosaic(pix, m_paintNode.smoothFuzzy);
-//            pix.save(QString("D:/pixMosaic_%1.png").arg(QString::number(idx++)));
-
-            m_paintNode.pixmap = pix;
-//            qDebug() << "----#4---->rect:" << rect;
-        }
-    }
 }
 
 void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)

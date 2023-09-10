@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QPointer>
+#include "xblureffect.h"
 #include "paintctrlbar.h"
 #include "paintbarhelper.h"
 

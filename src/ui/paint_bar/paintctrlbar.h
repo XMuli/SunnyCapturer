@@ -8,7 +8,6 @@
 #include <QGridLayout>
 #include <QFontComboBox>
 #include "colorpicker.h"
-#include "xblureffect.h"
 #include "common/absbtnsctrl.h"
 #include "paintbarhelper.h"
 
