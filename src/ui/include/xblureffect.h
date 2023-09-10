@@ -1,4 +1,4 @@
-#ifndef XBLUREFFECT_H
+﻿#ifndef XBLUREFFECT_H
 #define XBLUREFFECT_H
 
 #include <QWidget>

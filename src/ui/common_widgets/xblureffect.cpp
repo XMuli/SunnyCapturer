@@ -1,4 +1,4 @@
-#include "xblureffect.h"
+﻿#include "xblureffect.h"
 #include <QApplication>
 #include <QPainter>
 #include <QScreen>

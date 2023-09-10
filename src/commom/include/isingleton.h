@@ -1,4 +1,4 @@
-#ifndef ISINGLETON_H
+﻿#ifndef ISINGLETON_H
 #define ISINGLETON_H
 
 template<typename T>

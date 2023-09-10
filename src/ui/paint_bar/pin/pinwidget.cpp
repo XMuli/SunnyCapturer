@@ -1,4 +1,4 @@
-#include "pinwidget.h"
+﻿#include "pinwidget.h"
 #include <QAction>
 #include <QActionGroup>
 #include <QClipboard>

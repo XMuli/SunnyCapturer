@@ -1,4 +1,4 @@
-#include "paintbar.h"
+﻿#include "paintbar.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDebug>

@@ -1,4 +1,4 @@
-#ifndef PAINTBAR_H
+﻿#ifndef PAINTBAR_H
 #define PAINTBAR_H
 #include <QWidget>
 #include <QPointer>

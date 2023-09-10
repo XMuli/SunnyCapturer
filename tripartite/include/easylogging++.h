@@ -1,4 +1,4 @@
-//
+﻿//
 //  Bismillah ar-Rahmaan ar-Raheem
 //
 //  Easylogging++ v9.97.1

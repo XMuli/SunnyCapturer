@@ -1,4 +1,4 @@
-#ifndef TIPS_H
+﻿#ifndef TIPS_H
 #define TIPS_H
 
 #include <QColor>

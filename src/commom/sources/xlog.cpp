@@ -1,4 +1,4 @@
-#include "../include/xlog.h"
+﻿#include "../include/xlog.h"
 #include <QDateTime>
 #include <QTextStream>
 #include <QFile>

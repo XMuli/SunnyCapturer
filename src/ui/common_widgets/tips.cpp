@@ -1,4 +1,4 @@
-#include "tips.h"
+﻿#include "tips.h"
 #include <QDebug>
 #include <QRect>
 #include <QPainter>

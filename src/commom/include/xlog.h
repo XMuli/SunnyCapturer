@@ -1,4 +1,4 @@
-#ifndef XLOG_H
+﻿#ifndef XLOG_H
 #define XLOG_H
 
 #include <QObject>

@@ -1,4 +1,4 @@
-#include "xcolorbutton.h"
+﻿#include "xcolorbutton.h"
 #include <QDebug>
 
 XColorButton::XColorButton(const QColor &color, QWidget *parent)
