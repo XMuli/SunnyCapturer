@@ -15,4 +15,7 @@
 #  define WINDOWSRECT_EXPORT Q_DECL_IMPORT
 #endif
 
+
+
+
 #endif // WINDOWSRECT_GLOBAL_H

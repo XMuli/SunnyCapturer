@@ -12,8 +12,14 @@
 #include <QPointer>
 #include "tips.h"
 #include "capturehelper.h"
-#include "windowsrect.h"
 #include "../paint_bar/paintbar.h"
+
+#ifdef _WIN32
+#include "ntwindowsrect.h"
+#elif __linux__
+#include "x11windowsrect.h"
+#elif __APPLE__ || __MACH__
+#endif
 
 class ScreenShot : public QWidget
 {

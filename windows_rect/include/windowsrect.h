@@ -6,63 +6,32 @@
 #include <string>
 #include <vector>
 
-#ifdef _WIN32
-    #include <Windows.h>
-
-    #include <windef.h>
-    #include <winuser.h>
-#elif linux
-    #include <X11/Xlib.h>
-    #include <X11/Xatom.h>
-#elif __APPLE__ || __MACH__
-// 在 macOS 平台下的代码
-#else
-// 在其他平台下的代码
-#endif
-
-struct RectNode
-{
-    RECT rect;             // 显示器坐标
-    RECT relativelyRect;   // 相对窗口坐标
-    std::wstring title;
-    std::wstring notes; // 备注
-
-    unsigned long x11HWnd;  // Linux OS
-
-    HWND  ntHWnd;            // NT OS
-    DWORD ntPocessId;
-
-    void printf();
-};
-
-class WINDOWSRECT_EXPORT WindowsRect
-{
-public:
-    WindowsRect();
-    ~WindowsRect();
-
-// 思路1-------------------
-    void detectionWindowsRect();
-    RectNode rectNode() const;
-
-#ifdef _WIN32
-    bool startWindowsHook();
-    bool endWindowsHook();
-#endif
-// 思路2-------------------
 
 
 
-// end-------------------
+//class WINDOWSRECT_EXPORT WindowsRect
+//{
+//public:
+//    WindowsRect();
+//    ~WindowsRect();
 
-private:
-    RectNode m_rectNode;
-};
+//// 思路1-------------------
+//    void detectionWindowsRect();
+//    RectNode rectNode() const;
+
+//#ifdef _WIN32
+//    bool startWindowsHook();
+//    bool endWindowsHook();
+//#endif
+//// 思路2-------------------
 
 
-BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
-BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam);
 
-extern "C" WINDOWSRECT_EXPORT bool enumWindowsRect(std::vector<RectNode>& rectNodes);
+//// end-------------------
+
+//private:
+//    RectNode m_rectNode;
+//};
+
 
 #endif // WINDOWSRECT_H

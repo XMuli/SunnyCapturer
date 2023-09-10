@@ -14,9 +14,6 @@
 #include <QFileDialog>
 #include <QCursor>
 #include "../paint_bar/pin/pinwidget.h"
-#include "windowsrect.h"
-
-WindowsRect g_windowsRect;
 
 ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -29,10 +26,10 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_actionType(ActionType::AT_wait)
     , m_paintBar(new PaintBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
+    , m_orie(orie)
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
-    , m_orie(orie)
 {
     initUI();
     initConnect();
@@ -135,20 +132,24 @@ void ScreenShot::btnFinish()
 {
     const QPixmap& pixmap = finishPixmap();
 
-    QPixmap tPix1 = finishPixmap();
-    QPixmap tPix2= finishPixmap();
+//    QPixmap tPix1 = finishPixmap();
+//    QPixmap tPix2= finishPixmap();
 
-#if 1 // 测试效果代码
-    smoothMosaic(tPix1);
-    pixelatedMosaic(tPix2);
+//#if 1 // 测试效果代码
+//    smoothMosaic(tPix1);
+//    pixelatedMosaic(tPix2);
 
-    tPix1.save("D:/savePix1.png");
-    tPix2.save("D:/savePix2.png");
-#endif
+//    tPix1.save("D:/savePix1.png");
+//    tPix2.save("D:/savePix2.png");
+//#endif
 
-    // 将新的QPixmap复制到剪贴板
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setPixmap(pixmap);
+
+    if (!pixmap.isNull()) { // 检查QPixmap是否有效
+        // 将新的QPixmap复制到剪贴板
+        QClipboard* clipboard = QApplication::clipboard();
+        clipboard->setPixmap(pixmap);  // 由于 Qt 库会在应用程序终止时释放剪贴板对象; 故此处内存增加是必然的，不用额外 delete 处理； 氪！排查这么久结论居然是这个
+    }
+
     close();
 }
 

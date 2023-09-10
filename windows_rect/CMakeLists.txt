@@ -14,9 +14,19 @@ set(BUILD_SHARED_LIBS ON)                     # ON-SHARED 生成 dll; OFF-STATIC
 set(src_files
     include/windowsrect_global.h
     include/windowsrect.h
-
     sources/windowsrect.cpp
 )
+
+if(APPLE)
+elseif(WIN32)
+    list(APPEND src_files
+        include/ntwindowsrect.h
+        sources/ntwindowsrect.cpp)
+else()
+    list(APPEND src_files
+        include/x11windowsrect.h
+        sources/x11windowsrect.cpp)
+endif()
 
 set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                              # default root path curr path （CMakeList.txt）
 file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
