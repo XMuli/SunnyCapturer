@@ -34,6 +34,8 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_mosaicSliderCtrl(initSliderCtrl())
 {
     initUI();
+
+    connect(m_colorPicker, &ColorPicker::sigPickedColor, this, &PaintCtrlBar::sigPickedColor);
 }
 
 PaintCtrlBar::~PaintCtrlBar()
@@ -72,8 +74,6 @@ void PaintCtrlBar::initUI()
     m_layout->setContentsMargins(0, 0, 0 ,0);
     setLayout(m_layout);
     initBtns();
-
-    connect(&COMM, &Communication::sigPaintBtnRelease, this, &PaintCtrlBar::onPaintBtnRelease);
 }
 
 
@@ -98,7 +98,7 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number_rectangle" << "serial_letter_rectangle"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, &COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPaintCtrlIdReleasedFromPointCtrl);
 
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
@@ -244,7 +244,7 @@ AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
             slider->setValue(val);
         }
 
-        emit COMM.sigMosaicSliderValueChanged(id, val);
+        emit sigMosaicSliderValueChanged(id, val);
         labSlider->setText(QString::number(val));
     });
 
@@ -270,7 +270,7 @@ void PaintCtrlBar::setCurrMosaicBtnfuzzyValue()
             qDebug() << "btns:" << btns << "id:" << id;
         }
 
-        emit COMM.sigMosaicSliderValueChanged(id, val);
+        emit sigMosaicSliderValueChanged(id, val);
         auto slider = m_mosaicSliderCtrl->findChild<QSlider*>();
         slider->setValue(val);
     }
@@ -286,7 +286,7 @@ void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch,
 void PaintCtrlBar::onIdReleased(int id)
 {
     qDebug() << "----sender（）:" << sender() << "parent():" << sender()->parent() << "   id:" << id ;
-    emit COMM.sigPaintCtrlIdReleased(id);
+    emit sigPaintCtrlIdReleased(id);
 
 //    QButtonGroup *buttonGroup = qobject_cast<QButtonGroup*>(sender());
 //    if (buttonGroup) {
@@ -357,10 +357,8 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     }
 
     addSpacerItem(m_layout, m_orie); // 实际是有效果的，被子组合控件的弹簧所影响了
-
     int id = btnIdIschecked(type, isCheckable);
-    emit COMM.sigPaintCtrlIdReleased(id);
-//    emit COMM.sigWidgetResized();
+    emit sigPaintCtrlIdReleased(id); // fix: paintToolBar 按下时, id 默认没有上报
 
     for (int i = 0; i < m_layout->count(); ++i) {
         QLayoutItem *item = m_layout->itemAt(i);

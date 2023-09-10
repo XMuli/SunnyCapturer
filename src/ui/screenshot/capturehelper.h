@@ -90,7 +90,6 @@ struct Node
     std::vector<QPoint>   trackPos;             // move 累计的点
     QRect  pickedRect;                          // 初始绘画位置: 由 p1、p2 构成
     QRect  absoluteRect;                        // 绝对值矩形: 如拉伸时 pickedRect 的widget/height 可能为负数，此时就需要依靠它开show paintBtnsBar 等作为基准参考点
-
 };
 
 

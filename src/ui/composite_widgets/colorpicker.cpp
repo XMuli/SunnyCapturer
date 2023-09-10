@@ -102,7 +102,7 @@ void ColorPicker::onPickedColor(QAbstractButton *btn)
     if (t) {
         m_pickedBtn->setColor(t->color());
         m_pickedBtn->update();  // 自定义绘画的控件，发生改变需要 update 下
-        emit COMM.sigPickedColor(t->color());
+        emit sigPickedColor(t->color());
     }
 }
 

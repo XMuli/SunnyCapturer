@@ -13,7 +13,7 @@
 #include "tips.h"
 #include "capturehelper.h"
 #include "windowsrect.h"
-#include "../paint_bar/painttoolbar.h"
+#include "../paint_bar/paintbar.h"
 
 class ScreenShot : public QWidget
 {
@@ -25,7 +25,7 @@ public:
     void capture();
 
 private:
-//    void btnPin();
+    void btnPin();
     void btnUndo();
     void btnRedo();
     void btnSave();
@@ -94,7 +94,7 @@ private:
     bool                     m_bAutoDetectRect;    // 是否自动监测矩形
     ActionType               m_actionType;         // 当前的操作状态
     Node                     m_node;               // 一次操作的集合
-    QPointer<PaintToolBar>   m_paintBar;           // paintToolBar
+    QPointer<PaintBar>       m_paintBar;           // PaintBar
 
     PaintNode                m_paintNode;          // 当前绘画元素
     std::vector<PaintNode>   m_undo;               // 撤销-图案元素

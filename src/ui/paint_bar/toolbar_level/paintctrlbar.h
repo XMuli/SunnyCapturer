@@ -8,7 +8,7 @@
 #include <QGridLayout>
 #include <QFontComboBox>
 #include "colorpicker.h"
-#include "common/absbtnsctrl.h"
+#include "../common/absbtnsctrl.h"
 #include "paintbarhelper.h"
 
 class PaintCtrlBar : public QWidget
@@ -25,17 +25,19 @@ private:
     int  btnIdIschecked(const PaintType& type, const bool &isCheckable);
     AbsBtnsCtrl *initSliderCtrl();
 
-
     void  setCurrMosaicBtnfuzzyValue();
     void addWidget(QWidget *w, const bool& bAddSpaceLine = true, int stretch = 0, Qt::Alignment alignment = Qt::AlignCenter);
+
+signals:
+    void sigPaintCtrlIdReleased(const int& id);
+    void sigPaintCtrlIdReleasedFromPointCtrl(const int& id);                      // PaintCtrlBar PointCtrl 被按下
+    void sigMosaicSliderValueChanged(int id, int val);                            // PaintCtrlBar Slider 数值被发生改变时候
+    void sigPickedColor(const QColor& color);
 
 public slots:
     void onIdReleased(int id);
     void onMosaicCtrlIdReleased(int id);
     void onPaintBtnRelease(const PaintType& type, const bool &isCheckable);
-
-signals:
-    void sigWidgetResized();                              // layout change completed
 
 private:
     QBoxLayout*                   m_layout;
@@ -53,8 +55,6 @@ private:
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;
     QPointer<AbsBtnsCtrl>         m_mosaicSliderCtrl;
-
-
 };
 
 #endif // PAINTCTRLBAR_H

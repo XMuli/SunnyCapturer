@@ -15,7 +15,6 @@ AbsBtnsCtrl::AbsBtnsCtrl(const Qt::Orientations &orien, QWidget *parent)
     setContentsMargins(0, 0, 0, 0);
     m_layout->setMargin(0);
     m_layout->setSpacing(0);
-//    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     setLayout(m_layout);
 }

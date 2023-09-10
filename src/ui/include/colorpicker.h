@@ -32,6 +32,9 @@ private:
     void initUI();
     void initPickupBtn(const QColor &color);
 
+signals:
+    void sigPickedColor(const QColor& color);
+
 public slots:
     void onPickedColor(QAbstractButton *btn);
     void onPickupBtnReleased();

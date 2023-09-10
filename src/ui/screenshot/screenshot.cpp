@@ -13,8 +13,8 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QCursor>
+#include "../paint_bar/pin/pinwidget.h"
 #include "windowsrect.h"
-#include "communication.h"
 
 WindowsRect g_windowsRect;
 
@@ -27,7 +27,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_bFistPressed(false)
     , m_bAutoDetectRect(true)
     , m_actionType(ActionType::AT_wait)
-    , m_paintBar(new PaintToolBar(orie, this))
+    , m_paintBar(new PaintBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
@@ -57,6 +57,24 @@ void ScreenShot::capture()
 {
     originalPixmap();
     show();
+}
+
+void ScreenShot::btnPin()
+{
+#ifdef Q_OS_MAC
+    setWindowFlags(Qt::Dialog);
+    showNormal();
+#endif
+
+    const auto& rect = m_node.absoluteRect;
+
+//    PinWidget* w = new PinWidget(finishDrewPixmap(rect), nullptr);
+    PinWidget* w = new PinWidget(finishPixmap(), nullptr);
+    w->resize(rect.size());
+    w->show();
+    w->move(mapToGlobal(rect.topLeft()));
+
+    close();
 }
 
 void ScreenShot::btnUndo()
@@ -175,7 +193,7 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
 {
     if (isCheckable) {
 
-        if (m_paintBar->hadPaintBtnChecked()) {
+        if (m_paintBar->hadDrawBtnsChecked()) {
             m_actionType = ActionType::AT_drawing_shap;
 
             if (type == PaintType::PT_rectangle) {
@@ -205,10 +223,10 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
     } else {
 
         if (type == PaintType::PT_pin) {
+            btnPin();
         } else if (type == PaintType::PT_undo) {
             btnUndo();
             update();
-
             qDebug() << "----#a-->m_undo.size():" << m_undo.size() << "m_redo.size():" << m_redo.size();
         } else if (type == PaintType::PT_redo) {
             btnRedo();
@@ -295,7 +313,7 @@ void ScreenShot::initUI()
 
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
-    setWindowFlags(Qt::FramelessWindowHint | windowFlags());  // | Qt::WindowStaysOnTopHint
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
 #ifdef HALF_SCRN_DEVELOP
     if (m_screens.size() == 1) {
         m_vdRect.setWidth(m_vdRect.width() / 2);
@@ -329,16 +347,16 @@ void ScreenShot::initUI()
 void ScreenShot::initConnect()
 {
     connect(m_timerPoint, &QTimer::timeout, this, &ScreenShot::onHidePointTips);
-    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
-        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
-    });
+//    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
+//        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
+//    });
 
-    connect(&COMM, &Communication::sigPaintBtnRelease, this, &ScreenShot::onPaintBtnRelease);
-    connect(&COMM, &Communication::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
-    connect(&COMM, &Communication::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
-    connect(&COMM, &Communication::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
-    connect(&COMM, &Communication::sigUpdateToolBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
-    connect(&COMM, &Communication::sigPickedColor, this, &ScreenShot::onPickedColor);
+    connect(m_paintBar, &PaintBar::sigPaintToolBtnsRelease, this, &ScreenShot::onPaintBtnRelease);
+    connect(m_paintBar, &PaintBar::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
+    connect(m_paintBar, &PaintBar::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
+    connect(m_paintBar, &PaintBar::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
+    connect(m_paintBar, &PaintBar::sigUpdatePaintBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
+    connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
 
 }
 
@@ -789,15 +807,19 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
     QPoint pt;
     const int space = 10; // 和 pickedRect 之间的间隔
     const QSize& size = m_paintBar->size();
+    static bool prevBTranspose = false;
     if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
 
+        bool bTranspose = false;  // 适当时需要翻转对调两个 bar 的位置
         if (m_orie == Qt::Horizontal) {
+            static int paintToolBarWidth = size.width(); // Horizontal 模式使用这个体验更佳
             if(m_node.absoluteRect.bottom() + m_paintBar->height() + space <= currScrnRect(mapToGlobal(m_node.absoluteRect.bottomRight())).bottom()) {
-                pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * size.width(), space);
+                pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * paintToolBarWidth, space);
             } else if (m_node.absoluteRect.top() - m_paintBar->height() - space >= currScrnRect(mapToGlobal(m_node.absoluteRect.topRight())).top()) {
-                pt = m_node.absoluteRect.topRight() - QPoint(size.width(), space + size.height());
+                pt = m_node.absoluteRect.topRight() - QPoint(paintToolBarWidth, space + size.height());
+                bTranspose = true;
             } else {
-                pt = m_node.absoluteRect.topRight() + QPoint(-1 * size.width(), space);
+                pt = m_node.absoluteRect.topRight() + QPoint(-1 * paintToolBarWidth, space);
             }
 
         } else if (m_orie == Qt::Vertical) {
@@ -806,9 +828,15 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
                 pt = m_node.absoluteRect.topRight() + QPoint(space, 0);
             } else if (m_node.absoluteRect.left() - m_paintBar->width() >= currScrnRect(mapToGlobal(m_node.absoluteRect.topLeft())).left()) {
                 pt = m_node.absoluteRect.topLeft() + QPoint(-(space + size.width()), 0);
+                bTranspose = true;
             } else {
                 pt = m_node.absoluteRect.topLeft() + QPoint(space, 0);
             }
+        }
+
+        if (prevBTranspose != bTranspose) {
+            m_paintBar->transposePaintBar(bTranspose);
+            prevBTranspose = bTranspose;
         }
 
     } else if (cwt == CustomWidgetType::CWT_paint_btns_bar) {

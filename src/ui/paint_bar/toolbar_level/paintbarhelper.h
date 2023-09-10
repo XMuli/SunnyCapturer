@@ -9,7 +9,7 @@
 #include <QPointer>
 #include <QScreen>
 #include <QGuiApplication>
-#include "common/absbtnsctrl.h"
+#include "../common/absbtnsctrl.h"
 
 #define PROPERTY_PAINT_TYPR "PaintType"
 #define ICON_SIZE 32 // 32 48   在 100% 缩放上 32px 比较合适，然后实际大小乘以主屏幕的屏幕缩放比

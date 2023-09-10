@@ -10,9 +10,10 @@
 
 #include "ui/include/colorpicker.h"
 #include "ui/screenshot/screenshot.h"
-#include "ui/paint_bar/painttoolbar.h"
-#include "ui/paint_bar/paintctrlbar.h"
-
+#include "ui/paint_bar/toolbar_level/painttoolbar.h"
+#include "ui/paint_bar/toolbar_level/paintctrlbar.h"
+#include "ui/paint_bar/paintbar.h"
+#include "ui/paint_bar/pin/pinwidget.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +30,6 @@ int main(int argc, char *argv[])
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
     TRAY; // 启动托盘
 
-
 //    QString text = "27";
 //    Tips tips(text, TipsType::TT_point_changed_tips);
 //    tips.show();
@@ -38,11 +38,18 @@ int main(int argc, char *argv[])
 //    tips2.show();
 
 
-//    PaintToolBar paintToolBar(Qt::Horizontal); // Horizontal Vertical
+//    PaintToolBar paintToolBar(Qt::Vertical); // Horizontal Vertical
 //    paintToolBar.show();
 
-//    PaintCtrlBar paintCtrlBar(Qt::Horizontal);
+//    PaintCtrlBar paintCtrlBar(Qt::Vertical);
 //    paintCtrlBar.show();
+
+//    PaintBar paintbar(Qt::Horizontal); // Horizontal Vertical
+//    paintbar.show();
+//    paintbar.transposePaintBar(false);
+
+//    PinWidget pinWidget;
+//    pinWidget.show();
 
 //    SideSettingUI w;
 //    w.show();

@@ -1,5 +1,4 @@
 ﻿#include "capturehelper.h"
-#include "screenshot.h"
 #include <QDebug>
 #include <QMetaEnum>
 #include <QMetaObject>

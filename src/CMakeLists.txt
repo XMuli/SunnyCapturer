@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 #add_compile_definitions(LOG_MORE_INFO_DEVELOP)       # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
-#add_compile_definitions(LOG_CURR_POS_IN_RECTS)  # 便于调试, 当前光标所在的所有 窗口矩形 的信息
+#add_compile_definitions(LOG_CURR_POS_IN_RECTS)       # 便于调试, 当前光标所在的所有 窗口矩形 的信息
 
 set(qt_moduls Widgets Xml Svg)                        # Network Multimedia WebSockets
 set(qt_version_moduls)
@@ -80,12 +80,14 @@ set(custom_ui_files
 
     ui/paint_bar/common/absbtnsctrl.h
     ui/paint_bar/common/absbtnsctrl.cpp
-    ui/paint_bar/painttoolbar.h
-    ui/paint_bar/painttoolbar.cpp
-    ui/paint_bar/paintbarhelper.h
-    ui/paint_bar/paintbarhelper.cpp
-    ui/paint_bar/paintctrlbar.h
-    ui/paint_bar/paintctrlbar.cpp
+    ui/paint_bar/toolbar_level/painttoolbar.h
+    ui/paint_bar/toolbar_level/painttoolbar.cpp
+    ui/paint_bar/toolbar_level/paintbarhelper.h
+    ui/paint_bar/toolbar_level/paintbarhelper.cpp
+    ui/paint_bar/toolbar_level/paintctrlbar.h
+    ui/paint_bar/toolbar_level/paintctrlbar.cpp
+    ui/paint_bar/paintbar.h
+    ui/paint_bar/paintbar.cpp
 )
 
 set(src_files
@@ -104,14 +106,14 @@ set(src_files
     ui/screenshot/tray.cpp
     ui/commom/communication/communication.h
     ui/commom/communication/communication.cpp
+    ui/paint_bar/pin/pinwidget.h
+    ui/paint_bar/pin/pinwidget.cpp
 
     resources.qrc
 )
 
 set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                                 # default root path curr path （CMakeList.txt）
-file(GLOB_RECURSE source_lists LIST_DIRECTORIES false
-    "${src_root_path}/*.cpp"
-    "${src_root_path}/*.h")
+file(GLOB_RECURSE source_lists LIST_DIRECTORIES false "${src_root_path}/*.cpp" "${src_root_path}/*.h")
 source_group(TREE ${src_root_path} FILES ${source_lists})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")                                    # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
 
@@ -126,6 +128,33 @@ add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
 )
+
+
+# Define some variables that can be used in *.cpp
+target_compile_definitions(${project_name} PRIVATE XPROJECT_NAME=${project_name})
+target_compile_definitions(${project_name} PRIVATE XPROJECT_VERSION=${project_version})
+target_compile_definitions(${project_name} PRIVATE XBIT_ARCH=${CMAKE_SIZEOF_VOID_P})          # 4/8
+target_compile_definitions(${project_name} PRIVATE XCOMPILER=${CMAKE_HOST_SYSTEM_PROCESSOR})  # i386/i686/x86_64/unknown  Win: AMD64
+target_compile_definitions(${project_name} PRIVATE XCOMPILER_ID="${CMAKE_CXX_COMPILER_ID}")   # Clang/GCC/MSVC or GNU
+#target_compile_definitions(${project_name} PRIVATE XIS_X64BIT=${is_x64bit})
+
+message("------------BRGIN------------")
+message("XPROJECT_NAME:${project_name}")
+message("XPROJECT_VERSION:${project_version}")
+message("XBIT_ARCH:${CMAKE_SIZEOF_VOID_P}")
+message("XCOMPILER:${CMAKE_HOST_SYSTEM_PROCESSOR}")
+message("XCOMPILER_ID:${CMAKE_CXX_COMPILER_ID}")
+#message("XIS_X64BIT:" ${is_x64bit})
+
+message("CMake Path:"
+    "\nPROJECT_NAME:"  ${PROJECT_NAME}
+    "\nCMAKE_INSTALL_PREFIX:"  ${CMAKE_INSTALL_PREFIX}
+    "\nPROJECT_BINARY_DIR:"    ${PROJECT_BINARY_DIR}
+    "\nCMAKE_INSTALL_BINDIR:"  ${CMAKE_INSTALL_BINDIR}
+    "\nCMAKE_INSTALL_LIBDIR:"  ${CMAKE_INSTALL_LIBDIR}
+    "\nCMAKE_INSTALL_INCLUDEDIR:"  ${CMAKE_INSTALL_INCLUDEDIR})
+message("------------END------------")
+
 
 # 依据不同 build type, 生成实际 link 的 real dll 名
 set(dependent_dll_name WindowsRect)
@@ -145,8 +174,6 @@ target_include_directories(${project_name} PRIVATE                              
     ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include
 )
 target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY)                         # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装
-
-message("-------> ${CMAKE_CURRENT_SOURCE_DIR}/ui/include")
 
 set_target_properties(${project_name} PROPERTIES
     ${BUNDLE_ID_OPTION}
