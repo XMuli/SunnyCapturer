@@ -1,17 +1,17 @@
 #include "xtextedit.h"
 
-XTextWidget::XTextWidget(QWidget* parent)
+XTextEdit::XTextEdit(QWidget* parent)
     : QTextEdit(parent)
 {
-    setStyleSheet(QStringLiteral("XTextWidget { background: transparent; }"));
-    connect(this, &XTextWidget::textChanged, this, &XTextWidget::adjustSize);
-    connect(this, &XTextWidget::textChanged, this, &XTextWidget::emitTextUpdated);
+    setStyleSheet(QStringLiteral("XTextEdit { background: transparent; }"));
+    connect(this, &XTextEdit::textChanged, this, &XTextEdit::adjustSize);
+    connect(this, &XTextEdit::textChanged, this, &XTextEdit::emitTextUpdated);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setContextMenuPolicy(Qt::NoContextMenu);
 }
 
-void XTextWidget::showEvent(QShowEvent* e)
+void XTextEdit::showEvent(QShowEvent* e)
 {
     QFont font;
     QFontMetrics fm(font);
@@ -23,32 +23,32 @@ void XTextWidget::showEvent(QShowEvent* e)
     adjustSize();
 }
 
-void XTextWidget::resizeEvent(QResizeEvent* e)
+void XTextEdit::resizeEvent(QResizeEvent* e)
 {
     m_minSize.setHeight(qMin(m_baseSize.height(), height()));
     m_minSize.setWidth(qMin(m_baseSize.width(), width()));
     QTextEdit::resizeEvent(e);
 }
 
-void XTextWidget::setFont(const QFont& f)
+void XTextEdit::setFont(const QFont& f)
 {
     QTextEdit::setFont(f);
     adjustSize();
 }
 
-void XTextWidget::setAlignment(Qt::AlignmentFlag alignment)
+void XTextEdit::setAlignment(Qt::AlignmentFlag alignment)
 {
     QTextEdit::setAlignment(alignment);
     adjustSize();
 }
-void XTextWidget::setTextColor(const QColor& c)
+void XTextEdit::setTextColor(const QColor& c)
 {
     QString s(
-        QStringLiteral("XTextWidget { background: transparent; color: %1; }"));
+        QStringLiteral("XTextEdit { background: transparent; color: %1; }"));
     setStyleSheet(s.arg(c.name()));
 }
 
-void XTextWidget::adjustSize()
+void XTextEdit::adjustSize()
 {
     QString&& text = this->toPlainText();
 
@@ -66,7 +66,7 @@ void XTextWidget::adjustSize()
     this->setFixedSize(pixelsWide, pixelsHigh);
 }
 
-void XTextWidget::emitTextUpdated()
+void XTextEdit::emitTextUpdated()
 {
     emit textUpdated(this->toPlainText());
 }

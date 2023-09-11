@@ -3,11 +3,11 @@
 
 #include <QTextEdit>
 
-class XTextWidget : public QTextEdit
+class XTextEdit : public QTextEdit
 {
     Q_OBJECT
 public:
-    explicit XTextWidget(QWidget* parent = nullptr);
+    explicit XTextEdit(QWidget* parent = nullptr);
 
     void adjustSize();
     void setFont(const QFont& f);

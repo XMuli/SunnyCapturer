@@ -3,6 +3,7 @@
 #include "ui/screenshot/tray.h"
 
 // test
+#include "xtextedit.h"
 #include "tips.h"
 #include <QWidget>
 #include "colorpicker.h"
@@ -29,6 +30,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
     TRAY; // 启动托盘
+
+
+//    connect(m_widget, &XTextEdit::textUpdated, this, &TextTool::updateText);
 
 //    QString text = "27";
 //    Tips tips(text, TipsType::TT_point_changed_tips);

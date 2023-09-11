@@ -7,6 +7,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QMetaEnum>
+#include "xtextedit.h"
 
 class ScreenShot;
 
@@ -101,6 +102,14 @@ struct SerialNode
     QColor  background;
 };
 
+// 完成一次操作, 需要执行两步骤: 1. 初次点击创建填写文字时候，可以随意拖曳位置 2. 必须掉此一次其外部窗口，才能够成为保存成功入栈
+enum class XTextEditType {
+    XTET_nullptr,    // 为空，此时还没有被创建 1 step
+    XTET_generated,  // 已 first 生成此对象  1 step
+    XTET_editing,    // 编辑文字中           2 step（分界点，用于判断使用）
+    XTET_finish      // 已经编辑完成且入栈    2 step
+};
+
 struct PaintNode
 {
     Node node;
@@ -111,16 +120,21 @@ struct PaintNode
     int     pixelatedFuzzy = 10;                                // PST_mosaic: mosaic、 blur    模糊值
     int     smoothFuzzy = 10;
 
-
     QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
     SerialNode   serialNode;                                    // PST_serial 序号相关
+    XTextEdit* xTextEdit = nullptr;
+    XTextEditType xTextEditType = XTextEditType::XTET_nullptr;
 
-
-    QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
+    QPen pen; // = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QBrush brush; // = QBrush(Qt::red, Qt::SolidPattern);
 
     void printf() const;
+
+    PaintNode();   // 默认构造函数
+    ~PaintNode();  // 析构函数
+    PaintNode(const PaintNode& other);            // 由于 XTextEdit 的 几个相关拷贝函数都被禁止了，故只拷贝其 实际所需要的一些数据来 实现"深拷贝"
+//    PaintNode& operator=(const PaintNode& other); // 原因同上面, 赋值运算符的重载，也需要进行深拷贝,
 };
 
 void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案

@@ -28,11 +28,9 @@ set(src_files
     # base
     include/xwidgets_global.h
     include/xwidgets.h
-    include/xtextwidget.h
     include/chatinputedit.h
     include/xkeysequenceedit.h
     source/base/xwidgets.cpp
-    source/base/xtextwidget.cpp
     source/base/chatinputedit.cpp
     source/base/xkeysequenceedit.cpp
 

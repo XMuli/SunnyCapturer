@@ -13,6 +13,7 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QCursor>
+#include <QFont>
 #include "../paint_bar/pin/pinwidget.h"
 
 ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
@@ -921,9 +922,22 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
                 QChar serialChar = m_paintNode.serialNode.letter.unicode() + 1;
                 m_paintNode.serialNode.letter = serialChar;
             }
+        } else if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+            setMosaicPix();  // 此刻需要准备好马赛克的原始素材，无论是 move/release 都是需要它
+        } else if (m_paintNode.pst == PaintShapeType::PST_text) {
+
+            if (!m_paintNode.xTextEdit && m_paintNode.xTextEditType == XTextEditType::XTET_nullptr) { // 为 nullptr， 则初次创建
+                m_paintNode.xTextEdit = new XTextEdit(this);
+                m_paintNode.xTextEdit->show();
+                m_paintNode.xTextEdit->move(m_node.p1);
+                m_paintNode.xTextEdit->setFocus();
+                m_paintNode.xTextEditType = XTextEditType::XTET_generated;
+
+                qDebug() << "----#3.1----->m_paintNode.xTextEdit->hasFocus():" << m_paintNode.xTextEdit->hasFocus();
+            }
         }
 
-        if (m_paintNode.pst == PaintShapeType::PST_mosaic) setMosaicPix();  // 此刻需要准备好马赛克的原始素材，无论是 move/release 都是需要它
+
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
@@ -957,18 +971,61 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
     } else if (m_actionType == ActionType::AT_drawing_shap) {
         m_node.trackPos.emplace_back(m_node.p3);
+        // 点位确定了之后，再来 push_bach
         m_paintNode.node = m_node;
         m_paintNode.bShow = false;
 
-        stashMosaicPixmap();
-        m_redo.push_back(m_paintNode);
+        if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+            stashMosaicPixmap();
+        } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
+            if (m_paintNode.xTextEdit) {   // 已经存在时
+
+                if (m_paintNode.xTextEditType == XTextEditType::XTET_generated) {
+                    m_node.pt = m_node.p2; // 保留之前的位置位置
+                    m_paintNode.xTextEditType = XTextEditType::XTET_editing;
+                } else if (m_paintNode.xTextEditType == XTextEditType::XTET_editing) {
+
+                    if (!m_paintNode.xTextEdit->rect().contains(m_node.p2)) { // 点击在其外面，则此是旧的已经完成;
+
+                        m_paintNode.xTextEditType = XTextEditType::XTET_finish;
+                        m_paintNode.xTextEdit->clearFocus();
+                        if (!m_paintNode.xTextEdit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
+                            m_paintNode.node = m_node;
+                            m_redo.push_back(m_paintNode);
+                        }
+
+                        delete m_paintNode.xTextEdit;                          // 清空数据
+                        m_paintNode.xTextEdit = nullptr;
+
+
+                    } else {
+                        // 点击在其里面则继续，属无事发生; 继续编辑当前的编辑框的文本
+                        m_paintNode.xTextEdit->move(m_node.pt);
+                    }
+
+                } else if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) {
+                } else {
+                    qDebug() << "m_paintNode.xTextEditType is XTET_nullptr or other?";
+                }
+            }
+        }
+
+
+        m_paintNode.node = m_node;
+        m_paintNode.bShow = false;
+        if (m_paintNode.pst != PaintShapeType::PST_text) // 特例, PST_text 在 MousePress 里面去 push_back
+            m_redo.push_back(m_paintNode);
 
         // 归零可能会干扰下次操作的一些参数
         m_node.trackPos.clear();
+        if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) m_paintNode.xTextEditType = XTextEditType::XTET_nullptr;
         m_paintNode.pixmap = QPixmap();    // fix: push_back 时候永远是最新的一个
         qDebug() << "m_redo:" << m_redo.size();
-        setMouseTracking(true);
+
+
+
+        setMouseTracking(m_paintNode.pst == PaintShapeType::PST_text ? false : true);
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
@@ -1020,7 +1077,15 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
         setCursorShape(orieType, m_node.p3);
         m_paintNode.node = m_node;
 
-        stashMosaicPixmap();
+        if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+            stashMosaicPixmap();
+        } else if (m_paintNode.pst == PaintShapeType::PST_text) {
+
+            if (!m_paintNode.xTextEdit || !m_paintNode.xTextEdit->isVisible()) return;
+            if (m_paintNode.xTextEditType == XTextEditType::XTET_generated)
+                m_paintNode.xTextEdit->move(m_node.p3);
+        }
+
         qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
@@ -1110,15 +1175,33 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
     if (degrees.isNull()) return;
     QPoint step = degrees / 15;
 
-    const int min = 1;
-    const int max = 200;
-    int width = m_paintNode.pen.widthF();
 
-    width += step.y() > 0 ? 1 : -1;
-    width = qBound<int>(min, width, max);
-    m_paintNode.pen.setWidthF(width);
+    int width = -1;
+    if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+    } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-    showPointTips(QString::number(width));
+        if (!m_paintNode.xTextEdit || !m_paintNode.xTextEdit->isVisible()) return;
+        static QFont font = this->font();
+
+        font.setPointSize(font.pointSize() + 1);
+        m_paintNode.xTextEdit->setFont(font);
+        width = font.pointSize();
+        showPointTips(QString::number(width) + "pt");
+
+    } else {
+        const int min = 1;
+        const int max = 200;
+        width = m_paintNode.pen.widthF();
+
+        width += step.y() > 0 ? 1 : -1;
+        width = qBound<int>(min, width, max);
+        m_paintNode.pen.setWidthF(width);
+        showPointTips(QString::number(width));
+    }
+
+
+
+
 
     e->ignore();
 }
