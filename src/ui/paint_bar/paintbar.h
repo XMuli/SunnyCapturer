@@ -24,7 +24,8 @@ private:
 
 signals:
     void sigUpdatePaintBarBlurPixmap();
-    void sigPaintCtrlIdReleasedFromPointCtrl(const int& id);                           // PaintCtrlBar PointCtrl 被按下
+    void sigTextCtrlToggled(const TextFlags& flages);
+    void sigPointCtrlReleased(const int& id);                           // PaintCtrlBar PointCtrl 被按下
     void sigMosaicSliderValueChanged(int id, int val);                                 // PaintCtrlBar Slider 数值被发生改变时候
     void sigPickedColor(const QColor& color);                                          // PaintCtrlBar 调色盘 选取新颜色时候
 

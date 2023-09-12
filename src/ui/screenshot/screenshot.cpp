@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include <QCursor>
 #include <QFont>
+#include <QTextCharFormat>
 #include "../paint_bar/pin/pinwidget.h"
 
 ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
@@ -256,7 +257,34 @@ void ScreenShot::onPaintCtrlIdReleased(const int &id)
     m_paintNode.id = id;
 }
 
-void ScreenShot::onPaintCtrlIdReleasedFromPointCtrl(const int &id)
+void ScreenShot::onTextCtrlToggled(const TextFlags& flages)
+{
+    const bool& blod = flages & TextFlag::TF_blod;
+    const bool& italic = flages & TextFlag::TF_italic;
+    const bool& outline = flages & TextFlag::TF_outline;
+    const bool& strikeout = flages & TextFlag::TF_strikeout;
+    const bool& underline = flages & TextFlag::TF_underline;
+
+    QTextCharFormat format;
+    format.setFontWeight(blod ? QFont::Bold : QFont::Normal);
+    format.setFontItalic(italic);
+    format.setTextOutline(outline ? QPen(Qt::black) : QPen(Qt::transparent));
+    format.setFontStrikeOut(strikeout);
+    format.setFontUnderline(underline);
+
+    if (m_paintNode.xTextEdit)
+        m_paintNode.xTextEdit->setCurrentCharFormat(format);
+
+
+//    if (flages & TextFlag::TF_blod) {
+//    } else if (flages & TextFlag::TF_italic) {
+//    } else if (flages & TextFlag::TF_outline) {
+//    } else if (flages & TextFlag::TF_strikeout) {
+//    } else if (flages & TextFlag::TF_underline) {
+//    }
+}
+
+void ScreenShot::onPointCtrlReleased(const int &id)
 {
     int pointWidth = 2;
     if (id == 0) {
@@ -296,6 +324,17 @@ void ScreenShot::onPickedColor(const QColor &color)
 {
     m_paintNode.pen.setColor(color);
     m_paintNode.brush.setColor(color);
+
+    if (m_paintNode.xTextEdit) {
+        QTextCharFormat format = m_paintNode.xTextEdit->currentCharFormat();
+        format.setForeground(QBrush(color));
+        format.setTextOutline(QPen(Qt::white, 1));
+
+
+        m_paintNode.xTextEdit->setCurrentCharFormat(format);
+//        QTextCursor cursor = m_paintNode.xTextEdit->textCursor();
+//        cursor.mergeCharFormat(format);
+    }
 }
 
 void ScreenShot::initUI()
@@ -355,7 +394,8 @@ void ScreenShot::initConnect()
 
     connect(m_paintBar, &PaintBar::sigPaintToolBtnsRelease, this, &ScreenShot::onPaintBtnRelease);
     connect(m_paintBar, &PaintBar::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
-    connect(m_paintBar, &PaintBar::sigPaintCtrlIdReleasedFromPointCtrl, this, &ScreenShot::onPaintCtrlIdReleasedFromPointCtrl);
+    connect(m_paintBar, &PaintBar::sigTextCtrlToggled, this, &ScreenShot::onTextCtrlToggled);
+    connect(m_paintBar, &PaintBar::sigPointCtrlReleased, this, &ScreenShot::onPointCtrlReleased);
     connect(m_paintBar, &PaintBar::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
     connect(m_paintBar, &PaintBar::sigUpdatePaintBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
     connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);

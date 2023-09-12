@@ -77,7 +77,8 @@ void PaintBar::initConnect()
     // 统一接口，由 PaintBar 转发出去
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPaintCtrlIdReleased, this, &PaintBar::sigPaintCtrlIdReleased);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigMosaicSliderValueChanged, this, &PaintBar::sigMosaicSliderValueChanged);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigPaintCtrlIdReleasedFromPointCtrl, this, &PaintBar::sigPaintCtrlIdReleasedFromPointCtrl);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigTextCtrlToggled, this, &PaintBar::sigTextCtrlToggled);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
 }
 

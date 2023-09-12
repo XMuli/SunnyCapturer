@@ -38,6 +38,19 @@ Q_DECLARE_METATYPE(PaintType)                     // 可以被 QVariant 类型�
 Q_DECLARE_FLAGS(PaintTypeFlass, PaintType)        // 枚举 PaintType 生成宏 PaintTypeFlass
 //Q_DECLARE_OPERATORS_FOR_FLAGS(PaintTypeFlass)   // 重载宏 PaintTypeFlass 的 |() 函数
 
+
+enum class TextFlag
+{
+    TF_blod = 1 << 0,        // 1     // 粗体
+    TF_italic = 1 << 1,      // 2     // 倾斜
+    TF_outline = 1 << 2,     // 4     // 描边
+    TF_strikeout = 1 << 3,   // 8     // 删除线
+    TF_underline = 1 << 4    // 16     // 下划线
+};
+Q_DECLARE_METATYPE(TextFlag)                     // 可以被 QVariant 类型存储
+Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 TextFlags
+Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
+
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
                                  , const bool& bLastAddSpacer = false, const bool exclusive = true, const int defaultChecked = 0);
 

@@ -96,9 +96,9 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout_line" << "underline", false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number_rectangle" << "serial_letter_rectangle"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPaintCtrlIdReleasedFromPointCtrl);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPointCtrlReleased);
 
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
@@ -299,6 +299,36 @@ void PaintCtrlBar::onIdReleased(int id)
 //        if (btn) {
 //        }
     //    }
+}
+
+void PaintCtrlBar::onTextCtrlToggled(int id, bool checked)
+{
+
+    static TextFlags flags;
+
+    if (id == 0) {
+        if (checked) flags |= TextFlag::TF_blod;
+        else flags &= ~TextFlags(TextFlag::TF_blod);
+    } else if (id == 1) {
+        if (checked) flags |= TextFlag::TF_italic;
+        else flags &= ~TextFlags(TextFlag::TF_italic);
+    } else if (id == 2) {
+        if (checked) flags |= TextFlag::TF_outline;
+        else flags &= ~TextFlags(TextFlag::TF_outline);
+    } else if (id == 3) {
+        if (checked) flags |= TextFlag::TF_strikeout;
+        else flags &= ~TextFlags(TextFlag::TF_strikeout);
+    } else if (id == 4) {
+        if (checked) flags |= TextFlag::TF_underline;
+        else flags &= ~TextFlags(TextFlag::TF_underline);
+    } else {
+        qDebug() << "id is other!";
+    }
+
+
+    emit sigTextCtrlToggled(flags);
+
+    qDebug() << "id:" << id << "checked:" << checked << "flags:" << flags;
 }
 
 void PaintCtrlBar::onMosaicCtrlIdReleased(int id)

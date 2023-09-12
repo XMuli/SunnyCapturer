@@ -26,7 +26,6 @@
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/outline.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/rectangle.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/rectangle_fill.svg</file>
-        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/strikeout_line.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/underline.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/blur.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/mosaic.svg</file>
@@ -37,5 +36,6 @@
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_letter_rectangle.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_number_ellipse.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_number_rectangle.svg</file>
+        <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/strikeout.svg</file>
     </qresource>
 </RCC>
