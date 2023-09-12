@@ -348,15 +348,37 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 
     } else if (paintNode.pst == PaintShapeType::PST_text) {
 
+
         
-        if (paintNode.xTextEditType != XTextEditType::XTET_finish || !paintNode.xTextEdit) return;
-        qDebug() << "---#2.1---paintNode.xTextEditType:" << (int)paintNode.xTextEditType << "paintNode.xTextEdit:" << paintNode.xTextEdit << "paintNode.xTextEdit->hasFocus():" << paintNode.xTextEdit->hasFocus();
+        if (paintNode.xTextEditType != XTextEditType::XTET_finish || paintNode.textDoc.isEmpty()) return;
+//        qDebug() << "---#2.1---paintNode.xTextEditType:" << (int)paintNode.xTextEditType << "m_textEdit:" << m_textEdit << "m_textEdit->hasFocus():" << m_textEdit->hasFocus();
 
 
-        qDebug() << "toPlainText:" << paintNode.xTextEdit->toPlainText();
-        paintNode.xTextEdit->move(paintNode.node.pt);
-        paintNode.xTextEdit->show();
-        paintNode.xTextEdit->clearFocus();
+//        qDebug() << "toPlainText:" << m_textEdit->toPlainText();
+//        m_textEdit->move(paintNode.node.pt);
+//        m_textEdit->show();
+//        m_textEdit->clearFocus();
+
+        // 绘制文本到QWidget上
+//        pa.setRenderHint(QPainter::Antialiasing);
+////        QTextDocument doc(paintNode.textDoc);
+////        doc.drawContents(&pa, paintNode.node.absoluteRect);
+
+//        pa.setPen(paintNode.pen);
+//        pa.setBrush(Qt::NoBrush);
+//        pa.drawText(paintNode.node.absoluteRect, paintNode.textDoc);
+
+//        // 使用QTextDocument来渲染富文本内容
+//        static QTextDocument document;
+//        document.setHtml(paintNode.textDoc); // 设置富文本内容
+//        document.drawContents(&pa, paintNode.node.absoluteRect);
+
+
+//        XTextEdit *richTextDisplay = new XTextEdit();
+//        richTextDisplay->setHtml(paintNode.textDoc); // 设置QTextEdit的富文本内容
+//        richTextDisplay->show();
+//        richTextDisplay->move(paintNode.node.absoluteRect.topLeft());
+
 
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
         QString str;
@@ -499,85 +521,61 @@ void PaintNode::printf() const
                     .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height());
 }
 
+// 默认构造函数
 PaintNode::PaintNode()
-    : node()
-    , pst(PaintShapeType::PST_empty)
-    , bShow(false)
-    , id(-1)
-    , pixelatedFuzzy(10)
-    , smoothFuzzy(10)
-    , xTextEdit(nullptr)
-    , xTextEditType(XTextEditType::XTET_nullptr)
-    , pen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin)
-    , brush(Qt::red, Qt::SolidPattern)
-
-{
-    // 其他成员的默认初始化
+    : pst(PaintShapeType::PST_empty),
+    bShow(false),
+    id(-1),
+    pixelatedFuzzy(10),
+    smoothFuzzy(10),
+    xTextEditType(XTextEditType::XTET_nullptr),
+    pen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
+    brush(Qt::red, Qt::SolidPattern) {
+    // 在此添加其他成员变量的初始化（如果有需要的话）
 }
 
-PaintNode::~PaintNode()
-{
-    // 释放动态分配的资源
-    if (xTextEdit) {
-        delete xTextEdit;
-        xTextEdit = nullptr;
-    }
-}
+//// 拷贝构造函数
+//PaintNode::PaintNode(const PaintNode& other)
+//    : node(other.node),
+//    pst(other.pst),
+//    bShow(other.bShow),
+//    id(other.id),
+//    pixelatedFuzzy(other.pixelatedFuzzy),
+//    smoothFuzzy(other.smoothFuzzy),
+//    pixmap(other.pixmap),
+//    serialNode(other.serialNode),
+//    textDoc(other.textDoc.clone()),
+//    xTextEditType(other.xTextEditType),
+//    pen(other.pen),
+//    brush(other.brush) {
+//    // 在此添加其他成员变量的拷贝构造（如果有需要的话）
+//}
 
-PaintNode::PaintNode(const PaintNode &other)
-{
-    // 复制基本类型成员
-    node = other.node;
-    pst = other.pst;
-    bShow = other.bShow;
-    id = other.id;
-    pixelatedFuzzy = other.pixelatedFuzzy;
-    smoothFuzzy = other.smoothFuzzy;
-    xTextEditType = other.xTextEditType;
+//// 赋值运算符重载
+//PaintNode& PaintNode::operator=(const PaintNode& other) {
+//    if (this != &other) {
+//        // 避免自我赋值
 
-    // 复制 SerialNode
-    serialNode = other.serialNode;
+//        // 进行深拷贝
+//        node = other.node;
+//        pst = other.pst;
+//        bShow = other.bShow;
+//        id = other.id;
+//        pixelatedFuzzy = other.pixelatedFuzzy;
+//        smoothFuzzy = other.smoothFuzzy;
+//        pixmap = other.pixmap;
+//        serialNode = other.serialNode;
+//        textDoc = *other.textDoc.clone();
+//        xTextEditType = other.xTextEditType;
+//        pen = other.pen;
+//        brush = other.brush;
 
-    // 复制 QPixmap
-    if (!other.pixmap.isNull())
-        pixmap = other.pixmap.copy();
-    else
-        pixmap = QPixmap();
-
-    // 复制 xTextEdit
-    if (other.xTextEdit)
-    {
-        // 一个输入法却又多个设备 QTextEdit 怀疑导致某种"崩溃"而无法显示中文
-        // 此处添加父对象后，会中文输入法不显示候选框的中文，但去掉  other.xTextEdit->parentWidget() 却可以
-//        xTextEdit = new XTextEdit(other.xTextEdit->parentWidget()); // 创建一个新的 XTextEdit 对象
-        xTextEdit = new XTextEdit();
-//        xTextEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
-//        xTextEdit->setParent(other.xTextEdit->parentWidget());
-
-//        xTextEdit->setWindowFlags(Qt::FramelessWindowHint);
-//        xTextEdit->setAttribute(Qt::WA_TranslucentBackground);
+//        // 在此添加其他成员变量的赋值（如果有需要的话）
+//    }
+//    return *this;
+//}
 
 
-        // 复制文本内容
-        QTextCursor cursor(xTextEdit->document());
-        cursor.insertText(other.xTextEdit->document()->toPlainText());
-
-        // 复制字体等格式
-        xTextEdit->setFont(other.xTextEdit->font());
-//        xTextEdit->setAlignment(other.xTextEdit->alignment());
-
-        // 复制窗口大小
-        xTextEdit->setFixedSize(other.xTextEdit->size());
-    }
-    else
-    {
-        xTextEdit = nullptr;
-    }
-
-    // 复制 QPen 和 QBrush
-    pen = other.pen;
-    brush = other.brush;
-}
 
 //PaintNode &PaintNode::operator=(const PaintNode &other)
 //{
@@ -631,3 +629,34 @@ PaintNode::PaintNode(const PaintNode &other)
 
 
 
+
+void showDrewText(const PaintNode &paintNode, QWidget *w)
+{
+    if (paintNode.xTextEditType != XTextEditType::XTET_finish || paintNode.textDoc.isEmpty()) return;
+
+    XTextEdit* edit = new XTextEdit(w);   // 改用关联或者 std::智能指针，对哦， w 作主窗口，也是已经实现了的回收； 但是会这个位置重复 new， qdebug 看下，不然会有不断地 new 照成内存泄露
+    edit->setHtml(paintNode.textDoc);
+    edit->show();
+    edit->setFixedSize(paintNode.node.absoluteRect.size());
+    edit->move(paintNode.node.absoluteRect.topLeft());
+
+
+    //        pa.setRenderHint(QPainter::Antialiasing);
+    ////        QTextDocument doc(paintNode.textDoc);
+    ////        doc.drawContents(&pa, paintNode.node.absoluteRect);
+
+    //        pa.setPen(paintNode.pen);
+    //        pa.setBrush(Qt::NoBrush);
+    //        pa.drawText(paintNode.node.absoluteRect, paintNode.textDoc);
+
+    //        // 使用QTextDocument来渲染富文本内容
+    //        static QTextDocument document;
+    //        document.setHtml(paintNode.textDoc); // 设置富文本内容
+    //        document.drawContents(&pa, paintNode.node.absoluteRect);
+
+
+    //        XTextEdit *richTextDisplay = new XTextEdit();
+    //        richTextDisplay->setHtml(paintNode.textDoc); // 设置QTextEdit的富文本内容
+    //        richTextDisplay->show();
+    //        richTextDisplay->move(paintNode.node.absoluteRect.topLeft());
+}

@@ -7,7 +7,8 @@
 #include <QBrush>
 #include <QPainter>
 #include <QMetaEnum>
-#include "xtextedit.h"
+#include <QTextDocument>
+
 
 class ScreenShot;
 
@@ -123,7 +124,8 @@ struct PaintNode
     QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
     SerialNode   serialNode;                                    // PST_serial 序号相关
-    XTextEdit* xTextEdit = nullptr;
+    QString      textDoc;
+//
     XTextEditType xTextEditType = XTextEditType::XTET_nullptr;
 
     QPen pen; // = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
@@ -132,12 +134,14 @@ struct PaintNode
     void printf() const;
 
     PaintNode();   // 默认构造函数
-    ~PaintNode();  // 析构函数
-    PaintNode(const PaintNode& other);            // 由于 XTextEdit 的 几个相关拷贝函数都被禁止了，故只拷贝其 实际所需要的一些数据来 实现"深拷贝"
+//    ~PaintNode();  // 析构函数
+//    PaintNode(const PaintNode& other);            // 由于 XTextEdit 的 几个相关拷贝函数都被禁止了，故只拷贝其 实际所需要的一些数据来 实现"深拷贝"
 //    PaintNode& operator=(const PaintNode& other); // 原因同上面, 赋值运算符的重载，也需要进行深拷贝,
 };
 
 void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
+
+void showDrewText(const PaintNode &paintNode, QWidget *w);
 void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize = 20);
 void pixelatedMosaic(QPixmap &pixmap, const int& px = 20);
 void smoothMosaic(QPixmap& pixmap, int radius = 10);

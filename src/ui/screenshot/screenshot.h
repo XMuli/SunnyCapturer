@@ -12,6 +12,7 @@
 #include <QPointer>
 #include "tips.h"
 #include "capturehelper.h"
+#include "xtextedit.h"
 #include "../paint_bar/paintbar.h"
 
 #ifdef _WIN32
@@ -108,10 +109,11 @@ private:
     std::vector<PaintNode>   m_undo;               // 撤销-图案元素
     std::vector<PaintNode>   m_redo;               // 重做-图案元素
 
-    OrientationType          m_stretchPickedRectOrieType;    
+    OrientationType          m_stretchPickedRectOrieType;
     Qt::Orientation          m_orie;
     std::vector<RectNode>    m_rectNodes;
 
+    QPointer<XTextEdit>      m_textEdit;
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;

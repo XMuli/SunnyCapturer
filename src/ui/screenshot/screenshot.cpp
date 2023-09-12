@@ -16,6 +16,7 @@
 #include <QFont>
 #include <QTextCharFormat>
 #include "../paint_bar/pin/pinwidget.h"
+#include "xtextedit.h"
 
 ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -29,6 +30,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_paintBar(new PaintBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
+    , m_textEdit(new XTextEdit(this))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -272,8 +274,8 @@ void ScreenShot::onTextCtrlToggled(const TextFlags& flages)
     format.setFontStrikeOut(strikeout);
     format.setFontUnderline(underline);
 
-    if (m_paintNode.xTextEdit)
-        m_paintNode.xTextEdit->setCurrentCharFormat(format);
+    if (m_textEdit)
+        m_textEdit->setCurrentCharFormat(format);
 
 
 //    if (flages & TextFlag::TF_blod) {
@@ -325,14 +327,14 @@ void ScreenShot::onPickedColor(const QColor &color)
     m_paintNode.pen.setColor(color);
     m_paintNode.brush.setColor(color);
 
-    if (m_paintNode.xTextEdit) {
-        QTextCharFormat format = m_paintNode.xTextEdit->currentCharFormat();
+    if (m_textEdit) {
+        QTextCharFormat format = m_textEdit->currentCharFormat();
         format.setForeground(QBrush(color));
         format.setTextOutline(QPen(Qt::white, 1));
 
 
-        m_paintNode.xTextEdit->setCurrentCharFormat(format);
-//        QTextCursor cursor = m_paintNode.xTextEdit->textCursor();
+        m_textEdit->setCurrentCharFormat(format);
+//        QTextCursor cursor = m_textEdit->textCursor();
 //        cursor.mergeCharFormat(format);
     }
 }
@@ -344,6 +346,7 @@ void ScreenShot::initUI()
     m_paintBar->raise();
     m_pickedRectTips->raise();
     m_pointTips->raise();
+    m_textEdit->hide();
 
     m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_paintBar->hide();
@@ -966,14 +969,16 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
             setMosaicPix();  // 此刻需要准备好马赛克的原始素材，无论是 move/release 都是需要它
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-            if (!m_paintNode.xTextEdit && m_paintNode.xTextEditType == XTextEditType::XTET_nullptr) { // 为 nullptr， 则初次创建
-                m_paintNode.xTextEdit = new XTextEdit(this);
-                m_paintNode.xTextEdit->show();
-                m_paintNode.xTextEdit->move(m_node.p1);
-                m_paintNode.xTextEdit->setFocus();
+            if (m_paintNode.xTextEditType == XTextEditType::XTET_nullptr) { // 为 nullptr， 则初次创建
+//                m_textEdit = new XTextEdit(this);
+
+                qDebug() << "----#3.0----->m_textEdit:" << m_textEdit;
+                m_textEdit->show();
+                m_textEdit->move(m_node.p1);
+                m_textEdit->setFocus();
                 m_paintNode.xTextEditType = XTextEditType::XTET_generated;
 
-                qDebug() << "----#3.1----->m_paintNode.xTextEdit->hasFocus():" << m_paintNode.xTextEdit->hasFocus();
+                qDebug() << "----#3.1----->m_textEdit->hasFocus():" << m_textEdit->hasFocus();
             }
         }
 
@@ -1019,35 +1024,44 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
             stashMosaicPixmap();
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-            if (m_paintNode.xTextEdit) {   // 已经存在时
 
-                if (m_paintNode.xTextEditType == XTextEditType::XTET_generated) {
-                    m_node.pt = m_node.p2; // 保留之前的位置位置
-                    m_paintNode.xTextEditType = XTextEditType::XTET_editing;
-                } else if (m_paintNode.xTextEditType == XTextEditType::XTET_editing) {
+            if (m_paintNode.xTextEditType == XTextEditType::XTET_generated) {
+                m_node.pt = m_node.p2; // 保留之前的位置位置
+                m_paintNode.xTextEditType = XTextEditType::XTET_editing;
+            } else if (m_paintNode.xTextEditType == XTextEditType::XTET_editing) {
 
-                    if (!m_paintNode.xTextEdit->rect().contains(m_node.p2)) { // 点击在其外面，则此是旧的已经完成;
+                if (!m_textEdit->rect().contains(m_node.p2)) { // 点击在其外面，则此是旧的已经完成;
 
-                        m_paintNode.xTextEditType = XTextEditType::XTET_finish;
-                        m_paintNode.xTextEdit->clearFocus();
-                        if (!m_paintNode.xTextEdit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
-                            m_paintNode.node = m_node;
-                            m_redo.push_back(m_paintNode);
-                        }
+                    m_paintNode.xTextEditType = XTextEditType::XTET_finish;
+                    m_textEdit->clearFocus();
+                    if (!m_textEdit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
 
-                        delete m_paintNode.xTextEdit;                          // 清空数据
-                        m_paintNode.xTextEdit = nullptr;
+////                        m_paintNode.node = m_node;
+                        m_paintNode.textDoc = m_textEdit->toHtml(); //->document()->toHtml();
 
+                        m_paintNode.node.absoluteRect = QRect(m_node.pt, m_textEdit->rect().size());
+                        qDebug() << "------$4--->m_textEdit->rect():" << m_textEdit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect
+                                 << "m_paintNode.textDoc:" << m_paintNode.textDoc;
+                        showDrewText(m_paintNode, this);
+                        m_redo.push_back(m_paintNode);
 
-                    } else {
-                        // 点击在其里面则继续，属无事发生; 继续编辑当前的编辑框的文本
-                        m_paintNode.xTextEdit->move(m_node.pt);
                     }
 
-                } else if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) {
+                    m_textEdit->setText("");
+
+                    //m_textEdit.clear();  // fuck 居然会销毁
+//                    delete m_textEdit;                          // 清空数据
+//                    m_textEdit = nullptr;
+
+
                 } else {
-                    qDebug() << "m_paintNode.xTextEditType is XTET_nullptr or other?";
+                    // 点击在其里面则继续，属无事发生; 继续编辑当前的编辑框的文本
+                    m_textEdit->move(m_node.pt);
                 }
+
+            } else if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) {
+            } else {
+                qDebug() << "m_paintNode.xTextEditType is XTET_nullptr or other?";
             }
         }
 
@@ -1121,9 +1135,9 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
             stashMosaicPixmap();
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-            if (!m_paintNode.xTextEdit || !m_paintNode.xTextEdit->isVisible()) return;
+            if (!m_textEdit || !m_textEdit->isVisible()) return;
             if (m_paintNode.xTextEditType == XTextEditType::XTET_generated)
-                m_paintNode.xTextEdit->move(m_node.p3);
+                m_textEdit->move(m_node.p3);
         }
 
         qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
@@ -1220,11 +1234,11 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
     if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
     } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-        if (!m_paintNode.xTextEdit || !m_paintNode.xTextEdit->isVisible()) return;
+        if (!m_textEdit || !m_textEdit->isVisible()) return;
         static QFont font = this->font();
 
         font.setPointSize(font.pointSize() + 1);
-        m_paintNode.xTextEdit->setFont(font);
+        m_textEdit->setFont(font);
         width = font.pointSize();
         showPointTips(QString::number(width) + "pt");
 
