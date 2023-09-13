@@ -113,7 +113,7 @@ private:
     Qt::Orientation          m_orie;
     std::vector<RectNode>    m_rectNodes;
 
-    QPointer<XTextEdit>      m_textEdit;
+    QPointer<XTextEdit>      m_edit;
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;

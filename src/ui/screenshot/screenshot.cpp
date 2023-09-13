@@ -30,7 +30,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_paintBar(new PaintBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
-    , m_textEdit(new XTextEdit(this))
+    , m_edit(new XTextEdit(this))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -274,8 +274,8 @@ void ScreenShot::onTextCtrlToggled(const TextFlags& flages)
     format.setFontStrikeOut(strikeout);
     format.setFontUnderline(underline);
 
-    if (m_textEdit)
-        m_textEdit->setCurrentCharFormat(format);
+    if (m_edit)
+        m_edit->setCurrentCharFormat(format);
 
 
 //    if (flages & TextFlag::TF_blod) {
@@ -327,14 +327,14 @@ void ScreenShot::onPickedColor(const QColor &color)
     m_paintNode.pen.setColor(color);
     m_paintNode.brush.setColor(color);
 
-    if (m_textEdit) {
-        QTextCharFormat format = m_textEdit->currentCharFormat();
+    if (m_edit) {
+        QTextCharFormat format = m_edit->currentCharFormat();
         format.setForeground(QBrush(color));
         format.setTextOutline(QPen(Qt::white, 1));
 
 
-        m_textEdit->setCurrentCharFormat(format);
-//        QTextCursor cursor = m_textEdit->textCursor();
+        m_edit->setCurrentCharFormat(format);
+//        QTextCursor cursor = m_edit->textCursor();
 //        cursor.mergeCharFormat(format);
     }
 }
@@ -346,7 +346,7 @@ void ScreenShot::initUI()
     m_paintBar->raise();
     m_pickedRectTips->raise();
     m_pointTips->raise();
-    m_textEdit->hide();
+    m_edit->hide();
 
     m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_paintBar->hide();
@@ -970,15 +970,15 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
             if (m_paintNode.xTextEditType == XTextEditType::XTET_nullptr) { // 为 nullptr， 则初次创建
-//                m_textEdit = new XTextEdit(this);
+//                m_edit = new XTextEdit(this);
 
-                qDebug() << "----#3.0----->m_textEdit:" << m_textEdit;
-                m_textEdit->show();
-                m_textEdit->move(m_node.p1);
-                m_textEdit->setFocus();
+                qDebug() << "----#3.0----->m_edit:" << m_edit;
+                m_edit->show();
+                m_edit->move(m_node.p1);
+                m_edit->setFocus();
                 m_paintNode.xTextEditType = XTextEditType::XTET_generated;
 
-                qDebug() << "----#3.1----->m_textEdit->hasFocus():" << m_textEdit->hasFocus();
+                qDebug() << "----#3.1----->m_edit->hasFocus():" << m_edit->hasFocus();
             }
         }
 
@@ -1030,33 +1030,27 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
                 m_paintNode.xTextEditType = XTextEditType::XTET_editing;
             } else if (m_paintNode.xTextEditType == XTextEditType::XTET_editing) {
 
-                if (!m_textEdit->rect().contains(m_node.p2)) { // 点击在其外面，则此是旧的已经完成;
+                if (!m_edit->rect().contains(m_node.p2)) { // 点击在其外面，则此是旧的已经完成;
 
                     m_paintNode.xTextEditType = XTextEditType::XTET_finish;
-                    m_textEdit->clearFocus();
-                    if (!m_textEdit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
+                    m_edit->clearFocus();
+                    if (!m_edit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
 
-////                        m_paintNode.node = m_node;
-                        m_paintNode.textDoc = m_textEdit->toHtml(); //->document()->toHtml();
 
-                        m_paintNode.node.absoluteRect = QRect(m_node.pt, m_textEdit->rect().size());
-                        qDebug() << "------$4--->m_textEdit->rect():" << m_textEdit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect
-                                 << "m_paintNode.textDoc:" << m_paintNode.textDoc;
-                        showDrewText(m_paintNode, this);
+                        m_paintNode.node.absoluteRect = QRect(m_node.pt, m_edit->rect().size());
+                        qDebug() << "------$4--->m_edit->rect():" << m_edit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect;
+                        showCreatorRichText(m_edit->document(), m_paintNode.node.absoluteRect, this);
+                        m_edit->hide();
                         m_redo.push_back(m_paintNode);
 
                     }
 
-                    m_textEdit->setText("");
-
-                    //m_textEdit.clear();  // fuck 居然会销毁
-//                    delete m_textEdit;                          // 清空数据
-//                    m_textEdit = nullptr;
-
+//                    m_edit->document()->clear();
+                    m_edit->setText("");
 
                 } else {
                     // 点击在其里面则继续，属无事发生; 继续编辑当前的编辑框的文本
-                    m_textEdit->move(m_node.pt);
+                    m_edit->move(m_node.pt);
                 }
 
             } else if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) {
@@ -1135,9 +1129,9 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
             stashMosaicPixmap();
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-            if (!m_textEdit || !m_textEdit->isVisible()) return;
+            if (!m_edit || !m_edit->isVisible()) return;
             if (m_paintNode.xTextEditType == XTextEditType::XTET_generated)
-                m_textEdit->move(m_node.p3);
+                m_edit->move(m_node.p3);
         }
 
         qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
@@ -1234,11 +1228,11 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
     if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
     } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-        if (!m_textEdit || !m_textEdit->isVisible()) return;
+        if (!m_edit || !m_edit->isVisible()) return;
         static QFont font = this->font();
 
         font.setPointSize(font.pointSize() + 1);
-        m_textEdit->setFont(font);
+        m_edit->setFont(font);
         width = font.pointSize();
         showPointTips(QString::number(width) + "pt");
 
