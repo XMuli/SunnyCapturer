@@ -96,7 +96,7 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
+    connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", false, false, -1), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number_rectangle" << "serial_letter_rectangle"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPointCtrlReleased);
 
@@ -327,7 +327,6 @@ void PaintCtrlBar::onTextCtrlToggled(int id, bool checked)
 
 
     emit sigTextCtrlToggled(flags);
-
     qDebug() << "id:" << id << "checked:" << checked << "flags:" << flags;
 }
 

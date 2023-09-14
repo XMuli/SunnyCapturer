@@ -2,6 +2,7 @@
 
 XTextEdit::XTextEdit(QWidget* parent)
     : QTextEdit(parent)
+    , m_focusAble(true)
 {
     setStyleSheet(QStringLiteral("XTextEdit { background: transparent; }"));
     connect(this, &XTextEdit::textChanged, this, &XTextEdit::adjustSize);
@@ -28,6 +29,78 @@ void XTextEdit::resizeEvent(QResizeEvent* e)
     m_minSize.setHeight(qMin(m_baseSize.height(), height()));
     m_minSize.setWidth(qMin(m_baseSize.width(), width()));
     QTextEdit::resizeEvent(e);
+}
+
+void XTextEdit::focusInEvent(QFocusEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::focusInEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::focusOutEvent(QFocusEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::focusOutEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::mousePressEvent(QMouseEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::mousePressEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::mouseReleaseEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::mouseMoveEvent(QMouseEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::mouseMoveEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::mouseDoubleClickEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::keyPressEvent(QKeyEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::keyPressEvent(e);
+    } else {
+        e->ignore();
+    }
+}
+
+void XTextEdit::keyReleaseEvent(QKeyEvent *e)
+{
+    if (m_focusAble) {
+        QTextEdit::keyReleaseEvent(e);
+    } else {
+        e->ignore();
+    }
 }
 
 void XTextEdit::setFont(const QFont& f)
@@ -69,4 +142,19 @@ void XTextEdit::adjustSize()
 void XTextEdit::emitTextUpdated()
 {
     emit textUpdated(this->toPlainText());
+}
+
+bool XTextEdit::focusAble() const
+{
+    return m_focusAble;
+}
+
+void XTextEdit::setFocusAble(bool focusAble)
+{
+    m_focusAble = focusAble;
+
+    if (m_focusAble)
+        setStyleSheet(QStringLiteral("XTextEdit { background: transparent;}"));
+    else
+        setStyleSheet(QStringLiteral("XTextEdit { background: transparent; border: none; }"));
 }

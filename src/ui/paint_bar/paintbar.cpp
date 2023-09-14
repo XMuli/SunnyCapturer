@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QTimer>
 
 PaintBar::PaintBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget{parent}
@@ -96,7 +97,8 @@ void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheck
     }
 
     m_layout->setSpacing(space);
-    adjustSize();
+    QTimer::singleShot(10, this, [this](){ adjustSize(); }); // fix: 点击 text 时， 时间太短 pickColor 控件还没有 adjustSize() 调整好
+
     emit sigPaintToolBtnsRelease(type, isCheckable);
 }
 

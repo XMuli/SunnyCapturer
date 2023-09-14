@@ -504,15 +504,18 @@ PaintNode::PaintNode()
 
 void showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w)
 {
-    if (!doc || doc->isEmpty()) return;
-
-//    if (paintNode.xTextEditType != XTextEditType::XTET_finish) return;
+    if (!doc || doc->isEmpty()) return;      //    if (paintNode.xTextEditType != XTextEditType::XTET_finish) return;
     XTextEdit* newEdit = new XTextEdit(w);   // 改用关联或者 std::智能指针，对哦， w 作主窗口，也是已经实现了的回收； 但是会这个位置重复 new， qdebug 看下，不然会有不断地 new 照成内存泄露
-    newEdit->setDocument(doc->clone());     // 最关键的一个一行，对 QTextDocument 进行 1:1 的文本拷贝
+    newEdit->setDocument(doc->clone());      // 最关键的一个一行，对 QTextDocument 进行 1:1 的文本拷贝
 
-    newEdit->show();
+    newEdit->show();                         // 这三行的顺序不可以混
     newEdit->setFixedSize(rect.size());
     newEdit->move(rect.topLeft());
+    newEdit->setReadOnly(true);
+    newEdit->setFocusAble(false);
+//    newEdit->setMouseTracking(false);
+//    newEdit->setFocusPolicy(Qt::NoFocus);
+//    newEdit->setCursor(Qt::ArrowCursor);
     static int i = 1;
     qDebug() << "=============#=====>showDrewText() i:" << i++ << "newEdit:" << newEdit;
 }

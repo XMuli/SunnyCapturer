@@ -267,16 +267,14 @@ void ScreenShot::onTextCtrlToggled(const TextFlags& flages)
     const bool& strikeout = flages & TextFlag::TF_strikeout;
     const bool& underline = flages & TextFlag::TF_underline;
 
-    QTextCharFormat format;
+    QTextCharFormat format = m_edit->currentCharFormat();
+    const QColor foreground = format.foreground().color();
     format.setFontWeight(blod ? QFont::Bold : QFont::Normal);
     format.setFontItalic(italic);
-    format.setTextOutline(outline ? QPen(Qt::black) : QPen(Qt::transparent));
+    format.setTextOutline(QPen(outline ? Qt::white : foreground, 1));
     format.setFontStrikeOut(strikeout);
     format.setFontUnderline(underline);
-
-    if (m_edit)
-        m_edit->setCurrentCharFormat(format);
-
+    m_edit->mergeCurrentCharFormat(format);
 
 //    if (flages & TextFlag::TF_blod) {
 //    } else if (flages & TextFlag::TF_italic) {
@@ -327,16 +325,9 @@ void ScreenShot::onPickedColor(const QColor &color)
     m_paintNode.pen.setColor(color);
     m_paintNode.brush.setColor(color);
 
-    if (m_edit) {
-        QTextCharFormat format = m_edit->currentCharFormat();
-        format.setForeground(QBrush(color));
-        format.setTextOutline(QPen(Qt::white, 1));
-
-
-        m_edit->setCurrentCharFormat(format);
-//        QTextCursor cursor = m_edit->textCursor();
-//        cursor.mergeCharFormat(format);
-    }
+    QTextCharFormat format = m_edit->currentCharFormat();
+    format.setForeground(QBrush(color));
+    m_edit->mergeCurrentCharFormat(format);
 }
 
 void ScreenShot::initUI()
@@ -355,6 +346,7 @@ void ScreenShot::initUI()
     m_timerPoint->setInterval(5000);
     monitorsInfo();
 
+    onPickedColor(Qt::red); // 初始化一下，后面改为使用 配置文件
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
@@ -1222,16 +1214,18 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
     QPoint degrees = e->angleDelta() / 8;
     if (degrees.isNull()) return;
     QPoint step = degrees / 15;
+    const int& stepY = step.y() > 0 ? 1 : -1;
 
 
     int width = -1;
     if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
     } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-        if (!m_edit || !m_edit->isVisible()) return;
+        if (!m_edit->isVisible()) return;
         static QFont font = this->font();
 
-        font.setPointSize(font.pointSize() + 1);
+
+        font.setPointSize(font.pointSize() + stepY);
         m_edit->setFont(font);
         width = font.pointSize();
         showPointTips(QString::number(width) + "pt");
@@ -1240,8 +1234,7 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         const int min = 1;
         const int max = 200;
         width = m_paintNode.pen.widthF();
-
-        width += step.y() > 0 ? 1 : -1;
+        width += stepY;
         width = qBound<int>(min, width, max);
         m_paintNode.pen.setWidthF(width);
         showPointTips(QString::number(width));
