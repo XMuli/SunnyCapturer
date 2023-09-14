@@ -118,6 +118,7 @@ set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                  
 file(GLOB_RECURSE source_lists LIST_DIRECTORIES false "${src_root_path}/*.cpp" "${src_root_path}/*.h")
 source_group(TREE ${src_root_path} FILES ${source_lists})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")                                    # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
+#include_directories("${CMAKE_SOURCE_DIR}/tripartite/include")
 
 #************************************************************************
 #调用 WindowsRect DLL 共 ①~④ 步骤
