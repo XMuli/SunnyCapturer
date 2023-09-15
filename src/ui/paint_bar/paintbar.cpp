@@ -3,12 +3,19 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QTimer>
+#include <QApplication>
+#include <QPainter>
+#include <QScreen>
+#include <QPaintEvent>
+
+QT_BEGIN_NAMESPACE
+extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
+QT_END_NAMESPACE
 
 PaintBar::PaintBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget{parent}
     , m_layout(nullptr)
     , m_orie(orie)
-    , m_blurEffect(new XBlurEffect(this))
     , m_paintToolBar(new PaintToolBar(orie, this))
     , m_paintCtrlBar(new PaintCtrlBar(orie, this))
 
@@ -19,7 +26,7 @@ PaintBar::PaintBar(const Qt::Orientation &orie, QWidget *parent)
 
 PaintBar::~PaintBar()
 {
-    if (m_blurEffect) m_blurEffect->deleteLater();
+    if (m_blurPixmap.isNull()) m_blurPixmap = QPixmap();
     if (m_paintToolBar) m_paintToolBar->deleteLater();
     if (m_paintCtrlBar) m_paintCtrlBar->deleteLater();
 }
@@ -43,14 +50,6 @@ void PaintBar::transposePaintBar(const bool &bTranspose)
 bool PaintBar::hadDrawBtnsChecked() const
 {
     return m_paintToolBar->hadDrawBtnsChecked();
-}
-
-void PaintBar::setLowerBlurEffect(const QPixmap &pix, int radius)
-{
-    if (m_blurEffect) {
-        m_blurEffect->setPixmap(pix, radius);
-        m_blurEffect->lower();
-    }
 }
 
 void PaintBar::initUI()
@@ -83,6 +82,22 @@ void PaintBar::initConnect()
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
 }
 
+void PaintBar::setLowerBlurEffect(const QPixmap &pix, int radius)
+{
+    if (pix.isNull()) return;
+
+#if HIDE_TOOL_BAR_BLUR_EFFECT
+    m_pixmap = pix;
+#else
+    QImage img = pix.toImage();
+    QPixmap origPixmap(pix.size());
+    origPixmap.setDevicePixelRatio(qApp->primaryScreen()->devicePixelRatio());
+    QPainter painter(&origPixmap);
+    qt_blurImage(&painter, img, radius, true, false);
+    m_blurPixmap = std::move(origPixmap);
+#endif
+}
+
 void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheckable)
 {
     m_paintCtrlBar->onPaintBtnRelease(type, isCheckable);
@@ -105,10 +120,8 @@ void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheck
 void PaintBar::resizeEvent(QResizeEvent *e)
 {
     qDebug() << QString() << "-----------resizeEvent---parent():" << parent();
-    if (m_blurEffect) {
+    if (!m_blurPixmap.isNull())
         emit sigUpdatePaintBarBlurPixmap();
-        m_blurEffect->setGeometry(0, 0, width(), height());
-    }
 }
 
 void PaintBar::enterEvent(QEvent *e)
@@ -117,3 +130,22 @@ void PaintBar::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 }
 
+void PaintBar::paintEvent(QPaintEvent *e)
+{
+    Q_UNUSED(e)
+    QPainter pa(this);
+    pa.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+    int margin = 0;
+    if (!m_blurPixmap.isNull()) pa.drawPixmap(rect().adjusted(margin, margin, -margin, -margin), m_blurPixmap);
+
+    margin = 1;
+    pa.setPen(QPen(QColor(246, 246, 246, 1 * 255), margin));
+    pa.setBrush(QColor(255, 255, 255, 0.4 * 255));
+    pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
+
+    margin = 0;
+    pa.setPen(QColor(70, 70, 70, 1 * 255));
+    pa.setBrush(Qt::NoBrush);
+    pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
+}

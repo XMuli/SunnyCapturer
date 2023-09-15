@@ -16,7 +16,7 @@ public:
 
     void transposePaintBar(const bool& bTranspose = false);  // true-PaintToolBar在上，PaintCtrlBar在下; false- 颠倒一下顺序
     bool hadDrawBtnsChecked() const;
-    void setLowerBlurEffect(const QPixmap& pix, int radius);
+    void setLowerBlurEffect(const QPixmap &pix, int radius);
 
 private:
     void initUI();
@@ -38,11 +38,12 @@ private slots:
 protected:
     void resizeEvent(QResizeEvent *e) override;
     void enterEvent(QEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
 
 private:
     QBoxLayout*                     m_layout;
     Qt::Orientation                 m_orie;
-    QPointer<XBlurEffect>           m_blurEffect;
+    QPixmap                         m_blurPixmap;    // 模糊透明效果
     QPointer<PaintToolBar>          m_paintToolBar;
     QPointer<PaintCtrlBar>          m_paintCtrlBar;
 };

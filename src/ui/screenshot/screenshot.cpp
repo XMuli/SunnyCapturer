@@ -1164,7 +1164,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
 
         const auto& t = finishDrewPixmap().copy(QRect(pt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
-        m_paintBar->setLowerBlurEffect(t, 30);
+        m_paintBar->setLowerBlurEffect(t, 20);
 
         w->move(pt);
         bool isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
