@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QKeySequence>
 #include <QShortcut>
+#include <QHotkey>
 
 void Tray::init()
 {
@@ -31,6 +32,15 @@ void Tray::init()
     // Ensure proper removal of tray icon when program quits on Windows.
     connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
 #endif
+
+    QHotkey *hotkey = new QHotkey(QKeySequence("F6"), true, qApp); //The hotkey will be automatically registered
+    qDebug() << "Is segistered:" << hotkey->isRegistered();
+
+    QObject::connect(hotkey, &QHotkey::activated, qApp, [&](){
+        onCapture();
+        qDebug() << "Hotkey Activated - the application will quit now";
+//        qApp->quit();
+    });
 
     m_trayIcon->show();
 }

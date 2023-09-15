@@ -118,7 +118,7 @@ set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                  
 file(GLOB_RECURSE source_lists LIST_DIRECTORIES false "${src_root_path}/*.cpp" "${src_root_path}/*.h")
 source_group(TREE ${src_root_path} FILES ${source_lists})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")                                    # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
-#include_directories("${CMAKE_SOURCE_DIR}/tripartite/include")
+include_directories("${CMAKE_SOURCE_DIR}/tripartite/QHotkey")
 
 #************************************************************************
 #调用 WindowsRect DLL 共 ①~④ 步骤
@@ -169,7 +169,7 @@ message("--> CMAKE_DEBUG_POSTFIX:${CMAKE_DEBUG_POSTFIX}  dependent_dll_name:${de
 message("---@2--> ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include")
 
 add_dependencies(${project_name} ${dependent_dll_name})                                         # ③添加依赖顺序，确保先构建依赖，此处是 工程名称，而非 dll 名称(没有后缀d)
-target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name})  # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
+target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name} QHotkey::QHotkey)  # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
 target_include_directories(${project_name} PRIVATE                                              # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
     ${CMAKE_CURRENT_SOURCE_DIR}/commom/include
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/include

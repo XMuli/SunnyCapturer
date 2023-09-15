@@ -1,0 +1,3 @@
+[submodule "tripartite/QHotkey"]
+	path = tripartite/QHotkey
+	url = https://github.com/Skycoder42/QHotkey.git
