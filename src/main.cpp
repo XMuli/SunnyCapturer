@@ -1,8 +1,10 @@
 ﻿#include <QApplication>
+#include <QDebug>
 #include "xlog.h"
 #include "ui/screenshot/tray.h"
 
 // test
+#include "data/configmanager.h"
 #include "xtextedit.h"
 #include "tips.h"
 #include <QWidget>
@@ -32,6 +34,11 @@ int main(int argc, char *argv[])
     TRAY; // 启动托盘
 
 
+    CONF_MANAGE.initIniFile();
+
+//    CONF_MANAGE.setProperty("XGeneral_language", "test");
+    qDebug() << "--->" << CONF_MANAGE.property("XGeneral_language").toString();
+//    ConfigManager::instance().initIniFile();
 //    connect(m_widget, &XTextEdit::textUpdated, this, &TextTool::updateText);
 
 //    QString text = "27";

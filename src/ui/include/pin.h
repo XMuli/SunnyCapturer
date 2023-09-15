@@ -5,19 +5,19 @@
 #include <QWidget>
 
 namespace Ui {
-class Paste;
+class Pin;
 }
 
-class Paste : public QWidget
+class Pin : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Paste(QWidget *parent = nullptr);
-    ~Paste();
+    explicit Pin(QWidget *parent = nullptr);
+    ~Pin();
 
 private:
-    Ui::Paste *ui;
+    Ui::Pin *ui;
 };
 
 #endif // PASTE_H

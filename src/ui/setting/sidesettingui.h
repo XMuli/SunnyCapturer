@@ -31,9 +31,9 @@ private:
     QPointer<AbsSettingUI>    m_general;
     QPointer<AbsSettingUI>    m_interface;
     QPointer<AbsSettingUI>    m_output;
-    QPointer<AbsSettingUI>    m_paste;
+    QPointer<AbsSettingUI>    m_pin;
     QPointer<AbsSettingUI>    m_hotkeys;
-    QPointer<AbsSettingUI>    m_account;
+    QPointer<AbsSettingUI>    m_tokens;
     QPointer<AbsSettingUI>    m_about;
 };
 

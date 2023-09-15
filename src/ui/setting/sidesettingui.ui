@@ -117,7 +117,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="tbPaste">
+       <widget class="QToolButton" name="tbPin">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -131,7 +131,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Paste</string>
+         <string>Pin</string>
         </property>
        </widget>
       </item>
@@ -155,7 +155,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="tbAccount">
+       <widget class="QToolButton" name="tbTokens">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -169,7 +169,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Account</string>
+         <string>Tokens</string>
         </property>
        </widget>
       </item>

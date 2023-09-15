@@ -32,8 +32,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls})
 set(commom_files
     commom/include/xlog.h
     commom/include/isingleton.h
-
     commom/sources/xlog.cpp
+
+    data/config_global.h
+    data/configmanager.h
+    data/configmanager.cpp
 )
 
 set(custom_ui_files
@@ -52,7 +55,7 @@ set(custom_ui_files
     ui/include/general.h
     ui/include/interface.h
     ui/include/output.h
-    ui/include/paste.h
+    ui/include/pin.h
     ui/include/hotkeys.h
     ui/include/about.h
     #  cpp common_widgets
@@ -77,8 +80,8 @@ set(custom_ui_files
     ui/composite_widgets/hotkeys.ui
     ui/composite_widgets/about.cpp
     ui/composite_widgets/about.ui
-    ui/composite_widgets/paste.cpp
-    ui/composite_widgets/paste.ui
+    ui/composite_widgets/pin.cpp
+    ui/composite_widgets/pin.ui
 
     ui/paint_bar/common/absbtnsctrl.h
     ui/paint_bar/common/absbtnsctrl.cpp

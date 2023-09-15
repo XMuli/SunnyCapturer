@@ -1,10 +1,10 @@
 ﻿#include "sidesettingui.h"
-#include "paste.h"
+#include "pin.h"
 #include "ui_sidesettingui.h"
 #include "general.h"
 #include "interface.h"
 #include "output.h"
-#include "paste.h"
+#include "pin.h"
 #include "hotkeys.h"
 #include "about.h"
 
@@ -15,9 +15,9 @@ SideSettingUI::SideSettingUI(QWidget *parent)
     , m_general(new AbsSettingUI(this))
     , m_interface(new AbsSettingUI(this))
     , m_output(new AbsSettingUI(this))
-    , m_paste(new AbsSettingUI(this))
+    , m_pin(new AbsSettingUI(this))
     , m_hotkeys(new AbsSettingUI(this))
-    , m_account(new AbsSettingUI(this))
+    , m_tokens(new AbsSettingUI(this))
     , m_about(new AbsSettingUI(this))
 {
     ui->setupUi(this);
@@ -45,17 +45,17 @@ void SideSettingUI::initUI()
     m_general->insertWidget(0, new General());
     m_interface->insertWidget(0, new Interface());
     m_output->insertWidget(0, new Output());
-    m_paste->insertWidget(0, new Paste());
+    m_pin->insertWidget(0, new Pin());
     m_hotkeys->insertWidget(0, new Hotkeys());
-    m_account->insertWidget(0, new QWidget());
+    m_tokens->insertWidget(0, new QWidget());
     m_about->insertWidget(0, new About());
 
     ui->stackedWidget->insertWidget(0, m_general);
     ui->stackedWidget->insertWidget(1, m_interface);
     ui->stackedWidget->insertWidget(2, m_output);
-    ui->stackedWidget->insertWidget(3, m_paste);
+    ui->stackedWidget->insertWidget(3, m_pin);
     ui->stackedWidget->insertWidget(4, m_hotkeys);
-    ui->stackedWidget->insertWidget(5, m_account);
+    ui->stackedWidget->insertWidget(5, m_tokens);
     ui->stackedWidget->insertWidget(6, m_about);
 
     // 设置默认选中的页面
