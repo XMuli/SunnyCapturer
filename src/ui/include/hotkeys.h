@@ -16,6 +16,17 @@ public:
     explicit Hotkeys(QWidget *parent = nullptr);
     ~Hotkeys();
 
+private slots:
+    void onKeySeqChanged(const QKeySequence &keySequence);
+
+public slots:
+    void onBtnResetClicked(bool checked = false);
+
+
+
+private:
+    void initUI();
+
 private:
     Ui::Hotkeys *ui;
 };

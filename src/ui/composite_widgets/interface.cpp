@@ -86,3 +86,15 @@ void Interface::on_cbCrosshairShow_clicked(bool checked)
     CONF_MANAGE.setProperty("XGeneral_crosshair_show", checked);
 }
 
+void Interface::onBtnResetClicked(bool checked)
+{
+    ui->cbbStyle->setCurrentText("Sunny");
+    ui->cpHighlight->setCurrPickedColor("#387bfd");
+    ui->cpCrosshair->setCurrPickedColor("#d13840");
+    ui->sbBorderWidth->setValue(3);
+    ui->sbCrosshairWidth->setValue(2);
+    ui->cbAutoDetectWindows->setChecked(true);
+    ui->cbAutoCopyToClipboard->setChecked(true);
+    ui->cbCrosshairShow->setChecked(false);
+}
+

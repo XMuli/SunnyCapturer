@@ -4,6 +4,7 @@
 #include <QButtonGroup>
 #include <QPointer>
 #include <QWidget>
+#include "about.h"
 #include "abssettingui.h"
 
 namespace Ui {
@@ -24,6 +25,9 @@ private:
 private:
     void onSideGroupChanged(int idx);
 
+public slots:
+    void onBtnHintClicked(bool checked = false);
+
 private:
     Ui::SideSettingUI *ui;
 
@@ -34,7 +38,7 @@ private:
     QPointer<AbsSettingUI>    m_pin;
     QPointer<AbsSettingUI>    m_hotkeys;
     QPointer<AbsSettingUI>    m_tokens;
-    QPointer<AbsSettingUI>    m_about;
+    QPointer<About>           m_about;
 };
 
 #endif // SIDESETTINGUI_H

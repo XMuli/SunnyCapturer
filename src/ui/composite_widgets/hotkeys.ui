@@ -62,7 +62,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="XKeySequenceEdit" name="kseCustomSizeCapture3"/>
+       <widget class="XKeySequenceEdit" name="kseCustomCapture"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">

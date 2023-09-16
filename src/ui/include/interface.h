@@ -33,6 +33,8 @@ private slots:
     void on_cbAutoDetectWindows_clicked(bool checked);
     void on_cbAutoCopyToClipboard_clicked(bool checked);
     void on_cbCrosshairShow_clicked(bool checked);
+public slots:
+    void onBtnResetClicked(bool checked = false);
 
 private:
     void initUI();

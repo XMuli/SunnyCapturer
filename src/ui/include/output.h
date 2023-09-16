@@ -17,6 +17,19 @@ public:
     ~Output();
 
 private:
+    void initUI();
+
+private slots:
+    void on_sbImageQuailty_valueChanged(int arg1);
+    void on_leFileName_textChanged(const QString &arg1);
+    void on_leConfigPath_textChanged(const QString &arg1);
+    void on_leQuickSavePath_textChanged(const QString &arg1);
+    void on_leAutoSavePath_textChanged(const QString &arg1);
+    void onSleletedDir();
+public slots:
+    void onBtnResetClicked(bool checked = false);
+
+private:
     Ui::Output *ui;
 };
 

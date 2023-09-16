@@ -21,6 +21,8 @@ private slots:
     void on_cbbLogLevel_currentTextChanged(const QString &arg1);
     void on_btnFont_released();
     void on_cbAutostart_clicked(bool checked);
+public slots:
+    void onBtnResetClicked(bool checked = false);
 
 private:
     void initUI();

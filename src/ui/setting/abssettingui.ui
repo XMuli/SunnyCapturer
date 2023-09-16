@@ -46,7 +46,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="ResetUI" name="widget_2" native="true"/>
+       <widget class="ResetUI" name="resetUI" native="true"/>
       </item>
      </layout>
     </widget>

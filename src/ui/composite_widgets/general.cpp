@@ -39,7 +39,6 @@ void General::initUI()
     ui->btnFont->setText(CONF_MANAGE.property("XGeneral_font").toString());
     ui->cbAutostart->setChecked(CONF_MANAGE.property("XGeneral_autostart").toBool());
     ui->btnFont->setFixedHeight(ui->cbbLanguage->height());
-
 }
 
 void General::on_cbbLanguage_currentTextChanged(const QString &arg1)
@@ -73,5 +72,13 @@ void General::on_btnFont_released()
 void General::on_cbAutostart_clicked(bool checked)
 {
     CONF_MANAGE.setProperty("XGeneral_autostart", checked);
+}
+
+void General::onBtnResetClicked(bool checked)
+{
+    ui->cbbLanguage->setCurrentText("English");
+    ui->cbbLogLevel->setCurrentText("Debug");
+    ui->btnFont->setText("Microsoft YaHei,9");
+    ui->cbAutostart->setChecked(false);
 }
 

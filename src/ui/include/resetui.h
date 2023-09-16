@@ -16,6 +16,11 @@ public:
     explicit ResetUI(QWidget *parent = nullptr);
     ~ResetUI();
 
+signals:
+    void sigBtnHintClicked(bool checked = false);
+    void sigBtnResetClicked(bool checked = false);
+
+
 private:
     Ui::ResetUI *ui;
 };

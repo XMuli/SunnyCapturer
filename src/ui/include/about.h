@@ -16,6 +16,9 @@ public:
     ~About();
 
 private:
+    void initUI();
+
+private:
     Ui::About *ui;
 };
 

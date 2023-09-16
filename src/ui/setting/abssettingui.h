@@ -15,7 +15,14 @@ public:
     explicit AbsSettingUI(QWidget *parent = nullptr);
     ~AbsSettingUI();
 
-void insertWidget(int index, QWidget *widget, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
+    void insertWidget(int index, QWidget *widget, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
+
+private:
+    void initUI();
+
+signals:
+    void sigBtnHintClicked(bool checked = false);
+    void sigBtnResetClicked(bool checked = false);
 
 private:
     Ui::AbsSettingUI *ui;

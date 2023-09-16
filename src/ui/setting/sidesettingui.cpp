@@ -18,7 +18,7 @@ SideSettingUI::SideSettingUI(QWidget *parent)
     , m_pin(new AbsSettingUI(this))
     , m_hotkeys(new AbsSettingUI(this))
     , m_tokens(new AbsSettingUI(this))
-    , m_about(new AbsSettingUI(this))
+    , m_about(new About(this))
 {
     ui->setupUi(this);
 
@@ -42,13 +42,22 @@ void SideSettingUI::initUI()
         m_sideGroup->addButton(it, i++);
     }
 
-    m_general->insertWidget(0, new General());
-    m_interface->insertWidget(0, new Interface());
-    m_output->insertWidget(0, new Output());
-    m_pin->insertWidget(0, new Pin());
-    m_hotkeys->insertWidget(0, new Hotkeys());
-    m_tokens->insertWidget(0, new QWidget());
-    m_about->insertWidget(0, new About());
+
+    const auto& general = new General();
+    const auto& interface = new Interface();
+    const auto& output = new Output();
+    const auto& pin = new Pin();
+    const auto& hotkeys = new Hotkeys();
+    const auto& tokens = new QWidget();
+//    const auto& about = new About();
+
+    m_general->insertWidget(0, general);
+    m_interface->insertWidget(0, interface);
+    m_output->insertWidget(0, output);
+    m_pin->insertWidget(0, pin);
+    m_hotkeys->insertWidget(0, hotkeys);
+    m_tokens->insertWidget(0, tokens);
+//    m_about->insertWidget(0, about);
 
     ui->stackedWidget->insertWidget(0, m_general);
     ui->stackedWidget->insertWidget(1, m_interface);
@@ -63,6 +72,22 @@ void SideSettingUI::initUI()
 
     connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::idPressed), ui->stackedWidget, &QStackedWidget::setCurrentIndex);
 //    connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &SideSettingUI::onSideGroupChanged);
+
+
+    connect(m_general, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    connect(m_interface, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    connect(m_output, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    connect(m_pin, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    connect(m_hotkeys, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    connect(m_tokens, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+
+    connect(m_general, &AbsSettingUI::sigBtnResetClicked, general, &General::onBtnResetClicked);
+    connect(m_interface, &AbsSettingUI::sigBtnResetClicked, interface, &Interface::onBtnResetClicked);
+    connect(m_output, &AbsSettingUI::sigBtnResetClicked, output, &Output::onBtnResetClicked);
+    connect(m_pin, &AbsSettingUI::sigBtnResetClicked, pin, &Pin::onBtnResetClicked);
+    connect(m_hotkeys, &AbsSettingUI::sigBtnResetClicked, hotkeys, &Hotkeys::onBtnResetClicked);
+//    connect(m_tokens, &AbsSettingUI::sigBtnResetClicked, this, &SideSettingUI::onBtnResetClicked);
+
 }
 
 void SideSettingUI::onSideGroupChanged(int idx)
@@ -91,6 +116,32 @@ void SideSettingUI::onSideGroupChanged(int idx)
 
 //    stackedWidget->insertWidget(idx, newWidget);
 
-//    qDebug() << "----2-->stackedWidget->count():" << stackedWidget->count();
+    //    qDebug() << "----2-->stackedWidget->count():" << stackedWidget->count();
 }
+
+void SideSettingUI::onBtnHintClicked(bool checked)
+{
+    const AbsSettingUI* absUI = qobject_cast<AbsSettingUI *>(sender());
+    if (absUI == m_general) {
+    } else if (absUI == m_interface) {
+    } else if (absUI == m_output) {
+    } else if (absUI == m_pin) {
+    } else if (absUI == m_hotkeys) {
+    } else if (absUI == m_tokens) {
+    } else {
+    }
+}
+
+//void SideSettingUI::onBtnResetClicked(bool checked)
+//{
+//    const AbsSettingUI* absUI = qobject_cast<AbsSettingUI *>(sender());
+//    if (absUI == m_general) {
+//    } else if (absUI == m_interface) {
+//    } else if (absUI == m_output) {
+//    } else if (absUI == m_pin) {
+//    } else if (absUI == m_hotkeys) {
+//    } else if (absUI == m_tokens) {
+//    } else {
+//    }
+//}
 

@@ -16,6 +16,15 @@ public:
     explicit Pin(QWidget *parent = nullptr);
     ~Pin();
 
+private slots:
+    void on_sbOpacity_valueChanged(int arg1);
+    void on_sbMaxSize_valueChanged(int arg1);
+public slots:
+    void onBtnResetClicked(bool checked = false);
+
+private:
+    void initUI();
+
 private:
     Ui::Pin *ui;
 };

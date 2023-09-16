@@ -67,7 +67,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBox">
+          <widget class="QSpinBox" name="sbImageQuailty">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -153,10 +153,14 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="leConfig"/>
+             <widget class="QLineEdit" name="leConfigPath">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QPushButton" name="btnConfig">
+             <widget class="QPushButton" name="btnConfigOpen">
               <property name="minimumSize">
                <size>
                 <width>80</width>
@@ -181,7 +185,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="cbQuickSave">
+       <widget class="QGroupBox" name="cbQuickSaveEnable">
         <property name="title">
          <string>Quick save</string>
         </property>
@@ -215,10 +219,10 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="leQuickSave"/>
+             <widget class="QLineEdit" name="leQuickSavePath"/>
             </item>
             <item row="0" column="2">
-             <widget class="QPushButton" name="btnQuickSave">
+             <widget class="QPushButton" name="btnQuickSaveSelect">
               <property name="minimumSize">
                <size>
                 <width>80</width>
@@ -243,7 +247,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="cbAutoSave">
+       <widget class="QGroupBox" name="cbAutoSaveEnable">
         <property name="title">
          <string>Auto save</string>
         </property>
@@ -277,10 +281,10 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="leAutoSave"/>
+             <widget class="QLineEdit" name="leAutoSavePath"/>
             </item>
             <item row="0" column="2">
-             <widget class="QPushButton" name="btnAutoSave">
+             <widget class="QPushButton" name="btnAutoSaveSelect">
               <property name="minimumSize">
                <size>
                 <width>80</width>

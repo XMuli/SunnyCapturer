@@ -136,24 +136,38 @@ add_executable(${project_name}
 )
 
 
+# get kit architecture bit
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(arch_bit "x86")
+    set(is_x64bit false)
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(arch_bit "x64")
+    set(is_x64bit true)
+endif()
+
 # Define some variables that can be used in *.cpp
-target_compile_definitions(${project_name} PUBLIC XPROJECT_NAME=${project_name})
-target_compile_definitions(${project_name} PUBLIC XPROJECT_VERSION=${project_version})
-target_compile_definitions(${project_name} PUBLIC XBIT_ARCH=${CMAKE_SIZEOF_VOID_P})          # 4/8
-target_compile_definitions(${project_name} PUBLIC XCOMPILER=${CMAKE_HOST_SYSTEM_PROCESSOR})  # i386/i686/x86_64/unknown  Win: AMD64
-target_compile_definitions(${project_name} PUBLIC XCOMPILER_ID="${CMAKE_CXX_COMPILER_ID}")   # Clang/GCC/MSVC or GNU
+target_compile_definitions(${project_name} PRIVATE XPROJECT_NAME="${project_name}")
+target_compile_definitions(${project_name} PRIVATE XPROJECT_VERSION="${project_version}")
+target_compile_definitions(${project_name} PRIVATE XBUILD_TIME="2023.09.17")
+target_compile_definitions(${project_name} PRIVATE XARCH_BIT="${arch_bit}")
+target_compile_definitions(${project_name} PRIVATE XIS_X64BIT="${is_x64bit}")
+target_compile_definitions(${project_name} PRIVATE XCOMPILER="${CMAKE_HOST_SYSTEM_PROCESSOR}")  # i386/i686/x86_64/unknown  Win: AMD64
+target_compile_definitions(${project_name} PRIVATE XCOMPILER_ID="${CMAKE_CXX_COMPILER_ID}")     # Clang/GCC/MSVC or GNU
+
+
 #target_compile_definitions(${project_name} PUBLIC XIS_X64BIT=${is_x64bit})
 
 message("------------BRGIN------------")
 message("XPROJECT_NAME:${project_name}")
 message("XPROJECT_VERSION:${project_version}")
-message("XBIT_ARCH:${CMAKE_SIZEOF_VOID_P}")
+message("XARCH_BIT:${arch_bit}")
+message("XIS_X64BIT:${is_x64bit}")
 message("XCOMPILER:${CMAKE_HOST_SYSTEM_PROCESSOR}")
 message("XCOMPILER_ID:${CMAKE_CXX_COMPILER_ID}")
 #message("XIS_X64BIT:" ${is_x64bit})
 
 message("CMake Path:"
-    "\nPROJECT_NAME:"  ${PROJECT_NAME}
+    "\nPROJECT_NAME:"  ${project_name}
     "\nCMAKE_INSTALL_PREFIX:"  ${CMAKE_INSTALL_PREFIX}
     "\nPROJECT_BINARY_DIR:"    ${PROJECT_BINARY_DIR}
     "\nCMAKE_INSTALL_BINDIR:"  ${CMAKE_INSTALL_BINDIR}
