@@ -137,12 +137,12 @@ add_executable(${project_name}
 
 
 # Define some variables that can be used in *.cpp
-target_compile_definitions(${project_name} PRIVATE XPROJECT_NAME=${project_name})
-target_compile_definitions(${project_name} PRIVATE XPROJECT_VERSION=${project_version})
-target_compile_definitions(${project_name} PRIVATE XBIT_ARCH=${CMAKE_SIZEOF_VOID_P})          # 4/8
-target_compile_definitions(${project_name} PRIVATE XCOMPILER=${CMAKE_HOST_SYSTEM_PROCESSOR})  # i386/i686/x86_64/unknown  Win: AMD64
-target_compile_definitions(${project_name} PRIVATE XCOMPILER_ID="${CMAKE_CXX_COMPILER_ID}")   # Clang/GCC/MSVC or GNU
-#target_compile_definitions(${project_name} PRIVATE XIS_X64BIT=${is_x64bit})
+target_compile_definitions(${project_name} PUBLIC XPROJECT_NAME=${project_name})
+target_compile_definitions(${project_name} PUBLIC XPROJECT_VERSION=${project_version})
+target_compile_definitions(${project_name} PUBLIC XBIT_ARCH=${CMAKE_SIZEOF_VOID_P})          # 4/8
+target_compile_definitions(${project_name} PUBLIC XCOMPILER=${CMAKE_HOST_SYSTEM_PROCESSOR})  # i386/i686/x86_64/unknown  Win: AMD64
+target_compile_definitions(${project_name} PUBLIC XCOMPILER_ID="${CMAKE_CXX_COMPILER_ID}")   # Clang/GCC/MSVC or GNU
+#target_compile_definitions(${project_name} PUBLIC XIS_X64BIT=${is_x64bit})
 
 message("------------BRGIN------------")
 message("XPROJECT_NAME:${project_name}")

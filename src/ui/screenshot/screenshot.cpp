@@ -410,7 +410,7 @@ void ScreenShot::drawShadowOverlay(const QRect &fullRect, const QRect &pickedRec
     pa.restore();
 }
 
-void ScreenShot::drawBorderFlipped(QPainter &pa, const QRect &rt) const
+void ScreenShot::drawBorderSunny(QPainter &pa, const QRect &rt) const
 {
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing, true);
@@ -1294,7 +1294,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
 //    drawBorderMacOS(pa, pickedRect);
 //    drawBorderDDE(pa, pickedRect);
-    drawBorderFlipped(pa, pickedRect);
+    drawBorderSunny(pa, pickedRect);
 
 
     // 以下部分都是 printf 一些调试参数的部分

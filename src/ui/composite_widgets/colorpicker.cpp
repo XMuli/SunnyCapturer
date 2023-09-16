@@ -29,6 +29,21 @@ const QColor ColorPicker::pickedColor()
     return m_pickedBtn->color();
 }
 
+void ColorPicker::setCurrPickedColor(const QString &color)
+{
+//    int i = 0;
+    if (m_colorPickerType == ColorPickerType::CT_horizontal) {
+        for (auto it : findChildren<XColorButton*>()) {
+
+//            qDebug() << "i:" << i++ << it->color().name() << color << bool(it->color().name() == color);
+            if (it != m_pickedBtn && it->color().name() == color) {
+                it->setChecked(true);
+                break;
+            }
+        }
+    }
+}
+
 void ColorPicker::setColorPickerType(const ColorPickerType type)
 {
     if (m_colorPickerType != type) {
@@ -46,17 +61,24 @@ void ColorPicker::setColorPickerType(const ColorPickerType type)
 
 void ColorPicker::initUI()
 {
-    const QStringList& colors = {  "#000000", "#7f7f7f", "#880015", "#ed1c24", "#ff7f27"
-                                 , "#fff200", "#22b14c", "#00a2e8", "#3f48cc", "#a349a4"
-                                 , "#ffffff", "#c3c3c3", "#b97a57", "#ffaec9", "#ffc90e"
-                                 , "#efe4b0", "#b5e61d", "#99d9ea", "#7092be", "#c8bfe7"};
+    QStringList colors;
+    if (m_colorPickerType == ColorPickerType::CT_horizontal) {
+        colors << "#387bfd" << "#8c3e94" << "#e7509e" << "#d13840"
+               << "#e98226" << "#f6c632" << "#74b94a" << "#999898";
+    } else {
+        colors << "#000000" << "#7f7f7f" << "#880015" << "#ed1c24" << "#ff7f27"
+               << "#fff200" << "#22b14c" << "#00a2e8" << "#3f48cc" << "#a349a4"
+               << "#ffffff" << "#c3c3c3" << "#b97a57" << "#ffaec9" << "#ffc90e"
+               << "#efe4b0" << "#b5e61d" << "#99d9ea" << "#7092be" << "#c8bfe7";
+    }
+
     const int halfCount = colors.size() / 2;
     m_gridLayout->setContentsMargins(0, 0, 0, 0);
     initPickupBtn(colors.at(3));
 
     m_colorsGroup->setExclusive(true);
     for (int i = 0; i < colors.count(); ++i) {
-        auto btn = new XColorButton(QColor(colors.at(i)), this);
+        auto btn = new XColorButton(QColor(colors.at(i)), m_colorPickerType, this);
         btn->setFixedSize(m_size);
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
         btn->setAutoRaise(true);
@@ -80,7 +102,7 @@ void ColorPicker::initUI()
 
 void ColorPicker::initPickupBtn(const QColor& color)
 {
-    m_pickedBtn = new XColorButton(color, this);
+    m_pickedBtn = new XColorButton(color, m_colorPickerType, this);
     m_pickedBtn->setFixedSize(m_size * 2 + QSize(m_gridLayout->horizontalSpacing(), m_gridLayout->verticalSpacing()));
     m_pickedBtn->setToolButtonStyle(Qt::ToolButtonTextOnly);
     m_pickedBtn->setAutoRaise(true);

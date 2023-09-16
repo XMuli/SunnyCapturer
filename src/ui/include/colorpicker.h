@@ -10,12 +10,7 @@
 #include <QButtonGroup>
 #include "xcolorbutton.h"
 
-enum class ColorPickerType
-{
-    CT_horizontal,                           // GridLayout 仅一行 的水平布局，为活动色选择
-    CT_grid_horizontal,                      // GridLayout 为两行显示
-    CT_grid_vertical
-};
+
 
 class ColorPicker : public QWidget
 {
@@ -26,6 +21,7 @@ public:
 
 public:
     const QColor pickedColor();
+    void setCurrPickedColor(const QString &color);
     void setColorPickerType(const ColorPickerType type = ColorPickerType::CT_horizontal);
 
 private:

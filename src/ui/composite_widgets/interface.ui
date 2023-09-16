@@ -58,7 +58,7 @@
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QSpinBox" name="spinBox">
+          <widget class="QSpinBox" name="sbBorderWidth">
            <property name="toolTip">
             <string/>
            </property>
@@ -83,7 +83,7 @@
           </widget>
          </item>
          <item row="2" column="3">
-          <widget class="QSpinBox" name="spinBox_2">
+          <widget class="QSpinBox" name="sbCrosshairWidth">
            <property name="suffix">
             <string notr="true">px</string>
            </property>
@@ -146,9 +146,9 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="ColorPicker" name="widget_3" native="true">
+          <widget class="ColorPicker" name="cpHighlight" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -156,7 +156,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="ColorPicker" name="widget_4" native="true"/>
+          <widget class="ColorPicker" name="cpCrosshair" native="true"/>
          </item>
         </layout>
        </widget>
@@ -193,21 +193,21 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="cbAutoDetectWindows">
         <property name="text">
          <string>Auto detect windows</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_2">
+       <widget class="QCheckBox" name="cbAutoCopyToClipboard">
         <property name="text">
          <string>Auto copy to clipboard</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_3">
+       <widget class="QCheckBox" name="cbCrosshairShow">
         <property name="text">
          <string>Crosshair show</string>
         </property>

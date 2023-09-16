@@ -1,9 +1,10 @@
 ﻿#include "xcolorbutton.h"
 #include <QDebug>
 
-XColorButton::XColorButton(const QColor &color, QWidget *parent)
+XColorButton::XColorButton(const QColor &color, const ColorPickerType &type, QWidget *parent)
     : QToolButton(parent)
     , m_color(color)
+    , m_pickType(type)
 {
 }
 
@@ -39,6 +40,16 @@ void XColorButton::paintEvent(QPaintEvent *e)
         painter.setPen(QPen(black, 1));
         painter.setBrush(m_color);
         painter.drawRect(rect().adjusted(1, 1, -1, -1));
+    }
+
+    if (m_pickType == ColorPickerType::CT_horizontal) {
+        if (isChecked()) {
+            painter.setPen(QPen(black, 1));
+            painter.setBrush(Qt::white);
+            const int margin = 6;
+            const QRect& rt = rect().adjusted(margin, margin, -margin, -margin);
+            painter.drawRect(rt);
+        }
     }
 
 }

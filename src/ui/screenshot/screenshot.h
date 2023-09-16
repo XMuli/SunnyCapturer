@@ -59,7 +59,7 @@ private:
     void initUI();
     void initConnect();
     void drawShadowOverlay(const QRect& fullRect, const QRect& pickedRect, QPainter& pa) const;
-    void drawBorderFlipped(QPainter& pa, const QRect& rt) const;
+    void drawBorderSunny(QPainter& pa, const QRect& rt) const;
     void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) const;
     void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) const;
     void stashMosaicPixmap();           // 定格此刻的图片，用作打马赛克的素材

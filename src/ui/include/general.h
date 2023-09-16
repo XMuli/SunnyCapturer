@@ -16,6 +16,15 @@ public:
     explicit General(QWidget *parent = nullptr);
     ~General();
 
+private slots:
+    void on_cbbLanguage_currentTextChanged(const QString &arg1);
+    void on_cbbLogLevel_currentTextChanged(const QString &arg1);
+    void on_btnFont_released();
+    void on_cbAutostart_clicked(bool checked);
+
+private:
+    void initUI();
+
 private:
     Ui::General *ui;
 };
