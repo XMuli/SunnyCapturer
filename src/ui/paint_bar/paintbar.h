@@ -17,6 +17,7 @@ public:
     void transposePaintBar(const bool& bTranspose = false);  // true-PaintToolBar在上，PaintCtrlBar在下; false- 颠倒一下顺序
     bool hadDrawBtnsChecked() const;
     void setLowerBlurEffect(const QPixmap &pix, int radius);
+    void disableBlurEffect();
 
 private:
     void initUI();

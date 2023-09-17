@@ -59,13 +59,14 @@ private:
     void initUI();
     void initConnect();
     void drawShadowOverlay(const QRect& fullRect, const QRect& pickedRect, QPainter& pa) const;
-    void drawBorderSunny(QPainter& pa, const QRect& rt) const;
-    void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) const;
-    void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) const;
+
     void stashMosaicPixmap();           // 定格此刻的图片，用作打马赛克的素材
     void setCursorShape(const OrientationType &type, const QPoint &pt);
     void setMovePickedRect();
     void showCustomWidget(QWidget* w);
+    void showCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt) const;
+
+
 
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
     void preDestruction();             // 销毁对象之前的清理工作

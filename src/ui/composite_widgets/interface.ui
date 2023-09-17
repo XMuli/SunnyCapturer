@@ -193,6 +193,13 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="QCheckBox" name="cbAcrylicEffect">
+        <property name="text">
+         <string>Acrylic effect</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="cbAutoDetectWindows">
         <property name="text">
          <string>Auto detect windows</string>

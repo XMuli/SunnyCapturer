@@ -82,6 +82,12 @@ void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &l
 int countItemsformLayout(const QGridLayout* layout, const Qt::Orientation& orie, const int& idx = 0);
 double dpiScale(const QScreen* scrn = qGuiApp->primaryScreen());
 
+QString highlightColor(const bool enable = false);
+QString crosshairColor(const bool enable = true);
+int borderWidth();
+int crosshairWidth();
+bool acrylicEffectEnable();
+
 
 
 #endif // PAINTBARHELPER_H

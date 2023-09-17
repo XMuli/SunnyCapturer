@@ -31,18 +31,18 @@ void Interface::initUI()
     ui->cpCrosshair->setCurrPickedColor(CONF_MANAGE.property("XInterface_crosshair").toString());
     ui->sbBorderWidth->setValue(CONF_MANAGE.property("XInterface_border_width").toInt());
     ui->sbCrosshairWidth->setValue(CONF_MANAGE.property("XInterface_crosshair_width").toInt());
-    ui->cbAutoDetectWindows->setChecked(CONF_MANAGE.property("XGeneral_auto_detect_windows").toBool());
-    ui->cbAutoCopyToClipboard->setChecked(CONF_MANAGE.property("XGeneral_auto_copy_to_clipbaoard").toBool());
-    ui->cbCrosshairShow->setChecked(CONF_MANAGE.property("XGeneral_crosshair_show").toBool());
+    ui->cbAcrylicEffect->setChecked(CONF_MANAGE.property("XInterface_acrylic_effect").toBool());
+    ui->cbAutoDetectWindows->setChecked(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool());
+    ui->cbAutoCopyToClipboard->setChecked(CONF_MANAGE.property("XInterface_auto_copy_to_clipbaoard").toBool());
+    ui->cbCrosshairShow->setChecked(CONF_MANAGE.property("XInterface_crosshair_show").toBool());
 
     connect(ui->cpHighlight, &ColorPicker::sigPickedColor, this, &Interface::onHighlightPickedColor);
     connect(ui->cpCrosshair, &ColorPicker::sigPickedColor, this, &Interface::onCrosshairPickedColor);
 }
 
-
-
 void Interface::on_cbbStyle_currentTextChanged(const QString &arg1)
 {
+    ui->sbBorderWidth->setEnabled(arg1 != "MacOS");
     CONF_MANAGE.setProperty("XInterface_style", arg1);
 }
 
@@ -68,22 +68,27 @@ void Interface::on_sbCrosshairWidth_valueChanged(int arg1)
     CONF_MANAGE.setProperty("XInterface_crosshair_width", arg1);
 }
 
+void Interface::on_cbAcrylicEffect_clicked(bool checked)
+{
+    CONF_MANAGE.setProperty("XInterface_acrylic_effect", checked);
+}
+
 
 void Interface::on_cbAutoDetectWindows_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XGeneral_auto_detect_windows", checked);
+    CONF_MANAGE.setProperty("XInterface_auto_detect_windows", checked);
 }
 
 
 void Interface::on_cbAutoCopyToClipboard_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XGeneral_auto_copy_to_clipbaoard", checked);
+    CONF_MANAGE.setProperty("XInterface_auto_copy_to_clipbaoard", checked);
 }
 
 
 void Interface::on_cbCrosshairShow_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XGeneral_crosshair_show", checked);
+    CONF_MANAGE.setProperty("XInterface_crosshair_show", checked);
 }
 
 void Interface::onBtnResetClicked(bool checked)

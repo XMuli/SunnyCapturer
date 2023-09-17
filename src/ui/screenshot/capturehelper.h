@@ -142,6 +142,12 @@ void pixelatedMosaic(QPixmap &pixmap, const int& px = 20);
 void smoothMosaic(QPixmap& pixmap, int radius = 10);
 QPixmap monitoredDesktopPixmap(const QRect& rect);
 
+void drawBorderSunny(QPainter& pa, const QRect& rt) ;
+void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) ;
+void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) ;
+void drawBorder(QPainter& pa, const QRect& rt, int num = 8) ;
+void drawCrosshair(QPainter& pa, const QPoint& pt, const QRect& vdRt);
+
 class CaptureHelper : public QObject
 {
     Q_OBJECT

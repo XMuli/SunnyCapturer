@@ -21,6 +21,8 @@
 #include <QDesktopWidget>
 #include <QFontMetrics>
 #include "xtextedit.h"
+#include "../paint_bar/toolbar_level/paintbarhelper.h"
+#include "../../../data/configmanager.h"
 
 CaptureHelper::CaptureHelper(QObject *parent)
     : QObject{parent}
@@ -519,3 +521,168 @@ void showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w
     static int i = 1;
     qDebug() << "=============#=====>showDrewText() i:" << i++ << "newEdit:" << newEdit;
 }
+
+
+void drawBorderSunny(QPainter &pa, const QRect &rt)
+{
+    pa.save();
+    pa.setRenderHint(QPainter::Antialiasing, true);
+    QPen pen;
+    const int addFixWidth = 6;
+    pen.setWidth(borderWidth() + addFixWidth);
+    pen.setColor(QColor(14, 112, 255));
+    pa.setPen(pen);
+    pa.setBrush(Qt::NoBrush);
+
+    int x1 = rt.left();
+    int y1 = rt.top();
+    int x2 = rt.right();
+    int y2 = rt.bottom();
+
+    const int penWidth = pen.width();
+    const int cornerLength = 100;       // 四角周辅助的 ∟ 的长度
+    const int doubleCornerLength = 2 * cornerLength;
+
+    if (rt.width() >= doubleCornerLength && rt.height() >= doubleCornerLength) {
+        // hor 且补齐交叉角落的空缺的那一块
+        QLine l1(QPoint(x1 - penWidth / 2, y1), QPoint(x1 + cornerLength, y1));
+        QLine l2(QPoint(x1 - penWidth / 2, y2), QPoint(x1 + cornerLength, y2));
+        QLine l3(QPoint(x2 + penWidth / 2, y1), QPoint(x2 - cornerLength, y1));
+        QLine l4(QPoint(x2 + penWidth / 2, y2), QPoint(x2 - cornerLength, y2));
+
+        // ver
+        QLine l5(QPoint(x1, y1), QPoint(x1, y1 + cornerLength));
+        QLine l6(QPoint(x1, y2), QPoint(x1, y2 - cornerLength));
+        QLine l7(QPoint(x2, y1), QPoint(x2, y1 + cornerLength));
+        QLine l8(QPoint(x2, y2), QPoint(x2, y2 - cornerLength));
+
+        pa.drawLine(l1.translated(QPoint(0, -penWidth / 2)));
+        pa.drawLine(l2.translated(QPoint(0, penWidth / 2)));
+        pa.drawLine(l3.translated(QPoint(0, -penWidth / 2)));
+        pa.drawLine(l4.translated(QPoint(0, penWidth / 2)));
+        pa.drawLine(l5.translated(QPoint(-penWidth / 2, 0)));
+        pa.drawLine(l6.translated(QPoint(-penWidth / 2, 0)));
+        pa.drawLine(l7.translated(QPoint(penWidth / 2, 0)));
+        pa.drawLine(l8.translated(QPoint(penWidth / 2, 0)));
+    }
+
+    pen.setWidth(borderWidth());
+    pa.setPen(pen);
+    pa.drawRect(rt);
+    pa.restore();
+}
+
+void drawBorderMacOS(QPainter &pa, const QRect &rt, int num)
+{
+    pa.save();
+    pa.setRenderHint(QPainter::Antialiasing, false);
+    pa.setBrush(Qt::NoBrush);
+    QPen penWhite(QColor(255, 255, 255, 1 * 255), 1);
+    penWhite.setStyle(Qt::CustomDashLine);
+    penWhite.setDashOffset(0);
+    penWhite.setDashPattern(QVector<qreal>() << 4 << 4 );
+    penWhite.setCapStyle(Qt::FlatCap);
+    pa.setPen(penWhite);
+    pa.drawLine(QPoint(rt.left(), rt.top()), QPoint(rt.right(), rt.top()));
+    pa.drawLine(QPoint(rt.left(), rt.top()), QPoint(rt.left(), rt.bottom()));
+    pa.drawLine(QPoint(rt.left(), rt.bottom()), QPoint(rt.right(), rt.bottom()));
+    pa.drawLine(QPoint(rt.right(), rt.top()), QPoint(rt.right(), rt.bottom()));
+
+    QPen penBlack(penWhite);
+    penBlack.setColor(QColor(0, 0, 0, 1 * 255));
+    penBlack.setDashOffset(4);
+    pa.setPen(penBlack);
+    pa.drawLine(QPoint(rt.left(), rt.top()), QPoint(rt.right(), rt.top()));
+    pa.drawLine(QPoint(rt.left(), rt.top()), QPoint(rt.left(), rt.bottom()));
+    pa.drawLine(QPoint(rt.left(), rt.bottom()), QPoint(rt.right(), rt.bottom()));
+    pa.drawLine(QPoint(rt.right(), rt.top()), QPoint(rt.right(), rt.bottom()));
+
+    int x1 = 0;
+    int y1 = 0;
+    int x2 = 0;
+    int y2 = 0;
+    rt.getCoords(&x1, &y1, &x2, &y2);
+
+    QVector<QPoint> ver = { QPoint(x1, y1), QPoint(x2, y1), QPoint(x1, y2), QPoint(x2, y2),
+                           QPoint((x1 + x2) / 2.0, y1),
+                           QPoint((x1 + x2) / 2.0, y2),
+                           QPoint(x1, (y1 + y2) / 2.0),
+                           QPoint(x2, (y1 + y2) / 2.0) };
+
+    pa.setPen(QPen(Qt::white, 1.5));
+    pa.setBrush(QColor(146, 146, 146, 1 * 255));
+    QPoint offsetPos(6, 6);  // 边框上标记点的半径
+    pa.setRenderHint(QPainter::Antialiasing, true);
+
+    for (int i = 0; i < num; ++i)
+        pa.drawEllipse(ver[i], offsetPos.x(), offsetPos.y());
+
+    pa.restore();
+}
+
+void drawBorderDDE(QPainter &pa, const QRect &rt, int num)
+{
+    pa.save();
+    pa.setPen(QPen(QColor(14, 112, 255), borderWidth()));
+    pa.setBrush(Qt::NoBrush);
+    pa.drawRect(rt);
+
+    pa.setPen(Qt::NoPen);
+
+    QIcon icon(":/resources/screenshot_ui/screenshot/board_circle.svg");
+    const int radius = 6;
+    QPixmap pixmap = icon.pixmap(QSize(radius, radius) * 4);
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+
+    QPoint offsetPos(radius * 2, radius * 2 ) ;
+    pa.drawPixmap(rt.topLeft() - offsetPos, pixmap);
+    pa.drawPixmap(rt.topRight() - offsetPos, pixmap);
+    pa.drawPixmap(rt.bottomLeft() - offsetPos, pixmap);
+    pa.drawPixmap(rt.bottomRight() - offsetPos, pixmap);
+
+    if (num == 8) {
+        int x1 = 0;
+        int y1 = 0;
+        int x2 = 0;
+        int y2 = 0;
+
+        rt.getCoords(&x1, &y1, &x2, &y2);
+        pa.drawPixmap(QPoint((x1 + x2) / 2, y1) - offsetPos, pixmap);
+        pa.drawPixmap(QPoint((x1 + x2) / 2, y2) - offsetPos, pixmap);
+        pa.drawPixmap(QPoint(x1, (y1 + y2) / 2) - offsetPos, pixmap);
+        pa.drawPixmap(QPoint(x2, (y1 + y2) / 2) - offsetPos, pixmap);
+    }
+    pa.restore();
+}
+
+void drawBorder(QPainter &pa, const QRect &rt, int num)
+{
+    const auto& style  = CONF_MANAGE.property("XInterface_style").toString();
+    if (style == "Sunny") {
+        drawBorderSunny(pa, rt);
+    } else if (style == "MacOS") {
+        drawBorderMacOS(pa, rt, num);
+    } else if (style == "DDE") {
+        drawBorderDDE(pa, rt, num);
+    } else {
+        qDebug() << "other empty border style!";
+    }
+}
+
+
+void drawCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt)
+{
+//    const bool& bDraw = CONF_MANAGE.property("XInterface_crosshair_show").toBool();
+//    if (!bDraw)  return;
+
+    pa.save();
+    pa.setRenderHint(QPainter::Antialiasing, true);
+    pa.setPen(QPen(QColor(CONF_MANAGE.property("XInterface_crosshair").toString()), CONF_MANAGE.property("XInterface_crosshair_width").toInt()));
+    pa.setBrush(Qt::NoBrush);
+    const QLine l1(vdRt.left(), pt.y(), vdRt.right(), pt.y());
+    const QLine l2(pt.x(), vdRt.top(), pt.x(), vdRt.bottom());
+    pa.drawLine(l1);
+    pa.drawLine(l2);
+    pa.restore();
+}
+

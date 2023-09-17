@@ -7,6 +7,7 @@
 #include <QApplication>
 #include "paintbarhelper.h"
 #include "communication.h"
+#include "../../../data/configmanager.h"
 
 PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -93,7 +94,7 @@ void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik
         if (btn->isCheckable()) {
             const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_btn/" + btn->objectName() + ".svg";
             const QIcon origIcon(path);
-            const QIcon newIcon(changedSVGColor(path, QColor(Qt::green).name(), btn->iconSize()));
+            const QIcon newIcon(changedSVGColor(path, highlightColor(), btn->iconSize()));
 
             if (bSpik && tBtn != nullptr && tBtn == btn) {
                 btn->setIcon(btn->isChecked() ? newIcon : origIcon);

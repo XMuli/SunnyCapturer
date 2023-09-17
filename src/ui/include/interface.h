@@ -30,9 +30,11 @@ private slots:
     void onCrosshairPickedColor(const QColor& color);
     void on_sbBorderWidth_valueChanged(int arg1);
     void on_sbCrosshairWidth_valueChanged(int arg1);
+    void on_cbAcrylicEffect_clicked(bool checked);
     void on_cbAutoDetectWindows_clicked(bool checked);
     void on_cbAutoCopyToClipboard_clicked(bool checked);
     void on_cbCrosshairShow_clicked(bool checked);
+
 public slots:
     void onBtnResetClicked(bool checked = false);
 

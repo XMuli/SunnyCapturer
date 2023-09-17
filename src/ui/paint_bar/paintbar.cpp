@@ -98,6 +98,11 @@ void PaintBar::setLowerBlurEffect(const QPixmap &pix, int radius)
 #endif
 }
 
+void PaintBar::disableBlurEffect()
+{
+    m_blurPixmap = QPixmap();
+}
+
 void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheckable)
 {
     m_paintCtrlBar->onPaintBtnRelease(type, isCheckable);
@@ -137,7 +142,13 @@ void PaintBar::paintEvent(QPaintEvent *e)
     pa.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     int margin = 0;
-    if (!m_blurPixmap.isNull()) pa.drawPixmap(rect().adjusted(margin, margin, -margin, -margin), m_blurPixmap);
+    if (m_blurPixmap.isNull()) { // 关闭特效
+        pa.setPen(Qt::NoPen);
+        pa.setBrush(QColor(242, 242, 242));
+        pa.drawRect(rect().adjusted(margin, margin, -margin, -margin));
+    } else {  // 开启模糊特效
+        pa.drawPixmap(rect().adjusted(margin, margin, -margin, -margin), m_blurPixmap);
+    }
 
     margin = 1;
     pa.setPen(QPen(QColor(246, 246, 246, 1 * 255), margin));

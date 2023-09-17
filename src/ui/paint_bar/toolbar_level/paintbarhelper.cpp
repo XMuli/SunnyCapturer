@@ -14,7 +14,7 @@
 #include <QSpacerItem>
 #include "horspacerline.h"
 #include "verspacerline.h"
-
+#include "../../../data/configmanager.h"
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
 {
@@ -116,7 +116,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
         btn->setChecked(false);
         if (i == defaultChecked) {
             btn->setChecked(true);
-            const QIcon icon(changedSVGColor(path, QColor(Qt::green).name(), btn->iconSize()));
+            const QIcon icon(changedSVGColor(path, highlightColor(), btn->iconSize()));
             btn->setIcon(icon);
         }
 
@@ -131,7 +131,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
 
             const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/" + btn->objectName() + ".svg";
             const QIcon origIcon(path);
-            const QIcon newIcon(changedSVGColor(path, QColor(Qt::green).name(), btn->iconSize()));
+            const QIcon newIcon(changedSVGColor(path, highlightColor(), btn->iconSize()));
             btn->setIcon(btn->isChecked() ? newIcon : origIcon);
         });
 
@@ -158,4 +158,31 @@ double dpiScale(const QScreen *scrn)
     double scal = scrn ? scrn->logicalDotsPerInch() / double(96) : 1;
     qDebug() << "scrn:" << scrn << "DPIScale:" << scal;
     return scal;
+}
+
+QString highlightColor(const bool enable)
+{
+    const QColor& color = enable ? QColor(CONF_MANAGE.property("XInterface_highlight").toString()) : Qt::green;
+    return color.name();
+}
+
+QString crosshairColor(const bool enable)
+{
+    const QColor& color = enable ? QColor(CONF_MANAGE.property("XInterface_crosshair").toString()) : Qt::green;
+    return color.name();
+}
+
+int borderWidth()
+{
+    return CONF_MANAGE.property("XInterface_border_width").toInt();
+}
+
+int crosshairWidth()
+{
+    return CONF_MANAGE.property("XInterface_crosshair_width").toInt();
+}
+
+bool acrylicEffectEnable()
+{
+    return CONF_MANAGE.property("XInterface_acrylic_effect").toBool();
 }

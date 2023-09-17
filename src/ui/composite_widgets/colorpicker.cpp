@@ -63,8 +63,12 @@ void ColorPicker::initUI()
 {
     QStringList colors;
     if (m_colorPickerType == ColorPickerType::CT_horizontal) {
-        colors << "#387bfd" << "#8c3e94" << "#e7509e" << "#d13840"
-               << "#e98226" << "#f6c632" << "#74b94a" << "#999898";
+//        colors << "#387bfd" << "#8c3e94" << "#e7509e" << "#d13840"
+//               << "#e98226" << "#f6c632" << "#74b94a" << "#999898";
+
+           colors << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
+                  << "#00A48A" << "#0081FF" << "#3C02FF" << "#8C00D4" << "#4D4D4D";
+
     } else {
         colors << "#000000" << "#7f7f7f" << "#880015" << "#ed1c24" << "#ff7f27"
                << "#fff200" << "#22b14c" << "#00a2e8" << "#3f48cc" << "#a349a4"

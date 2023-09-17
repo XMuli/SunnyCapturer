@@ -24,9 +24,10 @@ constexpr const char* XInterface_highlight("highlight");
 constexpr const char* XInterface_border_width("border_width");
 constexpr const char* XInterface_crosshair("crosshair");
 constexpr const char* XInterface_crosshair_width("crosshair_width");
-constexpr const char* XGeneral_auto_detect_windows("auto_detect_windows");
-constexpr const char* XGeneral_auto_copy_to_clipbaoard("auto_copy_to_clipbaoard");
-constexpr const char* XGeneral_crosshair_show("crosshair_show");
+constexpr const char* XInterface_acrylic_effect("acrylic_effect");
+constexpr const char* XInterface_auto_detect_windows("auto_detect_windows");
+constexpr const char* XInterface_auto_copy_to_clipbaoard("auto_copy_to_clipbaoard");
+constexpr const char* XInterface_crosshair_show("crosshair_show");
 
 // Output
 constexpr const char* XOutput_image_quailty("image_quailty");
