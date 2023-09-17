@@ -88,6 +88,8 @@ int borderWidth();
 int crosshairWidth();
 bool acrylicEffectEnable();
 
+QString formatToFileName(const QString& name);
+
 
 
 #endif // PAINTBARHELPER_H

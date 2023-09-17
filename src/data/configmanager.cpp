@@ -10,17 +10,28 @@ void ConfigManager::readFromFile()
     GET_VALUE_PROPERTY(XGeneral_autostart)                 = READ_INI(XGeneral, XGeneral_autostart, false).toBool();
     // Interface
     GET_VALUE_PROPERTY(XInterface_style)                   = READ_INI(XInterface, XInterface_style, "Sunny");
-    GET_VALUE_PROPERTY(XInterface_highlight)               = READ_INI(XInterface, XInterface_highlight, "#ed1c24");
+    GET_VALUE_PROPERTY(XInterface_highlight)               = READ_INI(XInterface, XInterface_highlight, "#0081ff");
     GET_VALUE_PROPERTY(XInterface_border_width)            = READ_INI(XInterface, XInterface_border_width, 3).toInt();
-    GET_VALUE_PROPERTY(XInterface_crosshair)               = READ_INI(XInterface, XInterface_crosshair, "#ed1c24");
+    GET_VALUE_PROPERTY(XInterface_crosshair)               = READ_INI(XInterface, XInterface_crosshair, "#df4187");
     GET_VALUE_PROPERTY(XInterface_crosshair_width)         = READ_INI(XInterface, XInterface_crosshair_width, 2).toInt();
+
+    GET_VALUE_PROPERTY(XInterface_custom_size_enable)      = READ_INI(XInterface, XInterface_custom_size_enable, true).toBool();
+    GET_VALUE_PROPERTY(XInterface_topleft_enable)          = READ_INI(XInterface, XInterface_topleft_enable, true).toBool();
+    GET_VALUE_PROPERTY(XInterface_size_enable)             = READ_INI(XInterface, XInterface_size_enable, true).toBool();
+    GET_VALUE_PROPERTY(XInterface_delay_enable)            = READ_INI(XInterface, XInterface_delay_enable, true).toBool();
+    GET_VALUE_PROPERTY(XInterface_custom_rect_left)        = READ_INI(XOutput, XInterface_custom_rect_left, 0).toInt();
+    GET_VALUE_PROPERTY(XInterface_custom_rect_top)         = READ_INI(XOutput, XInterface_custom_rect_top, 0).toInt();
+    GET_VALUE_PROPERTY(XInterface_custom_rect_width)       = READ_INI(XOutput, XInterface_custom_rect_width, 640).toInt();
+    GET_VALUE_PROPERTY(XInterface_custom_rect_height)      = READ_INI(XOutput, XInterface_custom_rect_height, 480).toInt();
+    GET_VALUE_PROPERTY(XInterface_custom_dealy)            = READ_INI(XOutput, XInterface_custom_dealy, 2).toDouble();
+
     GET_VALUE_PROPERTY(XInterface_acrylic_effect)          = READ_INI(XInterface, XInterface_acrylic_effect, true).toBool();
     GET_VALUE_PROPERTY(XInterface_auto_detect_windows)     = READ_INI(XInterface, XInterface_auto_detect_windows, true).toBool();
     GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) = READ_INI(XInterface, XInterface_auto_copy_to_clipbaoard, true).toBool();
     GET_VALUE_PROPERTY(XInterface_crosshair_show)          = READ_INI(XInterface, XInterface_crosshair_show, false).toBool();
     // Output
     GET_VALUE_PROPERTY(XOutput_image_quailty)              = READ_INI(XOutput, XOutput_image_quailty, -1).toInt();
-    GET_VALUE_PROPERTY(XOutput_flie_name)                  = READ_INI(XOutput, XOutput_flie_name, "Sunny_$yyyyMMdd_hhmmss$.png");
+    GET_VALUE_PROPERTY(XOutput_flie_name)                  = READ_INI(XOutput, XOutput_flie_name, QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
     GET_VALUE_PROPERTY(XOutput_config_path)                = READ_INI(XOutput, XOutput_config_path, qApp->applicationDirPath());
     GET_VALUE_PROPERTY(XOutput_quick_save_enable)          = READ_INI(XOutput, XOutput_quick_save_enable, false).toBool();
     GET_VALUE_PROPERTY(XOutput_quick_save_path)            = READ_INI(XOutput, XOutput_quick_save_path, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
@@ -36,6 +47,8 @@ void ConfigManager::readFromFile()
 
     qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
     qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
+             << GET_VALUE_PROPERTY(XInterface_custom_size_enable) << GET_VALUE_PROPERTY(XInterface_topleft_enable) << GET_VALUE_PROPERTY(XInterface_size_enable) << GET_VALUE_PROPERTY(XInterface_delay_enable)
+             << GET_VALUE_PROPERTY(XInterface_custom_rect_left) << GET_VALUE_PROPERTY(XInterface_custom_rect_top) << GET_VALUE_PROPERTY(XInterface_custom_rect_width) << GET_VALUE_PROPERTY(XInterface_custom_rect_height) << GET_VALUE_PROPERTY(XInterface_custom_dealy)
              << GET_VALUE_PROPERTY(XInterface_acrylic_effect) << GET_VALUE_PROPERTY(XInterface_auto_detect_windows) << GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) << GET_VALUE_PROPERTY(XInterface_crosshair_show);
     qDebug() << GET_VALUE_PROPERTY(XOutput_image_quailty) << GET_VALUE_PROPERTY(XOutput_flie_name)  << GET_VALUE_PROPERTY(XOutput_config_path)
              << GET_VALUE_PROPERTY(XOutput_quick_save_enable) << GET_VALUE_PROPERTY(XOutput_quick_save_path)  << GET_VALUE_PROPERTY(XOutput_auto_save_enable) << GET_VALUE_PROPERTY(XOutput_auto_save_path);
@@ -56,6 +69,17 @@ void ConfigManager::writeToFile()
     WRITE_INI(XInterface, XInterface_border_width, GET_VALUE_PROPERTY(XInterface_border_width));
     WRITE_INI(XInterface, XInterface_crosshair, GET_VALUE_PROPERTY(XInterface_crosshair));
     WRITE_INI(XInterface, XInterface_crosshair_width, GET_VALUE_PROPERTY(XInterface_crosshair_width));
+
+    WRITE_INI(XInterface, XInterface_custom_size_enable, GET_VALUE_PROPERTY(XInterface_custom_size_enable));
+    WRITE_INI(XInterface, XInterface_topleft_enable, GET_VALUE_PROPERTY(XInterface_topleft_enable));
+    WRITE_INI(XInterface, XInterface_size_enable, GET_VALUE_PROPERTY(XInterface_size_enable));
+    WRITE_INI(XInterface, XInterface_delay_enable, GET_VALUE_PROPERTY(XInterface_delay_enable));
+    WRITE_INI(XInterface, XInterface_custom_rect_left, GET_VALUE_PROPERTY(XInterface_custom_rect_left));
+    WRITE_INI(XInterface, XInterface_custom_rect_top, GET_VALUE_PROPERTY(XInterface_custom_rect_top));
+    WRITE_INI(XInterface, XInterface_custom_rect_width, GET_VALUE_PROPERTY(XInterface_custom_rect_width));
+    WRITE_INI(XInterface, XInterface_custom_rect_height, GET_VALUE_PROPERTY(XInterface_custom_rect_height));
+    WRITE_INI(XInterface, XInterface_custom_dealy, GET_VALUE_PROPERTY(XInterface_custom_dealy));
+
     WRITE_INI(XInterface, XInterface_acrylic_effect, GET_VALUE_PROPERTY(XInterface_acrylic_effect));
     WRITE_INI(XInterface, XInterface_auto_detect_windows, GET_VALUE_PROPERTY(XInterface_auto_detect_windows));
     WRITE_INI(XInterface, XInterface_auto_copy_to_clipbaoard, GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard));
@@ -90,13 +114,24 @@ void ConfigManager::init()
     CONNECT_VALUE_PROPERTY(XInterface_border_width, 3);
     CONNECT_VALUE_PROPERTY(XInterface_crosshair, "#ed1c24");
     CONNECT_VALUE_PROPERTY(XInterface_crosshair_width, 2);
+
+    CONNECT_VALUE_PROPERTY(XInterface_custom_size_enable, true);
+    CONNECT_VALUE_PROPERTY(XInterface_topleft_enable, true);
+    CONNECT_VALUE_PROPERTY(XInterface_size_enable, true);
+    CONNECT_VALUE_PROPERTY(XInterface_delay_enable, true);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_left, 0);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_top, 0);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_width, 640);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_height, 480);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_dealy, 2);
+
     CONNECT_VALUE_PROPERTY(XInterface_acrylic_effect, true);
     CONNECT_VALUE_PROPERTY(XInterface_auto_detect_windows, true);
     CONNECT_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard, true);
     CONNECT_VALUE_PROPERTY(XInterface_crosshair_show, false);
     // Output
     CONNECT_VALUE_PROPERTY(XOutput_image_quailty, -1);
-    CONNECT_VALUE_PROPERTY(XOutput_flie_name, "Sunny_$yyyyMMdd_hhmmss$.png");
+    CONNECT_VALUE_PROPERTY(XOutput_flie_name, QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
     CONNECT_VALUE_PROPERTY(XOutput_config_path, qApp->applicationDirPath());
     CONNECT_VALUE_PROPERTY(XOutput_quick_save_enable, false);
     CONNECT_VALUE_PROPERTY(XOutput_quick_save_path, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());

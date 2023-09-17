@@ -672,8 +672,8 @@ void drawBorder(QPainter &pa, const QRect &rt, int num)
 
 void drawCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt)
 {
-//    const bool& bDraw = CONF_MANAGE.property("XInterface_crosshair_show").toBool();
-//    if (!bDraw)  return;
+    const bool& bDraw = CONF_MANAGE.property("XInterface_crosshair_show").toBool();
+    if (!bDraw)  return;
 
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing, true);

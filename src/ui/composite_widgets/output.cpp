@@ -6,6 +6,7 @@
 #include <QStandardPaths>
 #include <QFileDialog>
 #include <QUrl>
+#include "../paint_bar/toolbar_level/paintbarhelper.h"
 
 Output::Output(QWidget *parent) :
     QWidget(parent),
@@ -22,13 +23,23 @@ Output::~Output()
 
 void Output::initUI()
 {
+    const auto& fileName = CONF_MANAGE.property("XOutput_flie_name").toString();
+    const auto& configPath= CONF_MANAGE.property("XOutput_config_path").toString();
+    const auto& quickSavePath = CONF_MANAGE.property("XOutput_quick_save_path").toString();
+    const auto& autoSavePath = CONF_MANAGE.property("XOutput_auto_save_path").toString();
+
     ui->sbImageQuailty->setValue(CONF_MANAGE.property("XOutput_image_quailty").toInt());
-    ui->leFileName->setText(CONF_MANAGE.property("XOutput_flie_name").toString());
-    ui->leConfigPath->setText(CONF_MANAGE.property("XOutput_config_path").toString());
+    ui->leFileName->setText(fileName);
+    ui->leConfigPath->setText(configPath);
     ui->cbQuickSaveEnable->setChecked(CONF_MANAGE.property("XOutput_quick_save_enable").toBool());
-    ui->leQuickSavePath->setText(CONF_MANAGE.property("XOutput_quick_save_path").toString());
+    ui->leQuickSavePath->setText(quickSavePath);
     ui->cbAutoSaveEnable->setChecked(CONF_MANAGE.property("XOutput_auto_save_enable").toBool());
-    ui->leAutoSavePath->setText(CONF_MANAGE.property("XOutput_auto_save_path").toString());
+    ui->leAutoSavePath->setText(autoSavePath);
+
+    const auto& prewview = tr("Preview: ");
+    ui->leFileName->setToolTip(prewview + formatToFileName(fileName));
+    ui->leQuickSavePath->setToolTip(prewview + formatToFileName(quickSavePath + "/" + fileName));
+    ui->leAutoSavePath->setToolTip(prewview + formatToFileName(autoSavePath + "/" + fileName));
 
     connect(ui->cbQuickSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CONF_MANAGE.setProperty("XOutput_quick_save_enable", checked);});
     connect(ui->cbAutoSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CONF_MANAGE.setProperty("XOutput_auto_save_enable", checked);});
@@ -101,7 +112,7 @@ void Output::onSleletedDir()
 void Output::onBtnResetClicked(bool checked)
 {
     ui->sbImageQuailty->setValue(-1);
-    ui->leFileName->setText("Sunny_$yyyyMMdd_hhmmss$.png");
+    ui->leFileName->setText(QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
     ui->leConfigPath->setText(qApp->applicationDirPath());
     ui->cbQuickSaveEnable->setChecked(false);
     ui->leQuickSavePath->setText(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());

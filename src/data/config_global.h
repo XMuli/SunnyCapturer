@@ -24,6 +24,17 @@ constexpr const char* XInterface_highlight("highlight");
 constexpr const char* XInterface_border_width("border_width");
 constexpr const char* XInterface_crosshair("crosshair");
 constexpr const char* XInterface_crosshair_width("crosshair_width");
+
+constexpr const char* XInterface_custom_size_enable("custom_size_enable");
+constexpr const char* XInterface_topleft_enable("topleft_enable");
+constexpr const char* XInterface_size_enable("size_enable");
+constexpr const char* XInterface_delay_enable("delay_enable");
+constexpr const char* XInterface_custom_rect_left("custom_rect_left");
+constexpr const char* XInterface_custom_rect_top("custom_rect_top");
+constexpr const char* XInterface_custom_rect_width("custom_rect_width");
+constexpr const char* XInterface_custom_rect_height("custom_rect_height");
+constexpr const char* XInterface_custom_dealy("custom_dealy");
+
 constexpr const char* XInterface_acrylic_effect("acrylic_effect");
 constexpr const char* XInterface_auto_detect_windows("auto_detect_windows");
 constexpr const char* XInterface_auto_copy_to_clipbaoard("auto_copy_to_clipbaoard");

@@ -12,6 +12,7 @@
 #include <QButtonGroup>
 #include <QString>
 #include <QSpacerItem>
+#include <QDateTime>
 #include "horspacerline.h"
 #include "verspacerline.h"
 #include "../../../data/configmanager.h"
@@ -185,4 +186,15 @@ int crosshairWidth()
 bool acrylicEffectEnable()
 {
     return CONF_MANAGE.property("XInterface_acrylic_effect").toBool();
+}
+
+QString formatToFileName(const QString &name)
+{
+    auto fileName = name.trimmed();
+    auto first = fileName.indexOf("$");
+    auto second = fileName.lastIndexOf("$");
+    auto nameTime = fileName.mid(first + 1, second - first - 1);
+    auto finalyName = fileName.replace(first, second - first + 1, QDateTime::currentDateTime().toString(nameTime));
+
+    return finalyName;
 }

@@ -31,6 +31,17 @@ void Interface::initUI()
     ui->cpCrosshair->setCurrPickedColor(CONF_MANAGE.property("XInterface_crosshair").toString());
     ui->sbBorderWidth->setValue(CONF_MANAGE.property("XInterface_border_width").toInt());
     ui->sbCrosshairWidth->setValue(CONF_MANAGE.property("XInterface_crosshair_width").toInt());
+
+    ui->gbCustomSizeEnable->setChecked(CONF_MANAGE.property("XInterface_custom_size_enable").toBool());
+    ui->cbTopLeft->setChecked(CONF_MANAGE.property("XInterface_topleft_enable").toBool());
+    ui->cbSize->setChecked(CONF_MANAGE.property("XInterface_size_enable").toBool());
+    ui->cbDelay->setChecked(CONF_MANAGE.property("XInterface_delay_enable").toBool());
+    ui->sbLeft->setValue(CONF_MANAGE.property("XInterface_custom_rect_left").toInt());
+    ui->sbTop->setValue(CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+    ui->sbWidth->setValue(CONF_MANAGE.property("XInterface_custom_rect_width").toInt());
+    ui->sbHeight->setValue(CONF_MANAGE.property("XInterface_custom_rect_height").toInt());
+    ui->dsbDelay->setValue(CONF_MANAGE.property("XInterface_custom_dealy").toDouble());
+
     ui->cbAcrylicEffect->setChecked(CONF_MANAGE.property("XInterface_acrylic_effect").toBool());
     ui->cbAutoDetectWindows->setChecked(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool());
     ui->cbAutoCopyToClipboard->setChecked(CONF_MANAGE.property("XInterface_auto_copy_to_clipbaoard").toBool());
@@ -98,8 +109,67 @@ void Interface::onBtnResetClicked(bool checked)
     ui->cpCrosshair->setCurrPickedColor("#d13840");
     ui->sbBorderWidth->setValue(3);
     ui->sbCrosshairWidth->setValue(2);
+
+    ui->gbCustomSizeEnable->setChecked(true);
+    ui->cbTopLeft->setChecked(true);
+    ui->cbSize->setChecked(true);
+    ui->cbDelay->setChecked(true);
+    ui->sbLeft->setValue(0);
+    ui->sbTop->setValue(0);
+    ui->sbWidth->setValue(640);
+    ui->sbHeight->setValue(480);
+    ui->dsbDelay->setValue(2);
+
     ui->cbAutoDetectWindows->setChecked(true);
     ui->cbAutoCopyToClipboard->setChecked(true);
     ui->cbCrosshairShow->setChecked(false);
 }
+
+
+void Interface::on_gbCustomSizeEnable_clicked(bool checked)
+{
+    CONF_MANAGE.setProperty("XInterface_custom_size_enable", checked);
+}
+
+void Interface::on_cbTopLeft_clicked(bool checked)
+{
+    CONF_MANAGE.setProperty("XInterface_topleft_enable", checked);
+}
+
+void Interface::on_cbSize_clicked(bool checked)
+{
+    CONF_MANAGE.setProperty("XInterface_size_enable", checked);
+}
+
+void Interface::on_cbDelay_clicked(bool checked)
+{
+    CONF_MANAGE.setProperty("XInterface_delay_enable", checked);
+}
+
+void Interface::on_sbLeft_valueChanged(int arg1)
+{
+    CONF_MANAGE.setProperty("XInterface_custom_rect_left", arg1);
+}
+
+void Interface::on_sbTop_valueChanged(int arg1)
+{
+    CONF_MANAGE.setProperty("XInterface_custom_rect_top", arg1);
+}
+
+void Interface::on_sbWidth_valueChanged(int arg1)
+{
+    CONF_MANAGE.setProperty("XInterface_custom_rect_width", arg1);
+}
+
+
+void Interface::on_sbHeight_valueChanged(int arg1)
+{
+    CONF_MANAGE.setProperty("XInterface_custom_rect_height", arg1);
+}
+
+void Interface::on_dsbDelay_valueChanged(double arg1)
+{
+    CONF_MANAGE.setProperty("XInterface_custom_dealy", arg1);
+}
+
 

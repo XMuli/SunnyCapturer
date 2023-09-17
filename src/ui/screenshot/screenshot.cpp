@@ -26,7 +26,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
     , m_origPix()
     , m_vdRect()
     , m_bFistPressed(false)
-    , m_bAutoDetectRect(true)
+    , m_bAutoDetectRect(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool())
     , m_actionType(ActionType::AT_wait)
     , m_paintBar(new PaintBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
@@ -45,6 +45,7 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
             setMouseTracking(true);
         } else {
             m_actionType = ActionType::AT_picking_custom_rect;
+            setMouseTracking(true);
         };
     }
 }
@@ -121,7 +122,7 @@ void ScreenShot::btnSave()
     qDebug() <<"fileNmae:" << fileNmae;
 
     QTime startTime = QTime::currentTime();
-    pixmap.save(fileNmae);  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
+    pixmap.save(fileNmae, nullptr, CONF_MANAGE.property("XOutput_image_quailty").toInt());  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qInfo() << "btnSave() pixmap save time: " << elapsed << " ms" << pixmap.size();
@@ -806,6 +807,7 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
 
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         setMouseTracking(true);
+        m_bFistPressed = true;
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
         m_node.pt = e->pos();
         setMouseTracking(true);
@@ -966,8 +968,14 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
         setCursorShape(orieType, m_node.p3);
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
-        m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
-        m_node.trackPos.emplace_back(m_node.p3);
+
+        if (m_bFistPressed) {
+            m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
+            m_node.trackPos.emplace_back(m_node.p3);
+        } else {
+            m_node.p1 = e->pos();
+        }
+
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
         if (m_bFistPressed) {
             if (!allowableRangeErrorForPoint(m_node.p3, m_node.pt)) {

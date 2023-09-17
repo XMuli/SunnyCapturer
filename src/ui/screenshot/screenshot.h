@@ -66,8 +66,6 @@ private:
     void showCustomWidget(QWidget* w);
     void showCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt) const;
 
-
-
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
     void preDestruction();             // 销毁对象之前的清理工作
     void monitorsInfo() const;

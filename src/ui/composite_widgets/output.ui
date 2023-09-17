@@ -74,6 +74,11 @@
              <height>0</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Range: [0,100] or -1.
+Specify 0 to obtain small compressed files, 100 for large uncompressed files,
+and specify -1 to let Sunny decide for you.</string>
+           </property>
            <property name="minimum">
             <number>-1</number>
            </property>

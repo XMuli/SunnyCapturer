@@ -71,6 +71,17 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XInterface_border_width)
     SET_VALUE_PROPERTY(XInterface_crosshair)
     SET_VALUE_PROPERTY(XInterface_crosshair_width)
+
+    SET_VALUE_PROPERTY(XInterface_custom_size_enable);
+    SET_VALUE_PROPERTY(XInterface_topleft_enable);
+    SET_VALUE_PROPERTY(XInterface_size_enable);
+    SET_VALUE_PROPERTY(XInterface_delay_enable);
+    SET_VALUE_PROPERTY(XInterface_custom_rect_left);
+    SET_VALUE_PROPERTY(XInterface_custom_rect_top);
+    SET_VALUE_PROPERTY(XInterface_custom_rect_width);
+    SET_VALUE_PROPERTY(XInterface_custom_rect_height);
+    SET_VALUE_PROPERTY(XInterface_custom_dealy);
+
     SET_VALUE_PROPERTY(XInterface_acrylic_effect)
     SET_VALUE_PROPERTY(XInterface_auto_detect_windows)
     SET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard)

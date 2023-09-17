@@ -35,6 +35,17 @@ private slots:
     void on_cbAutoCopyToClipboard_clicked(bool checked);
     void on_cbCrosshairShow_clicked(bool checked);
 
+    void on_gbCustomSizeEnable_clicked(bool checked);
+    void on_cbTopLeft_clicked(bool checked);
+    void on_cbSize_clicked(bool checked);
+    void on_cbDelay_clicked(bool checked);
+    void on_sbLeft_valueChanged(int arg1);
+    void on_sbTop_valueChanged(int arg1);
+    void on_sbWidth_valueChanged(int arg1);
+    void on_sbHeight_valueChanged(int arg1);
+    void on_dsbDelay_valueChanged(double arg1);
+
+
 public slots:
     void onBtnResetClicked(bool checked = false);
 
