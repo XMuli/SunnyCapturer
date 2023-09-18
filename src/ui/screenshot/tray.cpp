@@ -6,6 +6,8 @@
 #include <QKeySequence>
 #include <QShortcut>
 #include <QHotkey>
+#include <QTimer>
+#include "../../data/configmanager.h"
 
 void Tray::init()
 {
@@ -43,12 +45,38 @@ void Tray::init()
     });
 
     m_trayIcon->show();
+
+    m_timerDelay->start(1000); // 1秒触发一次定时器
+    m_timerDelay->stop();
+    connect(m_timerDelay, &QTimer::timeout, this, &Tray::onCountdownTips);
 }
 
 void Tray::onCapture()
 {
     if (!m_scrnShot) m_scrnShot = new ScreenShot();
-    m_scrnShot->capture();
+    const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
+    const auto& delayEnable = CONF_MANAGE.property("XInterface_delay_enable").toBool();
+    const double& s = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
+    qDebug() << "------------>customSizeEnable:" << customSizeEnable << "delayEnable:" << delayEnable << "s:" << s;
+
+    if (customSizeEnable && delayEnable) {
+
+        QScreen* scrn = qGuiApp->screenAt(QCursor::pos());
+        if (!scrn) scrn = qGuiApp->primaryScreen();
+        m_remainingSeconds = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
+        m_countdownTips->setText(QString::number(m_remainingSeconds));
+        m_countdownTips->move(scrn->geometry().center() - QPoint(m_countdownTips->width() / 2, m_countdownTips->height() / 2));
+        m_countdownTips->show();
+        m_timerDelay->stop();
+        m_timerDelay->start();
+
+        QTimer::singleShot(s * 1000, this, [this](){
+            m_countdownTips->hide();
+            m_scrnShot->capture();
+        });
+    } else {
+        m_scrnShot->capture();
+    }
 
     if(!m_scrnShot->isActiveWindow())
         m_scrnShot->activateWindow();
@@ -63,8 +91,17 @@ void Tray::onSetting()
 void Tray::onTrayIcon(QSystemTrayIcon::ActivationReason reason)
 {
     if (QSystemTrayIcon::Trigger == reason) {  //  鼠标单击
-        if (!m_scrnShot) m_scrnShot = new ScreenShot();
-        m_scrnShot->capture();
+        onCapture();
+    }
+}
+
+void Tray::onCountdownTips()
+{
+    m_countdownTips->setText(QString::number(--m_remainingSeconds));
+    m_countdownTips->update();
+    if (m_remainingSeconds < 0) {
+        m_timerDelay->stop();
+        m_countdownTips->hide();
     }
 }
 
@@ -74,7 +111,12 @@ Tray::Tray(QObject *parent)
     , m_setting(nullptr)
     , m_trayMenu(new QMenu())
     , m_trayIcon(new QSystemTrayIcon(this))
+    , m_countdownTips(new Tips("", TipsType::TT_countdown_tips, qobject_cast<QWidget*>(this)))
+    , m_timerDelay(new QTimer(this))
+    , m_remainingSeconds(0)
 {
+    m_countdownTips->hide();
+    m_countdownTips->setWindowFlag(Qt::WindowStaysOnTopHint, true);
     init();
 }
 

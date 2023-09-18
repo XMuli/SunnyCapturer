@@ -19,6 +19,8 @@ Tips::Tips(const QString& text, const TipsType& type, QWidget *parent)
         font.setPointSize(12);
     } else if (m_type == TipsType::TT_point_changed_tips) {
         font.setPointSize(50);
+    } else if (m_type == TipsType::TT_countdown_tips) {
+        font.setPointSize(40);
     } else if (m_type == TipsType::TT_keyboard_operation_tips) {
         font.setPointSize(12);
     }
@@ -58,6 +60,13 @@ void Tips::paintEvent(QPaintEvent *event)
         resize(maxWidth, maxWidth);
         pa.setBrush(Qt::NoBrush);
         pa.drawText(rect(), Qt::AlignCenter, m_text);
+    } else if (m_type == TipsType::TT_countdown_tips) {
+
+        const QRect& rt = textRect(m_text);
+        const int& maxWidth = qMax(rt.width(), rt.height());
+        resize(maxWidth * 4 / 3, maxWidth);
+        pa.setBrush(Qt::NoBrush);
+        pa.drawText(rect(), Qt::AlignCenter, m_text);
     } else if (m_type == TipsType::TT_keyboard_operation_tips) {
         pa.drawText(rect().center(), m_text);
     }
@@ -91,6 +100,8 @@ QRect Tips::textRect(const QString &text)
 void Tips::setText(const QString &newText)
 {
     m_text = newText;
+
+    if (m_type == TipsType::TT_countdown_tips) m_text += "s";  // 加上单位秒
 }
 
 void Tips::setColor(const QColor &newColor)

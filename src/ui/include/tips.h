@@ -9,6 +9,7 @@ enum class TipsType{
     TT_empty,
     TT_picked_rect_tips,
     TT_point_changed_tips,
+    TT_countdown_tips,  // 延迟截图时刻的-倒计时
     TT_keyboard_operation_tips
 };
 

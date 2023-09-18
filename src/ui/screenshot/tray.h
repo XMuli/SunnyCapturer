@@ -6,6 +6,7 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 #include "screenshot.h"
+#include "tips.h"
 #include "../setting/sidesettingui.h"
 
 #define TRAY Tray::instance()
@@ -21,6 +22,7 @@ public slots:
     void onCapture();
     void onSetting();
     void onTrayIcon(QSystemTrayIcon::ActivationReason reason);
+    void onCountdownTips();
 
 public:
     static Tray &instance() {
@@ -42,6 +44,9 @@ private:
     QPointer<SideSettingUI>          m_setting;
     QPointer<QMenu>                  m_trayMenu;
     QPointer<QSystemTrayIcon>        m_trayIcon;
+    QPointer<Tips>                   m_countdownTips;  // 倒计时预览
+    QPointer<QTimer>                 m_timerDelay;
+    double                           m_remainingSeconds;
 };
 
 #endif // TRAY_H

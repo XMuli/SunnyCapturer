@@ -116,8 +116,6 @@ private:
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;
-
-
 };
 
 

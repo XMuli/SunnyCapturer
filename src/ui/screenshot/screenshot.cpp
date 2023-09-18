@@ -46,7 +46,27 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
         } else {
             m_actionType = ActionType::AT_picking_custom_rect;
             setMouseTracking(true);
-        };
+        }
+    }
+
+    const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
+    const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
+    const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
+    if (customSizeEnable) {
+
+        if (topleftEnable)
+            m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+
+        if (sizeEnable) {
+            m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
+            m_node.absoluteRect = m_node.pickedRect;
+            m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
+            m_actionType = ActionType::AT_wait;
+            setMouseTracking(false);
+        }
+
+        if (topleftEnable || sizeEnable)
+            m_bFistPressed = true;
     }
 }
 
@@ -808,6 +828,23 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
         setMouseTracking(true);
         m_bFistPressed = true;
+
+        const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
+        const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
+        const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
+        if (customSizeEnable) {
+
+            if (topleftEnable) {
+                m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+            }
+
+            if (sizeEnable) {
+                m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
+                m_node.absoluteRect = m_node.pickedRect;
+                m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
+            }
+        }
+
     } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
         m_node.pt = e->pos();
         setMouseTracking(true);
@@ -1187,7 +1224,6 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     prinftWindowsRects(pa);
     printfDevelopProjectInfo(pa);
 }
-
 
 #if defined(Q_OS_WIN)
 const QRect rectToQRect(const RECT &rect)

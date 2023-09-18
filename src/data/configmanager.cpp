@@ -1,49 +1,54 @@
 #include "configmanager.h"
 #include <QApplication>
 
+// 属性对象改变时  ---snyc----> member对象的值也会改变;但反之 member对象的值改变不会同步属性对象改;
+// 故此宏专门用于初次从初始化 .ini 文件，对 "属性对象 + member对象" 同时赋值; 然后在外面则，都是通过属性来修改其数值，从而发生值改变的信号
+#define SET_PROPERTY_AND_MEMBER_VALUE(root, key, defVal) \
+    GET_VALUE_PROPERTY(key) = READ_INI(root, key, defVal); \
+    setProperty(key, GET_VALUE_PROPERTY(key));
+
 void ConfigManager::readFromFile()
 {
     // General
-    GET_VALUE_PROPERTY(XGeneral_language)                  = READ_INI(XGeneral, XGeneral_language, "English");
-    GET_VALUE_PROPERTY(XGeneral_log_level)                 = READ_INI(XGeneral, XGeneral_log_level, "Debug");
-    GET_VALUE_PROPERTY(XGeneral_font)                      = READ_INI(XGeneral, XGeneral_font, "Microsoft YaHei,9");
-    GET_VALUE_PROPERTY(XGeneral_autostart)                 = READ_INI(XGeneral, XGeneral_autostart, false).toBool();
+    SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_language, "English");
+    SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_log_level, "Debug");
+    SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_font, "Microsoft YaHei,9");
+    SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_autostart, false);
     // Interface
-    GET_VALUE_PROPERTY(XInterface_style)                   = READ_INI(XInterface, XInterface_style, "Sunny");
-    GET_VALUE_PROPERTY(XInterface_highlight)               = READ_INI(XInterface, XInterface_highlight, "#0081ff");
-    GET_VALUE_PROPERTY(XInterface_border_width)            = READ_INI(XInterface, XInterface_border_width, 3).toInt();
-    GET_VALUE_PROPERTY(XInterface_crosshair)               = READ_INI(XInterface, XInterface_crosshair, "#df4187");
-    GET_VALUE_PROPERTY(XInterface_crosshair_width)         = READ_INI(XInterface, XInterface_crosshair_width, 2).toInt();
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_style, "Sunny");
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_highlight, "#0081ff");
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_border_width, 3);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_crosshair, "#df4187");
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_crosshair_width, 2);
 
-    GET_VALUE_PROPERTY(XInterface_custom_size_enable)      = READ_INI(XInterface, XInterface_custom_size_enable, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_topleft_enable)          = READ_INI(XInterface, XInterface_topleft_enable, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_size_enable)             = READ_INI(XInterface, XInterface_size_enable, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_delay_enable)            = READ_INI(XInterface, XInterface_delay_enable, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_custom_rect_left)        = READ_INI(XOutput, XInterface_custom_rect_left, 0).toInt();
-    GET_VALUE_PROPERTY(XInterface_custom_rect_top)         = READ_INI(XOutput, XInterface_custom_rect_top, 0).toInt();
-    GET_VALUE_PROPERTY(XInterface_custom_rect_width)       = READ_INI(XOutput, XInterface_custom_rect_width, 640).toInt();
-    GET_VALUE_PROPERTY(XInterface_custom_rect_height)      = READ_INI(XOutput, XInterface_custom_rect_height, 480).toInt();
-    GET_VALUE_PROPERTY(XInterface_custom_dealy)            = READ_INI(XOutput, XInterface_custom_dealy, 2).toDouble();
-
-    GET_VALUE_PROPERTY(XInterface_acrylic_effect)          = READ_INI(XInterface, XInterface_acrylic_effect, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_auto_detect_windows)     = READ_INI(XInterface, XInterface_auto_detect_windows, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) = READ_INI(XInterface, XInterface_auto_copy_to_clipbaoard, true).toBool();
-    GET_VALUE_PROPERTY(XInterface_crosshair_show)          = READ_INI(XInterface, XInterface_crosshair_show, false).toBool();
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_custom_size_enable, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_topleft_enable, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_size_enable, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_delay_enable, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_custom_rect_left, 100);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_custom_rect_top, 100);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_custom_rect_width, 640);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_custom_rect_height, 480);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_custom_dealy, 6.00);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_acrylic_effect, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_auto_detect_windows, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_auto_copy_to_clipbaoard, true);
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_crosshair_show, false);
     // Output
-    GET_VALUE_PROPERTY(XOutput_image_quailty)              = READ_INI(XOutput, XOutput_image_quailty, -1).toInt();
-    GET_VALUE_PROPERTY(XOutput_flie_name)                  = READ_INI(XOutput, XOutput_flie_name, QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
-    GET_VALUE_PROPERTY(XOutput_config_path)                = READ_INI(XOutput, XOutput_config_path, qApp->applicationDirPath());
-    GET_VALUE_PROPERTY(XOutput_quick_save_enable)          = READ_INI(XOutput, XOutput_quick_save_enable, false).toBool();
-    GET_VALUE_PROPERTY(XOutput_quick_save_path)            = READ_INI(XOutput, XOutput_quick_save_path, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
-    GET_VALUE_PROPERTY(XOutput_auto_save_enable)           = READ_INI(XOutput, XOutput_auto_save_enable, false).toBool();
-    GET_VALUE_PROPERTY(XOutput_auto_save_path)             = READ_INI(XOutput, XOutput_auto_save_path, QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_image_quailty, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_flie_name, QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_config_path, qApp->applicationDirPath());
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_quick_save_enable, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_quick_save_path, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_auto_save_enable, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_auto_save_path, QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
     // Pin
-    GET_VALUE_PROPERTY(XPin_opacity)                       = READ_INI(XPin, XPin_opacity, 100).toInt();
-    GET_VALUE_PROPERTY(XPin_maximum_size)                  = READ_INI(XPin, XPin_maximum_size, 10000).toInt();
+    SET_PROPERTY_AND_MEMBER_VALUE(XPin, XPin_opacity, 100);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPin, XPin_maximum_size, 10000);
     // Hotkeys
-    GET_VALUE_PROPERTY(XHotkeys_capture)                   = READ_INI(XHotkeys, XHotkeys_capture, "F3");
-    GET_VALUE_PROPERTY(XHotkeys_delay_capture)             = READ_INI(XHotkeys, XHotkeys_delay_capture, "F7");
-    GET_VALUE_PROPERTY(XHotkeys_custiom_capture)           = READ_INI(XHotkeys, XHotkeys_custiom_capture, "F8");
+    SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_capture, "F3");
+    SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_delay_capture, "F7");
+    SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_custiom_capture, "F8");
 
     qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
     qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
@@ -119,11 +124,11 @@ void ConfigManager::init()
     CONNECT_VALUE_PROPERTY(XInterface_topleft_enable, true);
     CONNECT_VALUE_PROPERTY(XInterface_size_enable, true);
     CONNECT_VALUE_PROPERTY(XInterface_delay_enable, true);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_left, 0);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_top, 0);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_left, 100);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_top, 100);
     CONNECT_VALUE_PROPERTY(XInterface_custom_rect_width, 640);
     CONNECT_VALUE_PROPERTY(XInterface_custom_rect_height, 480);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_dealy, 2);
+    CONNECT_VALUE_PROPERTY(XInterface_custom_dealy, 6);
 
     CONNECT_VALUE_PROPERTY(XInterface_acrylic_effect, true);
     CONNECT_VALUE_PROPERTY(XInterface_auto_detect_windows, true);
