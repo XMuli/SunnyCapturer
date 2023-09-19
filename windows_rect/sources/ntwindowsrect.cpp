@@ -24,7 +24,8 @@ bool WindowsRectFilter(HWND hwnd)
     return false;
 }
 
-BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
+//BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
     POINT pos;
     pos.x = ((int)(short)LOWORD(lParam));
@@ -55,7 +56,8 @@ BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
 }
 
 
-BOOL EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
+BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
+//BOOL EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
 {
     return TRUE;
 }

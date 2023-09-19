@@ -40,6 +40,8 @@ constexpr const char* XInterface_auto_detect_windows("auto_detect_windows");
 constexpr const char* XInterface_auto_copy_to_clipbaoard("auto_copy_to_clipbaoard");
 constexpr const char* XInterface_crosshair_show("crosshair_show");
 
+constexpr const char* XInterface_bulrr_effect_adius("bulrr_effect_adius");  // 仅提供配置文件修改
+
 // Output
 constexpr const char* XOutput_image_quailty("image_quailty");
 constexpr const char* XOutput_flie_name("flie_name");

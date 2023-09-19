@@ -31,8 +31,13 @@ struct RectNode
 //};
 
 
-BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
-BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam);
+//#ifdef _WIN64
+//BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
+//#else
+//BOOL CALLBACK EnumWindowsProc32(HWND hwnd, LPARAM lParam);
+//#endif
+
+
 
 extern "C" WINDOWSRECT_EXPORT bool enumWindowsRect(std::vector<RectNode>& rectNodes);
 

@@ -15,6 +15,9 @@ public:
     explicit About(QWidget *parent = nullptr);
     ~About();
 
+private slots:
+    void on_btnLicenses_released();
+
 private:
     void initUI();
 

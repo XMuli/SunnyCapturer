@@ -7,6 +7,8 @@ set(project_version_path 0)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
+add_definitions(-DXBUILD_TIME="2023.09.19")
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -58,6 +60,7 @@ set(custom_ui_files
     ui/include/pin.h
     ui/include/hotkeys.h
     ui/include/about.h
+    ui/include/licenseui.h
     #  cpp common_widgets
     ui/common_widgets/xblureffect.cpp
     ui/common_widgets/xcolorbutton.cpp
@@ -82,6 +85,8 @@ set(custom_ui_files
     ui/composite_widgets/about.ui
     ui/composite_widgets/pin.cpp
     ui/composite_widgets/pin.ui
+    ui/composite_widgets/licenseui.cpp
+    ui/composite_widgets/licenseui.ui
 
     ui/paint_bar/common/absbtnsctrl.h
     ui/paint_bar/common/absbtnsctrl.cpp
@@ -123,11 +128,57 @@ source_group(TREE ${src_root_path} FILES ${source_lists})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")                                    # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
 include_directories("${CMAKE_SOURCE_DIR}/tripartite/QHotkey")
 
-#************************************************************************
-#调用 WindowsRect DLL 共 ①~④ 步骤
+
+#********************************************** 判断且定义 x64/x86 变量 (get kit architecture bit) ****************************
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(arch_bit "86")
+    set(is_x64bit false)
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(arch_bit "64")
+    set(is_x64bit true)
+endif()
+
+# 定义一些 qt bin 的基础变量
+set(qt_binray_dir "${Qt5_DIR}/../../../bin")   # C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5/../../../bin
+set(lupdate_path "${qt_binray_dir}/lupdate")
+set(lrelease_path "${qt_binray_dir}/lrelease")
+
+if(APPLE)
+    set(windeployqt "${qt_binray_dir}/macdeployqt")
+elseif(UNIX)
+elseif(WIN32)
+    set(windeployqt "${qt_binray_dir}/windeployqt.exe")
+endif()
+
+message("Qt5_DIR:" ${Qt5_DIR})
+message("qt_binray_dir:" ${qt_binray_dir})
+message("windeployqt:" ${windeployqt})
+message("lupdate_path:" ${lupdate_path})
+message("lrelease_path:" ${lrelease_path})
+message("EXECUTABLE_OUTPUT_PATH:" ${EXECUTABLE_OUTPUT_PATH})
+message("CMAKE_BINARY_DIR:" ${CMAKE_BINARY_DIR})
+message("CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+message("CMAKE_RUNTIME_OUTPUT_DIRECTORY: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message("CMAKE_RUNTIME_OUTPUT_DIRECTORY: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")         # exe 和 dll 运行的输出路径
+message("CMAKE_LIBRARY_OUTPUT_DIRECTORY: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")         # 动态链接库（DLL、SO 等）的输出目录(实际不生效)
+message("CMAKE_ARCHIVE_OUTPUT_DIRECTORY： ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")         # 静态库的输出目录
+#************************************************* 拷贝 .ini 和资源文件 *******************************************************
+# copy "resources" 文件夹下的指定文件夹
+set(folders_to_copy "changelog" "licenses" "logo")
+set(source_root "${CMAKE_CURRENT_SOURCE_DIR}/resources/screenshot_ui")
+set(traget_root "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
+
+# 遍历复制文件夹集合中的每个文件夹
+foreach(it ${folders_to_copy})
+    set(copy_source_dir "${source_root}/${it}")
+    file(COPY ${copy_source_dir} DESTINATION ${traget_root})
+endforeach()
+
+file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+#******************************************* 调用 WindowsRect DLL 共 ①~④ 步骤 **********************************************
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/windows_rect/include/)                           # ①设置头文件目录
 link_directories(${trage_runtime_output_dir})                                                    # ②添加链接库路径
-#************************************************************************
+#***************************************************************************************************************************
 
 add_executable(${project_name}
     ${commom_files}
@@ -135,36 +186,19 @@ add_executable(${project_name}
     ${custom_ui_files}
 )
 
-
-# get kit architecture bit
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(arch_bit "x86")
-    set(is_x64bit false)
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(arch_bit "x64")
-    set(is_x64bit true)
-endif()
-
 # Define some variables that can be used in *.cpp
 target_compile_definitions(${project_name} PRIVATE XPROJECT_NAME="${project_name}")
 target_compile_definitions(${project_name} PRIVATE XPROJECT_VERSION="${project_version}")
-target_compile_definitions(${project_name} PRIVATE XBUILD_TIME="2023.09.17")
 target_compile_definitions(${project_name} PRIVATE XARCH_BIT="${arch_bit}")
-target_compile_definitions(${project_name} PRIVATE XIS_X64BIT="${is_x64bit}")
 target_compile_definitions(${project_name} PRIVATE XCOMPILER="${CMAKE_HOST_SYSTEM_PROCESSOR}")  # i386/i686/x86_64/unknown  Win: AMD64
 target_compile_definitions(${project_name} PRIVATE XCOMPILER_ID="${CMAKE_CXX_COMPILER_ID}")     # Clang/GCC/MSVC or GNU
-
-
-#target_compile_definitions(${project_name} PUBLIC XIS_X64BIT=${is_x64bit})
 
 message("------------BRGIN------------")
 message("XPROJECT_NAME:${project_name}")
 message("XPROJECT_VERSION:${project_version}")
 message("XARCH_BIT:${arch_bit}")
-message("XIS_X64BIT:${is_x64bit}")
 message("XCOMPILER:${CMAKE_HOST_SYSTEM_PROCESSOR}")
 message("XCOMPILER_ID:${CMAKE_CXX_COMPILER_ID}")
-#message("XIS_X64BIT:" ${is_x64bit})
 
 message("CMake Path:"
     "\nPROJECT_NAME:"  ${project_name}
@@ -226,6 +260,35 @@ if(MSVC)
         UNICODE
         _UNICODE)
 endif()
+
+
+#******************************************* 拷贝 ssl 和对应的 qt 依赖 *******************************************************
+if(APPLE)
+#    file(COPY "/usr/local/Cellar/openssl@3/3.1.1/lib/libcrypto.3.dylib" DESTINATION "${EXECUTABLE_OUTPUT_PATH}")
+#    file(COPY "/usr/local/Cellar/openssl@3/3.1.1/lib/libssl.3.dylib" DESTINATION "${exe_output_dir}")
+#    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt} ${EXECUTABLE_OUTPUT_PATH}/${project_name}.app" -verbose=1 )
+#    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}/ ${EXECUTABLE_OUTPUT_PATH}/${project_name}.app -dmg" )
+
+elseif(UNIX)
+
+elseif(WIN32)
+
+#    if(${is_x64bit})
+#        set(ssl_dir "C:/Qt/Tools/OpenSSL/Win_x64/")
+#        set(ssl_file "libssl-1_1-x64.dll" "libcrypto-1_1-x64.dll")
+#    else()
+#        set(ssl_dir "C:/Qt/Tools/OpenSSL/Win_x86/")
+#        set(ssl_file "libssl-1_1.dll" "libcrypto-1_1.dll")
+#    endif()
+
+#    foreach(it ${ssl_file})
+#        file(COPY "${ssl_dir}/bin/${it}" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+#        message("--->it:" "${ssl_dir}/bin/${it}")
+#    endforeach()
+
+    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.exe" --no-opengl-sw --no-translations)
+endif()
+#***************************************************************************************************************************
 
 include(GNUInstallDirs)
 install(TARGETS ${project_name}

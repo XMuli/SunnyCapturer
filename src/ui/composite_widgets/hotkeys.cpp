@@ -36,9 +36,9 @@ void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
 
 void Hotkeys::onBtnResetClicked(bool checked)
 {
-    ui->kseCapture->setKeySequence(QKeySequence("F3"));
-    ui->kseDelayCapture->setKeySequence(QKeySequence("F7"));
-    ui->kseCustomCapture->setKeySequence(QKeySequence("F8"));
+    ui->kseCapture->setKeySequence(QKeySequence("F6"));
+    ui->kseDelayCapture->setKeySequence(QKeySequence("Ctrl+F6"));
+    ui->kseCustomCapture->setKeySequence(QKeySequence("Shift+F6"));
 
     CONF_MANAGE.setProperty("XHotkeys_capture", ui->kseCapture->keySequence().toString());
     CONF_MANAGE.setProperty("XHotkeys_delay_capture", ui->kseDelayCapture->keySequence().toString());

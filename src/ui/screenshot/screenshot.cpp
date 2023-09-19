@@ -1082,7 +1082,8 @@ void ScreenShot::showCustomWidget(QWidget *w)
         if (isShow) {
             if (acrylicEffectEnable()) {
                 const auto& t = finishDrewPixmap().copy(QRect(pt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
-                m_paintBar->setLowerBlurEffect(t, 20);  // 此函数会照成主线程的绘画，函数卡顿
+                const auto& adius = CONF_MANAGE.property("XInterface_bulrr_effect_adius").toInt();
+                m_paintBar->setLowerBlurEffect(t, adius);  // 此函数会照成主线程的绘画，函数卡顿
             } else {
                 m_paintBar->disableBlurEffect();
             }
