@@ -3,6 +3,9 @@
 
 #include "xwidget_global.h"
 #include <QWidget>
+#include <QLabel>
+#include "../../commom/communication/communication.h"
+
 
 namespace Ui {
 class Hotkeys;
@@ -22,10 +25,9 @@ private slots:
 public slots:
     void onBtnResetClicked(bool checked = false);
 
-
-
 private:
     void initUI();
+    void setHotkeyIconStatus(QLabel * lab, const HotKeyType &type);
 
 private:
     Ui::Hotkeys *ui;

@@ -14,6 +14,7 @@
 #include "capturehelper.h"
 #include "xtextedit.h"
 #include "../paint_bar/paintbar.h"
+#include "../../commom/communication/communication.h"
 
 #ifdef _WIN32
 #include "ntwindowsrect.h"
@@ -26,7 +27,7 @@ class ScreenShot : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ScreenShot(const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);  // Horizontal Vertical
+    explicit ScreenShot(const HotKeyType &type, const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);  // Horizontal Vertical
     virtual ~ScreenShot();
 
     void capture();
@@ -100,6 +101,7 @@ private:
 
     bool                     m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
     bool                     m_bAutoDetectRect;    // 是否自动监测矩形
+    HotKeyType               m_HotKeyType;         // 初始化进来的状态，采用何用截图方式
     ActionType               m_actionType;         // 当前的操作状态
     Node                     m_node;               // 一次操作的集合
     QPointer<PaintBar>       m_paintBar;           // PaintBar

@@ -19,12 +19,13 @@
 #include "../paint_bar/pin/pinwidget.h"
 #include "../../data/configmanager.h"
 
-ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
+ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
     , m_primaryScreen(qGuiApp->primaryScreen())
     , m_screens(qGuiApp->screens())
     , m_origPix()
     , m_vdRect()
+    , m_HotKeyType(type)
     , m_bFistPressed(false)
     , m_bAutoDetectRect(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool())
     , m_actionType(ActionType::AT_wait)
@@ -49,25 +50,37 @@ ScreenShot::ScreenShot(const Qt::Orientation &orie, QWidget *parent)
         }
     }
 
+    qDebug() << "------#1---->" << hotKeyTypeToString(m_HotKeyType);
     const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
     const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
     const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
-    if (customSizeEnable) {
 
-        if (topleftEnable)
-            m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+    if (m_HotKeyType == HotKeyType::HKT_capture) {
+    } else if (m_HotKeyType == HotKeyType::HKT_delay_capture) {
+        // 不给预设的初始化矩形即可
+    } else if (m_HotKeyType == HotKeyType::HKT_custiom_capture) {
 
-        if (sizeEnable) {
-            m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
-            m_node.absoluteRect = m_node.pickedRect;
-            m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
-            m_actionType = ActionType::AT_wait;
-            setMouseTracking(false);
+
+        if (customSizeEnable) {
+            if (topleftEnable)
+                m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+
+            if (sizeEnable) {
+                m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
+                m_node.absoluteRect = m_node.pickedRect;
+                m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
+                m_actionType = ActionType::AT_wait;
+                setMouseTracking(false);
+            }
+
+            if (topleftEnable || sizeEnable)
+                m_bFistPressed = true;
         }
 
-        if (topleftEnable || sizeEnable)
-            m_bFistPressed = true;
+    } else {
     }
+
+
 }
 
 
@@ -829,19 +842,21 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
         setMouseTracking(true);
         m_bFistPressed = true;
 
-        const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
-        const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
-        const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
-        if (customSizeEnable) {
+        if (m_HotKeyType == HotKeyType::HKT_custiom_capture) {
+            const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
+            const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
+            const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
+            if (customSizeEnable) {
 
-            if (topleftEnable) {
-                m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
-            }
+                if (topleftEnable) {
+                    m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+                }
 
-            if (sizeEnable) {
-                m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
-                m_node.absoluteRect = m_node.pickedRect;
-                m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
+                if (sizeEnable) {
+                    m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
+                    m_node.absoluteRect = m_node.pickedRect;
+                    m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
+                }
             }
         }
 

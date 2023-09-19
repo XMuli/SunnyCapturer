@@ -20,7 +20,7 @@ void About::initUI()
 {
     const QString& project = QString("<html><head/><body><p><span style=\" font-size:20pt;\">%1</span><span style=\" font-size:9pt; font-weight:400;\">(%2-bit)</span></p></body></html>")
                           .arg(XPROJECT_NAME).arg(XARCH_BIT);
-    const QString& version = QString("Version %1 %2 (%3)").arg(XPROJECT_VERSION).arg(QString(XCOMPILER_ID).toLower()).arg(XBUILD_TIME);
+    const QString& version = QString("Version %1 %2 (%3)").arg(XPROJECT_VERSION).arg(XCOMPILER_ID).arg(XBUILD_TIME);
     ui->labProject->setText(project);
     ui->labVersion->setText(version);
 }

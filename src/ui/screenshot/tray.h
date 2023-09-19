@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QSystemTrayIcon>
+#include "communication.h"
 #include "screenshot.h"
 #include "tips.h"
 #include "../setting/sidesettingui.h"
@@ -14,15 +15,17 @@
 class Tray : public QObject
 {
     Q_OBJECT
-
-private:
-    void init();
+public:
+    void capture(const HotKeyType& type = HotKeyType::HKT_capture);  // 实际的调用函数
 
 public slots:
     void onCapture();
     void onSetting();
     void onTrayIcon(QSystemTrayIcon::ActivationReason reason);
     void onCountdownTips();
+
+private:
+    void init();
 
 public:
     static Tray &instance() {

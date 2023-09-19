@@ -37,5 +37,8 @@
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_number_ellipse.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/serial_number_rectangle.svg</file>
         <file>resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/strikeout.svg</file>
+        <file>resources/screenshot_ui/icons/setting/error.svg</file>
+        <file>resources/screenshot_ui/icons/setting/infomation.svg</file>
+        <file>resources/screenshot_ui/icons/setting/success.svg</file>
     </qresource>
 </RCC>

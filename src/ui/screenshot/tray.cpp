@@ -35,51 +35,56 @@ void Tray::init()
     connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
 #endif
 
-    QHotkey *hotkey = new QHotkey(QKeySequence("F6"), true, qApp); //The hotkey will be automatically registered
-    qDebug() << "Is segistered:" << hotkey->isRegistered();
-
-    QObject::connect(hotkey, &QHotkey::activated, qApp, [&](){
-        onCapture();
-        qDebug() << "Hotkey Activated - the application will quit now";
-//        qApp->quit();
-    });
-
     m_trayIcon->show();
-
     m_timerDelay->start(1000); // 1秒触发一次定时器
     m_timerDelay->stop();
     connect(m_timerDelay, &QTimer::timeout, this, &Tray::onCountdownTips);
 }
 
-void Tray::onCapture()
+void Tray::capture(const HotKeyType &type)
 {
-    if (!m_scrnShot) m_scrnShot = new ScreenShot();
+
+    qDebug() << "capture type:" << hotKeyTypeToString(type);
+    if (!m_scrnShot) m_scrnShot = new ScreenShot(type);
     const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
     const auto& delayEnable = CONF_MANAGE.property("XInterface_delay_enable").toBool();
     const double& s = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
     qDebug() << "------------>customSizeEnable:" << customSizeEnable << "delayEnable:" << delayEnable << "s:" << s;
 
-    if (customSizeEnable && delayEnable) {
+    auto delayAndCustomFunction = [this, &customSizeEnable, &delayEnable, &s]() {
 
-        QScreen* scrn = qGuiApp->screenAt(QCursor::pos());
-        if (!scrn) scrn = qGuiApp->primaryScreen();
-        m_remainingSeconds = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
-        m_countdownTips->setText(QString::number(m_remainingSeconds));
-        m_countdownTips->move(scrn->geometry().center() - QPoint(m_countdownTips->width() / 2, m_countdownTips->height() / 2));
-        m_countdownTips->show();
-        m_timerDelay->stop();
-        m_timerDelay->start();
+        if (customSizeEnable && delayEnable) {
+            QScreen* scrn = qGuiApp->screenAt(QCursor::pos());
+            if (!scrn) scrn = qGuiApp->primaryScreen();
+            m_remainingSeconds = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
+            m_countdownTips->setText(QString::number(m_remainingSeconds));
+            m_countdownTips->move(scrn->geometry().center() - QPoint(m_countdownTips->width() / 2, m_countdownTips->height() / 2));
+            m_countdownTips->show();
+            m_timerDelay->stop();
+            m_timerDelay->start();
 
-        QTimer::singleShot(s * 1000, this, [this](){
-            m_countdownTips->hide();
-            m_scrnShot->capture();
-        });
-    } else {
+            QTimer::singleShot(s * 1000, this, [this](){
+                m_countdownTips->hide();
+                m_scrnShot->capture();
+            });
+        }
+    };
+
+    if (type == HotKeyType::HKT_capture) {
         m_scrnShot->capture();
+    } else if (type == HotKeyType::HKT_delay_capture || type == HotKeyType::HKT_custiom_capture) {
+        delayAndCustomFunction();
+    } else {
+        qDebug() << "type is empty!";
     }
 
     if(!m_scrnShot->isActiveWindow())
         m_scrnShot->activateWindow();
+}
+
+void Tray::onCapture()
+{
+    capture(); // 套一层，方便兼容 QAction 发射的信号
 }
 
 void Tray::onSetting()
