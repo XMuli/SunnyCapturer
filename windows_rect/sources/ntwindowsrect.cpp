@@ -1,4 +1,4 @@
-#include "ntwindowsrect.h"
+﻿#include "ntwindowsrect.h"
 
 static std::vector<RectNode> g_rectNodes;
 

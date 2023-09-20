@@ -1,7 +1,9 @@
 ﻿#include "communication.h"
 #include <QApplication>
 #include <QKeySequence>
+#include <QLocale>
 #include <QDebug>
+#include <QTranslator>
 #include "../../data/configmanager.h"
 #include "../../ui/screenshot/tray.h"
 
@@ -76,6 +78,39 @@ bool Communication::shortcutStatus(const HotKeyType &type) const
     return hk->isRegistered();
 }
 
+void Communication::setAppFont(const QString &font)
+{
+    TRAY.setAppFont(font);
+}
+
+void Communication::loadTranslation(const QString &language)
+{
+    QString temp = language.isEmpty() ? CONF_MANAGE.property("XGeneral_language").toString() : language; //language.isEmpty() ? QLocale::system().name() : t;
+
+    // 创建 QTranslator 对象
+    static QTranslator* translator = nullptr;
+    if (!translator) translator = new QTranslator(this);
+
+    // 构建翻译文件的路径
+    const QString& qmDir = qGuiApp->applicationDirPath() + "/translations/";
+    const QString& qmName = QString("%1_%2.qm").arg(XPROJECT_NAME).arg(toLocaleName(temp));
+    const QString& qmPath = qmDir + qmName;
+    qDebug() << "loadTranslation qmPath:" << qmPath;
+    if (translator->load(qmPath)) {  // 加载翻译文件
+        qApp->installTranslator(translator);
+        emit COMM.sigLanguageChange(qmName);
+
+        CONF_MANAGE.setProperty("XGeneral_language", temp);
+    }
+}
+
+QString Communication::toLocaleName(const QString &language)
+{
+    const auto& map = languageMap();
+    auto it = map.find(language);
+    return it != map.cend() ? it->second : "";
+}
+
 QString hotKeyTypeToString(const HotKeyType &hotKeyType)
 {
     switch (hotKeyType) {
@@ -88,4 +123,12 @@ QString hotKeyTypeToString(const HotKeyType &hotKeyType)
     default:
         return "Unknown";
     }
+}
+
+std::map<QString, QString> languageMap()
+{
+    static  std::map<QString, QString> map = {  {"English", "en_US"}
+                                              , {"简体中文", "zh_CN"}
+                                              , {"繁体中文", "zh_TW"}};
+    return map;
 }

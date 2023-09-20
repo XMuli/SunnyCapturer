@@ -1,4 +1,4 @@
-#ifndef NTWINDOWSRECT_H
+﻿#ifndef NTWINDOWSRECT_H
 #define NTWINDOWSRECT_H
 
 #include <Windows.h>

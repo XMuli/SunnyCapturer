@@ -2,43 +2,75 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QGuiApplication>
 #include <QIcon>
 #include <QKeySequence>
 #include <QShortcut>
 #include <QHotkey>
 #include <QTimer>
+#include <QFont>
+#include <QProcess>
+#include "communication.h"
 #include "../../data/configmanager.h"
 
 void Tray::init()
 {
-    QAction* srnShot = new QAction(tr("Capture"), this);
-    QAction* setting = new QAction(tr("Setting"), this);
-    QAction* quit = new QAction(tr("Quit"), this);
+    setAppFont("");
+    QAction* capture = new QAction(this);
+    QAction* setting = new QAction(this);
+    QAction* restart = new QAction(this);
+    QAction* quit = new QAction(this);
+    capture->setObjectName("actCapture");
+    setting->setObjectName("actSetting");
+    restart->setObjectName("actRestart");
+    quit->setObjectName("actQuit");
 
-    m_trayMenu->addAction(srnShot);
+    m_trayMenu->addAction(capture);
     m_trayMenu->addAction(setting);
     m_trayMenu->addSeparator();
+    m_trayMenu->addAction(restart);
     m_trayMenu->addAction(quit);
 
     m_trayIcon->setIcon(QIcon(":/resources/screenshot_ui/logo/logo.svg"));
 //    m_trayIcon->setToolTip("");
     m_trayIcon->setContextMenu(m_trayMenu);
 
-
-    connect(m_trayIcon, &QSystemTrayIcon::activated, this, &Tray::onTrayIcon);
-    connect(srnShot, &QAction::triggered, this, &Tray::onCapture);
-    connect(setting, &QAction::triggered, this, &Tray::onSetting);
-    connect(quit, &QAction::triggered, [](){ qApp->quit(); });
-
-#ifdef Q_OS_WIN
-    // Ensure proper removal of tray icon when program quits on Windows.
-    connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
-#endif
-
+    onLanguageChange("");
     m_trayIcon->show();
     m_timerDelay->start(1000); // 1秒触发一次定时器
     m_timerDelay->stop();
+
+    connect(m_trayIcon, &QSystemTrayIcon::activated, this, &Tray::onTrayIcon);
+    connect(capture, &QAction::triggered, this, &Tray::onCapture);
+    connect(setting, &QAction::triggered, this, &Tray::onSetting);
+    connect(restart, &QAction::triggered, this, &Tray::onRestart);
+    connect(quit, &QAction::triggered, [](){ qApp->quit(); });
     connect(m_timerDelay, &QTimer::timeout, this, &Tray::onCountdownTips);
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { onLanguageChange("");});
+
+#ifdef Q_OS_WIN  // Ensure proper removal of tray icon when program quits on Windows.
+    connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
+#endif
+}
+
+void Tray::setAppFont(const QString &tFont)
+{
+    QStringList list = tFont.isEmpty() ? CONF_MANAGE.property("XGeneral_font").toString().split(",") : tFont.split(",");
+    if (list.size() < 2) {
+        list .clear();
+
+    #if defined(Q_OS_WIN)
+        list << "Microsoft YaHei" << "9";
+    #elif defined(Q_OS_LINUX)
+        list << "WenQuanYi Micro Hei" << "9";
+    #elif defined(Q_OS_MAC)
+        list << "PingFang SC" << "11";
+    #endif
+
+    }
+    const QFont font(list.at(0), list.at(1).toInt());
+    qApp->setFont(font);
+    m_trayMenu->setFont(font);
 }
 
 void Tray::capture(const HotKeyType &type)
@@ -93,6 +125,13 @@ void Tray::onSetting()
     m_setting->show();
 }
 
+void Tray::onRestart()
+{
+    const QString& path = qApp->applicationFilePath();
+    QProcess::startDetached(path, QStringList());
+    QCoreApplication::quit();
+}
+
 void Tray::onTrayIcon(QSystemTrayIcon::ActivationReason reason)
 {
     if (QSystemTrayIcon::Trigger == reason) {  //  鼠标单击
@@ -108,6 +147,20 @@ void Tray::onCountdownTips()
         m_timerDelay->stop();
         m_countdownTips->hide();
     }
+}
+
+void Tray::onLanguageChange(const QString qmName)
+{
+    Q_UNUSED(qmName)
+    QAction * actCapture = findChild<QAction*>("actCapture");
+    QAction * actSetting = findChild<QAction*>("actSetting");
+    QAction * actRestart = findChild<QAction*>("actRestart");
+    QAction * actQuit = findChild<QAction*>("actQuit");
+
+    if (actCapture) actCapture->setText(tr("Capture"));
+    if (actSetting) actSetting->setText(tr("Setting"));
+    if (actRestart) actRestart->setText(tr("Restart"));
+    if (actQuit) actQuit->setText(tr("Quit"));
 }
 
 Tray::Tray(QObject *parent)

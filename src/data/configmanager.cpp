@@ -1,4 +1,4 @@
-#include "configmanager.h"
+﻿#include "configmanager.h"
 #include <QApplication>
 
 // 属性对象改变时  ---snyc----> member对象的值也会改变;但反之 member对象的值改变不会同步属性对象改;

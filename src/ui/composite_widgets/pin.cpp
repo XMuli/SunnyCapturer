@@ -1,5 +1,6 @@
 ﻿#include "pin.h"
 #include "ui_pin.h"
+#include "communication.h"
 #include "../../data/configmanager.h"
 
 Pin::Pin(QWidget *parent) :
@@ -36,4 +37,5 @@ void Pin::initUI()
 {
     ui->sbOpacity->setValue(CONF_MANAGE.property("XPin_opacity").toInt());
     ui->sbMaxSize->setValue(CONF_MANAGE.property("XPin_maximum_size").toInt());
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }

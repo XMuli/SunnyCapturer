@@ -2,6 +2,7 @@
 #include "ui_about.h"
 #include <QPointer>
 #include "licenseui.h"
+#include "communication.h"
 
 About::About(QWidget *parent) :
     QWidget(parent),
@@ -23,6 +24,8 @@ void About::initUI()
     const QString& version = QString("Version %1 %2 (%3)").arg(XPROJECT_VERSION).arg(XCOMPILER_ID).arg(XBUILD_TIME);
     ui->labProject->setText(project);
     ui->labVersion->setText(version);
+
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 
 void About::on_btnLicenses_released()

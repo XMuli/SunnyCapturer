@@ -1,4 +1,4 @@
-#ifndef XTEXTEDIT_H
+﻿#ifndef XTEXTEDIT_H
 #define XTEXTEDIT_H
 
 #include <QFocusEvent>

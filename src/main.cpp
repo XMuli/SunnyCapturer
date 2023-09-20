@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
 //    CONF_MANAGE.writeToFile();
 
-    COMM;
+    COMM.loadTranslation("");
 
     TRAY; // 启动托盘
 

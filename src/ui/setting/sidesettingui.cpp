@@ -7,6 +7,7 @@
 #include "pin.h"
 #include "hotkeys.h"
 #include "about.h"
+#include "communication.h"
 
 SideSettingUI::SideSettingUI(QWidget *parent)
     : QWidget(parent)
@@ -87,7 +88,7 @@ void SideSettingUI::initUI()
     connect(m_pin, &AbsSettingUI::sigBtnResetClicked, pin, &Pin::onBtnResetClicked);
     connect(m_hotkeys, &AbsSettingUI::sigBtnResetClicked, hotkeys, &Hotkeys::onBtnResetClicked);
 //    connect(m_tokens, &AbsSettingUI::sigBtnResetClicked, this, &SideSettingUI::onBtnResetClicked);
-
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 
 void SideSettingUI::onSideGroupChanged(int idx)

@@ -28,8 +28,8 @@ foreach(it ${qt_moduls})
     message("--->qt_moduls:" Qt${QT_VERSION_MAJOR}::${it})
 endforeach()
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${qt_moduls})
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls})
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${qt_moduls} LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls} LinguistTools) # LinguistTools No link
 
 set(commom_files
     commom/include/xlog.h
@@ -174,7 +174,35 @@ foreach(it ${folders_to_copy})
     file(COPY ${copy_source_dir} DESTINATION ${traget_root})
 endforeach()
 
-file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+#file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+#************************************************* update .ts, and generate .qm *******************************************************
+set(ts_dir "${CMAKE_CURRENT_SOURCE_DIR}/translations")
+if(APPLE)
+    set(qm_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.app/Contents/MacOS/translations)
+else()
+    set(qm_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations)
+endif()
+
+file(MAKE_DIRECTORY "${ts_dir}" "${qm_dir}")
+file(GLOB ts_files "${ts_dir}/*.ts")
+
+set(ts_files_name "")    # 获取文件名部分（不包括路径）
+foreach(it ${ts_files})
+    get_filename_component(ts_filename ${it} NAME_WE)
+    list(APPEND ts_files_name ${ts_filename})
+endforeach()
+
+##编译时更新 .ts 和生成 .qm, # 命令参数问题：确保命令的参数传递方式正确。有时候在使用 execute_process 时，参数的传递需要一些特殊的格式，比如将参数放到列表中传递。
+foreach(it ${ts_files_name})
+    execute_process(COMMAND "${lupdate_path}" -locations none -no-obsolete -no-ui-lines "${CMAKE_CURRENT_SOURCE_DIR}" -ts "${ts_dir}/${it}.ts") # 注意参数  # -no-obsolete -no-ui-lines
+    execute_process(COMMAND "${lrelease_path}" "${ts_dir}/${it}.ts" -qm "${qm_dir}/${it}.qm")
+endforeach()
+
+file(GLOB_RECURSE qm_files "${qm_dir}/*.qm")
+
+message("-->ts_files_name: ${ts_files_name}")
+message("-->ts_files: ${ts_files}")
+message("-->qm_files: ${qm_files}")
 #******************************************* 调用 WindowsRect DLL 共 ①~④ 步骤 **********************************************
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/windows_rect/include/)                           # ①设置头文件目录
 link_directories(${trage_runtime_output_dir})                                                    # ②添加链接库路径
@@ -184,6 +212,7 @@ add_executable(${project_name}
     ${commom_files}
     ${src_files}
     ${custom_ui_files}
+    ${qm_files}
 )
 
 # Define some variables that can be used in *.cpp

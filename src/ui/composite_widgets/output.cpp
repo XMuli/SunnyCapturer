@@ -1,11 +1,12 @@
 ﻿#include "output.h"
 #include "ui_output.h"
-#include "../../data/configmanager.h"
 
 #include <QDesktopServices>
 #include <QStandardPaths>
 #include <QFileDialog>
 #include <QUrl>
+#include "communication.h"
+#include "../../data/configmanager.h"
 #include "../paint_bar/toolbar_level/paintbarhelper.h"
 
 Output::Output(QWidget *parent) :
@@ -46,6 +47,7 @@ void Output::initUI()
     connect(ui->btnConfigOpen, &QPushButton::released, this, &Output::onSleletedDir);
     connect(ui->btnQuickSaveSelect, &QPushButton::released, this, &Output::onSleletedDir);
     connect(ui->btnAutoSaveSelect, &QPushButton::released, this, &Output::onSleletedDir);
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 
 void Output::on_sbImageQuailty_valueChanged(int arg1)

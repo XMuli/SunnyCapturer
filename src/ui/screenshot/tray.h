@@ -17,12 +17,15 @@ class Tray : public QObject
     Q_OBJECT
 public:
     void capture(const HotKeyType& type = HotKeyType::HKT_capture);  // 实际的调用函数
+    void setAppFont(const QString& tFont);
 
 public slots:
     void onCapture();
     void onSetting();
+    void onRestart();
     void onTrayIcon(QSystemTrayIcon::ActivationReason reason);
     void onCountdownTips();
+    void onLanguageChange(const QString qmName);
 
 private:
     void init();

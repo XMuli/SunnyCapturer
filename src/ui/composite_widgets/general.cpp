@@ -1,7 +1,10 @@
 ﻿#include "general.h"
 #include "ui_general.h"
+#include <QDir>
 #include <QFontDialog>
+#include <QTranslator>
 #include <map>
+#include "communication.h"
 #include "../../data/configmanager.h"
 
 General::General(QWidget *parent)
@@ -19,9 +22,7 @@ General::~General()
 
 void General::initUI()
 {
-    std::map<QString, QString> languages = {  {"English", "en_US"}
-                                            , {"简体中文", "zh_CN"}
-                                            , {"繁体中文", "zh_TW"}};
+    const auto& languages = languageMap();
 
     std::map<QString, QtMsgType> logLevel = {  {"Debug", QtDebugMsg}
                                              , {"Info", QtInfoMsg}
@@ -38,12 +39,33 @@ void General::initUI()
     ui->cbbLogLevel->setCurrentText(currLogLevel);
     ui->btnFont->setText(CONF_MANAGE.property("XGeneral_font").toString());
     ui->cbAutostart->setChecked(CONF_MANAGE.property("XGeneral_autostart").toBool());
-    ui->btnFont->setFixedHeight(ui->cbbLanguage->height());
+    ui->btnFont->resize(ui->cbbLanguage->size());
+
+    connect(ui->cbbLanguage, &QComboBox::currentTextChanged, this, &General::onCbbLanguageCurrentTextChanged);
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 
-void General::on_cbbLanguage_currentTextChanged(const QString &arg1)
+void General::setAutoStart(const bool &enable)
 {
-    CONF_MANAGE.setProperty("XGeneral_language", arg1);
+#if defined(Q_OS_WIN)
+    QSettings reg("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+    if (enable) {
+        QString strAppPath = QDir::toNativeSeparators(qApp->applicationFilePath());
+        strAppPath.replace(QChar('/'), QChar('\\'), Qt::CaseInsensitive);
+        reg.setValue(XPROJECT_NAME, strAppPath);
+    } else {
+        reg.setValue(XPROJECT_NAME, "");
+    }
+#else
+#endif
+}
+
+void General::onCbbLanguageCurrentTextChanged(const QString &arg1)
+{
+    COMM.loadTranslation(arg1);
+    ui->retranslateUi(this);
+
+    ui->btnFont->setText(CONF_MANAGE.property("XGeneral_font").toString()); // fix: 切换语言后会被刷新掉
 }
 
 
@@ -60,8 +82,8 @@ void General::on_btnFont_released()
     QFont font = QFontDialog::getFont(&ok, QFont(fontFamily.split(',').at(0)), this, tr("Select Font"));
     if (!ok) return;
 
-    qApp->setFont(font);
     QString text = QString("%1,%2").arg(font.family()).arg(font.pointSize());
+    COMM.setAppFont(text);
     ui->btnFont->setText(text);
 
     CONF_MANAGE.setProperty("XGeneral_font", text);
@@ -71,6 +93,7 @@ void General::on_btnFont_released()
 
 void General::on_cbAutostart_clicked(bool checked)
 {
+    setAutoStart(checked);
     CONF_MANAGE.setProperty("XGeneral_autostart", checked);
 }
 

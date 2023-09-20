@@ -1,4 +1,4 @@
-#ifndef CONFIG_GLOBAL_H
+﻿#ifndef CONFIG_GLOBAL_H
 #define CONFIG_GLOBAL_H
 
 #include <cstring>

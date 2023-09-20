@@ -1,7 +1,9 @@
 ﻿#include "hotkeys.h"
 #include "ui_hotkeys.h"
 #include <QKeySequence>
+#include "communication.h"
 #include "../../data/configmanager.h"
+
 Hotkeys::Hotkeys(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Hotkeys)
@@ -42,6 +44,7 @@ void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
 
     const bool& resetOK = COMM.resetShortcut(keySequence, type);
     if (resetOK) CONF_MANAGE.setProperty(propertyName.toStdString().data(), keySequence.toString());
+    keyEdit->setStyleSheet(QString("background-color: %1;").arg(resetOK ? "" : "#FFCDD2"));
     setHotkeyIconStatus(lab, type);
 }
 
@@ -68,6 +71,7 @@ void Hotkeys::initUI()
     connect(ui->kseCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
     connect(ui->kseDelayCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
     connect(ui->kseCustomCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 
 void Hotkeys::setHotkeyIconStatus(QLabel *lab, const HotKeyType &type)

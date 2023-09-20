@@ -1,5 +1,6 @@
 ﻿#include "licenseui.h"
 #include "ui_licenseui.h"
+#include "communication.h"
 
 LicenseUI::LicenseUI(QWidget *parent) :
     QWidget(parent),
@@ -15,6 +16,7 @@ LicenseUI::LicenseUI(QWidget *parent) :
     QString copyright = QString(tr("Copyright (C) 2023 %1. All rights reserved.<br>The birth of this project is inseparable from these open source software")).arg(author);
     QString introduce = QString("<html><body><b>%1</b><br>%2<br></body></html>").arg(name).arg(copyright);
     ui->labIntroduce->setText(introduce);
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
     resize(900, 1200);
 }
 

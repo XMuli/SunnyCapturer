@@ -1,4 +1,4 @@
-#ifndef X11WINDOWSRECT_H
+﻿#ifndef X11WINDOWSRECT_H
 #define X11WINDOWSRECT_H
 
 

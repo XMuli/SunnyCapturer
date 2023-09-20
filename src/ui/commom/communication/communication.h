@@ -5,6 +5,7 @@
 #include <QPointer>
 #include <QWidget>
 #include "qhotkey.h"
+#include "../../data/configmanager.h"
 
 #define COMM Communication::instance()
 
@@ -26,8 +27,15 @@ public:
     void init();
     bool resetShortcut(const QKeySequence &keySequence, const HotKeyType& type);
     bool shortcutStatus(const HotKeyType& type) const ;
+    void setAppFont(const QString& font);
+    void loadTranslation(const QString& language);
+
+signals:
+    void sigLanguageChange(const QString qmFile);
 
 private:
+    QString toLocaleName(const QString& language);
+
     explicit Communication(QObject *parent = nullptr);
     virtual ~Communication() = default;
     Communication(const Communication&) = delete;
@@ -40,5 +48,8 @@ private:
     QHotkey* m_hkDelayCapture;
     QHotkey* m_hkCustiomCapture;
 };
+
+
+std::map<QString, QString> languageMap();
 
 #endif // COMMUNICATION_H

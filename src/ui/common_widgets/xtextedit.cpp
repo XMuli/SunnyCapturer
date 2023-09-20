@@ -1,4 +1,4 @@
-#include "xtextedit.h"
+﻿#include "xtextedit.h"
 
 XTextEdit::XTextEdit(QWidget* parent)
     : QTextEdit(parent)

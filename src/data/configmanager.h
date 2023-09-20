@@ -1,4 +1,4 @@
-#ifndef CONFIGMANAGER_H
+﻿#ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
 
 #include <QObject>

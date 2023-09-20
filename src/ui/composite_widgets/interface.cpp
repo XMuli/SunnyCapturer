@@ -1,6 +1,7 @@
 ﻿#include "interface.h"
 #include "ui_interface.h"
 #include <map>
+#include "communication.h"
 #include "../../data/configmanager.h"
 
 Interface::Interface(QWidget *parent) :
@@ -49,6 +50,7 @@ void Interface::initUI()
 
     connect(ui->cpHighlight, &ColorPicker::sigPickedColor, this, &Interface::onHighlightPickedColor);
     connect(ui->cpCrosshair, &ColorPicker::sigPickedColor, this, &Interface::onCrosshairPickedColor);
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 
 void Interface::on_cbbStyle_currentTextChanged(const QString &arg1)
