@@ -91,25 +91,70 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
-procedure InstallVCRuntimeX64( );
-Var
-  szApp, szParam ,szIntallPath: String;
-  nRetCode : Integer;
+procedure InstallVCRuntime( );
+var
+  szParam, szExecutable, szArchitecture, StatusMsg, szFileExists: String;
+  nRetCode: Integer;
+  bFileExists, bVCRuntimeInstalled: Boolean; // 定义一个布尔变量
+  
 begin
- 
-  if not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8bdfe669-9705-4184-9368-db9ce581e0e7}') then
+  szArchitecture := '{#MyArchitecture}';
+  if szArchitecture  = 'x64' then
   begin
-    szParam := '/install /quiet /norestart';
-    Exec(ExpandConstant('{app}\VC_redist.x64.exe'), szParam, '', SW_HIDE, ewWaitUntilTerminated, nRetCode);
-    Sleep(100);  
-  end; 
+    szExecutable := ExpandConstant('{app}') + '\VC_redist.x64.exe';
+    bVCRuntimeInstalled := RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8bdfe669-9705-4184-9368-db9ce581e0e7}');
+  end
+  else
+  begin
+    szExecutable := ExpandConstant('{app}') + '\VC_redist.x86.exe';
+    bVCRuntimeInstalled := RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8bdfe669-9705-4184-9368-db9ce581e0e7}');  // 需要修改对应的 x86 guid 数值
+  end;
+  
+
+  bFileExists := FileExists(szExecutable);
+
+  if bVCRuntimeInstalled then
+    StatusMsg := 'True'
+  else
+    StatusMsg := 'False';
+	
+  if bFileExists then
+    szFileExists := 'True'
+  else
+    szFileExists := 'False';
+
+    MsgBox('szExecutable：' + szExecutable + ' ' + '{app}' + szArchitecture, mbInformation, MB_OK);
+    MsgBox('StatusMsg:' + StatusMsg + ' szFileExists:' + szFileExists, mbInformation, MB_OK);
+    MsgBox('The value of {app} is: ' + ExpandConstant('{app}'), mbInformation, MB_OK);
+
+	Log('Executable file not found: ' + szExecutable);
+
+  // 检查系统中是否已经安装了 VC_redist，如果已经安装则跳过
+  if bVCRuntimeInstalled then
+    begin
+    MsgBox('@0', mbInformation, MB_OK);
+    Log('VC_redist is already installed. Skipping installation.');
+    end
+  else
+    if bFileExists then
+      begin
+      MsgBox('@1', mbInformation, MB_OK);
+      szParam := '/install /quiet /norestart';
+      Exec(szExecutable, szParam, '', SW_HIDE, ewWaitUntilTerminated, nRetCode);
+      Sleep(100);
+      end
+    else
+      begin
+      MsgBox('@2', mbInformation, MB_OK);
+      Log('Executable file not found: ' + szExecutable);
+      end
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then
   begin
-    InstallVCRuntimeX64();
+    InstallVCRuntime();
     Log('RESULTCODE=0');
   end;
 end;
