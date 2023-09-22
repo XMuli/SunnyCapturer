@@ -6,10 +6,10 @@
 #define MyAppPublisher "Vincent Teams"
 #define MyAppURL "https://github.com/XMuli/Sunny"
 #define MyAppExeName "Sunny.exe"
-#define MyArchitecture "x64"
-#define MyCOMPILER_ID "MSVC"
+#define MyArchitecture "x64"   ; x64    x86
+#define MyCOMPILER_ID "MSVC"   ; WinGW  MSVC
 #define MySrc "."
-#define MyBinDir "./bin"
+#define MyBinDir "bin"         ; 相对于 .iss 文件的路径
 #define MyOutputDir "../Archived"
 
 
@@ -17,7 +17,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{FA8A4B7A-24C2-45AF-B4A0-14A15ABD4530}
+AppId={{9A015CFA-E381-4CFA-8496-07E627B373DB}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -43,6 +43,9 @@ Password=
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+;开启日志功能
+SetupLogging=yes
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -93,7 +96,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 [Code]
 procedure InstallVCRuntime( );
 var
-  szParam, szExecutable, szArchitecture, StatusMsg, szFileExists: String;
+  szAppName, szParam, szExecutable, szArchitecture, szVCRuntimeInstalled, szFileExists: String;
   nRetCode: Integer;
   bFileExists, bVCRuntimeInstalled: Boolean; // 定义一个布尔变量
   
@@ -101,60 +104,63 @@ begin
   szArchitecture := '{#MyArchitecture}';
   if szArchitecture  = 'x64' then
   begin
-    szExecutable := ExpandConstant('{app}') + '\VC_redist.x64.exe';
-    bVCRuntimeInstalled := RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8bdfe669-9705-4184-9368-db9ce581e0e7}');
+    szAppName := 'vc_redist.x64.exe';
   end
   else
   begin
-    szExecutable := ExpandConstant('{app}') + '\VC_redist.x86.exe';
-    bVCRuntimeInstalled := RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8bdfe669-9705-4184-9368-db9ce581e0e7}');  // 需要修改对应的 x86 guid 数值
+    szAppName := 'vc_redist.x86.exe';
   end;
-  
 
+  szExecutable := ExpandConstant('{app}\') + szAppName;
+  bVCRuntimeInstalled := RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{8bdfe669-9705-4184-9368-db9ce581e0e7}');   // x64或x86 均为此 guid 数值
   bFileExists := FileExists(szExecutable);
-
+  
   if bVCRuntimeInstalled then
-    StatusMsg := 'True'
+    szVCRuntimeInstalled := 'True'
   else
-    StatusMsg := 'False';
-	
+    szVCRuntimeInstalled := 'False';
+    
   if bFileExists then
     szFileExists := 'True'
   else
     szFileExists := 'False';
 
-    MsgBox('szExecutable：' + szExecutable + ' ' + '{app}' + szArchitecture, mbInformation, MB_OK);
-    MsgBox('StatusMsg:' + StatusMsg + ' szFileExists:' + szFileExists, mbInformation, MB_OK);
-    MsgBox('The value of {app} is: ' + ExpandConstant('{app}'), mbInformation, MB_OK);
+	Log('-->szAppName:' + szAppName + ' szExecutable:' + szExecutable + ' szArchitecture:' + szArchitecture + ' szVCRuntimeInstalled:' + szVCRuntimeInstalled + ' szFileExists:' + szFileExists + ' The value of {app} is: ' + ExpandConstant('{app}'));
 
-	Log('Executable file not found: ' + szExecutable);
-
-  // 检查系统中是否已经安装了 VC_redist，如果已经安装则跳过
-  if bVCRuntimeInstalled then
+  if bVCRuntimeInstalled then      // 系统若已经安装了 VC_redist 则跳过
     begin
-    MsgBox('@0', mbInformation, MB_OK);
     Log('VC_redist is already installed. Skipping installation.');
     end
   else
-    if bFileExists then
+    if bFileExists then            // 此文件存在才安装
       begin
-      MsgBox('@1', mbInformation, MB_OK);
+	  Log('VC_redist is install');
       szParam := '/install /quiet /norestart';
       Exec(szExecutable, szParam, '', SW_HIDE, ewWaitUntilTerminated, nRetCode);
       Sleep(100);
       end
     else
       begin
-      MsgBox('@2', mbInformation, MB_OK);
       Log('Executable file not found: ' + szExecutable);
       end
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
+var
+  logfilepathname, logfilename, newfilepathname: string;
 begin
-  if CurStep = ssPostInstall then
+  if CurStep = ssPostInstall then   // 通常是在安装程序成功安装应用程序之后执行的步骤
   begin
     InstallVCRuntime();
     Log('RESULTCODE=0');
+  end;
+
+  logfilepathname := ExpandConstant('{log}');
+  logfilename := ExtractFileName(logfilepathname);
+  newfilepathname := ExpandConstant('{app}\') + logfilename;
+
+  if CurStep = ssDone then          // 当前的安装步骤是否已经完成（Done）
+  begin
+    FileCopy(logfilepathname, newfilepathname, false);
   end;
 end;
