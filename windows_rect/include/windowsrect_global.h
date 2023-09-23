@@ -15,7 +15,42 @@
 #  define WINDOWSRECT_EXPORT Q_DECL_IMPORT
 #endif
 
+#include <iostream>
+#include <string>
 
+
+
+struct XRECT
+{
+    long    left;
+    long    top;
+    long    width;
+    long    height;
+    long    right;
+    long    bottom;
+};
+
+struct RectNode
+{
+    XRECT rect;             // 显示器坐标
+    XRECT relativelyRect;   // 相对窗口坐标
+    std::wstring title;
+    std::wstring notes; // 备注
+
+    void* ntHWnd;               // NT OS: HWND
+    unsigned long ntPocessId;   // NT OS: DWORD
+    unsigned long x11HWnd;      // Linux OS; typedef XID Window;
+
+    void printf()
+    {
+        std::wcout << L"---------------------------printf Start-------------------------------" << std::endl;
+        std::wcout << L"rect(" << rect.left << L", " << rect.top << L", " << rect.right - rect.left << L" * " << rect.bottom - rect.top << L")" << std::endl;
+        std::wcout << L"title:[" << title << L"]\n notes:[" << notes << L"]" << std::endl;
+        std::wcout << L"ntHWnd:[" << ntHWnd << L"] ntPocessId:[" << ntPocessId << L"]" << std::endl;
+        std::wcout << L"x11HWnd:[" << x11HWnd << L"]" << std::endl;
+        std::wcout << L"---------------------------printf End-------------------------------" << std::endl << std::endl;
+    }
+};
 
 
 #endif // WINDOWSRECT_GLOBAL_H

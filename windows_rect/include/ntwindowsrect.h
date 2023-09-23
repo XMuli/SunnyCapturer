@@ -9,36 +9,11 @@
 #include <vector>
 #include "windowsrect_global.h"
 
-struct RectNode
-{
-    RECT rect;             // 显示器坐标
-    RECT relativelyRect;   // 相对窗口坐标
-    std::wstring title;
-    std::wstring notes; // 备注
-
-    unsigned long x11HWnd;  // Linux OS
-
-    HWND  ntHWnd;            // NT OS
-    DWORD ntPocessId;
-
-    void printf();
-};
-
-//class NtWindowsRect
-//{
-//public:
-//    NtWindowsRect();
-//};
 
 
-//#ifdef _WIN64
-//BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
-//#else
-//BOOL CALLBACK EnumWindowsProc32(HWND hwnd, LPARAM lParam);
-//#endif
+RECT  xrect2rect(const XRECT& rt);
+XRECT rect2xrect(const RECT& rt);
 
-
-
-extern "C" WINDOWSRECT_EXPORT bool enumWindowsRect(std::vector<RectNode>& rectNodes);
+void enumWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT& pos);
 
 #endif // NTWINDOWSRECT_H

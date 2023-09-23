@@ -11,17 +11,11 @@
 #include <QRect>
 #include <QPointer>
 #include "tips.h"
-#include "capturehelper.h"
 #include "xtextedit.h"
+#include "capturehelper.h"
 #include "../paint_bar/paintbar.h"
 #include "../../commom/communication/communication.h"
-
-#ifdef _WIN32
-#include "ntwindowsrect.h"
-#elif __linux__
-#include "x11windowsrect.h"
-#elif __APPLE__ || __MACH__
-#endif
+#include "windowsrect.h" // 引用位置在 Qt 库之后，避免 x11 库冲突
 
 class ScreenShot : public QWidget
 {
@@ -121,10 +115,10 @@ private:
 };
 
 
-#if defined(Q_OS_WIN)
-    const QRect rectToQRect(const RECT& rect);
-#elif defined(Q_OS_LINUX)
+const QRect xrectToQRect(const XRECT &rect);
 
+#if defined(Q_OS_WIN)
+#elif defined(Q_OS_LINUX)
 #elif defined(Q_OS_MAC)
 #endif
 

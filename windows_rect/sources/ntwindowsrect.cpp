@@ -2,21 +2,6 @@
 
 static std::vector<RectNode> g_rectNodes;
 
-//NtWindowsRect::NtWindowsRect()
-//{
-
-//}
-
-
-void RectNode::printf()
-{
-    std::wcout << L"---------------------------printf Start-------------------------------" << std::endl;
-    std::wcout << L"rect(" << rect.left << L", " << rect.top << L", " << rect.right - rect.left << L" * " << rect.bottom - rect.top << L")" << std::endl;
-    std::wcout << L"title:[" << title << L"]\n notes:[" << notes << L"]" << std::endl;
-    std::wcout << L"ntHWnd:[" << ntHWnd << L"]\n x11HWnd:[" << x11HWnd << L"]" << std::endl;
-    std::wcout << L"---------------------------printf End-------------------------------" << std::endl << std::endl;
-}
-
 
 // 自定义的一些过滤
 bool WindowsRectFilter(HWND hwnd)
@@ -25,14 +10,13 @@ bool WindowsRectFilter(HWND hwnd)
 }
 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
-//BOOL EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
     POINT pos;
     pos.x = ((int)(short)LOWORD(lParam));
     pos.y = ((int)(short)HIWORD(lParam));
 
     RectNode node;
-    RECT& rect = node.rect;
+    RECT rect;
 
     if (IsWindowVisible(hwnd)) {
         wchar_t windowText[MAX_PATH] = L"";
@@ -40,6 +24,9 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         node.title = windowText;
 
         GetWindowRect(hwnd, &rect);
+
+        node.rect = rect2xrect(rect);
+
         const int x = rect.left;
         const int y = rect.top;
         const int width = rect.right - rect.left;
@@ -57,20 +44,38 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
 
 BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
-//BOOL EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
 {
     return TRUE;
 }
 
-bool enumWindowsRect(std::vector<RectNode>& rectNodes)
+RECT xrect2rect(const XRECT &rt)
 {
-    POINT pos;
-    GetCursorPos(&pos);
+    RECT rect;
+    rect.left = rt.left;
+    rect.top = rt.top;
+    rect.right = rt.right;
+    rect.bottom = rt.bottom;
 
+    return rect;
+}
+
+void enumWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos)
+{
     std::wcout << L"--->pos(" << pos.x << L", " << pos.y << L")" << std::endl;
-    rectNodes = g_rectNodes;
     g_rectNodes.clear();
     EnumWindows(EnumWindowsProc, MAKELPARAM(pos.x, pos.y));
+    rectNodes = g_rectNodes;
+}
 
-    return g_rectNodes.size() ? true : false;
+XRECT rect2xrect(const RECT &rt)
+{
+    XRECT xrect;
+    xrect.left = rt.left;
+    xrect.top = rt.top;
+    xrect.right = rt.right;
+    xrect.bottom = rt.bottom;
+    xrect.width = rt.right - rt.left;
+    xrect.height = rt.bottom - rt.top;
+
+    return xrect;
 }

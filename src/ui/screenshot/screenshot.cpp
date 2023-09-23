@@ -19,15 +19,16 @@
 #include "../paint_bar/pin/pinwidget.h"
 #include "../../data/configmanager.h"
 
+
 ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
     , m_primaryScreen(qGuiApp->primaryScreen())
     , m_screens(qGuiApp->screens())
     , m_origPix()
     , m_vdRect()
-    , m_HotKeyType(type)
     , m_bFistPressed(false)
     , m_bAutoDetectRect(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool())
+    , m_HotKeyType(type)
     , m_actionType(ActionType::AT_wait)
     , m_paintBar(new PaintBar(orie, this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
@@ -640,8 +641,8 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
 
     int idx = 0;
     for (const auto& it : m_rectNodes) {
-        const auto& rect = rectToQRect(it.rect);
-        const auto& relativelyRect = rectToQRect(it.relativelyRect);
+        const auto& rect = xrectToQRect(it.rect);
+        const auto& relativelyRect = xrectToQRect(it.relativelyRect);
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//idx:%1-------------------------\n").arg(idx++));
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++),  QString("it.rect(%1, %2, %3 * %4) it.relativelyRect(%5, %6, %7 * %8)")
                                                                        .arg(rect.x())
@@ -670,15 +671,15 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
 
 #if LOG_CURR_POS_IN_RECTS
     for (const auto& it : m_rectNodes) {
-        const auto& rect = rectToQRect(it.rect);
-        const auto& relativelyRect = rectToQRect(it.relativelyRect);
+        const auto& rect = xrectToQRect(it.rect);
+        const auto& relativelyRect = xrectToQRect(it.relativelyRect);
 #else
     QRect rect;
     QRect relativelyRect;
     if (m_rectNodes.size()) {
         const RectNode it = m_rectNodes.at(0);
-        rect = rectToQRect(it.rect);
-        relativelyRect = rectToQRect(it.relativelyRect);
+        rect = xrectToQRect(it.rect);
+        relativelyRect = xrectToQRect(it.relativelyRect);
 
 #endif
         pa.drawRect(relativelyRect);
@@ -709,7 +710,7 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
 void ScreenShot::rectNodesMapFromGlobal()
 {
     for (auto& it : m_rectNodes) {
-        const auto& rect = rectToQRect(it.rect);
+        const auto& rect = xrectToQRect(it.rect);
         const auto& topLeft = mapFromGlobal(rect.topLeft());
         it.relativelyRect.left = topLeft.x();
         it.relativelyRect.top = topLeft.y();
@@ -722,7 +723,7 @@ void ScreenShot::firstRectNodesAssignmentNode()
 {
     if (m_rectNodes.size() == 0) return;
     const auto& it = m_rectNodes.at(0);
-    const auto& relativelyRect = rectToQRect(it.relativelyRect);
+    const auto& relativelyRect = xrectToQRect(it.relativelyRect);
 
     m_node.p1 = relativelyRect.topLeft();
     m_node.p2 = relativelyRect.bottomRight();
@@ -1241,14 +1242,8 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     printfDevelopProjectInfo(pa);
 }
 
-#if defined(Q_OS_WIN)
-const QRect rectToQRect(const RECT &rect)
+const QRect xrectToQRect(const XRECT &rect)
 {
     return QRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 }
-
-#elif defined(Q_OS_LINUX)
-
-#elif defined(Q_OS_MAC)
-#endif
 

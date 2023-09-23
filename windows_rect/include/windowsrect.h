@@ -1,37 +1,8 @@
 ﻿#ifndef WINDOWSRECT_H
 #define WINDOWSRECT_H
-
-#include "windowsrect_global.h"
-#include <iostream>
-#include <string>
 #include <vector>
+#include "windowsrect_global.h"
 
-
-
-
-//class WINDOWSRECT_EXPORT WindowsRect
-//{
-//public:
-//    WindowsRect();
-//    ~WindowsRect();
-
-//// 思路1-------------------
-//    void detectionWindowsRect();
-//    RectNode rectNode() const;
-
-//#ifdef _WIN32
-//    bool startWindowsHook();
-//    bool endWindowsHook();
-//#endif
-//// 思路2-------------------
-
-
-
-//// end-------------------
-
-//private:
-//    RectNode m_rectNode;
-//};
-
+extern "C" WINDOWSRECT_EXPORT bool enumWindowsRect(std::vector<RectNode>& rectNodes);
 
 #endif // WINDOWSRECT_H

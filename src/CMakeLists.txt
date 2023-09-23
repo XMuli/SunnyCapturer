@@ -240,15 +240,22 @@ message("------------END------------")
 
 
 # 依据不同 build type, 生成实际 link 的 real dll 名
-set(dependent_dll_name WindowsRect)
-set(dependent_dll_real_name ${dependent_dll_name})
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(dependent_dll_real_name "${dependent_dll_name}${CMAKE_DEBUG_POSTFIX}")
-endif()
+set(dependent_dll_name WindowsRect)  # xwidgets
+set(dependent_dll_real_name)
+foreach(it ${dependent_dll_name})
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(it ${it}${CMAKE_DEBUG_POSTFIX})
+    endif()
+    message("--> curr dll {it} name:" "${it}")
+    list(APPEND dependent_dll_real_name "${it}")
+endforeach()
+
 message("--> CMAKE_DEBUG_POSTFIX:${CMAKE_DEBUG_POSTFIX}  dependent_dll_name:${dependent_dll_name} dependent_dll_real_name:${dependent_dll_real_name}")
 message("---@2--> ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include")
+message("---@3--> ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 add_dependencies(${project_name} ${dependent_dll_name})                                         # ③添加依赖顺序，确保先构建依赖，此处是 工程名称，而非 dll 名称(没有后缀d)
+target_link_directories(${project_name} PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name} QHotkey::QHotkey)  # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
 target_include_directories(${project_name} PRIVATE                                              # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
     ${CMAKE_CURRENT_SOURCE_DIR}/commom/include

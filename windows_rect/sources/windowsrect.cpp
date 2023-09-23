@@ -1,98 +1,36 @@
 ﻿#include "windowsrect.h"
+#include <iostream>
+#include <string>
 
-
-//#ifdef _WIN32
-//static HHOOK g_hook = nullptr;
-
-//// 处理鼠标事件的回调函数
-//LRESULT CALLBACK CallBackProc(int nCode, WPARAM wParam, LPARAM lParam)
-//{
-//    switch (wParam) {
-//        case WM_LBUTTONDOWN: {
-//            POINT pos;
-//            bool ret = GetCursorPos(&pos);
-//            if(ret) std::wcout << pos.x << L" " << pos.y;
-
-//            std::wcout << L"鼠标左键按下" << std::endl;
-//            break;
-//        } default: {
-//            break;
-//        }
-//    }
-
-//    return CallNextHookEx(nullptr, nCode, wParam, lParam);   // 注意这一行一定不能少，否则会出大问题
-//}
-//#elif linux
-//#endif
+#ifdef _WIN32
+#include "ntwindowsrect.h"
+#elif __linux__
+#include "x11windowsrect.h"
+#elif __APPLE__ || __MACH__
+#endif
 
 
 
+bool enumWindowsRect(std::vector<RectNode> &rectNodes)
+{
+    rectNodes.clear();
 
+#ifdef _WIN32
 
-//WindowsRect::WindowsRect()
-//{
+    POINT pos;
+    GetCursorPos(&pos);
+    enumWindowsRectInfo(rectNodes, pos);
 
-//}
+#elif __linux__
 
-//WindowsRect::~WindowsRect()
-//{
+    std::wcout << L" test";
 
-//}
+    X11WindowsRect x11WinRects;
+    const Point& pt = x11WinRects.currPos();
+    x11WinRects.enumWindowsRectInfo(rectNodes, pt);
 
-//// 检测窗口光标坐在位置的窗口矩形
-//void WindowsRect::detectionWindowsRect()
-//{
-//#ifdef _WIN32
-//    POINT pos;
-//    GetCursorPos(&pos);
+#elif __APPLE__ || __MACH__
+#endif
 
-//    HWND hwnd = nullptr;
-//    hwnd = WindowFromPoint(pos);                // 通过鼠标位置获取窗口句柄
-//    std::wcout << L"hwnd:" << hwnd << L"  pos:(" << pos.x << L", " << pos.x << L")" << std::endl;
-//    if(!hwnd) return;
-
-//    RECT rect;
-//    bool ret = GetWindowRect(hwnd, &rect);     //获取窗口位置
-
-//    wchar_t windowText[MAX_PATH] = L"";
-//    GetWindowText(hwnd, windowText, MAX_PATH);
-
-//    m_rectNode.ntHWnd = hwnd;
-//    m_rectNode.title = windowText;
-//    m_rectNode.rect = rect;
-
-//#elif linux
-
-//#elif __APPLE__ || __MACH__
-
-//#endif
-
-//    m_rectNode.printf();
-//}
-
-//RectNode WindowsRect::rectNode() const
-//{
-//    return m_rectNode;
-//}
-
-//#ifdef _WIN32
-//bool WindowsRect::startWindowsHook()
-//{
-//    g_hook = SetWindowsHookExW(WH_MOUSE_LL, CallBackProc, GetModuleHandleW(nullptr), 0);  // 挂载全局鼠标钩子
-//    g_hook ? std::wcout <<  L"鼠标钩子挂接成功,线程ID:" << GetCurrentThreadId() << std::endl :  std::wcout <<  L"鼠标钩子挂接失败,error:" << GetLastError() << std::endl;
-//    return g_hook ? true : false;
-//}
-
-//bool WindowsRect::endWindowsHook()
-//{
-//    if (g_hook) {
-//        bool ret = UnhookWindowsHookEx(g_hook);
-//        ret ? std::wcout <<  L"卸载鼠标钩子,线程ID:" << GetCurrentThreadId() << std::endl :  std::wcout <<  L"卸载鼠标钩子失败,error:" << GetLastError() << std::endl;
-
-//        return ret;
-//    }
-
-//    std::wcout <<  L"g_hook is nullptr" << std::endl;
-//    return false;
-//}
-//#endif
+    return rectNodes.size() ? true : false;
+}
