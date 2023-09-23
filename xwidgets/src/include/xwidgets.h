@@ -12,11 +12,8 @@ public:
     int addition(int a, int b);
 };
 
-// 对普通的函数， .h 声明， .cpp 实现; 在外部函数中，是会调用失败； 但是可以在 .h 里面声明+实现，则外部可以直接调用
-extern "C" __declspec(dllexport) int subtraction(int a, int b)
-{
-    qDebug() << "call subtraction(), does not class member subtraction:";
-    return a - b;
-}
+// 对普通的函数， .h 声明， .cpp 实现; 或者在 .h 中声明且实现; 则在外部函数中，是会调用均可以成功
+extern "C" Q_DECL_EXPORT int subtraction(int a, int b);
+
 
 #endif // XWIDGETS_H

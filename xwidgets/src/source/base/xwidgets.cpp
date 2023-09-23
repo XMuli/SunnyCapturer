@@ -10,8 +10,8 @@ int Xwidgets::addition(int a, int b)
     return a + b;
 }
 
-//int subtraction(int a, int b)
-//{
-//    qDebug() << "call subtraction(), does not class member subtraction:";
-//    return a - b;
-//}
+int subtraction(int a, int b)
+{
+    qDebug() << "call subtraction(), does not class member subtraction:";
+    return a - b;
+}

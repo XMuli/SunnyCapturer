@@ -52,7 +52,7 @@ file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_LIBRARY_OUTPUT_DIR
 
 if(NOT CMAKE_DEBUG_POSTFIX)                     # 好像仅添加到 库文件 的后缀
     if(WIN32)
-        set(CMAKE_DEBUG_POSTFIX _debug)
+        set(CMAKE_DEBUG_POSTFIX _debug)         # 若是去掉 _debug 这个，则可以在分散在各个文件夹下，编译成功过
     else()
         set(CMAKE_DEBUG_POSTFIX _debug)
     endif()
@@ -76,6 +76,6 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(windows_rect)
-#add_subdirectory(xwidgets)
+add_subdirectory(xwidgets)
 
 #add_subdirectory(common)
