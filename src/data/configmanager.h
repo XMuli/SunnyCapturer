@@ -86,9 +86,6 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XInterface_auto_detect_windows)
     SET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard)
     SET_VALUE_PROPERTY(XInterface_crosshair_show)
-
-    SET_VALUE_PROPERTY(XInterface_bulrr_effect_adius)  // only *.ini write and read
-
     // Output
     SET_VALUE_PROPERTY(XOutput_image_quailty)
     SET_VALUE_PROPERTY(XOutput_flie_name)
@@ -104,6 +101,10 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XHotkeys_capture);
     SET_VALUE_PROPERTY(XHotkeys_delay_capture);
     SET_VALUE_PROPERTY(XHotkeys_custiom_capture);
+    // XOtherControl
+    SET_VALUE_PROPERTY(XOtherControl_blur_effect_adius);
+    SET_VALUE_PROPERTY(XOtherControl_highlight_iridescence);
+    SET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence);
 
 public:
     void readFromFile();

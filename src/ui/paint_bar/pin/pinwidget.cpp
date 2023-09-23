@@ -1,4 +1,5 @@
-﻿#include "pinwidget.h"
+#include "pinwidget.h"
+#include "ui_pinwidget.h"
 #include <QAction>
 #include <QActionGroup>
 #include <QClipboard>
@@ -9,24 +10,45 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QSize>
+#include <QVBoxLayout>
 #include <QGraphicsView>
+#include "../toolbar_level/paintbarhelper.h"
+
 
 PinWidget::PinWidget(const QPixmap &pixmap, QWidget *parent)
     : QWidget(parent)
-    , m_pixmap(pixmap)
+    , ui(new Ui::PinWidget)
     , m_menu(new QMenu(this))
+    , m_timer(new QTimer(this))
+    , m_pixmap(pixmap)
+    , m_shadowEffect(new QGraphicsDropShadowEffect(this))
 {
-    initUI();
+    ui->setupUi(this);
 
+    initUI();
+}
+
+PinWidget::~PinWidget()
+{
+    delete ui;
 }
 
 void PinWidget::initUI()
 {
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-//    setAttribute(Qt::WA_TranslucentBackground);           // Otherwise it is a black background
+    setAttribute(Qt::WA_TranslucentBackground);              // 屏蔽后，可以看到实际的黑色边框的大小
     setAttribute(Qt::WA_DeleteOnClose);
+    setStyleSheet("background: transparent;");
+
+    ui->label->setPixmap(m_pixmap);
+    m_shadowEffect->setColor(highlightColor(true));
+    m_shadowEffect->setBlurRadius(ui->layout->margin() * 2);  // 对应半径
+    m_shadowEffect->setOffset(0, 0);
+    setGraphicsEffect(m_shadowEffect);
 
     initMenu();
+//    m_timer->start(500);
+//    connect(m_timer, SIGNAL(timeout()), this, SLOT(changeShadowColor()));
 }
 
 void PinWidget::initMenu()
@@ -61,6 +83,16 @@ void PinWidget::initMenu()
     //    connect(aShadow, &QAction::triggered, this, [&, aShadow](bool checked) { aShadow->setChecked(checked); });
 }
 
+void PinWidget::setScaledPixmapToLabel(const QSize &newSize, const qreal scale, const bool expanding)
+{
+    QPixmap scaledPixmap;
+    const auto aspectRatio = expanding ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio;
+
+    scaledPixmap = m_pixmap.scaled(newSize * scale, aspectRatio, Qt::SmoothTransformation); // Qt::FastTransformation
+    scaledPixmap.setDevicePixelRatio(scale);
+    ui->label->setPixmap(scaledPixmap);
+}
+
 void PinWidget::onCopy()
 {
     if (m_pixmap.isNull()) return;
@@ -89,6 +121,22 @@ void PinWidget::onColse()
 void PinWidget::onOpacity(const int &opacity)
 {
     setWindowOpacity(opacity / 100.0);
+}
+
+void PinWidget::changeShadowColor()
+{
+    // 生成随机颜色
+    int red = qrand() % 256;
+    int green = qrand() % 256;
+    int blue = qrand() % 256;
+
+    QColor newColor =  QColor(red, green, blue);
+    m_shadowEffect->setColor(newColor);
+
+    adjustSize();
+    update();
+
+//    QTimer::singleShot(50, [this](){ this->setAttribute(Qt::WA_TranslucentBackground, true); update();});
 }
 
 void PinWidget::mousePressEvent(QMouseEvent *e)
@@ -127,38 +175,23 @@ void PinWidget::wheelEvent(QWheelEvent *e)
 {
     const QPoint degrees = e->angleDelta() / 8;
     const int direction = degrees.y() > 0 ? 1 : -1;       // zooming in or out
-    qreal scaleFactor = 1.1; // 10% 的缩放因子
 
-    // 如果 degrees 大于0，表示向上滚动，放大窗口；否则，缩小窗口
-    if (direction < 0) scaleFactor = 1.0 / scaleFactor; // 如果向上滚动，将缩放因子取倒数
 
-    QSize currentSize = size();
-    int newWidth = currentSize.width() * scaleFactor;
-    int newHeight = currentSize.height() * scaleFactor;
-    resize(newWidth, newHeight);
+    const int step = degrees.manhattanLength() * direction;
+    const int newWidth = qBound(50, ui->label->width() + step, maximumWidth());
+    const int newHeight = qBound(50, ui->label->height() + step, maximumHeight());
 
-    QWidget::wheelEvent(e);
+    const QSize newSize(newWidth, newHeight);
+    const qreal scale = qApp->devicePixelRatio();
+    const bool isExpanding = direction > 0;
+    setScaledPixmapToLabel(newSize, scale, isExpanding);
+
+    changeShadowColor();
+    adjustSize();                                         // Reflect scaling to the label
+    e->accept();
 }
 
 void PinWidget::contextMenuEvent(QContextMenuEvent *e)
 {
     m_menu->exec(e->globalPos());
-}
-
-void PinWidget::paintEvent(QPaintEvent *e)
-{
-    QPainter pa(this);
-
-    if (m_pixmap.isNull()) return;
-    pa.drawPixmap(rect(), m_pixmap);
-}
-
-QPixmap PinWidget::pixmap() const
-{
-    return m_pixmap;
-}
-
-void PinWidget::setPixmap(const QPixmap &newPixmap)
-{
-    m_pixmap = newPixmap;
 }

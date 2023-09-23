@@ -35,7 +35,6 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_auto_detect_windows, true);
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_auto_copy_to_clipbaoard, true);
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_crosshair_show, false);
-    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_bulrr_effect_adius, 20);
 
     // Output
     SET_PROPERTY_AND_MEMBER_VALUE(XOutput, XOutput_image_quailty, -1);
@@ -52,16 +51,30 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_capture, "F6");
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_delay_capture, "Ctrl+F6");
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_custiom_capture, "Shift+F6");
+    // XOtherControl
+    QStringList highlight;
+    highlight << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
+              << "#00A48A" << "#0081FF" << "#3C02FF" << "#8C00D4" << "#4D4D4D";
+    QStringList crosshair;
+    crosshair << "#000000" << "#7f7f7f" << "#880015" << "#ed1c24" << "#ff7f27"
+           << "#fff200" << "#22b14c" << "#00a2e8" << "#3f48cc" << "#a349a4"
+           << "#ffffff" << "#c3c3c3" << "#b97a57" << "#ffaec9" << "#ffc90e"
+           << "#efe4b0" << "#b5e61d" << "#99d9ea" << "#7092be" << "#c8bfe7";
+    SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_blur_effect_adius, 20);
+    SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_highlight_iridescence, highlight);
+    SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_crosshair_iridescence, crosshair);
+
 
     qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
     qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
              << GET_VALUE_PROPERTY(XInterface_custom_size_enable) << GET_VALUE_PROPERTY(XInterface_topleft_enable) << GET_VALUE_PROPERTY(XInterface_size_enable) << GET_VALUE_PROPERTY(XInterface_delay_enable)
              << GET_VALUE_PROPERTY(XInterface_custom_rect_left) << GET_VALUE_PROPERTY(XInterface_custom_rect_top) << GET_VALUE_PROPERTY(XInterface_custom_rect_width) << GET_VALUE_PROPERTY(XInterface_custom_rect_height) << GET_VALUE_PROPERTY(XInterface_custom_dealy)
-             << GET_VALUE_PROPERTY(XInterface_acrylic_effect) << GET_VALUE_PROPERTY(XInterface_auto_detect_windows) << GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) << GET_VALUE_PROPERTY(XInterface_crosshair_show) << GET_VALUE_PROPERTY(XInterface_bulrr_effect_adius);;
+             << GET_VALUE_PROPERTY(XInterface_acrylic_effect) << GET_VALUE_PROPERTY(XInterface_auto_detect_windows) << GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) << GET_VALUE_PROPERTY(XInterface_crosshair_show);
     qDebug() << GET_VALUE_PROPERTY(XOutput_image_quailty) << GET_VALUE_PROPERTY(XOutput_flie_name)  << GET_VALUE_PROPERTY(XOutput_config_path)
              << GET_VALUE_PROPERTY(XOutput_quick_save_enable) << GET_VALUE_PROPERTY(XOutput_quick_save_path)  << GET_VALUE_PROPERTY(XOutput_auto_save_enable) << GET_VALUE_PROPERTY(XOutput_auto_save_path);
     qDebug() << GET_VALUE_PROPERTY(XPin_opacity) << GET_VALUE_PROPERTY(XPin_maximum_size);
     qDebug() << GET_VALUE_PROPERTY(XHotkeys_capture) << GET_VALUE_PROPERTY(XHotkeys_delay_capture)  << GET_VALUE_PROPERTY(XHotkeys_custiom_capture);
+    qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence);
 }
 
 void ConfigManager::writeToFile()
@@ -92,7 +105,7 @@ void ConfigManager::writeToFile()
     WRITE_INI(XInterface, XInterface_auto_copy_to_clipbaoard, GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard));
     WRITE_INI(XInterface, XInterface_crosshair_show, GET_VALUE_PROPERTY(XInterface_crosshair_show));
 
-    WRITE_INI(XInterface, XInterface_bulrr_effect_adius, GET_VALUE_PROPERTY(XInterface_bulrr_effect_adius));
+
     // Output
     WRITE_INI(XOutput, XOutput_image_quailty, GET_VALUE_PROPERTY(XOutput_image_quailty));
     WRITE_INI(XOutput, XOutput_flie_name, GET_VALUE_PROPERTY(XOutput_flie_name));
@@ -108,6 +121,10 @@ void ConfigManager::writeToFile()
     WRITE_INI(XHotkeys, XHotkeys_capture, GET_VALUE_PROPERTY(XHotkeys_capture));
     WRITE_INI(XHotkeys, XHotkeys_delay_capture, GET_VALUE_PROPERTY(XHotkeys_delay_capture));
     WRITE_INI(XHotkeys, XHotkeys_custiom_capture, GET_VALUE_PROPERTY(XHotkeys_custiom_capture));
+    // XOtherControl
+    WRITE_INI(XOtherControl, XOtherControl_blur_effect_adius, GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius));
+    WRITE_INI(XOtherControl, XOtherControl_highlight_iridescence, GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence));
+    WRITE_INI(XOtherControl, XOtherControl_crosshair_iridescence, GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence));
 }
 
 void ConfigManager::init()
@@ -138,7 +155,6 @@ void ConfigManager::init()
     CONNECT_VALUE_PROPERTY(XInterface_auto_detect_windows, true);
     CONNECT_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard, true);
     CONNECT_VALUE_PROPERTY(XInterface_crosshair_show, false);
-    CONNECT_VALUE_PROPERTY(XInterface_bulrr_effect_adius, 20);
     // Output
     CONNECT_VALUE_PROPERTY(XOutput_image_quailty, -1);
     CONNECT_VALUE_PROPERTY(XOutput_flie_name, QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
@@ -154,6 +170,18 @@ void ConfigManager::init()
     CONNECT_VALUE_PROPERTY(XHotkeys_capture, "F6");
     CONNECT_VALUE_PROPERTY(XHotkeys_delay_capture, "Ctrl+F6");
     CONNECT_VALUE_PROPERTY(XHotkeys_custiom_capture, "Shift+F6");
+    // XOtherControl
+    QStringList highlight;
+    highlight << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
+              << "#00A48A" << "#0081FF" << "#3C02FF" << "#8C00D4" << "#4D4D4D";
+    QStringList crosshair;
+    crosshair << "#000000" << "#7f7f7f" << "#880015" << "#ed1c24" << "#ff7f27"
+              << "#fff200" << "#22b14c" << "#00a2e8" << "#3f48cc" << "#a349a4"
+              << "#ffffff" << "#c3c3c3" << "#b97a57" << "#ffaec9" << "#ffc90e"
+              << "#efe4b0" << "#b5e61d" << "#99d9ea" << "#7092be" << "#c8bfe7";
+    CONNECT_VALUE_PROPERTY(XOtherControl_blur_effect_adius, 20);
+    CONNECT_VALUE_PROPERTY(XOtherControl_highlight_iridescence, highlight);
+    CONNECT_VALUE_PROPERTY(XOtherControl_crosshair_iridescence, crosshair);
 }
 
 void ConfigManager::setIniValue(const QString &key, const QVariant &value)

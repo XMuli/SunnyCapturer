@@ -118,6 +118,7 @@ set(src_files
     ui/commom/communication/communication.cpp
     ui/paint_bar/pin/pinwidget.h
     ui/paint_bar/pin/pinwidget.cpp
+    ui/paint_bar/pin/pinwidget.ui
 
     resources.qrc
 )

@@ -40,8 +40,6 @@ constexpr const char* XInterface_auto_detect_windows("auto_detect_windows");
 constexpr const char* XInterface_auto_copy_to_clipbaoard("auto_copy_to_clipbaoard");
 constexpr const char* XInterface_crosshair_show("crosshair_show");
 
-constexpr const char* XInterface_bulrr_effect_adius("bulrr_effect_adius");  // 仅提供配置文件修改
-
 // Output
 constexpr const char* XOutput_image_quailty("image_quailty");
 constexpr const char* XOutput_flie_name("flie_name");
@@ -59,5 +57,11 @@ constexpr const char* XPin_maximum_size("maximum_size");
 constexpr const char* XHotkeys_capture("capture");
 constexpr const char* XHotkeys_delay_capture("delay_capture");
 constexpr const char* XHotkeys_custiom_capture("custiom_capture");
+
+// XOtherControl
+constexpr const char* XOtherControl = "XOtherControl";
+constexpr const char* XOtherControl_blur_effect_adius("blur_effect_adius");  // 仅提供配置文件修改
+constexpr const char* XOtherControl_highlight_iridescence("highlight_iridescence");
+constexpr const char* XOtherControl_crosshair_iridescence("crosshair_iridescence");
 
 #endif // CONFIG_GLOBAL_H

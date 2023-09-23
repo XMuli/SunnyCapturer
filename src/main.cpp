@@ -33,13 +33,9 @@ int main(int argc, char *argv[])
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
 
 //    CONF_MANAGE.writeToFile();
-
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
-
-
-
 
 //    CONF_MANAGE.setProperty("XGeneral_language", "test");
 //    qDebug() << "--->" << CONF_MANAGE.property("XGeneral_language").toString();

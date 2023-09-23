@@ -1,4 +1,4 @@
-﻿#ifndef PINWIDGET_H
+#ifndef PINWIDGET_H
 #define PINWIDGET_H
 
 #include <QWidget>
@@ -7,30 +7,36 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QPixmap>
+#include <QPointer>
 #include <QPaintEvent>
+#include <QGraphicsDropShadowEffect>
+#include <QLabel>
+#include <QTimer>
 #include "../../screenshot/capturehelper.h"
 
+namespace Ui {
+class PinWidget;
+}
 
 class PinWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit PinWidget(const QPixmap &pixmap, QWidget *parent = nullptr);
-
-    QPixmap pixmap() const;
-    void setPixmap(const QPixmap &newPixmap);
+    virtual ~PinWidget();
 
 private:
     void initUI();
     void initMenu();
-
-signals:
+    void setScaledPixmapToLabel(const QSize& newSize, const qreal scale, const bool expanding);
 
 private slots:
     void onCopy();
     void onSave();
     void onColse();
     void onOpacity(const int& opacity);
+    void changeShadowColor();
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -39,12 +45,14 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     void contextMenuEvent(QContextMenuEvent *e) override;
-    void paintEvent(QPaintEvent *e) override;
 
 private:
-    Node      m_node;
-    QMenu*    m_menu;
-    QPixmap   m_pixmap;
+    Ui::PinWidget*                      ui;
+    Node                                m_node;
+    QMenu*                              m_menu;
+    QTimer*                             m_timer;
+    QPixmap                             m_pixmap;
+    QPointer<QGraphicsDropShadowEffect> m_shadowEffect;
 };
 
 #endif // PINWIDGET_H
