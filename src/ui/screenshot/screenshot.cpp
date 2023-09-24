@@ -105,6 +105,10 @@ void ScreenShot::btnPin()
 
     const auto& rect = m_node.absoluteRect;
     PinWidget* w = new PinWidget(finishDrewPixmap(rect), nullptr);
+    const int opacity = CONF_MANAGE.property("XPin_opacity").toInt();
+    const int max = CONF_MANAGE.property("XPin_maximum_size").toInt();
+    w->setWindowOpacity(opacity / 100.0);
+    w->setMaximumSize(QSize(max, max));
     w->resize(rect.size());
     w->move(mapToGlobal(rect.topLeft()));
     w->show();

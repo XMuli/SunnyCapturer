@@ -35,8 +35,7 @@
 
 #define GET_VALUE_PROPERTY(name) m_ ## name
 
-#define CONNECT_VALUE_PROPERTY(name, val) \
-    connect(this, SIGNAL(sig ## name()), this, SLOT(onSyncToFile()));
+
 //    m_ ## name = val;
 //    connect(this, SIGNAL(sig ## name()), this, [](){ });
 
@@ -63,10 +62,12 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     // General
     SET_VALUE_PROPERTY(XGeneral_language) //生成对应的属性，信号，类成员变量
     SET_VALUE_PROPERTY(XGeneral_log_level)
+    SET_VALUE_PROPERTY(XGeneral_themes)
     SET_VALUE_PROPERTY(XGeneral_font)
     SET_VALUE_PROPERTY(XGeneral_autostart)
     // Interface
     SET_VALUE_PROPERTY(XInterface_style)
+    SET_VALUE_PROPERTY(XInterface_orientation)
     SET_VALUE_PROPERTY(XInterface_highlight)
     SET_VALUE_PROPERTY(XInterface_border_width)
     SET_VALUE_PROPERTY(XInterface_crosshair)
@@ -111,7 +112,6 @@ public:
     void writeToFile();
 
 private:
-    void init();   // 关连属性的 成员变量-的信号和槽
     void setIniValue(const QString& key, const QVariant& value);
     QVariant getIniValue(const QString& key, const QVariant& defaultValue = QVariant()) const;
 

@@ -17,6 +17,15 @@ Interface::~Interface()
     delete ui;
 }
 
+std::map<QString, QString> orientationMaps()
+{
+    std::map<QString, QString> orie = {  { "Horizontal", QObject::tr("Horizontal")}
+                                       , { "Vertical" , QObject::tr("Vertical")}};
+
+
+    return orie;
+}
+
 void Interface::initUI()
 {
     std::map<QString, StyleType> styles = {  {"Sunny", StyleType::ST_sunny}
@@ -24,10 +33,9 @@ void Interface::initUI()
                                            , {"DDE", StyleType::ST_dde}};
 
     const auto& currStyle = CONF_MANAGE.property("XInterface_style").toString();
-    for (const auto& it : styles)
-        ui->cbbStyle->addItem(it.first, QVariant::fromValue(it.second));
-
+    for (const auto& it : styles) ui->cbbStyle->addItem(it.first, QVariant::fromValue(it.second));
     ui->cbbStyle->setCurrentText(currStyle);
+    onLanguageChange("");
     ui->cpHighlight->setCurrPickedColor(CONF_MANAGE.property("XInterface_highlight").toString());
     ui->cpCrosshair->setCurrPickedColor(CONF_MANAGE.property("XInterface_crosshair").toString());
     ui->sbBorderWidth->setValue(CONF_MANAGE.property("XInterface_border_width").toInt());
@@ -50,7 +58,10 @@ void Interface::initUI()
 
     connect(ui->cpHighlight, &ColorPicker::sigPickedColor, this, &Interface::onHighlightPickedColor);
     connect(ui->cpCrosshair, &ColorPicker::sigPickedColor, this, &Interface::onCrosshairPickedColor);
-    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() {
+        ui->retranslateUi(this);
+        onLanguageChange("");
+    });
 }
 
 void Interface::on_cbbStyle_currentTextChanged(const QString &arg1)
@@ -127,6 +138,21 @@ void Interface::onBtnResetClicked(bool checked)
     ui->cbCrosshairShow->setChecked(false);
 }
 
+void Interface::onLanguageChange(const QString qmName)
+{
+    Q_UNUSED(qmName)
+    const auto orie = orientationMaps();
+    const auto& currOrie = CONF_MANAGE.property("XInterface_orientation").toString();
+    ui->cbbOrientation->clear();
+    for (const auto& it : orie) ui->cbbOrientation->addItem(it.second, it.first);
+    for (const auto& it : orie) {
+        if (it.first == currOrie) {
+            ui->cbbOrientation->setCurrentText(it.second);
+            break;
+        }
+    }
+}
+
 
 void Interface::on_gbCustomSizeEnable_clicked(bool checked)
 {
@@ -174,4 +200,13 @@ void Interface::on_dsbDelay_valueChanged(double arg1)
     CONF_MANAGE.setProperty("XInterface_custom_dealy", arg1);
 }
 
+void Interface::on_cbbOrientation_currentTextChanged(const QString &arg1)
+{
+    for (const auto& it : orientationMaps()) {
+        if (it.second == arg1) {
+            CONF_MANAGE.setProperty("XInterface_orientation", it.first);
+            break;
+        }
+    }
+}
 

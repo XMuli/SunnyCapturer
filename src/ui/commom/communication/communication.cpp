@@ -104,6 +104,11 @@ void Communication::loadTranslation(const QString &language)
     }
 }
 
+void Communication::loadCustomQss(const QString &path)
+{
+    TRAY.loadCustomQss(path);
+}
+
 QString Communication::toLocaleName(const QString &language)
 {
     const auto& map = languageMap();
@@ -132,3 +137,38 @@ std::map<QString, QString> languageMap()
                                               , {"繁体中文", "zh_TW"}};
     return map;
 }
+
+
+#include <QDir>
+#include <QString>
+#include <QStringList>
+#include <QFileInfoList>
+#include <QStyleFactory>
+
+// 获取主题的名称
+std::map<const QString, const bool> themesMap()
+{
+    static std::map<const QString, const bool>  map;
+    map.insert(std::make_pair("default", true));
+    for(const auto& it : QStyleFactory::keys()) map.insert(std::make_pair(it, true));
+    for (const auto& it : getQSSFileNames())  map.insert(std::make_pair(it, false));
+    return map;
+}
+
+QStringList getQSSFileNames(const QString &path)
+{
+    QDir dir(path);
+    QStringList filters;
+    filters << "*.qss";
+    dir.setNameFilters(filters);
+
+    QStringList qssFileNames;
+    QFileInfoList fileInfoList = dir.entryInfoList();
+    foreach (const QFileInfo& fileInfo, fileInfoList) {
+        QString qssFileName = fileInfo.baseName();
+        qssFileNames.append(qssFileName);
+    }
+
+    return qssFileNames;
+}
+

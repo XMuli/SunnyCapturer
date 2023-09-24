@@ -18,6 +18,7 @@ class Tray : public QObject
 public:
     void capture(const HotKeyType& type = HotKeyType::HKT_capture);  // 实际的调用函数
     void setAppFont(const QString& tFont);
+    void loadCustomQss(const QString &path);
 
 public slots:
     void onCapture();

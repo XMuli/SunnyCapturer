@@ -88,6 +88,10 @@
         <source>Select Font</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Themes:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Hotkeys</name>
@@ -184,6 +188,10 @@
     </message>
     <message>
         <source>Crosshair show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orientation:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -365,6 +373,21 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Save Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Horizontal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

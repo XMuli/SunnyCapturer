@@ -88,6 +88,10 @@
         <source>Select Font</source>
         <translation>选择字体</translation>
     </message>
+    <message>
+        <source>Themes:</source>
+        <translation>主题:</translation>
+    </message>
 </context>
 <context>
     <name>Hotkeys</name>
@@ -185,6 +189,10 @@
     <message>
         <source>Crosshair show</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orientation:</source>
+        <translation type="unfinished">方向:</translation>
     </message>
 </context>
 <context>
@@ -367,6 +375,21 @@ and specify -1 to let Sunny decide for you.</source>
         <source>Save Files</source>
         <translation type="unfinished">保存图片</translation>
     </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Horizontal</source>
+        <translation>水平</translation>
+    </message>
+    <message>
+        <source>Vertical</source>
+        <translation>竖直</translation>
+    </message>
 </context>
 <context>
     <name>ResetUI</name>
@@ -414,7 +437,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Hotkeys</source>
-        <translation>快捷键</translation>
+        <translation>热键</translation>
     </message>
     <message>
         <source>Tokens</source>

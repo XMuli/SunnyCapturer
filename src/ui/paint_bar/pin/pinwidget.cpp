@@ -12,6 +12,8 @@
 #include <QSize>
 #include <QVBoxLayout>
 #include <QGraphicsView>
+#include <QShortcut>
+#include <QKeySequence>
 #include "../toolbar_level/paintbarhelper.h"
 
 
@@ -24,7 +26,6 @@ PinWidget::PinWidget(const QPixmap &pixmap, QWidget *parent)
     , m_shadowEffect(new QGraphicsDropShadowEffect(this))
 {
     ui->setupUi(this);
-
     initUI();
 }
 
@@ -38,7 +39,7 @@ void PinWidget::initUI()
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);              // 屏蔽后，可以看到实际的黑色边框的大小
     setAttribute(Qt::WA_DeleteOnClose);
-    setStyleSheet("background: transparent;");
+//    setStyleSheet("background: transparent;");
 
     ui->label->setPixmap(m_pixmap);
     m_shadowEffect->setColor(highlightColor(true));
@@ -72,13 +73,15 @@ void PinWidget::initMenu()
     m_menu->addMenu(aOpicaty);
     m_menu->addSeparator();
     m_menu->addSeparator();
-    auto aColse = m_menu->addAction(tr("Close")/*, this, &PinWidget::close, QKeySequence(Qt::CTRL + Qt::Key_W)*/);
+    auto aColse = m_menu->addAction(tr("Close"), this, &PinWidget::close, QKeySequence(Qt::CTRL + Qt::Key_W));
 
 
     connect(aCopy, &QAction::triggered, this, &PinWidget::onCopy);
     connect(aSave, &QAction::triggered, this, &PinWidget::onSave);
-    connect(aColse, &QAction::triggered, this, &PinWidget::onColse);
 
+
+//    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close())); // TODO 2022.07.29: 替换为 Qt5 形式
+    new QShortcut(Qt::Key_Escape, this, SLOT(close()));
     // 使用单值捕获，不然有问题： https://zhuanlan.zhihu.com/p/346991724
     //    connect(aShadow, &QAction::triggered, this, [&, aShadow](bool checked) { aShadow->setChecked(checked); });
 }
@@ -111,11 +114,6 @@ void PinWidget::onSave()
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qDebug() << "save m_pixmap tim =" << elapsed << "ms" << m_pixmap.size();
-}
-
-void PinWidget::onColse()
-{
-    close();
 }
 
 void PinWidget::onOpacity(const int &opacity)
@@ -186,7 +184,7 @@ void PinWidget::wheelEvent(QWheelEvent *e)
     const bool isExpanding = direction > 0;
     setScaledPixmapToLabel(newSize, scale, isExpanding);
 
-    changeShadowColor();
+//    changeShadowColor();
     adjustSize();                                         // Reflect scaling to the label
     e->accept();
 }

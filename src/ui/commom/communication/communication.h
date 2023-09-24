@@ -29,6 +29,7 @@ public:
     bool shortcutStatus(const HotKeyType& type) const ;
     void setAppFont(const QString& font);
     void loadTranslation(const QString& language);
+    void loadCustomQss(const QString &path);
 
 signals:
     void sigLanguageChange(const QString qmFile);
@@ -51,5 +52,8 @@ private:
 
 
 std::map<QString, QString> languageMap();
+std::map<const QString, const bool> themesMap();
+QStringList getQSSFileNames(const QString& path = qApp->applicationDirPath() + "/resources/qss");
+
 
 #endif // COMMUNICATION_H

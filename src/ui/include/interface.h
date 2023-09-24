@@ -26,6 +26,7 @@ public:
 
 private slots:
     void on_cbbStyle_currentTextChanged(const QString &arg1);
+    void on_cbbOrientation_currentTextChanged(const QString &arg1);
     void onHighlightPickedColor(const QColor& color);
     void onCrosshairPickedColor(const QColor& color);
     void on_sbBorderWidth_valueChanged(int arg1);
@@ -45,9 +46,9 @@ private slots:
     void on_sbHeight_valueChanged(int arg1);
     void on_dsbDelay_valueChanged(double arg1);
 
-
 public slots:
     void onBtnResetClicked(bool checked = false);
+    void onLanguageChange(const QString qmName);
 
 private:
     void initUI();

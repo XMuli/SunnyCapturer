@@ -14,12 +14,14 @@ constexpr const char* XAbout = "About";
 
 // General
 constexpr const char* XGeneral_language("language");
+constexpr const char* XGeneral_themes("themes");
 constexpr const char* XGeneral_log_level("log_level");
 constexpr const char* XGeneral_font("font");
 constexpr const char* XGeneral_autostart("autostart");
 
 // Interface
 constexpr const char* XInterface_style("style");
+constexpr const char* XInterface_orientation("orientation");
 constexpr const char* XInterface_highlight("highlight");
 constexpr const char* XInterface_border_width("border_width");
 constexpr const char* XInterface_crosshair("crosshair");

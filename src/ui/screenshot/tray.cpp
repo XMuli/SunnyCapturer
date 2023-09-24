@@ -53,6 +53,26 @@ void Tray::init()
 #endif
 }
 
+void Tray::loadCustomQss(const QString &path)
+{
+    QString css = path.isEmpty() ? "" : path;
+    QFile file(path);
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream in(&file);
+        css = in.readAll();
+    } else {
+        qDebug() << "custom qss is open fail, file path:" << path;
+    }
+
+    if (m_setting) m_setting->setStyleSheet(css);
+    if (m_trayMenu) m_trayMenu->setStyleSheet(css);
+    if (m_countdownTips) m_countdownTips->setStyleSheet(css);
+//    qApp->setStyleSheet(css);
+
+//    if (m_scrnShot)
+//        m_scrnShot->setStyleSheet("");
+}
+
 void Tray::setAppFont(const QString &tFont)
 {
     QStringList list = tFont.isEmpty() ? CONF_MANAGE.property("XGeneral_font").toString().split(",") : tFont.split(",");
@@ -77,7 +97,12 @@ void Tray::capture(const HotKeyType &type)
 {
 
     qDebug() << "capture type:" << hotKeyTypeToString(type);
-    if (!m_scrnShot) m_scrnShot = new ScreenShot(type);
+
+    const QString szOrie = CONF_MANAGE.property("XInterface_orientation").toString();
+    Qt::Orientation orie = Qt::Horizontal;
+    if (szOrie == "Horizontal") orie = Qt::Horizontal;
+    else if (szOrie == "Vertical") orie = Qt::Vertical;
+    if (!m_scrnShot) m_scrnShot = new ScreenShot(type, orie);
     const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
     const auto& delayEnable = CONF_MANAGE.property("XInterface_delay_enable").toBool();
     const double& s = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();

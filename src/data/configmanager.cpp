@@ -5,17 +5,25 @@
 // 故此宏专门用于初次从初始化 .ini 文件，对 "属性对象 + member对象" 同时赋值; 然后在外面则，都是通过属性来修改其数值，从而发生值改变的信号
 #define SET_PROPERTY_AND_MEMBER_VALUE(root, key, defVal) \
     GET_VALUE_PROPERTY(key) = READ_INI(root, key, defVal); \
-    setProperty(key, GET_VALUE_PROPERTY(key));
+    setProperty(key, GET_VALUE_PROPERTY(key)); \
+    connect(this, SIGNAL(sig ## key()), this, SLOT(onSyncToFile()));
+
+
+
+//#define CONNECT_VALUE_PROPERTY(name, val) \
+//    connect(this, SIGNAL(sig ## name()), this, SLOT(onSyncToFile()));
 
 void ConfigManager::readFromFile()
 {
     // General
     SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_language, "English");
+    SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_themes, "default");
     SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_log_level, "Debug");
     SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_font, "Microsoft YaHei,9");
     SET_PROPERTY_AND_MEMBER_VALUE(XGeneral, XGeneral_autostart, false);
     // Interface
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_style, "Sunny");
+    SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_orientation, "Horizontal");
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_highlight, "#0081ff");
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_border_width, 3);
     SET_PROPERTY_AND_MEMBER_VALUE(XInterface, XInterface_crosshair, "#df4187");
@@ -65,8 +73,8 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_crosshair_iridescence, crosshair);
 
 
-    qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
-    qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
+    qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_themes) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
+    qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_orientation) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
              << GET_VALUE_PROPERTY(XInterface_custom_size_enable) << GET_VALUE_PROPERTY(XInterface_topleft_enable) << GET_VALUE_PROPERTY(XInterface_size_enable) << GET_VALUE_PROPERTY(XInterface_delay_enable)
              << GET_VALUE_PROPERTY(XInterface_custom_rect_left) << GET_VALUE_PROPERTY(XInterface_custom_rect_top) << GET_VALUE_PROPERTY(XInterface_custom_rect_width) << GET_VALUE_PROPERTY(XInterface_custom_rect_height) << GET_VALUE_PROPERTY(XInterface_custom_dealy)
              << GET_VALUE_PROPERTY(XInterface_acrylic_effect) << GET_VALUE_PROPERTY(XInterface_auto_detect_windows) << GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) << GET_VALUE_PROPERTY(XInterface_crosshair_show);
@@ -81,11 +89,13 @@ void ConfigManager::writeToFile()
 {
     // General
     WRITE_INI(XGeneral, XGeneral_language, GET_VALUE_PROPERTY(XGeneral_language));  // 使用类成员变量进行赋值到 .ini 文件
+    WRITE_INI(XGeneral, XGeneral_themes, GET_VALUE_PROPERTY(XGeneral_themes));
     WRITE_INI(XGeneral, XGeneral_log_level, GET_VALUE_PROPERTY(XGeneral_log_level));
     WRITE_INI(XGeneral, XGeneral_font, GET_VALUE_PROPERTY(XGeneral_font));
     WRITE_INI(XGeneral, XGeneral_autostart, GET_VALUE_PROPERTY(XGeneral_autostart));
     // Interface
     WRITE_INI(XInterface, XInterface_style, GET_VALUE_PROPERTY(XInterface_style));
+    WRITE_INI(XInterface, XInterface_orientation, GET_VALUE_PROPERTY(XInterface_orientation));
     WRITE_INI(XInterface, XInterface_highlight, GET_VALUE_PROPERTY(XInterface_highlight));
     WRITE_INI(XInterface, XInterface_border_width, GET_VALUE_PROPERTY(XInterface_border_width));
     WRITE_INI(XInterface, XInterface_crosshair, GET_VALUE_PROPERTY(XInterface_crosshair));
@@ -127,63 +137,6 @@ void ConfigManager::writeToFile()
     WRITE_INI(XOtherControl, XOtherControl_crosshair_iridescence, GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence));
 }
 
-void ConfigManager::init()
-{
-    // General
-    CONNECT_VALUE_PROPERTY(XGeneral_language, "English");  // 连接信号和赋值初始化
-    CONNECT_VALUE_PROPERTY(XGeneral_log_level, "debug");
-    CONNECT_VALUE_PROPERTY(XGeneral_font, "Microsoft YaHei,9");
-    CONNECT_VALUE_PROPERTY(XGeneral_autostart, true);
-    // Interface
-    CONNECT_VALUE_PROPERTY(XInterface_style, "Sunny");
-    CONNECT_VALUE_PROPERTY(XInterface_highlight, "#ed1c24");
-    CONNECT_VALUE_PROPERTY(XInterface_border_width, 3);
-    CONNECT_VALUE_PROPERTY(XInterface_crosshair, "#ed1c24");
-    CONNECT_VALUE_PROPERTY(XInterface_crosshair_width, 2);
-
-    CONNECT_VALUE_PROPERTY(XInterface_custom_size_enable, true);
-    CONNECT_VALUE_PROPERTY(XInterface_topleft_enable, true);
-    CONNECT_VALUE_PROPERTY(XInterface_size_enable, true);
-    CONNECT_VALUE_PROPERTY(XInterface_delay_enable, true);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_left, 100);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_top, 100);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_width, 640);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_rect_height, 480);
-    CONNECT_VALUE_PROPERTY(XInterface_custom_dealy, 6);
-
-    CONNECT_VALUE_PROPERTY(XInterface_acrylic_effect, true);
-    CONNECT_VALUE_PROPERTY(XInterface_auto_detect_windows, true);
-    CONNECT_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard, true);
-    CONNECT_VALUE_PROPERTY(XInterface_crosshair_show, false);
-    // Output
-    CONNECT_VALUE_PROPERTY(XOutput_image_quailty, -1);
-    CONNECT_VALUE_PROPERTY(XOutput_flie_name, QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
-    CONNECT_VALUE_PROPERTY(XOutput_config_path, qApp->applicationDirPath());
-    CONNECT_VALUE_PROPERTY(XOutput_quick_save_enable, false);
-    CONNECT_VALUE_PROPERTY(XOutput_quick_save_path, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
-    CONNECT_VALUE_PROPERTY(XOutput_auto_save_enable, false);
-    CONNECT_VALUE_PROPERTY(XOutput_auto_save_path, QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
-    // Pin
-    CONNECT_VALUE_PROPERTY(XPin_opacity, 100);
-    CONNECT_VALUE_PROPERTY(XPin_maximum_size, 10000);
-    // Hotkeys
-    CONNECT_VALUE_PROPERTY(XHotkeys_capture, "F6");
-    CONNECT_VALUE_PROPERTY(XHotkeys_delay_capture, "Ctrl+F6");
-    CONNECT_VALUE_PROPERTY(XHotkeys_custiom_capture, "Shift+F6");
-    // XOtherControl
-    QStringList highlight;
-    highlight << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
-              << "#00A48A" << "#0081FF" << "#3C02FF" << "#8C00D4" << "#4D4D4D";
-    QStringList crosshair;
-    crosshair << "#000000" << "#7f7f7f" << "#880015" << "#ed1c24" << "#ff7f27"
-              << "#fff200" << "#22b14c" << "#00a2e8" << "#3f48cc" << "#a349a4"
-              << "#ffffff" << "#c3c3c3" << "#b97a57" << "#ffaec9" << "#ffc90e"
-              << "#efe4b0" << "#b5e61d" << "#99d9ea" << "#7092be" << "#c8bfe7";
-    CONNECT_VALUE_PROPERTY(XOtherControl_blur_effect_adius, 20);
-    CONNECT_VALUE_PROPERTY(XOtherControl_highlight_iridescence, highlight);
-    CONNECT_VALUE_PROPERTY(XOtherControl_crosshair_iridescence, crosshair);
-}
-
 void ConfigManager::setIniValue(const QString &key, const QVariant &value)
 {
     m_settings->setValue(key, value);
@@ -207,5 +160,4 @@ ConfigManager::ConfigManager(QObject *parent)
 {
     m_settings->setIniCodec("UTF-8"); // 禁用自动转义
     readFromFile();
-    init();
 }

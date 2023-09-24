@@ -23,6 +23,7 @@ General::~General()
 void General::initUI()
 {
     const auto& languages = languageMap();
+    const auto& themes = themesMap();
 
     std::map<QString, QtMsgType> logLevel = {  {"Debug", QtDebugMsg}
                                              , {"Info", QtInfoMsg}
@@ -31,11 +32,14 @@ void General::initUI()
                                              , {"Fatal", QtFatalMsg}};
 
     const auto& currLanguage = CONF_MANAGE.property("XGeneral_language").toString();
+    const auto& currTheme = CONF_MANAGE.property("XGeneral_themes").toString();
     const auto& currLogLevel = CONF_MANAGE.property("XGeneral_log_level").toString();
     for (const auto& it : languages) ui->cbbLanguage->addItem(it.first, it.second);
+    for (const auto& it : themes) ui->cbbThemes->addItem(it.first, it.second);
     for (const auto& it : logLevel) ui->cbbLogLevel->addItem(it.first, it.second);
 
     ui->cbbLanguage->setCurrentText(currLanguage);
+    ui->cbbThemes->setCurrentText(currTheme);
     ui->cbbLogLevel->setCurrentText(currLogLevel);
     ui->btnFont->setText(CONF_MANAGE.property("XGeneral_font").toString());
     ui->cbAutostart->setChecked(CONF_MANAGE.property("XGeneral_autostart").toBool());
@@ -103,5 +107,35 @@ void General::onBtnResetClicked(bool checked)
     ui->cbbLogLevel->setCurrentText("Debug");
     ui->btnFont->setText("Microsoft YaHei,9");
     ui->cbAutostart->setChecked(false);
+}
+
+void General::on_cbbThemes_currentTextChanged(const QString &arg1)
+{
+    const auto themes = themesMap();
+    const auto& it = themes.find(arg1);
+    const QString& path = it->second ? arg1 : qApp->applicationDirPath() + QString("/resources/qss/%1.qss").arg(it->first);
+
+    if (it != themes.cend()) {
+        if (it->second) {  // 系统自带的 style
+            COMM.loadCustomQss("");
+
+            QString style;
+#if defined(Q_OS_WIN)
+            style = "WindowsVista";
+#elif  defined(Q_OS_LINUX)
+            style = "Fusion";
+#elif  defined(Q_OS_MAC)
+            style = "Macintosh";
+#endif
+
+            qApp->setStyle(it->first == "default" ? style : it->first);
+        } else {  // 三方 qss 样式
+            qApp->setStyle("");
+            COMM.loadCustomQss(path);
+        }
+    }
+
+    qDebug() << "--->" << it->first << "  " << it->second << "  " <<path << "arg1:" << arg1;
+    CONF_MANAGE.setProperty("XGeneral_themes", arg1);
 }
 
