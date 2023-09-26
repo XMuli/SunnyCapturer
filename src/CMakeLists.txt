@@ -176,18 +176,6 @@ foreach(it ${folders_to_copy})
 endforeach()
 
 #file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-
-#*************************************************** 三方库 QSS COPY **********************************************
-set(qss_input_dir ${CMAKE_SOURCE_DIR}/tripartite/include/qss)
-if(APPLE)
-    set(qss_output_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.app/Contents/MacOS/resources/qss)
-else()
-    set(qss_output_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/qss)
-endif()
-
-file(MAKE_DIRECTORY ${qss_output_dir})                      # 创建输出目录
-file(GLOB qss_files "${qss_input_dir}/*.qss")
-file(COPY ${qss_files} DESTINATION ${qss_output_dir})       # 拷贝整套的 .qss
 #************************************************* update .ts, and generate .qm *******************************************************
 set(ts_dir "${CMAKE_CURRENT_SOURCE_DIR}/translations")
 if(APPLE)
