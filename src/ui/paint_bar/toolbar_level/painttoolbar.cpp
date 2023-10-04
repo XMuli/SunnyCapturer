@@ -43,7 +43,7 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin"), false, true);
 
-    m_btns.emplace_back(nullptr, PaintType::PT_undo, "undo", tr("Undo (Ctrl + ZA)"), false, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_undo, "undo", tr("Undo (Ctrl + Z)"), false, false);
     m_btns.emplace_back(nullptr, PaintType::PT_redo, "redo", tr("Redo (Ctrl + Y)"), false, true);
 
     m_btns.emplace_back(nullptr, PaintType::PT_save, "save", tr("Save"), false, false);

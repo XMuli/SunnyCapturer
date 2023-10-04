@@ -70,8 +70,11 @@ void SideSettingUI::initUI()
 
     // 设置默认选中的页面
     ui->stackedWidget->setCurrentIndex(0);
-
-    connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::idPressed), ui->stackedWidget, &QStackedWidget::setCurrentIndex);
+    connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::idPressed), this, [this](int n) {
+        ui->stackedWidget->setCurrentIndex(n);
+        auto btns = ui->sideWidget->findChildren<QToolButton*>();
+        if (n <= btns.count() && btns.at(n)) btns.at(n)->setChecked(true);
+    });
 //    connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &SideSettingUI::onSideGroupChanged);
 
 

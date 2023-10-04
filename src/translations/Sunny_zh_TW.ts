@@ -24,10 +24,6 @@
         <translation>專業版</translation>
     </message>
     <message>
-        <source>Version 1.0.0-msvc (2023.09.17)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023 &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;版權所有 (C) 2023 &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -46,6 +42,10 @@
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -116,83 +116,83 @@
     <name>Interface</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Personalization</source>
-        <translation type="unfinished"></translation>
+        <translation>個性化</translation>
     </message>
     <message>
         <source>Border Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>邊框寬度:</translation>
     </message>
     <message>
         <source>Crosshair:</source>
-        <translation type="unfinished"></translation>
+        <translation>十字線顏色:</translation>
     </message>
     <message>
         <source>Crosshair Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>十字線寬度:</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>風格:</translation>
     </message>
     <message>
         <source>Highlight:</source>
-        <translation type="unfinished"></translation>
+        <translation>活動色:</translation>
     </message>
     <message>
         <source>Custom size</source>
-        <translation type="unfinished"></translation>
+        <translation>自定義大小截圖</translation>
     </message>
     <message>
         <source>,</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Top left:</source>
-        <translation type="unfinished"></translation>
+        <translation>左上角:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>大小:</translation>
     </message>
     <message>
         <source>Delay:</source>
-        <translation type="unfinished"></translation>
+        <translation>延時:</translation>
     </message>
     <message>
         <source>x</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>s</source>
-        <translation type="unfinished"></translation>
+        <translation>秒</translation>
     </message>
     <message>
         <source>px</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Acrylic effect</source>
-        <translation type="unfinished"></translation>
+        <translation>亞克力效果</translation>
     </message>
     <message>
         <source>Auto detect windows</source>
-        <translation type="unfinished"></translation>
+        <translation>自動檢測窗口</translation>
     </message>
     <message>
         <source>Auto copy to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>自動複製到剪切板</translation>
     </message>
     <message>
         <source>Crosshair show</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示全屏十字線</translation>
     </message>
     <message>
         <source>Orientation:</source>
-        <translation type="unfinished">方向:</translation>
+        <translation>工具欄的方位:</translation>
     </message>
 </context>
 <context>
@@ -207,127 +207,129 @@
     </message>
     <message>
         <source>Copyright (C) 2023 %1. All rights reserved.&lt;br&gt;The birth of this project is inseparable from these open source software</source>
-        <translation type="unfinished"></translation>
+        <translation>版權所有 2023  %1. 保留所有權利。&lt;br&gt;本項目的誕生離不開如下開源項目</translation>
     </message>
 </context>
 <context>
     <name>Output</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Image quailty:</source>
-        <translation type="unfinished"></translation>
+        <translation>圖像質量:</translation>
     </message>
     <message>
         <source>Range: [0,100] or -1.
 Specify 0 to obtain small compressed files, 100 for large uncompressed files,
 and specify -1 to let Sunny decide for you.</source>
-        <translation type="unfinished"></translation>
+        <translation>範圍：[0,100] 或 -1.
+設為 0 可最大壓縮圖像，100 為完全不壓縮,
+設為 -1 讓 Sunny 為您決定。</translation>
     </message>
     <message>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>路徑</translation>
     </message>
     <message>
         <source>File Name：</source>
-        <translation type="unfinished"></translation>
+        <translation>文件名:</translation>
     </message>
     <message>
         <source>Config Path：</source>
-        <translation type="unfinished"></translation>
+        <translation>配置路徑:</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>打開</translation>
     </message>
     <message>
         <source>Quick save</source>
-        <translation type="unfinished"></translation>
+        <translation>快速保存</translation>
     </message>
     <message>
         <source>Path：</source>
-        <translation type="unfinished"></translation>
+        <translation>路徑:</translation>
     </message>
     <message>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>更改</translation>
     </message>
     <message>
         <source>Auto save</source>
-        <translation type="unfinished"></translation>
+        <translation>自動保存</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation type="unfinished"></translation>
+        <translation>路徑:</translation>
     </message>
     <message>
         <source>Preview: </source>
-        <translation type="unfinished"></translation>
+        <translation>預覽: </translation>
     </message>
     <message>
         <source>Select a path</source>
-        <translation type="unfinished"></translation>
+        <translation>選擇新路徑</translation>
     </message>
 </context>
 <context>
     <name>PaintToolBar</name>
     <message>
         <source>Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>矩形</translation>
     </message>
     <message>
         <source>Ellipse</source>
-        <translation type="unfinished"></translation>
+        <translation>橢圓</translation>
     </message>
     <message>
         <source>Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>箭頭</translation>
     </message>
     <message>
         <source>Pencil</source>
-        <translation type="unfinished"></translation>
+        <translation>畫筆</translation>
     </message>
     <message>
         <source>Marker pen</source>
-        <translation type="unfinished"></translation>
+        <translation>記號筆</translation>
     </message>
     <message>
         <source>Mosaic/Blur</source>
-        <translation type="unfinished"></translation>
+        <translation>馬賽克/模糊</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Text</translation>
     </message>
     <message>
         <source>Serial</source>
-        <translation type="unfinished"></translation>
+        <translation>序號</translation>
     </message>
     <message>
         <source>Pin</source>
-        <translation type="unfinished">釘圖</translation>
-    </message>
-    <message>
-        <source>Undo (Ctrl + ZA)</source>
-        <translation type="unfinished"></translation>
+        <translation>釘圖到屏幕上</translation>
     </message>
     <message>
         <source>Redo (Ctrl + Y)</source>
-        <translation type="unfinished"></translation>
+        <translation>重做 (Ctrl + Y)</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>保存到文件</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>退出截屏</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation>複製到剪切板</translation>
+    </message>
+    <message>
+        <source>Undo (Ctrl + Z)</source>
+        <translation>撤銷 (Ctrl + Z)</translation>
     </message>
 </context>
 <context>
@@ -338,46 +340,46 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Maximum size:</source>
-        <translation>最大窗口尺寸:</translation>
+        <translation>默認最大窗口尺寸:</translation>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation>默認透明度:</translation>
+        <translation>默認不透明度:</translation>
     </message>
 </context>
 <context>
     <name>PinWidget</name>
     <message>
         <source>Copy image</source>
-        <translation type="unfinished"></translation>
+        <translation>複製圖像</translation>
     </message>
     <message>
         <source>Save image as ..</source>
-        <translation type="unfinished"></translation>
+        <translation>圖像另存為 ..</translation>
     </message>
     <message>
         <source>Opicaty</source>
-        <translation type="unfinished"></translation>
+        <translation>不透明度</translation>
     </message>
     <message>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <source>Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)</source>
-        <translation type="unfinished">圖片文件(*.png);;圖片文件(*.jpg);;所有格式(*.*)</translation>
+        <translation>圖片文件(*.png);;圖片文件(*.jpg);;所有格式(*.*)</translation>
     </message>
     <message>
         <source>Save Files</source>
-        <translation type="unfinished">保存圖片</translation>
+        <translation>保存圖片</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

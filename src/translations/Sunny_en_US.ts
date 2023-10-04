@@ -24,10 +24,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Version 1.0.0-msvc (2023.09.17)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023 &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -45,6 +41,10 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -310,10 +310,6 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Undo (Ctrl + ZA)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Redo (Ctrl + Y)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -327,6 +323,10 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Finish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo (Ctrl + Z)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
