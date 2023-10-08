@@ -140,13 +140,6 @@ and specify -1 to let Sunny decide for you.</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="leFileName">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_11">
               <property name="text">
@@ -182,6 +175,9 @@ and specify -1 to let Sunny decide for you.</string>
                <string>Open</string>
               </property>
              </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="leFileName"/>
             </item>
            </layout>
           </widget>

@@ -24,30 +24,38 @@ Output::~Output()
 
 void Output::initUI()
 {
-    const auto& fileName = CONF_MANAGE.property("XOutput_flie_name").toString();
-    const auto& configPath= CONF_MANAGE.property("XOutput_config_path").toString();
-    const auto& quickSavePath = CONF_MANAGE.property("XOutput_quick_save_path").toString();
-    const auto& autoSavePath = CONF_MANAGE.property("XOutput_auto_save_path").toString();
 
-    ui->sbImageQuailty->setValue(CONF_MANAGE.property("XOutput_image_quailty").toInt());
-    ui->leFileName->setText(fileName);
-    ui->leConfigPath->setText(configPath);
     ui->cbQuickSaveEnable->setChecked(CONF_MANAGE.property("XOutput_quick_save_enable").toBool());
-    ui->leQuickSavePath->setText(quickSavePath);
     ui->cbAutoSaveEnable->setChecked(CONF_MANAGE.property("XOutput_auto_save_enable").toBool());
-    ui->leAutoSavePath->setText(autoSavePath);
 
-    const auto& prewview = tr("Preview: ");
-    ui->leFileName->setToolTip(prewview + formatToFileName(fileName));
-    ui->leQuickSavePath->setToolTip(prewview + formatToFileName(quickSavePath + "/" + fileName));
-    ui->leAutoSavePath->setToolTip(prewview + formatToFileName(autoSavePath + "/" + fileName));
+    onLanguageChange("");
+//    const auto& fileName = CONF_MANAGE.property("XOutput_flie_name").toString();
+//    const auto& configPath= CONF_MANAGE.property("XOutput_config_path").toString();
+//    const auto& quickSavePath = CONF_MANAGE.property("XOutput_quick_save_path").toString();
+//    const auto& autoSavePath = CONF_MANAGE.property("XOutput_auto_save_path").toString();
+
+//    ui->sbImageQuailty->setValue(CONF_MANAGE.property("XOutput_image_quailty").toInt());
+//    ui->leFileName->setText(fileName);
+//    ui->leConfigPath->setText(configPath);
+//    ui->cbQuickSaveEnable->setChecked(CONF_MANAGE.property("XOutput_quick_save_enable").toBool());
+//    ui->leQuickSavePath->setText(quickSavePath);
+//    ui->cbAutoSaveEnable->setChecked(CONF_MANAGE.property("XOutput_auto_save_enable").toBool());
+//    ui->leAutoSavePath->setText(autoSavePath);
+
+//    const auto& prewview = tr("Preview: ");
+//    ui->leFileName->setToolTip(prewview + formatToFileName(fileName));
+//    ui->leQuickSavePath->setToolTip(prewview + formatToFileName(quickSavePath + "/" + fileName));
+//    ui->leAutoSavePath->setToolTip(prewview + formatToFileName(autoSavePath + "/" + fileName));
 
     connect(ui->cbQuickSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CONF_MANAGE.setProperty("XOutput_quick_save_enable", checked);});
     connect(ui->cbAutoSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CONF_MANAGE.setProperty("XOutput_auto_save_enable", checked);});
     connect(ui->btnConfigOpen, &QPushButton::released, this, &Output::onSleletedDir);
     connect(ui->btnQuickSaveSelect, &QPushButton::released, this, &Output::onSleletedDir);
     connect(ui->btnAutoSaveSelect, &QPushButton::released, this, &Output::onSleletedDir);
-    connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() {
+        ui->retranslateUi(this);
+        onLanguageChange("");
+    });
 }
 
 void Output::on_sbImageQuailty_valueChanged(int arg1)
@@ -120,5 +128,26 @@ void Output::onBtnResetClicked(bool checked)
     ui->leQuickSavePath->setText(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
     ui->cbAutoSaveEnable->setChecked(false);
     ui->leAutoSavePath->setText(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
+}
+
+void Output::onLanguageChange(const QString qmName)
+{
+    const auto& fileName = CONF_MANAGE.property("XOutput_flie_name").toString();
+    const auto& configPath= CONF_MANAGE.property("XOutput_config_path").toString();
+    const auto& quickSavePath = CONF_MANAGE.property("XOutput_quick_save_path").toString();
+    const auto& autoSavePath = CONF_MANAGE.property("XOutput_auto_save_path").toString();
+
+    qDebug() << "fileName:" << fileName;
+
+    ui->sbImageQuailty->setValue(CONF_MANAGE.property("XOutput_image_quailty").toInt());
+    ui->leFileName->setText(fileName);
+    ui->leConfigPath->setText(configPath);
+    ui->leQuickSavePath->setText(quickSavePath);
+    ui->leAutoSavePath->setText(autoSavePath);
+
+    const auto& prewview = tr("Preview: ");
+    ui->leFileName->setToolTip(prewview + formatToFileName(fileName));
+    ui->leQuickSavePath->setToolTip(prewview + formatToFileName(quickSavePath + "/" + fileName));
+    ui->leAutoSavePath->setToolTip(prewview + formatToFileName(autoSavePath + "/" + fileName));
 }
 

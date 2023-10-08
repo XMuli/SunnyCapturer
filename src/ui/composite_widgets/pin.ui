@@ -52,7 +52,7 @@
        <widget class="QSpinBox" name="sbOpacity">
         <property name="minimumSize">
          <size>
-          <width>80</width>
+          <width>120</width>
           <height>0</height>
          </size>
         </property>

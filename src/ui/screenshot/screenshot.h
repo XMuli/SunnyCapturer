@@ -25,7 +25,6 @@ public:
     virtual ~ScreenShot();
 
     void capture();
-
 private:
     void btnPin();
     void btnUndo();
@@ -35,8 +34,12 @@ private:
     void btnFinish();
     QPixmap finishPixmap();
     QPixmap finishDrewPixmap(const QRect& rect = QRect());
+
     void originalPixmap();
     void setMosaicPix();
+    QString imageSavePath(const ImageSaveType& types);
+    bool imageSave(const QString& path);
+    void imageQuickSave();
 
 
 public slots:

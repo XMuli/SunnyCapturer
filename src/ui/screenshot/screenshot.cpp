@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include <QCursor>
 #include <QFont>
+#include <QShortcut>
 #include <QTextCharFormat>
 #include "xtextedit.h"
 #include "../paint_bar/pin/pinwidget.h"
@@ -144,25 +145,14 @@ void ScreenShot::btnRedo()
 
 void ScreenShot::btnSave()
 {
-    const QPixmap& pixmap = finishPixmap();
-    if (pixmap.isNull()) return;
+    QString path = imageSavePath(ImageSaveType::IST_manual_save);
+    imageSave(path);
 
-    QDateTime dateTime = QDateTime::currentDateTime(); // 获取当前日期和时间
-    QString dateTimeString = dateTime.toString("yyyyMMdd_hhmmss");
-    const QString& imageName = QString("Sunny_%1").arg(dateTimeString);
-
-    const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
-    const QString& fileNmae = QFileDialog::getSaveFileName(this, tr("Save Files"), imageName, fileter);
-    if (fileNmae.isEmpty()) return;
-
-    qDebug() <<"fileNmae:" << fileNmae;
-
-    QTime startTime = QTime::currentTime();
-    pixmap.save(fileNmae, nullptr, CONF_MANAGE.property("XOutput_image_quailty").toInt());  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
-    QTime stopTime = QTime::currentTime();
-    int elapsed = startTime.msecsTo(stopTime);
-    qInfo() << "btnSave() pixmap save time: " << elapsed << " ms" << pixmap.size();
-    close();
+    if (CONF_MANAGE.property("XOutput_auto_save_enable").toBool()) {
+        QString dir = CONF_MANAGE.property("XOutput_auto_save_path").toString();
+        path = dir + path.right(path.count() - path.lastIndexOf('/'));
+        imageSave(path);
+    }
 }
 
 void ScreenShot::btnCancel()
@@ -190,6 +180,16 @@ void ScreenShot::btnFinish()
         // 将新的QPixmap复制到剪贴板
         QClipboard* clipboard = QApplication::clipboard();
         clipboard->setPixmap(pixmap);  // 由于 Qt 库会在应用程序终止时释放剪贴板对象; 故此处内存增加是必然的，不用额外 delete 处理； 氪！排查这么久结论居然是这个
+
+        // 同时自动保存
+        if (CONF_MANAGE.property("XOutput_auto_save_enable").toBool()) {
+            QTime startTime = QTime::currentTime();
+            const auto& path = imageSavePath(ImageSaveType::IST_auto_save);
+            pixmap.save(path, nullptr, CONF_MANAGE.property("XOutput_image_quailty").toInt());
+            QTime stopTime = QTime::currentTime();
+            int elapsed = startTime.msecsTo(stopTime);
+            qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
+        }
     }
 
     close();
@@ -416,6 +416,12 @@ void ScreenShot::initUI()
     move(geom.topLeft());
     qDebug() << "#2-->" << geom << "   " << this->rect();
 #endif
+
+
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S),  this, [this](){
+        qDebug() << "Press CTRL + SHIFT + S";
+        imageQuickSave();
+    });
 }
 
 void ScreenShot::initConnect()
@@ -492,6 +498,52 @@ void ScreenShot::setMosaicPix()
 {
     m_mosaicPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
     qDebug() << "m_mosaicPix()， &m_mosaicPix:" << &m_mosaicPix << "m_mosaicPix:" << m_mosaicPix;
+}
+
+QString ScreenShot::imageSavePath(const ImageSaveType &types)
+{
+    QString path = "";
+    QDateTime dateTime = QDateTime::currentDateTime(); // 获取当前日期和时间
+    QString dateTimeString = dateTime.toString("yyyyMMdd_hhmmss");
+    const QString& imageName = QString("Sunny_%1").arg(dateTimeString);
+
+    if (types == ImageSaveType::IST_manual_save) {
+        const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
+        path = QFileDialog::getSaveFileName(this, tr("Save Files"), imageName, fileter);
+    } else if (types == ImageSaveType::IST_quick_save) {
+        if (CONF_MANAGE.property("XOutput_quick_save_enable").toBool())
+            path = CONF_MANAGE.property("XOutput_quick_save_path").toString() + "/" + imageName + ".png";
+    } else if (types == ImageSaveType::IST_auto_save) {
+        if (CONF_MANAGE.property("XOutput_auto_save_enable").toBool())
+            path = CONF_MANAGE.property("XOutput_auto_save_path").toString() + "/" + imageName + ".png";
+    } else {
+        qDebug() <<"error: types & ImageSaveType:: other !";
+    }
+
+    qDebug() <<"fileNmae path:" << path;
+    return path;
+}
+
+bool ScreenShot::imageSave(const QString &path)
+{
+    const QPixmap& pixmap = finishPixmap();
+    if (pixmap.isNull()) return false;
+
+    QTime startTime = QTime::currentTime();
+    const bool ret = pixmap.save(path, nullptr, CONF_MANAGE.property("XOutput_image_quailty").toInt());  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
+    QTime stopTime = QTime::currentTime();
+    int elapsed = startTime.msecsTo(stopTime);
+    qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
+    close();
+
+    return ret;
+}
+
+void ScreenShot::imageQuickSave()
+{
+    const auto& path = imageSavePath(ImageSaveType::IST_quick_save);
+    const bool ok = imageSave(path);
+    COMM.sigShowSystemMessagebox(ok ? tr("Success") : tr("Failed"), ok ? tr("Image save to ") + path : tr("Quick save feature is not enabled, please check."), 10000);
 }
 
 void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)

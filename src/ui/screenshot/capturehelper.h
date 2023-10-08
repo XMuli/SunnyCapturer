@@ -70,6 +70,16 @@ enum class CustomWidgetType {
     CWT_point_changed_tooptip     // 线宽 px 改变
 };
 
+
+enum class ImageSaveType {
+    IST_manual_save,
+    IST_quick_save,
+    IST_auto_save
+};
+Q_DECLARE_METATYPE(ImageSaveType)                     // 可以被 QVariant 类型存储
+Q_DECLARE_FLAGS(ImageSaveTypes, ImageSaveType)        // 枚举 ImageSaveType 生成宏 ImageSaveTypes
+Q_DECLARE_OPERATORS_FOR_FLAGS(ImageSaveTypes)         // 重载宏 ImageSaveTypes 的 |() 函数
+
 void ensurePositiveSize(QRect &rect);                                         // 若宽度或高度为负数，重新生成一个矩形，确保左上角和右下角坐标正确
 OrientationType containsForRect(const QRect& rect, const QPoint& pt);         // 判断点在矩形区域的方位
 QRect largestRect(const QRect& rect, const QPoint& pt);                       // 获取公共的最大矩形, 通过3个点

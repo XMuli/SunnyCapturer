@@ -47,6 +47,9 @@ void Tray::init()
     connect(quit, &QAction::triggered, [](){ qApp->quit(); });
     connect(m_timerDelay, &QTimer::timeout, this, &Tray::onCountdownTips);
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { onLanguageChange("");});
+    connect(&COMM, &Communication::sigShowSystemMessagebox, this, &Tray::onShowSystemMessagebox);
+
+
 
 #ifdef Q_OS_WIN  // Ensure proper removal of tray icon when program quits on Windows.
     connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
@@ -186,6 +189,11 @@ void Tray::onLanguageChange(const QString qmName)
     if (actSetting) actSetting->setText(tr("Setting"));
     if (actRestart) actRestart->setText(tr("Restart"));
     if (actQuit) actQuit->setText(tr("Quit"));
+}
+
+void Tray::onShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs)
+{
+    m_trayIcon->showMessage(title, msg, QIcon(":/resources/screenshot_ui/logo/logo.svg"), msecs);
 }
 
 Tray::Tray(QObject *parent)

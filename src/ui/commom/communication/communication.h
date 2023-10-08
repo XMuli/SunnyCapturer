@@ -33,6 +33,7 @@ public:
 
 signals:
     void sigLanguageChange(const QString qmFile);
+    void sigShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs); // 系统消息通知
 
 private:
     QString toLocaleName(const QString& language);

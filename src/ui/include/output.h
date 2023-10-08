@@ -26,8 +26,10 @@ private slots:
     void on_leQuickSavePath_textChanged(const QString &arg1);
     void on_leAutoSavePath_textChanged(const QString &arg1);
     void onSleletedDir();
+
 public slots:
     void onBtnResetClicked(bool checked = false);
+    void onLanguageChange(const QString qmName);
 
 private:
     Ui::Output *ui;

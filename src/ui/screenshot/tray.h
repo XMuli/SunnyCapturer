@@ -27,6 +27,7 @@ public slots:
     void onTrayIcon(QSystemTrayIcon::ActivationReason reason);
     void onCountdownTips();
     void onLanguageChange(const QString qmName);
+    void onShowSystemMessagebox(const QString &title, const QString &msg, const int &msecs = 6000); // 系统消息通知
 
 private:
     void init();
