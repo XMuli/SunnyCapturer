@@ -103,7 +103,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
     group->setExclusive(exclusive);
     for (int i = 0; i < items.size(); ++i) {
         QToolButton* btn = new QToolButton();
-        btn->setStyleSheet("border-style:none");
+        btn->setStyleSheet("border-style:none; padding: 8px");
         const double& scal = dpiScale();
         const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
         btn->setIconSize(size);
