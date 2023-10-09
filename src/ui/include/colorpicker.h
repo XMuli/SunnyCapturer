@@ -17,7 +17,7 @@ class ColorPicker : public QWidget
     Q_OBJECT
 public:
     explicit ColorPicker(QWidget *parent = nullptr);
-    explicit ColorPicker(QSize size = QSize(16, 16), const ColorPickerType type = ColorPickerType::CT_horizontal, QWidget *parent = nullptr);
+    explicit ColorPicker(QSize size = QSize(14, 14), const ColorPickerType type = ColorPickerType::CT_horizontal, QWidget *parent = nullptr);
 
 public:
     const QColor pickedColor();

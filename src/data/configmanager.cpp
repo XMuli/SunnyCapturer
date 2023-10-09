@@ -71,6 +71,7 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_blur_effect_adius, 20);
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_highlight_iridescence, highlight);
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_crosshair_iridescence, crosshair);
+    SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_show_develop_ui_log, false);
 
 
     qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_themes) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
@@ -82,7 +83,7 @@ void ConfigManager::readFromFile()
              << GET_VALUE_PROPERTY(XOutput_quick_save_enable) << GET_VALUE_PROPERTY(XOutput_quick_save_path)  << GET_VALUE_PROPERTY(XOutput_auto_save_enable) << GET_VALUE_PROPERTY(XOutput_auto_save_path);
     qDebug() << GET_VALUE_PROPERTY(XPin_opacity) << GET_VALUE_PROPERTY(XPin_maximum_size);
     qDebug() << GET_VALUE_PROPERTY(XHotkeys_capture) << GET_VALUE_PROPERTY(XHotkeys_delay_capture)  << GET_VALUE_PROPERTY(XHotkeys_custiom_capture);
-    qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence);
+    qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence) << GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
 }
 
 void ConfigManager::writeToFile()
@@ -135,6 +136,7 @@ void ConfigManager::writeToFile()
     WRITE_INI(XOtherControl, XOtherControl_blur_effect_adius, GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius));
     WRITE_INI(XOtherControl, XOtherControl_highlight_iridescence, GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence));
     WRITE_INI(XOtherControl, XOtherControl_crosshair_iridescence, GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence));
+    WRITE_INI(XOtherControl, XOtherControl_show_develop_ui_log, GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log));
 }
 
 void ConfigManager::setIniValue(const QString &key, const QVariant &value)

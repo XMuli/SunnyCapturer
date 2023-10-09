@@ -65,5 +65,6 @@ constexpr const char* XOtherControl = "XOtherControl";
 constexpr const char* XOtherControl_blur_effect_adius("blur_effect_adius");  // 仅提供配置文件修改
 constexpr const char* XOtherControl_highlight_iridescence("highlight_iridescence");
 constexpr const char* XOtherControl_crosshair_iridescence("crosshair_iridescence");
+constexpr const char* XOtherControl_show_develop_ui_log("show_develop_ui_log");
 
 #endif // CONFIG_GLOBAL_H

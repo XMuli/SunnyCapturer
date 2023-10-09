@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 
 set(project_name Sunny)
 set(project_version_major 1)
-set(project_version_minor 0)
+set(project_version_minor 2)
 set(project_version_path 0)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.10.08")
+add_definitions(-DXBUILD_TIME="2023.10.10")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 各种调试开关
-add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+#add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 #add_compile_definitions(LOG_MORE_INFO_DEVELOP)       # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)       # 便于调试, 当前光标所在的所有 窗口矩形 的信息
@@ -121,6 +121,7 @@ set(src_files
     ui/paint_bar/pin/pinwidget.ui
 
     resources.qrc
+    resources/logo/resources.rc
 )
 
 set(src_root_path ${CMAKE_CURRENT_SOURCE_DIR})                                                 # default root path curr path （CMakeList.txt）
@@ -166,7 +167,7 @@ message("CMAKE_ARCHIVE_OUTPUT_DIRECTORY： ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")  
 #************************************************* 拷贝 .ini 和资源文件 *******************************************************
 # copy "resources" 文件夹下的指定文件夹
 set(folders_to_copy "changelog" "licenses" "logo")
-set(source_root "${CMAKE_CURRENT_SOURCE_DIR}/resources/screenshot_ui")
+set(source_root "${CMAKE_CURRENT_SOURCE_DIR}/resources")
 set(traget_root "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
 
 # 遍历复制文件夹集合中的每个文件夹

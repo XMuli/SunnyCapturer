@@ -82,7 +82,7 @@ void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &l
 int countItemsformLayout(const QGridLayout* layout, const Qt::Orientation& orie, const int& idx = 0);
 double dpiScale(const QScreen* scrn = qGuiApp->primaryScreen());
 
-QString highlightColor(const bool enable = false);
+QString highlightColor(const bool enable = false); // 高亮色，活动色，强调色
 QString crosshairColor(const bool enable = true);
 int borderWidth();
 int crosshairWidth();

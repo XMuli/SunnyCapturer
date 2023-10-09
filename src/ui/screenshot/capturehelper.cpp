@@ -629,7 +629,7 @@ void drawBorderDDE(QPainter &pa, const QRect &rt, int num)
 
     pa.setPen(Qt::NoPen);
 
-    QIcon icon(":/resources/screenshot_ui/screenshot/board_circle.svg");
+    QIcon icon(":/resources/icons/border_effect/dde/board_circle.svg");
     const int radius = 6;
     QPixmap pixmap = icon.pixmap(QSize(radius, radius) * 4);
     pixmap.setDevicePixelRatio(qApp->devicePixelRatio());

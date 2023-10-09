@@ -31,7 +31,7 @@ void Tray::init()
     m_trayMenu->addAction(restart);
     m_trayMenu->addAction(quit);
 
-    m_trayIcon->setIcon(QIcon(":/resources/screenshot_ui/logo/logo.svg"));
+    m_trayIcon->setIcon(QIcon(":/resources/logo/logo.svg"));
 //    m_trayIcon->setToolTip("");
     m_trayIcon->setContextMenu(m_trayMenu);
 
@@ -193,7 +193,7 @@ void Tray::onLanguageChange(const QString qmName)
 
 void Tray::onShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs)
 {
-    m_trayIcon->showMessage(title, msg, QIcon(":/resources/screenshot_ui/logo/logo.svg"), msecs);
+    m_trayIcon->showMessage(title, msg, QIcon(":/resources/logo/logo.svg"), msecs);
 }
 
 Tray::Tray(QObject *parent)

@@ -5,6 +5,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QShortcut>
+#include <QKeySequence>
 #include "paintbarhelper.h"
 #include "communication.h"
 #include "../../../data/configmanager.h"
@@ -30,6 +32,8 @@ void PaintToolBar::initUI()
     initBtns();
 }
 
+
+
 void PaintToolBar::initBtns()
 {
     m_btns.reserve(13);
@@ -41,14 +45,19 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_mosaic, "mosaic", tr("Mosaic/Blur"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_text, "text", tr("Text"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin"), false, true);
+    m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin to screen") + " (Ctrl + T)", false, true);
 
-    m_btns.emplace_back(nullptr, PaintType::PT_undo, "undo", tr("Undo (Ctrl + Z)"), false, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_redo, "redo", tr("Redo (Ctrl + Y)"), false, true);
+    m_btns.emplace_back(nullptr, PaintType::PT_undo, "undo", tr("Undo") + " (Ctrl + Z)", false, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_redo, "redo", tr("Redo") + " (Ctrl + Y)", false, true);
 
-    m_btns.emplace_back(nullptr, PaintType::PT_save, "save", tr("Save"), false, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_cancel, "cancel", tr("Cancel"), false, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_finish, "finish", tr("Finish"), false, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_cancel, "cancel", tr("Cancel Capture") + " (Esc)", false, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_save, "save", tr("Save to file") + " (Ctrl + S)", false, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_finish, "copy", tr("copy to clipboard") + " (Ctrl + C)", false, false);
+
+    #define CREATOR_QSHORTCUT(_type, _keySequence) \
+        if (it.type == _type) { new QShortcut(QKeySequence(_keySequence), this, [&it]() { \
+    it.btn->released(); \
+    }); }
 
     for (int i = 0; i < m_btns.size(); ++i) {
         auto& it = m_btns.at(i);
@@ -61,8 +70,8 @@ void PaintToolBar::initBtns()
         tb->setChecked(false);
         tb->setAutoRaise(true);
         tb->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        tb->setStyleSheet("border-style:none; padding: 8px");
-        tb->setIcon(QIcon(":/resources/screenshot_ui/paint_tool_bar/paint_btn/" + it.name + ".svg"));
+        tb->setStyleSheet("border-style:none; padding: 4px");
+        tb->setIcon(QIcon(":/resources/icons/paint_tool_bar/paint_btn/" + it.name + ".svg"));
         tb->setContentsMargins(0, 0, 0, 0);
         tb->setIconSize(size);
         tb->setFixedSize(size);
@@ -72,7 +81,23 @@ void PaintToolBar::initBtns()
 
         m_layout->addWidget(tb, Qt::AlignCenter);
         if (it.bAddSpacer) addSpacerLine(m_layout, m_orie);
+
         connect(tb, &QToolButton::released, this, &PaintToolBar::onPaintBtnReleased);
+#if 0
+        CREATOR_QSHORTCUT(PaintType::PT_rectangle, Qt::CTRL + Qt::Key_1)
+        CREATOR_QSHORTCUT(PaintType::PT_ellipse, Qt::CTRL + Qt::Key_2)
+        CREATOR_QSHORTCUT(PaintType::PT_arrow, Qt::CTRL + Qt::Key_3)
+        CREATOR_QSHORTCUT(PaintType::PT_pencil, Qt::CTRL + Qt::Key_4)
+        CREATOR_QSHORTCUT(PaintType::PT_marker_pen, Qt::CTRL + Qt::Key_5)
+        CREATOR_QSHORTCUT(PaintType::PT_mosaic, Qt::CTRL + Qt::Key_6)
+        CREATOR_QSHORTCUT(PaintType::PT_text, Qt::CTRL + Qt::Key_7)
+        CREATOR_QSHORTCUT(PaintType::PT_serial, Qt::CTRL + Qt::Key_8)
+#endif
+        CREATOR_QSHORTCUT(PaintType::PT_pin, Qt::CTRL + Qt::Key_T)
+        CREATOR_QSHORTCUT(PaintType::PT_undo, Qt::CTRL + Qt::Key_Z)
+        CREATOR_QSHORTCUT(PaintType::PT_redo, Qt::CTRL + Qt::Key_Y)
+        CREATOR_QSHORTCUT(PaintType::PT_save, Qt::CTRL + Qt::Key_S)
+        CREATOR_QSHORTCUT(PaintType::PT_finish, Qt::CTRL + Qt::Key_C)
     }
 
     // 结尾添加弹簧进行压缩
@@ -81,6 +106,7 @@ void PaintToolBar::initBtns()
     } else if (m_orie == Qt::Vertical) {
         m_layout->addItem(new QSpacerItem(1, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     }
+
 }
 
 // bSpik: true-btn需要跳过统一逻辑，单独执行自己的逻辑修改 icon, false-全部都设置为回复默认; ret: true-有按钮处理选中按下  false-全部都没有按下
@@ -92,7 +118,7 @@ void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik
 
         // 仅传入进来的 tBtn 状态相反变化，而其余的都需要置为未选中状态
         if (btn->isCheckable()) {
-            const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_btn/" + btn->objectName() + ".svg";
+            const QString path = ":/resources/icons/paint_tool_bar/paint_btn/" + btn->objectName() + ".svg";
             const QIcon origIcon(path);
             const QIcon newIcon(changedSVGColor(path, highlightColor(), btn->iconSize()));
 

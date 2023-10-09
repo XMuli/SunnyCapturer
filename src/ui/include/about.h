@@ -17,6 +17,7 @@ public:
 
 private slots:
     void on_btnLicenses_released();
+    void onLanguageChange(const QString qmName);
 
 private:
     void initUI();

@@ -106,6 +106,7 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XOtherControl_blur_effect_adius);
     SET_VALUE_PROPERTY(XOtherControl_highlight_iridescence);
     SET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence);
+    SET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
 
 public:
     void readFromFile();

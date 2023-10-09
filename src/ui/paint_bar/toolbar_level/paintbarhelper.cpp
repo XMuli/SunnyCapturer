@@ -103,7 +103,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
     group->setExclusive(exclusive);
     for (int i = 0; i < items.size(); ++i) {
         QToolButton* btn = new QToolButton();
-        btn->setStyleSheet("border-style:none; padding: 8px");
+        btn->setStyleSheet("border-style:none; padding: 4px");
         const double& scal = dpiScale();
         const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
         btn->setIconSize(size);
@@ -130,7 +130,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCt
 
         QObject::connect(btn, &QToolButton::toggled, [btn]() {
 
-            const QString path = ":/resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/" + btn->objectName() + ".svg";
+            const QString path = ":/resources/icons/paint_tool_bar/paint_ctrl_btn/" + btn->objectName() + ".svg";
             const QIcon origIcon(path);
             const QIcon newIcon(changedSVGColor(path, highlightColor(), btn->iconSize()));
             btn->setIcon(btn->isChecked() ? newIcon : origIcon);

@@ -28,7 +28,7 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_serialCtrl(nullptr)
     , m_pointCtrl(nullptr)
     , m_markerPenCtrl(nullptr)
-    , m_colorPicker(new ColorPicker(QSize(20, 20), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
+    , m_colorPicker(new ColorPicker(QSize(14, 14) * dpiScale(), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
     , m_mosaicSliderCtrl(initSliderCtrl())
@@ -90,14 +90,14 @@ void PaintCtrlBar::initUI()
 *******************************************************************************************************/
 void PaintCtrlBar::initBtns()
 {
-    const QString& dir(":/resources/screenshot_ui/paint_tool_bar/paint_ctrl_btn/");
+    const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
     connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", false, false, -1), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
-    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number_rectangle" << "serial_letter_rectangle"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPointCtrlReleased);
 
 //    addWidget(m_rectCtrl);

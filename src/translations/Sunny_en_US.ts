@@ -47,6 +47,10 @@
         <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AbsSettingUI</name>
@@ -282,10 +286,6 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Arrow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Pencil</source>
         <translation type="unfinished"></translation>
     </message>
@@ -306,27 +306,31 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pin</source>
+        <source>Pin to screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Redo (Ctrl + Y)</source>
+        <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save</source>
+        <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cancel</source>
+        <source>Cancel Capture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Finish</source>
+        <source>Save to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Undo (Ctrl + Z)</source>
+        <source>copy to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arrow</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -410,6 +414,22 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Save Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image save to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quick save feature is not enabled, please check.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

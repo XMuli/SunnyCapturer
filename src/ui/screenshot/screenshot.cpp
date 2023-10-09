@@ -393,7 +393,7 @@ void ScreenShot::initUI()
         m_vdRect.setWidth(m_vdRect.width() / 2);
     } else {
         for (const auto& it: m_screens) {
-            if (currentScreen() != it) {
+            if (currentScreen() == it) {
                 m_vdRect = it->geometry();
                 break;
             }
@@ -1286,14 +1286,13 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
     drawShadowOverlay(rect(), pickedRect, pa);
     drawBorder(pa, pickedRect);
-
     showCrosshair(pa, QCursor::pos(), m_vdRect);
 
-
-
     // 以下部分都是 printf 一些调试参数的部分
-    prinftWindowsRects(pa);
-    printfDevelopProjectInfo(pa);
+    if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool()) {
+        prinftWindowsRects(pa);
+        printfDevelopProjectInfo(pa);
+    }
 }
 
 const QRect xrectToQRect(const XRECT &rect)

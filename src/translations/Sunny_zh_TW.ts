@@ -45,7 +45,11 @@
     </message>
     <message>
         <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version 1.0.0-msvc (yyyy.MM.dd)</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>版本</translation>
     </message>
 </context>
 <context>
@@ -284,10 +288,6 @@ and specify -1 to let Sunny decide for you.</source>
         <translation>橢圓</translation>
     </message>
     <message>
-        <source>Arrow</source>
-        <translation>箭頭</translation>
-    </message>
-    <message>
         <source>Pencil</source>
         <translation>畫筆</translation>
     </message>
@@ -308,28 +308,32 @@ and specify -1 to let Sunny decide for you.</source>
         <translation>序號</translation>
     </message>
     <message>
-        <source>Pin</source>
-        <translation>釘圖到屏幕上</translation>
+        <source>Pin to screen</source>
+        <translation>釘到屏幕上</translation>
     </message>
     <message>
-        <source>Redo (Ctrl + Y)</source>
-        <translation>重做 (Ctrl + Y)</translation>
+        <source>Undo</source>
+        <translation>撤銷</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation>保存到文件</translation>
+        <source>Redo</source>
+        <translation>重做</translation>
     </message>
     <message>
-        <source>Cancel</source>
+        <source>Cancel Capture</source>
         <translation>退出截屏</translation>
     </message>
     <message>
-        <source>Finish</source>
+        <source>Save to file</source>
+        <translation>保存到文件</translation>
+    </message>
+    <message>
+        <source>copy to clipboard</source>
         <translation>複製到剪切板</translation>
     </message>
     <message>
-        <source>Undo (Ctrl + Z)</source>
-        <translation>撤銷 (Ctrl + Z)</translation>
+        <source>Arrow</source>
+        <translation>箭頭</translation>
     </message>
 </context>
 <context>
@@ -413,6 +417,22 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Save Files</source>
         <translation>保存圖片</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>成功</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>失敗</translation>
+    </message>
+    <message>
+        <source>Image save to </source>
+        <translation>圖片保存到 </translation>
+    </message>
+    <message>
+        <source>Quick save feature is not enabled, please check.</source>
+        <translation>快速保存功能未啟用，請檢查。</translation>
     </message>
 </context>
 <context>

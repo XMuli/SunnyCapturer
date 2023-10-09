@@ -76,6 +76,5 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(windows_rect)
-add_subdirectory(xwidgets)
-
+#add_subdirectory(xwidgets)
 #add_subdirectory(common)

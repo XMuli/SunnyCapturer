@@ -54,7 +54,7 @@
         </property>
         <property name="icon">
          <iconset resource="../../resources.qrc">
-          <normaloff>:/resources/screenshot_ui/icons/setting/infomation.svg</normaloff>:/resources/screenshot_ui/icons/setting/infomation.svg</iconset>
+          <normaloff>:/resources/icons/setting/infomation.svg</normaloff>:/resources/icons/setting/infomation.svg</iconset>
         </property>
         <property name="autoRepeat">
          <bool>false</bool>

@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 #pragma parseroption -p
 #define MyAppName "Sunny"
-#define MyAppVersion "1.0.0"
-#define MyAppPublisher "Vincent Teams"
+#define MyAppVersion "1.2.0"
+#define MyAppPublisher "XMuli Teams"
 #define MyAppURL "https://github.com/XMuli/Sunny"
 #define MyAppExeName "Sunny.exe"
 #define MyArchitecture "x64"   ; x64    x86
@@ -11,13 +11,12 @@
 #define MySrc "."
 #define MyBinDir "bin"         ; 相对于 .iss 文件的路径
 #define MyOutputDir "../Archived"
-
-
+#define MyGUID "{9A015CFA-E381-4CFA-8496-07E627B373DB}"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{9A015CFA-E381-4CFA-8496-07E627B373DB}
+AppId={{#MyGUID}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -31,6 +30,9 @@ DefaultGroupName={#MyAppName}
 LicenseFile={#MyBinDir}\resources\licenses\License.md
 InfoBeforeFile={#MyBinDir}\resources\licenses\PrivacyAndDataProtection.md
 ;InfoAfterFile={#MyBinDir}\resources\licenses\other.md
+;控制面板删除的图标
+UninstallDisplayIcon={app}\{#MyAppExeName}
+UninstallDisplayName={#MyAppName}
 
 ; Uncomment the following line to run in non-administrative install mode (install for current user only.)
 ; PrivilegesRequiredOverridesAllowed 的两个参数，dialog 可选安装路径； commandline 不可选路径
@@ -44,7 +46,7 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 ;开启日志功能
-SetupLogging=yes
+;SetupLogging=yes
 
 
 [Languages]
@@ -84,6 +86,17 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#MyBinDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyBinDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+
+;[Registry]
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: string; ValueName: "DisplayIcon"; ValueData: "{app}\{#MyAppExeName},0"
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: string; ValueName: "DisplayName"; ValueData: "{#MyAppName} {#MyAppVersion}"
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: string; ValueName: "UninstallString"; ValueData: "{uninstallexe}"
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: string; ValueName: "Publisher"; ValueData: "{#MyAppPublisher}"
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: string; ValueName: "DisplayVersion"; ValueData: "{#MyAppVersion}"
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: string; ValueName: "URLInfoAbout"; ValueData: "{#MyAppURL}"
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: dword; ValueName: "NoModify"; ValueData: 1
+;Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyGUID}_is1"; ValueType: dword; ValueName: "NoRepair"; ValueData: 1
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

@@ -89,16 +89,20 @@ void ColorPicker::initUI()
         btn->setCheckable(true);
         m_colorsGroup->addButton(btn);
 
+        int horSpace = 2;
+        int verSpace = 2;
         if (m_colorPickerType == ColorPickerType::CT_horizontal) {
             m_gridLayout->addWidget(btn, 0, i);
         } else if (m_colorPickerType == ColorPickerType::CT_grid_horizontal) {
             m_gridLayout->addWidget(btn, i <= halfCount - 1 ? 0 : 1 , i % halfCount + 2);
+            verSpace = 0;
         } else if (m_colorPickerType == ColorPickerType::CT_grid_vertical) {
             m_gridLayout->addWidget(btn, i % halfCount + 2, i <= halfCount - 1 ? 0 : 1);
+            horSpace = 0;
         }
 
-        m_gridLayout->setHorizontalSpacing(3);
-        m_gridLayout->setVerticalSpacing(3);
+        m_gridLayout->setHorizontalSpacing(horSpace);
+        m_gridLayout->setVerticalSpacing(verSpace);
     }
 
     connect(m_colorsGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonReleased), this, &ColorPicker::onPickedColor);

@@ -78,6 +78,6 @@ void Hotkeys::setHotkeyIconStatus(QLabel *lab, const HotKeyType &type)
 {
     if (!lab) return;
     const QString& t = COMM.shortcutStatus(type) ? "success" : "error";
-    const QString& path = QString(":/resources/screenshot_ui/icons/setting/%1.svg").arg(t);
+    const QString& path = QString(":/resources/icons/setting/%1.svg").arg(t);
     lab->setPixmap(QPixmap(path));
 }

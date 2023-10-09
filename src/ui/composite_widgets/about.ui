@@ -61,7 +61,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../resources.qrc">
-             <normaloff>:/resources/screenshot_ui/logo/logo.svg</normaloff>:/resources/screenshot_ui/logo/logo.svg</iconset>
+             <normaloff>:/resources/logo/logo.svg</normaloff>:/resources/logo/logo.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -100,6 +100,9 @@
            </property>
            <property name="textFormat">
             <enum>Qt::AutoText</enum>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
