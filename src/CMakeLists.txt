@@ -34,7 +34,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls} LinguistTool
 set(commom_files
     commom/include/xlog.h
     commom/include/isingleton.h
+    commom/include/xapphelper.h
+
     commom/sources/xlog.cpp
+    commom/sources/xapphelper.cpp
 
     data/config_global.h
     data/configmanager.h

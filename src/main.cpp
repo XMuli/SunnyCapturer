@@ -1,7 +1,12 @@
 ﻿#include <QApplication>
+#include <QCoreApplication>
+#include <QSystemSemaphore>
+#include <QSharedMemory>
 #include <QDebug>
+
 #include "xlog.h"
 #include "ui/screenshot/tray.h"
+#include "xapphelper.h"
 
 // test
 #include "data/configmanager.h"
@@ -28,14 +33,31 @@ int main(int argc, char *argv[])
     // 因多处使用 QSettings，故声明组织等信息
     QCoreApplication::setOrganizationName(QStringLiteral("XMuli"));
     QCoreApplication::setOrganizationDomain(QStringLiteral("github.com/XMuli"));
-
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
+
+    QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
+    QSharedMemory sharedMemory;
+    sharedMemory.setKey(uniqueKey);
+    // 尝试创建共享内存，如果已经存在，表示已经有一个实例在运行, 判断是为了确保在同一台计算机上只能运行一个相同实例的程序。
+    if (!sharedMemory.create(1)) {
+        qDebug() << "There is already an instance of the application running (by QSharedMemory)!";
+        return 1;
+    }
+
+    // 创建系统信号量, 再尝试获取系统信号量，如果已经被其他实例持有，程序就退出, 判断是为了确保在多个进程同时启动时，只有一个进程能够继续执行。QSystemSemaphore用于创建系统信号量，如果系统信号量已经被其他实例持有（比如由于上一次程序异常退出导致信号量未被释放），则acquire函数会返回false，
+    QSystemSemaphore systemSemaphore(uniqueKey, 1, QSystemSemaphore::Open);
+    if (!systemSemaphore.acquire()) {
+        qDebug() << "There is already an instance of the application running (by QSystemSemaphore)!";
+        return 1;
+    }
 
     CONF_MANAGE; //.writeToFile();
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
+
+
 
 //    CONF_MANAGE.setProperty("XGeneral_language", "test");
 //    qDebug() << "--->" << CONF_MANAGE.property("XGeneral_language").toString();
@@ -72,5 +94,8 @@ int main(int argc, char *argv[])
 //    absW.show();
 //    ResetUI resetUI;
 //    resetUI.show();
+
+    // 释放系统信号量
+    systemSemaphore.release();
     return a.exec();
 }

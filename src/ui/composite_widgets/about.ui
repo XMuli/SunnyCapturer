@@ -44,56 +44,7 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item row="1" column="0" colspan="3">
-          <widget class="QLabel" name="labVersion">
-           <property name="text">
-            <string>Version 1.0.0-msvc (yyyy.MM.dd)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QToolButton" name="toolButton">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>LOGO</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources.qrc">
-             <normaloff>:/resources/logo/logo.svg</normaloff>:/resources/logo/logo.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>80</width>
-             <height>60</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>false</bool>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>483</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="0" colspan="3">
+         <item row="2" column="0" colspan="4">
           <widget class="QLabel" name="labCopyright">
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023 &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -107,6 +58,28 @@
           </widget>
          </item>
          <item row="0" column="1">
+          <widget class="QLabel" name="labLogo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../../resources.qrc">:/resources/logo/logo.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
           <widget class="QLabel" name="labProject">
            <property name="font">
             <font>
@@ -122,6 +95,26 @@
             <enum>Qt::RichText</enum>
            </property>
           </widget>
+         </item>
+         <item row="1" column="0" colspan="4">
+          <widget class="QLabel" name="labVersion">
+           <property name="text">
+            <string>Version 1.0.0-msvc (yyyy.MM.dd)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>483</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
