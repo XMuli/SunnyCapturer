@@ -95,7 +95,7 @@ int countItemsformLayout(const QGridLayout *layout, const Qt::Orientation &orie,
 
 
 QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
-                                 , const int defaultChecked, const bool& bLastAddSpacer, const bool exclusive)
+                                 , const QStringList& defaultChecked, const bool& bLastAddSpacer, const bool exclusive)
 {
     if (!absBtnsCtrl) absBtnsCtrl = new AbsBtnsCtrl(orie);
 
@@ -115,10 +115,13 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCt
         btn->setAutoRaise(true);
         btn->setCheckable(true);
         btn->setChecked(false);
-        if (i == defaultChecked) {
-            btn->setChecked(true);
-            const QIcon icon(changedSVGColor(path, highlightColor(), btn->iconSize()));
-            btn->setIcon(icon);
+
+        for (const auto& it : defaultChecked) {
+            if (i == it.toInt()) {
+                btn->setChecked(true);
+                const QIcon icon(changedSVGColor(path, highlightColor(), btn->iconSize()));
+                btn->setIcon(icon);
+            }
         }
 
         group->addButton(btn, i);

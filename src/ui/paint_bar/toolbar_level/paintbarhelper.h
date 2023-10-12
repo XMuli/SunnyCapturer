@@ -52,7 +52,7 @@ Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 Tex
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
-                                 , const int defaultChecked = 0, const bool& bLastAddSpacer = false, const bool exclusive = true);
+                                 , const QStringList& defaultChecked, const bool& bLastAddSpacer = false, const bool exclusive = true);
 
 struct PaintBtn
 {
