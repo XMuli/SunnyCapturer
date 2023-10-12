@@ -13,8 +13,8 @@
 
 PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
-    , m_layout(nullptr)
     , m_orie(orie)
+    , m_layout(nullptr)
 {
     initUI();
 }
@@ -82,7 +82,34 @@ void PaintToolBar::initBtns()
         m_layout->addWidget(tb, Qt::AlignCenter);
         if (it.bAddSpacer) addSpacerLine(m_layout, m_orie);
 
+
+        // 若是要实现，则需要调优
+//        if (tb->isCheckable()) {
+//            const auto type = it.type;
+//            if (type == PaintType::PT_rectangle) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_rect).toBool()) tb->setChecked(true);
+//            } else if (type == PaintType::PT_ellipse) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_ellipse).toBool())
+//                    tb->setChecked(true);
+//            } else if (type == PaintType::PT_arrow) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_arrow).toBool()) tb->setChecked(true);
+//            } else if (type == PaintType::PT_pencil) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_penciler).toBool()) tb->setChecked(true);
+//            } else if (type == PaintType::PT_marker_pen) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_marker_pen).toBool()) tb->setChecked(true);
+//            } else if (type == PaintType::PT_mosaic) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_mosaic).toBool()) tb->setChecked(true);
+//            } else if (type == PaintType::PT_text) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_text).toBool()) tb->setChecked(true);
+//            } else if (type == PaintType::PT_serial) {
+//                if (CONF_GET_PROPERTY(XPaintBarStatus_serial).toBool()) tb->setChecked(true);
+//            } else {
+//            }
+//        }
+
         connect(tb, &QToolButton::released, this, &PaintToolBar::onPaintBtnReleased);
+
+
 #if 0
         CREATOR_QSHORTCUT(PaintType::PT_rectangle, Qt::CTRL + Qt::Key_1)
         CREATOR_QSHORTCUT(PaintType::PT_ellipse, Qt::CTRL + Qt::Key_2)
@@ -99,6 +126,9 @@ void PaintToolBar::initBtns()
         CREATOR_QSHORTCUT(PaintType::PT_save, Qt::CTRL + Qt::Key_S)
         CREATOR_QSHORTCUT(PaintType::PT_finish, Qt::CTRL + Qt::Key_C)
     }
+
+
+
 
     // 结尾添加弹簧进行压缩
     if (m_orie == Qt::Horizontal)  {
@@ -145,6 +175,8 @@ bool PaintToolBar::hadDrawBtnsChecked() const
     return false;
 }
 
+#include <QTimer>
+#include <QTime>
 void PaintToolBar::onPaintBtnReleased()
 {
     QToolButton* btn = qobject_cast<QToolButton*>(sender());
@@ -152,7 +184,60 @@ void PaintToolBar::onPaintBtnReleased()
     const PaintType& type = btn->property(PROPERTY_PAINT_TYPR).value<PaintType>();
     emit sigPaintToolBtnsRelease(type, btn->isCheckable());
 
-    if (btn->isCheckable()) paintBtnsExclusive(btn, true);
+    if (btn->isCheckable()) {
+        paintBtnsExclusive(btn, true);
+
+          // 这一段比较耗时，不推荐
+//        QTimer::singleShot(100, this, [&btn, &type](){
+//            QTime timer;
+//            timer.start();  // 启动计时器
+
+//            const bool& tChecked = false;
+//            CONF_SET_PROPERTY(XPaintBarStatus_rect, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_ellipse, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_arrow, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_penciler, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_marker_pen, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_mosaic, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_text, tChecked);
+//            CONF_SET_PROPERTY(XPaintBarStatus_serial, tChecked);
+
+
+//            int elapsedFirst = timer.elapsed();  // 获取经过的毫秒数
+//            qDebug() << "Elapsed time for the first block: " << elapsedFirst << "ms";
+
+//            timer.restart();  // 重新启动计时器
+
+//            const bool& isChecked = btn->isChecked();
+//            if (type == PaintType::PT_rectangle) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_rect, isChecked);
+//            } else if (type == PaintType::PT_ellipse) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_ellipse, isChecked);
+
+//                auto t = CONF_GET_PROPERTY(XPaintBarStatus_ellipse).toBool();
+//                qDebug() << t;
+//            } else if (type == PaintType::PT_arrow) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_arrow, isChecked);
+//            } else if (type == PaintType::PT_pencil) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_penciler, isChecked);
+//            } else if (type == PaintType::PT_marker_pen) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_marker_pen, isChecked);
+//            } else if (type == PaintType::PT_mosaic) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_mosaic, isChecked);
+//            } else if (type == PaintType::PT_text) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_text, isChecked);
+//            } else if (type == PaintType::PT_serial) {
+//                CONF_SET_PROPERTY(XPaintBarStatus_serial, isChecked);
+//            } else {
+//            }
+
+
+//            int elapsedSecond = timer.elapsed();  // 获取经过的毫秒数
+//            qDebug() << "Elapsed time for the second block: " << elapsedSecond << "ms";
+//        });
+
+    }
+
     adjustSize();
     qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked();
 }

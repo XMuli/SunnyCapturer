@@ -20,8 +20,8 @@ enum class PaintType
     PT_ellipse,
     PT_arrow,
     PT_pencil,
-    PT_mosaic,
     PT_marker_pen,
+    PT_mosaic,
     PT_text,
     PT_serial,
     PT_pin,
@@ -52,12 +52,13 @@ Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 Tex
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
-                                 , const bool& bLastAddSpacer = false, const bool exclusive = true, const int defaultChecked = 0);
+                                 , const int defaultChecked = 0, const bool& bLastAddSpacer = false, const bool exclusive = true);
 
 struct PaintBtn
 {
     PaintBtn() {}
-    PaintBtn(QToolButton* tBtn, const PaintType& tType, const QString& tName, const QString& tTooltip, const bool& tBCheckable  = true, const bool& tBAddSpacer = false)
+    PaintBtn(QToolButton* tBtn, const PaintType& tType, const QString& tName, const QString& tTooltip
+             , const bool& tBCheckable  = true, const bool& tBAddSpacer = false)
         : btn(tBtn)
         , type(tType)
         , name(tName)

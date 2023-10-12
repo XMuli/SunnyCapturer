@@ -1,5 +1,19 @@
 ﻿#include "configmanager.h"
 #include <QApplication>
+#include <QPen>
+#include <QBrush>
+
+#if 1
+#define WRITE_INI(root, key, val) \
+    setIniValue(QString("/") + root + "/" + key, val)
+#define READ_INI(root, key, defVal) \
+    getIniValue(QString("/") + root + "/" + key, defVal)
+#else
+#define WRITE_INI(root, key, val) \
+ConfigManager::instance().setIniValue(QString("/") + root + "/" + key, val)
+#define READ_INI(root, key, defVal) \
+    ConfigManager::instance().getIniValue(QString("/") + root + "/" + key, defVal)
+#endif
 
 // 属性对象改变时  ---snyc----> member对象的值也会改变;但反之 member对象的值改变不会同步属性对象改;
 // 故此宏专门用于初次从初始化 .ini 文件，对 "属性对象 + member对象" 同时赋值; 然后在外面则，都是通过属性来修改其数值，从而发生值改变的信号
@@ -72,7 +86,39 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_highlight_iridescence, highlight);
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_crosshair_iridescence, crosshair);
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_show_develop_ui_log, false);
+    // XPaintBarStatus
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_rect, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_ellipse, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_arrow, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_penciler, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_marker_pen, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_mosaic, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_serial, false);
 
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_rectType, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_ellipseType, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_arrowType, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_marker_penType, -1);
+
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_mosaicType, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_pixelatedMosaic, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_smoothMosaic, -1);
+
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_textBold, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_textItalic, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_textOutline, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_textStrikeout, false);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_textUnderline, false);
+
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_fontFamily, "Microsoft YaHei");
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_fontSize, 16);
+
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_serialType, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_serialNumber, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_serialLetter, QChar());
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_pointType, -1);
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_paPen, QPen());
+    SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_paBrush, QBrush());
 
     qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_themes) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
     qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_orientation) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
@@ -84,6 +130,35 @@ void ConfigManager::readFromFile()
     qDebug() << GET_VALUE_PROPERTY(XPin_opacity) << GET_VALUE_PROPERTY(XPin_maximum_size);
     qDebug() << GET_VALUE_PROPERTY(XHotkeys_capture) << GET_VALUE_PROPERTY(XHotkeys_delay_capture)  << GET_VALUE_PROPERTY(XHotkeys_custiom_capture);
     qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence) << GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
+
+    qDebug() <<  GET_VALUE_PROPERTY(XPaintBarStatus_rect)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_ellipse)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_arrow)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_penciler)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_marker_pen)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_mosaic)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_text)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serial)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_rectType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_ellipseType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_arrowType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_marker_penType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_mosaicType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_pixelatedMosaic)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_smoothMosaic)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textBold)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textItalic)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textOutline)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textStrikeout)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textUnderline)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_fontFamily)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_fontSize)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serialType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serialNumber)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serialLetter)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_pointType)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_paPen)
+             <<  GET_VALUE_PROPERTY(XPaintBarStatus_paBrush);
 }
 
 void ConfigManager::writeToFile()
@@ -116,7 +191,6 @@ void ConfigManager::writeToFile()
     WRITE_INI(XInterface, XInterface_auto_copy_to_clipbaoard, GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard));
     WRITE_INI(XInterface, XInterface_crosshair_show, GET_VALUE_PROPERTY(XInterface_crosshair_show));
 
-
     // Output
     WRITE_INI(XOutput, XOutput_image_quailty, GET_VALUE_PROPERTY(XOutput_image_quailty));
     WRITE_INI(XOutput, XOutput_flie_name, GET_VALUE_PROPERTY(XOutput_flie_name));
@@ -137,6 +211,39 @@ void ConfigManager::writeToFile()
     WRITE_INI(XOtherControl, XOtherControl_highlight_iridescence, GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence));
     WRITE_INI(XOtherControl, XOtherControl_crosshair_iridescence, GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence));
     WRITE_INI(XOtherControl, XOtherControl_show_develop_ui_log, GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log));
+    // XPaintBarStatus
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_rect, true);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipse, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_arrow, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_penciler, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_marker_pen, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_mosaic, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serial, false);
+
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_rectType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipseType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_arrowType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_marker_penType, 0);
+
+//    WRITE_INI(XPaintBarStatus, XPaintBarStatus_mosaicType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_pixelatedMosaic, 10);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_smoothMosaic, 10);
+
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textBold, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textItalic, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textOutline, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textStrikeout, false);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textUnderline, false);
+
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_fontFamily, "Microsoft YaHei");
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_fontSize, 16);
+
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serialType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serialNumber, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serialLetter, QChar('a'));
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_pointType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_paPen, QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_paBrush, QBrush(Qt::red, Qt::SolidPattern));
 }
 
 void ConfigManager::setIniValue(const QString &key, const QVariant &value)
@@ -163,3 +270,44 @@ ConfigManager::ConfigManager(QObject *parent)
     m_settings->setIniCodec("UTF-8"); // 禁用自动转义
     readFromFile();
 }
+
+
+void initPaintBarStatus(PaintBarStatus &pbs)
+{
+    // 一级工具栏的状态
+    pbs.rect = CONF_GET_PROPERTY(XPaintBarStatus_rect).toBool();
+    pbs.ellipse = CONF_GET_PROPERTY(XPaintBarStatus_ellipse).toBool();
+    pbs.arrow = CONF_GET_PROPERTY(XPaintBarStatus_arrow).toBool();
+    pbs.penciler = CONF_GET_PROPERTY(XPaintBarStatus_penciler).toBool();
+    pbs.marker_pen = CONF_GET_PROPERTY(XPaintBarStatus_marker_pen).toBool();
+    pbs.mosaic = CONF_GET_PROPERTY(XPaintBarStatus_mosaic).toBool();
+    pbs.text = CONF_GET_PROPERTY(XPaintBarStatus_text).toBool();
+    pbs.serial = CONF_GET_PROPERTY(XPaintBarStatus_serial).toBool();
+
+    // 二级工具栏的状态
+    pbs.rectintType = CONF_GET_PROPERTY(XPaintBarStatus_rectType).toInt();
+    pbs.ellipseType = CONF_GET_PROPERTY(XPaintBarStatus_ellipseType).toInt();
+    pbs.arrowType = CONF_GET_PROPERTY(XPaintBarStatus_arrowType).toInt();
+    pbs.marker_penType = CONF_GET_PROPERTY(XPaintBarStatus_marker_penType).toInt();
+
+    pbs.mosaicType = CONF_GET_PROPERTY(XPaintBarStatus_mosaicType).toInt();
+    pbs.pixelatedMosaic = CONF_GET_PROPERTY(XPaintBarStatus_pixelatedMosaic).toInt();
+    pbs.smoothMosaic = CONF_GET_PROPERTY(XPaintBarStatus_smoothMosaic).toInt();
+
+    pbs.textBold = CONF_GET_PROPERTY(XPaintBarStatus_textBold).toBool();
+    pbs.textItalic = CONF_GET_PROPERTY(XPaintBarStatus_textItalic).toBool();
+    pbs.textOutline = CONF_GET_PROPERTY(XPaintBarStatus_textOutline).toBool();
+    pbs.textStrikeout = CONF_GET_PROPERTY(XPaintBarStatus_textStrikeout).toBool();
+    pbs.textUnderline = CONF_GET_PROPERTY(XPaintBarStatus_textUnderline).toBool();
+    pbs.fontFamily = CONF_GET_PROPERTY(XPaintBarStatus_fontFamily).toString();
+    pbs.fontSize = CONF_GET_PROPERTY(XPaintBarStatus_fontSize).toInt();
+
+    pbs.serialType = CONF_GET_PROPERTY(XPaintBarStatus_serialType).toInt();
+    pbs.serialNumber = CONF_GET_PROPERTY(XPaintBarStatus_serialNumber).toInt();
+    pbs.serialLetter = CONF_GET_PROPERTY(XPaintBarStatus_serialLetter).toChar();
+    pbs.pointType = CONF_GET_PROPERTY(XPaintBarStatus_pointType).toInt();
+
+    pbs.paPen = CONF_GET_PROPERTY(XPaintBarStatus_paPen).value<QPen>();
+    pbs.paBrush = CONF_GET_PROPERTY(XPaintBarStatus_paBrush).value<QBrush>();
+}
+

@@ -52,11 +52,11 @@ private:
     QPointer<AbsBtnsCtrl>         m_rectCtrl;                      // 矩形
     QPointer<AbsBtnsCtrl>         m_ellipseCtrl;                   // 圆形
     QPointer<AbsBtnsCtrl>         m_arrowCtrl;                     // 箭头
+    QPointer<AbsBtnsCtrl>         m_markerPenCtrl;                 // 记号笔
     QPointer<AbsBtnsCtrl>         m_mosaicCtrl;                    // 马赛克
     QPointer<AbsBtnsCtrl>         m_textCtrl;                      // 文本
     QPointer<AbsBtnsCtrl>         m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>         m_pointCtrl;                     // 线宽
-    QPointer<AbsBtnsCtrl>         m_markerPenCtrl;                 // 记号笔
     QPointer<ColorPicker>         m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;

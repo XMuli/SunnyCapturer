@@ -686,3 +686,4 @@ void drawCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt)
     pa.restore();
 }
 
+

@@ -94,8 +94,8 @@ int countItemsformLayout(const QGridLayout *layout, const Qt::Orientation &orie,
 
 
 
-QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation &orie, QPointer<AbsBtnsCtrl> &absBtnsCtrl, const QString &dir
-                                 , const QStringList &items, const bool& bLastAddSpacer, const bool exclusive, const int defaultChecked)
+QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
+                                 , const int defaultChecked, const bool& bLastAddSpacer, const bool exclusive)
 {
     if (!absBtnsCtrl) absBtnsCtrl = new AbsBtnsCtrl(orie);
 

@@ -123,7 +123,6 @@ private:
     QTimer*                  m_timerPoint;
 
     static QFont m_textFont; // 绘画字体的时候，显示的
-    static PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态
 };
 
 

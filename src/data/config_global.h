@@ -67,4 +67,36 @@ constexpr const char* XOtherControl_highlight_iridescence("highlight_iridescence
 constexpr const char* XOtherControl_crosshair_iridescence("crosshair_iridescence");
 constexpr const char* XOtherControl_show_develop_ui_log("show_develop_ui_log");
 
+// XPaintBarStatus
+constexpr const char* XPaintBarStatus = "XPaintBarStatus";
+constexpr const char* XPaintBarStatus_rect = "rect";
+constexpr const char* XPaintBarStatus_ellipse = "ellipse";
+constexpr const char* XPaintBarStatus_arrow = "arrow";
+constexpr const char* XPaintBarStatus_penciler = "penciler";
+constexpr const char* XPaintBarStatus_marker_pen = "marker_pen";
+constexpr const char* XPaintBarStatus_mosaic = "mosaic";
+constexpr const char* XPaintBarStatus_text = "text";
+constexpr const char* XPaintBarStatus_serial = "serial";
+
+constexpr const char* XPaintBarStatus_rectType = "rectintType";
+constexpr const char* XPaintBarStatus_ellipseType = "ellipseType";
+constexpr const char* XPaintBarStatus_arrowType = "arrowType";
+constexpr const char* XPaintBarStatus_marker_penType = "marker_penType";
+constexpr const char* XPaintBarStatus_mosaicType = "mosaicType";
+constexpr const char* XPaintBarStatus_pixelatedMosaic = "pixelatedMosaic";
+constexpr const char* XPaintBarStatus_smoothMosaic = "smoothMosaic";
+constexpr const char* XPaintBarStatus_textBold = "textBold";
+constexpr const char* XPaintBarStatus_textItalic = "textItalic";
+constexpr const char* XPaintBarStatus_textOutline = "textOutline";
+constexpr const char* XPaintBarStatus_textStrikeout = "textStrikeout";
+constexpr const char* XPaintBarStatus_textUnderline = "textUnderline";
+constexpr const char* XPaintBarStatus_fontFamily = "fontFamily";
+constexpr const char* XPaintBarStatus_fontSize = "fontSize";
+constexpr const char* XPaintBarStatus_serialType = "serialType";
+constexpr const char* XPaintBarStatus_serialNumber = "serialNumber";
+constexpr const char* XPaintBarStatus_serialLetter = "serialLetter";
+constexpr const char* XPaintBarStatus_pointType = "point";
+constexpr const char* XPaintBarStatus_paPen = "paPen";
+constexpr const char* XPaintBarStatus_paBrush = "paBrush";
+
 #endif // CONFIG_GLOBAL_H

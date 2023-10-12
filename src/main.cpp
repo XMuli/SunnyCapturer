@@ -4,24 +4,24 @@
 #include <QSharedMemory>
 #include <QDebug>
 
-#include "xlog.h"
+//#include "xlog.h"
 #include "ui/screenshot/tray.h"
-#include "xapphelper.h"
+//#include "xapphelper.h"
 
 // test
 #include "data/configmanager.h"
-#include "xtextedit.h"
-#include "tips.h"
-#include <QWidget>
-#include "colorpicker.h"
-#include "ui/setting/sidesettingui.h"
+//#include "xtextedit.h"
+//#include "tips.h"
+//#include <QWidget>
+//#include "colorpicker.h"
+//#include "ui/setting/sidesettingui.h"
 
-#include "ui/include/colorpicker.h"
-#include "ui/screenshot/screenshot.h"
-#include "ui/paint_bar/toolbar_level/painttoolbar.h"
-#include "ui/paint_bar/toolbar_level/paintctrlbar.h"
-#include "ui/paint_bar/paintbar.h"
-#include "ui/paint_bar/pin/pinwidget.h"
+//#include "ui/include/colorpicker.h"
+//#include "ui/screenshot/screenshot.h"
+//#include "ui/paint_bar/toolbar_level/painttoolbar.h"
+//#include "ui/paint_bar/toolbar_level/paintctrlbar.h"
+//#include "ui/paint_bar/paintbar.h"
+//#include "ui/paint_bar/pin/pinwidget.h"
 
 int main(int argc, char *argv[])
 {
@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     }
 
     CONF_MANAGE; //.writeToFile();
+    initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘

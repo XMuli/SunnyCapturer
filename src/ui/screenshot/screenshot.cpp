@@ -21,7 +21,6 @@
 #include "../../data/configmanager.h"
 
 QFont ScreenShot::m_textFont = QFont("Microsoft YaHei", 16);
-PaintBarStatus ScreenShot::m_paintBarStatus = PaintBarStatus();
 
 ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)

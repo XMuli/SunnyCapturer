@@ -4,24 +4,61 @@
 #include <QObject>
 #include <QSettings>
 #include <QApplication>
+#include <QPen>
+#include <QBrush>
 #include <QDebug>
 #include <QStandardPaths>
 #include "isingleton.h"
 #include "config_global.h"
 
-#define CONF_MANAGE ConfigManager::instance()
+struct PaintBarStatus
+{
+    // 一级工具栏的状态
+    bool rect = false;
+    bool ellipse = false;
+    bool arrow = false;
+    bool penciler = false;
+    bool marker_pen = false;
+    bool mosaic = false;
+    bool text = false;
+    bool serial = false;
 
-#if 1
-    #define WRITE_INI(root, key, val) \
-        setIniValue(QString("/") + root + "/" + key, val)
-    #define READ_INI(root, key, defVal) \
-        getIniValue(QString("/") + root + "/" + key, defVal)
-#else
-    #define WRITE_INI(root, key, val) \
-        ConfigManager::instance().setIniValue(QString("/") + root + "/" + key, val)
-    #define READ_INI(root, key, defVal) \
-        ConfigManager::instance().getIniValue(QString("/") + root + "/" + key, defVal)
-#endif
+    // 二级工具栏的状态
+    int rectintType = -1;
+    int ellipseType = -1;
+    int arrowType = -1;
+    int marker_penType = -1;
+
+    int mosaicType = -1;
+    int pixelatedMosaic = -1;
+    int smoothMosaic = -1;
+
+    bool textBold = false;
+    bool textItalic = false;
+    bool textOutline = false;
+    bool textStrikeout = false;
+    bool textUnderline = false;
+    QString fontFamily = "Microsoft YaHei";
+    int fontSize = 16;
+
+    int serialType = -1;
+    int serialNumber = -1;
+    QChar serialLetter = ' ';
+    int pointType = -1;
+
+    QPen paPen;
+    QBrush paBrush;
+};
+
+void initPaintBarStatus(PaintBarStatus& pbs);
+
+//-------------------------------------------------------------
+
+#define CONF_MANAGE ConfigManager::instance()
+#define CONF_PBS_DATA ConfigManager::instance().m_paintBarStatus  // 获取 m_paintBarStatus
+
+#define CONF_SET_PROPERTY(name, val) CONF_MANAGE.setProperty(#name, val)  // 直接设置单例里面的属性为新值
+#define CONF_GET_PROPERTY(name) CONF_MANAGE.property(#name)               // 直接获取单例里面的属性
 
 // 每新建一个 保存的变量 到配置文件，就分别在对应的三个位置调用如下的三个宏即可。
 // 这里面保存的属性名字实际为 “常变量” 而不是 其 所对应的具体字符串 -> 为了外部的书写是统一的，且实际的配置的名字也是耦合考虑
@@ -107,10 +144,41 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XOtherControl_highlight_iridescence);
     SET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence);
     SET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
+    // XPaintBarStatus
+    SET_VALUE_PROPERTY(XPaintBarStatus_rect);
+    SET_VALUE_PROPERTY(XPaintBarStatus_ellipse);
+    SET_VALUE_PROPERTY(XPaintBarStatus_arrow);
+    SET_VALUE_PROPERTY(XPaintBarStatus_penciler);
+    SET_VALUE_PROPERTY(XPaintBarStatus_marker_pen);
+    SET_VALUE_PROPERTY(XPaintBarStatus_mosaic);
+    SET_VALUE_PROPERTY(XPaintBarStatus_text);
+    SET_VALUE_PROPERTY(XPaintBarStatus_serial);
+
+    SET_VALUE_PROPERTY(XPaintBarStatus_rectType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_ellipseType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_arrowType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_marker_penType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_mosaicType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_pixelatedMosaic);
+    SET_VALUE_PROPERTY(XPaintBarStatus_smoothMosaic);
+    SET_VALUE_PROPERTY(XPaintBarStatus_textBold);
+    SET_VALUE_PROPERTY(XPaintBarStatus_textItalic);
+    SET_VALUE_PROPERTY(XPaintBarStatus_textOutline);
+    SET_VALUE_PROPERTY(XPaintBarStatus_textStrikeout);
+    SET_VALUE_PROPERTY(XPaintBarStatus_textUnderline);
+    SET_VALUE_PROPERTY(XPaintBarStatus_fontFamily);
+    SET_VALUE_PROPERTY(XPaintBarStatus_fontSize);
+    SET_VALUE_PROPERTY(XPaintBarStatus_serialType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_serialNumber);
+    SET_VALUE_PROPERTY(XPaintBarStatus_serialLetter);
+    SET_VALUE_PROPERTY(XPaintBarStatus_pointType);
+    SET_VALUE_PROPERTY(XPaintBarStatus_paPen);
+    SET_VALUE_PROPERTY(XPaintBarStatus_paBrush);
 
 public:
     void readFromFile();
     void writeToFile();
+    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态
 
 private:
     void setIniValue(const QString& key, const QVariant& value);
@@ -126,5 +194,7 @@ private:
 private:
     QSettings* m_settings;
 };
+
+
 
 #endif // CONFIGMANAGER_H

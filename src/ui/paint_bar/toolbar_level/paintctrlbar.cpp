@@ -11,6 +11,7 @@
 #include "communication.h"
 #include "horspacerline.h"
 #include "verspacerline.h"
+#include "../../data/configmanager.h"
 
 #define PIXELATED_MOSAIC_VAL  "pixelatedMosaicValue"
 #define SMOOTH_MOSAIC_VAL  "smoothMosaicValue"
@@ -23,11 +24,11 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_rectCtrl(nullptr)
     , m_ellipseCtrl(nullptr)
     , m_arrowCtrl(nullptr)
+    , m_markerPenCtrl(nullptr)
     , m_mosaicCtrl(nullptr)
     , m_textCtrl(nullptr)
     , m_serialCtrl(nullptr)
     , m_pointCtrl(nullptr)
-    , m_markerPenCtrl(nullptr)
     , m_colorPicker(new ColorPicker(QSize(14, 14) * dpiScale(), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
@@ -92,14 +93,14 @@ void PaintCtrlBar::initUI()
 void PaintCtrlBar::initBtns()
 {
     const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
-    connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", false, false, -1), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
-    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPointCtrlReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", CONF_GET_PROPERTY(XPaintBarStatus_rectType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", CONF_GET_PROPERTY(XPaintBarStatus_ellipseType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", CONF_GET_PROPERTY(XPaintBarStatus_arrowType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill", CONF_GET_PROPERTY(XPaintBarStatus_marker_penType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur", CONF_GET_PROPERTY(XPaintBarStatus_mosaicType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", -1, false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
+    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", CONF_GET_PROPERTY(XPaintBarStatus_serialType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", CONF_GET_PROPERTY(XPaintBarStatus_pointType).toInt()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
@@ -294,8 +295,37 @@ void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch,
 
 void PaintCtrlBar::onIdReleased(int id)
 {
-    qDebug() << "----sender（）:" << sender() << "parent():" << sender()->parent() << "   id:" << id ;
+    qDebug() << "----sender（）:" << sender() << "parent():" << "   id:" << id ;
     emit sigPaintCtrlIdReleased(id);
+
+    const auto& paint = sender()->parent();
+    if (paint == m_rectCtrl) {
+        CONF_SET_PROPERTY(XPaintBarStatus_rectType, id);
+    } else if (paint == m_ellipseCtrl) {
+        CONF_SET_PROPERTY(XPaintBarStatus_ellipseType, id);
+    } else if (paint == m_arrowCtrl) {
+        CONF_SET_PROPERTY(XPaintBarStatus_arrowType, id);
+    } else if (paint == m_markerPenCtrl) {
+        CONF_SET_PROPERTY(XPaintBarStatus_marker_penType, id);
+    } else if (paint == m_mosaicCtrl) {
+        CONF_SET_PROPERTY(XPaintBarStatus_mosaicType, id);
+    } else if (paint == m_textCtrl) {
+        // TBD:
+        const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
+        if (id == 0) CONF_SET_PROPERTY(XPaintBarStatus_textBold, checked);
+        else if (id == 1) CONF_SET_PROPERTY(XPaintBarStatus_textItalic, checked);
+        else if (id == 2) CONF_SET_PROPERTY(XPaintBarStatus_textOutline, checked);
+        else if (id == 3) CONF_SET_PROPERTY(XPaintBarStatus_textStrikeout, checked);
+        else if (id == 4) CONF_SET_PROPERTY(XPaintBarStatus_textUnderline, checked);
+        else qDebug() << "PaintCtrlBar::onIdReleased is m_textCtrl, and id is empty!";
+    } else if (paint == m_serialCtrl) {
+        CONF_SET_PROPERTY(XPaintBarStatus_serialType, id);
+    } else if (paint == m_pointCtrl) {
+        emit sigPointCtrlReleased(id);
+        CONF_SET_PROPERTY(XPaintBarStatus_pointType, id);
+    } else {
+        qDebug() << "sender()->parent(): %1 is empty!";
+    }
 
 //    QButtonGroup *buttonGroup = qobject_cast<QButtonGroup*>(sender());
 //    if (buttonGroup) {
