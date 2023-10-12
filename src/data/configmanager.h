@@ -11,6 +11,7 @@
 #include "isingleton.h"
 #include "config_global.h"
 
+
 struct PaintBarStatus
 {
     // 一级工具栏的状态
@@ -178,7 +179,7 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
 public:
     void readFromFile();
     void writeToFile();
-    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态
+    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
 
 private:
     void setIniValue(const QString& key, const QVariant& value);

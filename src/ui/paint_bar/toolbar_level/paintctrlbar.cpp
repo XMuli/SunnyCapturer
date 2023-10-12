@@ -99,14 +99,14 @@ void PaintCtrlBar::initBtns()
     if (CONF_PBS_DATA.textStrikeout) textLists << "3";
     if (CONF_PBS_DATA.textUnderline) textLists << "4";
     const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
-    connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << CONF_GET_PROPERTY(XPaintBarStatus_rectType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() <<CONF_GET_PROPERTY(XPaintBarStatus_ellipseType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << CONF_GET_PROPERTY(XPaintBarStatus_arrowType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill", QStringList() << CONF_GET_PROPERTY(XPaintBarStatus_marker_penType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur", QStringList() << CONF_GET_PROPERTY(XPaintBarStatus_mosaicType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << QString::number(CONF_PBS_DATA.rectintType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() << QString::number(CONF_PBS_DATA.ellipseType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << QString::number(CONF_PBS_DATA.arrowType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill", QStringList() << QString::number(CONF_PBS_DATA.marker_penType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur", QStringList() << QString::number(CONF_PBS_DATA.mosaicType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", textLists, false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
-    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << CONF_GET_PROPERTY(XPaintBarStatus_serialType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << CONF_GET_PROPERTY(XPaintBarStatus_pointType).toString()), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CONF_PBS_DATA.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CONF_PBS_DATA.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
@@ -306,29 +306,29 @@ void PaintCtrlBar::onIdReleased(int id)
 
     const auto& paint = sender()->parent();
     if (paint == m_rectCtrl) {
-        CONF_SET_PROPERTY(XPaintBarStatus_rectType, id);
+        CONF_PBS_DATA.rectintType = id;
     } else if (paint == m_ellipseCtrl) {
-        CONF_SET_PROPERTY(XPaintBarStatus_ellipseType, id);
+        CONF_PBS_DATA.ellipseType = id;
     } else if (paint == m_arrowCtrl) {
-        CONF_SET_PROPERTY(XPaintBarStatus_arrowType, id);
+        CONF_PBS_DATA.arrowType = id;
     } else if (paint == m_markerPenCtrl) {
-        CONF_SET_PROPERTY(XPaintBarStatus_marker_penType, id);
+        CONF_PBS_DATA.marker_penType = id;
     } else if (paint == m_mosaicCtrl) {
-        CONF_SET_PROPERTY(XPaintBarStatus_mosaicType, id);
+        CONF_PBS_DATA.mosaicType = id;
     } else if (paint == m_textCtrl) {
         // TBD:
         const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
-        if (id == 0) CONF_SET_PROPERTY(XPaintBarStatus_textBold, checked);
-        else if (id == 1) CONF_SET_PROPERTY(XPaintBarStatus_textItalic, checked);
-        else if (id == 2) CONF_SET_PROPERTY(XPaintBarStatus_textOutline, checked);
-        else if (id == 3) CONF_SET_PROPERTY(XPaintBarStatus_textStrikeout, checked);
-        else if (id == 4) CONF_SET_PROPERTY(XPaintBarStatus_textUnderline, checked);
+        if (id == 0) CONF_PBS_DATA.textBold = checked;
+        else if (id == 1) CONF_PBS_DATA.textItalic = checked;
+        else if (id == 2) CONF_PBS_DATA.textOutline = checked;
+        else if (id == 3) CONF_PBS_DATA.textStrikeout = checked;
+        else if (id == 4) CONF_PBS_DATA.textUnderline = checked;
         else qDebug() << "PaintCtrlBar::onIdReleased is m_textCtrl, and id is empty!";
     } else if (paint == m_serialCtrl) {
-        CONF_SET_PROPERTY(XPaintBarStatus_serialType, id);
+        CONF_PBS_DATA.serialType = id;
     } else if (paint == m_pointCtrl) {
         emit sigPointCtrlReleased(id);
-        CONF_SET_PROPERTY(XPaintBarStatus_pointType, id);
+        CONF_PBS_DATA.pointType = id;
     } else {
         qDebug() << "sender()->parent(): %1 is empty!";
     }

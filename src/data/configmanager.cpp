@@ -212,7 +212,7 @@ void ConfigManager::writeToFile()
     WRITE_INI(XOtherControl, XOtherControl_crosshair_iridescence, GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence));
     WRITE_INI(XOtherControl, XOtherControl_show_develop_ui_log, GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log));
     // XPaintBarStatus
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_rect, true);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_rect, false);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipse, false);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_arrow, false);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_penciler, false);
@@ -225,7 +225,7 @@ void ConfigManager::writeToFile()
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_arrowType, 0);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_marker_penType, 0);
 
-//    WRITE_INI(XPaintBarStatus, XPaintBarStatus_mosaicType, 0);
+    WRITE_INI(XPaintBarStatus, XPaintBarStatus_mosaicType, 0);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_pixelatedMosaic, 10);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_smoothMosaic, 10);
 
