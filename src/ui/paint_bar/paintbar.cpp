@@ -76,10 +76,13 @@ void PaintBar::initConnect()
 
     // 统一接口，由 PaintBar 转发出去
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPaintCtrlIdReleased, this, &PaintBar::sigPaintCtrlIdReleased);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigTextFontFamilyChanged, this, &PaintBar::sigTextFontFamilyChanged);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigTextFontSizeChanged, this, &PaintBar::sigTextFontSizeChanged);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigMosaicSliderValueChanged, this, &PaintBar::sigMosaicSliderValueChanged);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigTextCtrlToggled, this, &PaintBar::sigTextCtrlToggled);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
+    connect(this, &PaintBar::sigSetTextFontSizeComboBoxValue, m_paintCtrlBar, &PaintCtrlBar::onSetTextFontSizeComboBoxValue);
 }
 
 void PaintBar::setLowerBlurEffect(const QPixmap &pix, int radius)

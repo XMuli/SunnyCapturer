@@ -32,6 +32,9 @@ signals:
 
     void sigPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable);      // paintToolBar 按钮被按下
     void sigPaintCtrlIdReleased(const int& id);                                        // PaintCtrlBar 按钮被按下
+    void sigTextFontSizeChanged(const QString &text);                                  // PaintCtrlBar 拉列表的字体的大小被修改
+    void sigTextFontFamilyChanged(const QFont &font);                                  // PaintCtrlBar 字体 被发生改变时候
+    void sigSetTextFontSizeComboBoxValue(const QString &fontSize);                     // sync 修改下拉列表的字体的大小
 
 private slots:
     void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable);

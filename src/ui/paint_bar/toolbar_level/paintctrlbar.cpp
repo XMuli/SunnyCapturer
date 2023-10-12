@@ -59,12 +59,13 @@ void PaintCtrlBar::initUI()
 {
     if (m_orie == Qt::Horizontal) {
         m_layout = new QHBoxLayout(this);
+        m_fontFamily->setMaximumWidth(170);
     } else if (m_orie == Qt::Vertical) {
         m_layout = new QVBoxLayout(this);
+        m_fontFamily->setMaximumWidth(120);
     }
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_fontFamily->setMaximumWidth(170);
     m_colorPicker->hide();
     m_fontFamily->hide();
     m_fontScale->hide();
@@ -99,6 +100,14 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", false, false, -1), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter"), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large"), &QButtonGroup::idReleased, this, &PaintCtrlBar::sigPointCtrlReleased);
+    connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
+    connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
+
+    m_fontFamily->setEditable(false);
+    const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
+    m_fontScale->addItems(fontSize);
+    m_fontScale->setCurrentText("16");
+    m_fontScale->setEditable(true);
 
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
@@ -393,4 +402,9 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
         QLayoutItem *item = m_layout->itemAt(i);
         qDebug() << "-----@3-->i:" << i << item;
     }
+}
+
+void PaintCtrlBar::onSetTextFontSizeComboBoxValue(const QString &fontSize)
+{
+    m_fontScale->setCurrentText(fontSize);
 }

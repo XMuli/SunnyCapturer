@@ -20,6 +20,8 @@
 #include "../paint_bar/pin/pinwidget.h"
 #include "../../data/configmanager.h"
 
+QFont ScreenShot::m_textFont = QFont("Microsoft YaHei", 16);
+PaintBarStatus ScreenShot::m_paintBarStatus = PaintBarStatus();
 
 ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -368,6 +370,18 @@ void ScreenShot::onPickedColor(const QColor &color)
     m_edit->mergeCurrentCharFormat(format);
 }
 
+void ScreenShot::onTextFontFamilyChanged(const QFont &font)
+{
+    m_textFont.setFamily(font.family());
+    m_edit->setFont(m_textFont);
+}
+
+void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
+{
+    const int& width = fontSize.toInt();
+    setTextFontSize(0, width, false);
+}
+
 void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -438,6 +452,10 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
     connect(m_paintBar, &PaintBar::sigUpdatePaintBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
     connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
+    connect(m_paintBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
+    connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
+
+    connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
 
 }
 
@@ -544,6 +562,17 @@ void ScreenShot::imageQuickSave()
     const auto& path = imageSavePath(ImageSaveType::IST_quick_save);
     const bool ok = imageSave(path);
     COMM.sigShowSystemMessagebox(ok ? tr("Success") : tr("Failed"), ok ? tr("Image save to ") + path : tr("Quick save feature is not enabled, please check."), 10000);
+}
+
+// bMouse true-鼠标滑轮， false-绘画工具栏下拉列表实现
+void ScreenShot::setTextFontSize(const int& stepY, const int& width, const bool &bMouse)
+{
+    m_textFont.setPointSize(bMouse ? m_textFont.pointSize() + stepY : width);
+    m_edit->setFont(m_textFont);
+    const int& tWidth = m_textFont.pointSize();
+    const QString& szWidth = QString::number(tWidth);
+    showPointTips(szWidth + "pt");
+    if (bMouse) emit sigSetTextFontSizeComboBoxValue(szWidth);  // 同步修改下拉列表的字体大小
 }
 
 void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
@@ -1192,6 +1221,8 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
     showCustomWidget(m_paintBar);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
     showPickedRectTips();
     update();
+
+    qDebug() << "mouseReleaseEvent m_redo:" << m_redo.size();
 }
 
 void ScreenShot::mouseMoveEvent(QMouseEvent *e)
@@ -1216,14 +1247,7 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
     if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
     } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-        if (!m_edit->isVisible()) return;
-        static QFont font = this->font();
-
-
-        font.setPointSize(font.pointSize() + stepY);
-        m_edit->setFont(font);
-        width = font.pointSize();
-        showPointTips(QString::number(width) + "pt");
+        setTextFontSize(stepY, width, true);
 
     } else {
         const int min = 1;
@@ -1234,10 +1258,6 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         m_paintNode.pen.setWidthF(width);
         showPointTips(QString::number(width));
     }
-
-
-
-
 
     e->ignore();
 }
@@ -1270,7 +1290,6 @@ void ScreenShot::paintEvent(QPaintEvent *e)
         pa.drawPixmap(QPoint(0, 0), m_origPix);
     }
 
-    qDebug() << "paintEvent m_redo:" << m_redo.size();
     for (const auto& it : m_redo) {
         it.printf();
         drawShape(it, pa);

@@ -144,6 +144,44 @@ struct PaintNode
     PaintNode();   // 默认构造函数
 };
 
+struct PaintBarStatus
+{
+    // 一级工具栏的状态
+    bool rect = false;
+    bool ellipse = false;
+    bool arrow = false;
+    bool pen = false;
+    bool marker_pen = false;
+    bool mosaic = false;
+    bool text = false;
+    bool serial = false;
+
+    // 二级工具栏的状态
+    int rectintType = -1;
+    int ellipseType = -1;
+    int arrowType = -1;
+    int marker_penType = -1;
+
+    int pixelatedMosaic = -1;
+    int smoothMosaic = -1;
+
+    bool textBold = false;
+    bool textItalic = false;
+    bool textOutline = false;
+    bool textStrikeout = false;
+    bool textUnderline = false;
+    QString fontFamily = "Microsoft YaHei";
+    int fontSize = 16;
+
+    int serialType = -1;
+    int serialNumber = -1;
+    QChar serialLetter = ' ';
+    int point = -1;
+
+    QPen paPen;
+    QBrush paBrush;
+};
+
 void showCreatorRichText(const QTextDocument *doc, const QRect &rect, QWidget *w);
 void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
 

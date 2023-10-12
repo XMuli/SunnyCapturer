@@ -41,6 +41,10 @@ private:
     bool imageSave(const QString& path);
     void imageQuickSave();
 
+    void setTextFontSize(const int& stepY, const int &width, const bool& bMouse);
+
+signals:
+    void sigSetTextFontSizeComboBoxValue(const QString &fontSize);     // sync 修改下拉列表的字体的大小
 
 public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
@@ -52,6 +56,8 @@ public slots:
     void onHidePointTips();
     void onUpdateToolBarBlurPixmap();
     void onPickedColor(const QColor& color);
+    void onTextFontFamilyChanged(const QFont &font);
+    void onTextFontSizeChanged(const QString &fontSize);
 
 private:
     void initUI();
@@ -115,6 +121,9 @@ private:
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;
+
+    static QFont m_textFont; // 绘画字体的时候，显示的
+    static PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态
 };
 
 

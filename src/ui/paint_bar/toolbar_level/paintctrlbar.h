@@ -32,14 +32,18 @@ signals:
     void sigPaintCtrlIdReleased(const int& id);
     void sigTextCtrlToggled(const TextFlags& flages);
     void sigPointCtrlReleased(const int& id);                      // PaintCtrlBar PointCtrl 被按下
-    void sigMosaicSliderValueChanged(int id, int val);                            // PaintCtrlBar Slider 数值被发生改变时候
+    void sigMosaicSliderValueChanged(int id, int val);             // PaintCtrlBar Slider 数值被发生改变时候
     void sigPickedColor(const QColor& color);
+    void sigTextFontFamilyChanged(const QFont &font);              // PaintCtrlBar 字体 被发生改变时候
+    void sigTextFontSizeChanged(const QString &fontSize);          // PaintCtrlBar 字体大小 数值被发生改变时候
+
 
 public slots:
     void onIdReleased(int id);
     void onTextCtrlToggled(int id, bool checked);
     void onMosaicCtrlIdReleased(int id);
     void onPaintBtnRelease(const PaintType& type, const bool &isCheckable);
+    void onSetTextFontSizeComboBoxValue(const QString &fontSize);     // sync 修改下拉列表的字体的大小
 
 private:
     QBoxLayout*                   m_layout;
