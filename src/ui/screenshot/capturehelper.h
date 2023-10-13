@@ -1,6 +1,5 @@
 ﻿#ifndef CAPTUREHELPER_H
 #define CAPTUREHELPER_H
-
 #include <QObject>
 #include <QColor>
 #include <QPen>
@@ -8,7 +7,7 @@
 #include <QPainter>
 #include <QMetaEnum>
 #include <QTextDocument>
-
+#include "xtextedit.h"
 
 class ScreenShot;
 
@@ -135,6 +134,7 @@ struct PaintNode
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
     SerialNode   serialNode;                                    // PST_serial 序号相关
 //
+    XTextEdit *xTextEdit = nullptr;                             // true-显示； false-（如被撤销）就隐藏了
     XTextEditType xTextEditType = XTextEditType::XTET_nullptr;
 
     QPen pen; // = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
@@ -145,7 +145,7 @@ struct PaintNode
 };
 
 
-void showCreatorRichText(const QTextDocument *doc, const QRect &rect, QWidget *w);
+XTextEdit* showCreatorRichText(const QTextDocument *doc, const QRect &rect, QWidget *w);
 void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
 
 void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize = 20);

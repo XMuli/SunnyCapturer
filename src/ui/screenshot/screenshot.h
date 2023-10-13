@@ -41,7 +41,7 @@ private:
     bool imageSave(const QString& path);
     void imageQuickSave();
 
-    void setTextFontSize(const int& stepY, const int &width, const bool& bMouse);
+    void setTextFontSize(const int& stepY, const int &width, const bool& bMouse, const bool& bShowPointTips = true);
 
 signals:
     void sigSetTextFontSizeComboBoxValue(const QString &fontSize);     // sync 修改下拉列表的字体的大小
@@ -121,8 +121,7 @@ private:
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;
-
-    static QFont m_textFont; // 绘画字体的时候，显示的
+    static QFont             m_textFont;            // 绘画字体的时候，显示的
 };
 
 

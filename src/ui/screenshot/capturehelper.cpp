@@ -257,11 +257,12 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
     pa.setRenderHint(QPainter::Antialiasing);
 
     if (paintNode.pst == PaintShapeType::PST_rect) {
-        pa.setPen(paintNode.pen);
 
         if (paintNode.id == 0) {
+            pa.setPen(paintNode.pen);
             pa.setBrush(Qt::NoBrush);
         } else if (paintNode.id == 1) {
+            pa.setPen(Qt::NoPen);
             pa.setBrush(paintNode.pen.color());
         }
 
@@ -269,11 +270,12 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         pa.drawRect(rect);
 
     } else if (paintNode.pst == PaintShapeType::PST_ellipse) {
-        pa.setPen(paintNode.pen);
 
         if (paintNode.id == 0) {
+            pa.setPen(paintNode.pen);
             pa.setBrush(Qt::NoBrush);
         } else if (paintNode.id == 1) {
+            pa.setPen(Qt::NoPen);
             pa.setBrush(paintNode.pen.color());
         }
 
@@ -317,23 +319,32 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
             pa.drawPath(path);
         }
 
-        // 绘制原始点
-        for (const auto& point : trackPos) {
-            pa.drawPoint(point);
-        }
+//        // 绘制原始点
+//        for (const auto& point : trackPos)
+//            pa.drawPoint(point);
 
     } else if (paintNode.pst == PaintShapeType::PST_marker_pen) {
 
-        pa.setPen(Qt::NoPen);
+        const QColor blackCover(0, 0, 0, 0.3 * 255);
         QColor color = paintNode.brush.color();
         color.setAlpha(0.3 * 255);
-        pa.setBrush(color);
-        const auto& rect = largestRect(paintNode.node.p1, paintNode.node.p2);
 
         if (paintNode.id == 0) {
-            pa.drawEllipse(rect);
+            QPen pen(paintNode.pen);
+            pen.setColor(color);
+            pa.setPen(pen);
+            pa.setBrush(Qt::NoBrush);
+            pa.drawLine(paintNode.node.p1, paintNode.node.p2);
+
+            pen.setColor(blackCover);
+            pa.setPen(pen);
+            pa.drawLine(paintNode.node.p1, paintNode.node.p2);
         } else if (paintNode.id == 1) {
-            pa.drawRect(rect);
+            pa.setPen(Qt::NoPen);
+            pa.setBrush(color);
+            pa.drawRect(largestRect(paintNode.node.p1, paintNode.node.p2));
+            pa.setBrush(blackCover);
+            pa.drawRect(largestRect(paintNode.node.p1, paintNode.node.p2));
         }
 
     } else if (paintNode.pst == PaintShapeType::PST_mosaic) {
@@ -349,7 +360,9 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
             pa.drawPixmap(rect, paintNode.pixmap);
 
     } else if (paintNode.pst == PaintShapeType::PST_text) {
-        // nothing, 在外面 showCreatorRichText() 处理了， 绘画图片感觉也可以参考
+        // nothing, 在外面 showCreatorRichText() 处理了， 绘画图片感觉也可以参考; 以及 btnUndo(), btnRedo() 中实现隐藏和展示
+//        if (!paintNode.xTextEdit) return;
+//        paintNode.xTextEdit->setVisible(paintNode.xTextEditShow);
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
         QString str;
         if (paintNode.id == 0) {
@@ -504,10 +517,11 @@ PaintNode::PaintNode()
     // 在此添加其他成员变量的初始化（如果有需要的话）
 }
 
-void showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w)
+XTextEdit* showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w)
 {
-    if (!doc || doc->isEmpty()) return;      //    if (paintNode.xTextEditType != XTextEditType::XTET_finish) return;
-    XTextEdit* newEdit = new XTextEdit(w);   // 改用关联或者 std::智能指针，对哦， w 作主窗口，也是已经实现了的回收； 但是会这个位置重复 new， qdebug 看下，不然会有不断地 new 照成内存泄露
+    XTextEdit* newEdit = nullptr;
+    if (!doc || doc->isEmpty()) return newEdit;      //    if (paintNode.xTextEditType != XTextEditType::XTET_finish) return;
+    newEdit = new XTextEdit(w);   // 改用关联或者 std::智能指针，对哦， w 作主窗口，也是已经实现了的回收； 但是会这个位置重复 new， qdebug 看下，不然会有不断地 new 照成内存泄露
     newEdit->setDocument(doc->clone());      // 最关键的一个一行，对 QTextDocument 进行 1:1 的文本拷贝
 
     newEdit->show();                         // 这三行的顺序不可以混
@@ -515,11 +529,13 @@ void showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w
     newEdit->move(rect.topLeft());
     newEdit->setReadOnly(true);
     newEdit->setFocusAble(false);
+
 //    newEdit->setMouseTracking(false);
 //    newEdit->setFocusPolicy(Qt::NoFocus);
 //    newEdit->setCursor(Qt::ArrowCursor);
     static int i = 1;
     qDebug() << "=============#=====>showDrewText() i:" << i++ << "newEdit:" << newEdit;
+    return newEdit;
 }
 
 

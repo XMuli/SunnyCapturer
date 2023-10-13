@@ -7,6 +7,7 @@
 #include <QSize>
 #include <QButtonGroup>
 #include <QLabel>
+#include <QFont>
 #include "paintbarhelper.h"
 #include "communication.h"
 #include "horspacerline.h"
@@ -60,15 +61,18 @@ void PaintCtrlBar::initUI()
 {
     if (m_orie == Qt::Horizontal) {
         m_layout = new QHBoxLayout(this);
-        m_fontFamily->setMaximumWidth(170);
+        m_fontFamily->setMaximumWidth(120);
     } else if (m_orie == Qt::Vertical) {
         m_layout = new QVBoxLayout(this);
-        m_fontFamily->setMaximumWidth(120);
+        m_fontFamily->setMaximumWidth(100);
     }
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_colorPicker->setCurrPickedColor(CONF_PBS_DATA.paPen.color().name());
     m_colorPicker->hide();
     m_fontFamily->hide();
+
+    m_fontFamily->setCurrentFont(QFont(CONF_PBS_DATA.fontFamily, CONF_PBS_DATA.fontSize));
     m_fontScale->hide();
     m_mosaicSliderCtrl->hide();
 
@@ -111,10 +115,11 @@ void PaintCtrlBar::initBtns()
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
     m_fontFamily->setEditable(false);
+    m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
     m_fontScale->addItems(fontSize);
-    m_fontScale->setCurrentText("16");
-    m_fontScale->setEditable(true);
+    m_fontScale->setCurrentText(QString::number(CONF_PBS_DATA.fontSize));
+
 
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
@@ -348,36 +353,22 @@ void PaintCtrlBar::onIdReleased(int id)
 
 void PaintCtrlBar::onTextCtrlToggled(int id, bool checked)
 {
-
     static TextFlags flags;
-
     if (id == 0) {
-        if (checked) flags |= TextFlag::TF_blod;
-        else flags &= ~TextFlags(TextFlag::TF_blod);
+        checked ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
         CONF_PBS_DATA.textBold = checked;
-//        ConfigManager::instance().setProperty("XPaintBarStatus_textBold", checked);  // 很卡， 原因未知
-//        CONF_SET_PROPERTY(XPaintBarStatus_textBold, checked);
     } else if (id == 1) {
-        if (checked) flags |= TextFlag::TF_italic;
-        else flags &= ~TextFlags(TextFlag::TF_italic);
+        checked ? flags |= TextFlag::TF_italic : flags &= ~TextFlags(TextFlag::TF_italic);
         CONF_PBS_DATA.textItalic = checked;
-//        ConfigManager::instance().setProperty("XPaintBarStatus_textItalic", checked);
-//        CONF_SET_PROPERTY(XPaintBarStatus_textItalic, checked);
     } else if (id == 2) {
-        if (checked) flags |= TextFlag::TF_outline;
-        else flags &= ~TextFlags(TextFlag::TF_outline);
+        checked ? flags |= TextFlag::TF_outline : flags &= ~TextFlags(TextFlag::TF_outline);
         CONF_PBS_DATA.textOutline = checked;
-//        CONF_SET_PROPERTY(XPaintBarStatus_textOutline, checked);
     } else if (id == 3) {
-        if (checked) flags |= TextFlag::TF_strikeout;
-        else flags &= ~TextFlags(TextFlag::TF_strikeout);
+        checked ? flags |= TextFlag::TF_strikeout : flags &= ~TextFlags(TextFlag::TF_strikeout);
         CONF_PBS_DATA.textStrikeout = checked;
-//        CONF_SET_PROPERTY(XPaintBarStatus_textStrikeout, checked);
     } else if (id == 4) {
-        if (checked) flags |= TextFlag::TF_underline;
-        else flags &= ~TextFlags(TextFlag::TF_underline);
+        checked ? flags |= TextFlag::TF_underline : flags &= ~TextFlags(TextFlag::TF_underline);
         CONF_PBS_DATA.textUnderline = checked;
-//        CONF_SET_PROPERTY(XPaintBarStatus_textUnderline, checked);
     } else {
         qDebug() << "id is other!";
     }

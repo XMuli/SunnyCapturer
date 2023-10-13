@@ -32,6 +32,7 @@ const QColor ColorPicker::pickedColor()
 void ColorPicker::setCurrPickedColor(const QString &color)
 {
 //    int i = 0;
+    m_pickedBtn->setColor(color);
     if (m_colorPickerType == ColorPickerType::CT_horizontal) {
         for (auto it : findChildren<XColorButton*>()) {
 
@@ -65,9 +66,8 @@ void ColorPicker::initUI()
     if (m_colorPickerType == ColorPickerType::CT_horizontal) {
 //        colors << "#387bfd" << "#8c3e94" << "#e7509e" << "#d13840"
 //               << "#e98226" << "#f6c632" << "#74b94a" << "#999898";
-
-           colors << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
-                  << "#00A48A" << "#0081FF" << "#3C02FF" << "#8C00D4" << "#4D4D4D";
+        colors << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
+               << "#00A48A" << "#0081FF" << "#3C02FF" << "#8C00D4" << "#4D4D4D";
 
     } else {
         colors << "#000000" << "#7f7f7f" << "#880015" << "#ed1c24" << "#ff7f27"
@@ -139,6 +139,9 @@ void ColorPicker::onPickedColor(QAbstractButton *btn)
 void ColorPicker::onPickupBtnReleased()
 {
     const QColor& color = m_pickedBtn->palette().color(QPalette::Window);
-    const QColor& newColor = QColorDialog::getColor(color, this, tr("select color"));
-    if (newColor != color) m_pickedBtn->setColor(newColor);
+    const QColor& newColor = QColorDialog::getColor(color, this, tr("select color"), QColorDialog::ShowAlphaChannel);
+    if (newColor != color) {
+        m_pickedBtn->setColor(newColor);
+        emit sigPickedColor(newColor);
+    }
 }

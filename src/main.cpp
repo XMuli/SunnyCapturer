@@ -26,6 +26,7 @@
 int main(int argc, char *argv[])
 {
 //    qInstallMessageHandler(XMessageOutput);
+//    qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
 #if(QT_VERSION > QT_VERSION_CHECK(5,6,0))
     qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif

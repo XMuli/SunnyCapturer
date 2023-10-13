@@ -125,8 +125,10 @@ void ScreenShot::btnUndo()
     m_undo.emplace_back(std::move(m_redo.back())); // 在 m_undo 中构造新元素并移动
     m_redo.pop_back(); // 从 m_redo 中移除最后一个元素
 
-    // 被撤销时，序号自然减去一
-    if (m_paintNode.pst == PaintShapeType::PST_serial) {
+    if (m_paintNode.pst == PaintShapeType::PST_text) {          // 撤销时候就隐藏
+        XTextEdit* xTextEdit = m_undo.back().xTextEdit;
+        if (xTextEdit) xTextEdit->hide();
+    } else if (m_paintNode.pst == PaintShapeType::PST_serial) {  // 被撤销时，序号自然减去一
         if (m_paintNode.id == 0) {
             m_paintNode.serialNode.number--;
         } else if (m_paintNode.id == 1) {
@@ -142,6 +144,12 @@ void ScreenShot::btnRedo()
 
     m_redo.emplace_back(std::move(m_undo.back())); // 移动最后一个元素到 m_redo
     m_undo.pop_back(); // 从 m_undo 中移除最后一个元素
+
+    if (m_paintNode.pst == PaintShapeType::PST_text) {          // 重做时候就显示
+        XTextEdit* xTextEdit = m_redo.back().xTextEdit;
+        if (xTextEdit) xTextEdit->show();
+    }
+
 }
 
 void ScreenShot::btnSave()
@@ -367,18 +375,23 @@ void ScreenShot::onPickedColor(const QColor &color)
     QTextCharFormat format = m_edit->currentCharFormat();
     format.setForeground(QBrush(color));
     m_edit->mergeCurrentCharFormat(format);
+
+    CONF_PBS_DATA.paPen.setColor(color);
+    CONF_PBS_DATA.paBrush.setColor(color);
 }
 
 void ScreenShot::onTextFontFamilyChanged(const QFont &font)
 {
     m_textFont.setFamily(font.family());
     m_edit->setFont(m_textFont);
+    CONF_PBS_DATA.fontFamily = font.family();
 }
 
 void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
 {
     const int& width = fontSize.toInt();
     setTextFontSize(0, width, false);
+    CONF_PBS_DATA.fontSize = width;
 }
 
 void ScreenShot::initUI()
@@ -388,16 +401,28 @@ void ScreenShot::initUI()
     m_paintBar->raise();
     m_pickedRectTips->raise();
     m_pointTips->raise();
-    m_edit->hide();
 
+    // 初始化上一次的效果
+    setTextFontSize(0, CONF_PBS_DATA.fontSize, false, false);
+    TextFlags flags;
+    CONF_PBS_DATA.textBold ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
+    CONF_PBS_DATA.textItalic ? flags |= TextFlag::TF_italic : flags &= ~TextFlags(TextFlag::TF_italic);
+    CONF_PBS_DATA.textOutline ? flags |= TextFlag::TF_outline : flags &= ~TextFlags(TextFlag::TF_outline);
+    CONF_PBS_DATA.textStrikeout ? flags |= TextFlag::TF_strikeout : flags &= ~TextFlags(TextFlag::TF_strikeout);
+    CONF_PBS_DATA.textUnderline ? flags |= TextFlag::TF_underline : flags &= ~TextFlags(TextFlag::TF_underline);
+    onTextCtrlToggled(flags);
+
+    m_edit->hide();
     m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_paintBar->hide();
     m_pointTips->hide();
     m_pickedRectTips->hide();
+
     m_timerPoint->setInterval(5000);
     monitorsInfo();
-
-    onPickedColor(Qt::red); // 初始化一下，后面改为使用 配置文件
+    onPickedColor(CONF_PBS_DATA.paPen.color());
+    m_paintNode.pen = CONF_PBS_DATA.paPen;
+    m_paintNode.brush = CONF_PBS_DATA.paBrush;
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
@@ -564,13 +589,13 @@ void ScreenShot::imageQuickSave()
 }
 
 // bMouse true-鼠标滑轮， false-绘画工具栏下拉列表实现
-void ScreenShot::setTextFontSize(const int& stepY, const int& width, const bool &bMouse)
+void ScreenShot::setTextFontSize(const int& stepY, const int& width, const bool &bMouse, const bool &bShowPointTips)
 {
     m_textFont.setPointSize(bMouse ? m_textFont.pointSize() + stepY : width);
     m_edit->setFont(m_textFont);
     const int& tWidth = m_textFont.pointSize();
     const QString& szWidth = QString::number(tWidth);
-    showPointTips(szWidth + "pt");
+    if (bShowPointTips) showPointTips(szWidth + "pt");
     if (bMouse) emit sigSetTextFontSizeComboBoxValue(szWidth);  // 同步修改下拉列表的字体大小
 }
 
@@ -1035,10 +1060,9 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
                     m_edit->clearFocus();
                     if (!m_edit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
 
-
                         m_paintNode.node.absoluteRect = QRect(m_node.pt, m_edit->rect().size());
                         qDebug() << "------$4--->m_edit->rect():" << m_edit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect;
-                        showCreatorRichText(m_edit->document(), m_paintNode.node.absoluteRect, this);
+                        m_paintNode.xTextEdit = showCreatorRichText(m_edit->document(), m_paintNode.node.absoluteRect, this);
                         m_edit->hide();
                         m_redo.push_back(m_paintNode);
 
@@ -1241,7 +1265,6 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
     QPoint step = degrees / 15;
     const int& stepY = step.y() > 0 ? 1 : -1;
 
-
     int width = -1;
     if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
     } else if (m_paintNode.pst == PaintShapeType::PST_text) {
@@ -1256,6 +1279,8 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         width = qBound<int>(min, width, max);
         m_paintNode.pen.setWidthF(width);
         showPointTips(QString::number(width));
+
+        CONF_PBS_DATA.paPen = m_paintNode.pen;
     }
 
     e->ignore();
