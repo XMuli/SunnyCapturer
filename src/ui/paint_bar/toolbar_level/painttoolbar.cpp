@@ -70,7 +70,7 @@ void PaintToolBar::initBtns()
         tb->setChecked(false);
         tb->setAutoRaise(true);
         tb->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        tb->setStyleSheet("border-style:none; padding: 4px");
+        tb->setStyleSheet(szIconBtnCSS);
         tb->setIcon(QIcon(":/resources/icons/paint_tool_bar/paint_btn/" + it.name + ".svg"));
         tb->setContentsMargins(0, 0, 0, 0);
         tb->setIconSize(size);

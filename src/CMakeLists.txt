@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.5)
 set(project_name Sunny)
 set(project_version_major 1)
 set(project_version_minor 2)
-set(project_version_path 0)
+set(project_version_path 1)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.10.14")
+add_definitions(-DXBUILD_TIME="2023.10.16")
 
 
 set(CMAKE_AUTOUIC ON)
@@ -171,7 +171,7 @@ message("CMAKE_LIBRARY_OUTPUT_DIRECTORY: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")    
 message("CMAKE_ARCHIVE_OUTPUT_DIRECTORY： ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")         # 静态库的输出目录
 #************************************************* 拷贝 .ini 和资源文件 *******************************************************
 # copy "resources" 文件夹下的指定文件夹
-set(folders_to_copy "changelog" "licenses" "logo")
+set(folders_to_copy "changelog" "licenses" "logo" "linux")
 set(source_root "${CMAKE_CURRENT_SOURCE_DIR}/resources")
 set(traget_root "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
 
@@ -182,6 +182,11 @@ foreach(it ${folders_to_copy})
 endforeach()
 
 file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
+if(UNIX)
+    file(GLOB sh_files "${source_root}/linux/debian/*.sh")
+    file(COPY ${sh_files} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+endif()
 #************************************************* update .ts, and generate .qm *******************************************************
 set(ts_dir "${CMAKE_CURRENT_SOURCE_DIR}/translations")
 if(APPLE)
@@ -331,14 +336,126 @@ elseif(WIN32)
 
     add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.exe" --no-opengl-sw --no-translations)
 endif()
-#***************************************************************************************************************************
+#****************************************************** 稚拙 Ununtu 22.04 的 .deb *********************************************************************
 
 include(GNUInstallDirs)
-install(TARGETS ${project_name}
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+include (FeatureSummary)  # using  set_package_properties
+
+if (WIN32)
+elseif (APPLE)
+elseif (UNIX)
+    # Helper macros for parsing and setting project version from `git describe --long` result
+    macro (ppic_set_version_via_describe _describe_long)
+        string (
+            REGEX REPLACE
+            "^([0-9a-z.]*)-[0-9]+-g[0-9a-f]*$"
+            "\\1"
+            _tag_parts
+            "${_describe_long}"
+        )
+        list (GET _tag_parts 0 _matched_tag_version)
+        if ("${_matched_tag_version}" MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+            string (
+                REGEX REPLACE
+                "^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$"
+                "\\1;\\2;\\3"
+                _ver_parts
+                "${_matched_tag_version}"
+            )
+            list (GET _ver_parts 0 CPACK_PACKAGE_VERSION_MAJOR)
+            list (GET _ver_parts 1 CPACK_PACKAGE_VERSION_MINOR)
+            list (GET _ver_parts 2 CPACK_PACKAGE_VERSION_PATCH)
+        endif ()
+    endmacro ()
+
+    # Version setup
+    if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+        find_package(Git)
+        set_package_properties(Git PROPERTIES TYPE OPTIONAL PURPOSE "Determine exact build version.")
+        if (GIT_FOUND)
+            execute_process (
+                COMMAND ${GIT_EXECUTABLE} describe --tags --always --long
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE _git_describe_long
+            )
+            string (REGEX REPLACE "\n" "" _git_describe_long "${_git_describe_long}")
+            ppic_set_version_via_describe(${_git_describe_long})
+            target_compile_definitions(${project_name} PRIVATE
+                GIT_DESCRIBE_VERSION_STRING="${_git_describe_long}"
+            )
+        endif ()
+    endif ()
+
+    set(CMAKE_INSTALL_PREFIX /usr)
+    # install icon
+    install (
+        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/logo/logo.svg
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps"
+        RENAME tech.xmuli.sunny.svg
+    )
+    # install shortcut
+    install (
+        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/tech.xmuli.sunny.desktop
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications"
+    )
+
+    set (INSTALL_TARGETS_DEFAULT_ARGS
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Devel
+    )
+
+    # install exe(linux)
+    install (
+        TARGETS ${project_name}
+        ${INSTALL_TARGETS_DEFAULT_ARGS}
+    )
+
+    message("---------->:" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.so)
+    message("---------->RUNTIME:" ${RUNTIME})
+    message("---------->LIBRARY:" ${LIBRARY})
+    message("---------->ARCHIVE:" ${ARCHIVE})
+    message("---------->CMAKE_INSTALL_BINDIR:" ${CMAKE_INSTALL_BINDIR})
+    message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
+    message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
+    message("---------->INSTALL_TARGETS_DEFAULT_ARGS:" ${INSTALL_TARGETS_DEFAULT_ARGS})
+    message("---------->qm:" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations")
+
+    install (
+        FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+
+    install(
+        DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "*.qm"
+    )
+
+    install(
+        DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "*.*"
+    )
+
+    feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+    # CPACK: General Settings
+    set (CPACK_GENERATOR "TBZ2")
+    set (CPACK_PACKAGE_NAME "${project_name}")
+    set (CPACK_PACKAGE_VERSION "${project_version}")
+    set (CPACK_PACKAGE_VENDOR "https://github.com/XMuli")
+    set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple and beautiful screenshot software tool for Windows, MacOS and Linux")
+    set (CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+    set (CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
+    # 设置Debian软件包的依赖关系
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5x11extras5")
+
+    set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+    set (CPACK_DEBIAN_PACKAGE_SHILIBDEPS ON)
+
+    include(CPack)
+endif()
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${project_name})

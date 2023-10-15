@@ -40,6 +40,12 @@ int main(int argc, char *argv[])
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
     QSharedMemory sharedMemory;
     sharedMemory.setKey(uniqueKey);
+
+    // 尝试附加到现有的共享内存并分离
+    if (sharedMemory.attach()) {
+        sharedMemory.detach();
+    }
+
     // 尝试创建共享内存，如果已经存在，表示已经有一个实例在运行, 判断是为了确保在同一台计算机上只能运行一个相同实例的程序。
     if (!sharedMemory.create(1)) {
         qDebug() << "There is already an instance of the application running (by QSharedMemory)!";

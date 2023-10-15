@@ -12,7 +12,17 @@
 #include "../common/absbtnsctrl.h"
 
 #define PROPERTY_PAINT_TYPR "PaintType"
-#define ICON_SIZE 32 // 32 48   在 100% 缩放上 32px 比较合适，然后实际大小乘以主屏幕的屏幕缩放比
+#define ICON_SIZE 28     // 32 48   在 100% 缩放上 32px 比较合适，然后实际大小乘以主屏幕的屏幕缩放比
+#define ICON_PADDING 4          //
+const QString szIconBtnCSS = QString("border-style:none; padding: %1px").arg(ICON_PADDING);
+//#define ICON_PADDING_TOP 0      //
+//#define ICON_PADDING_BOTTOM 0   //
+
+//const QString PaintToolBarIconBtnCSS = QString("border-style:none; padding-left: %1px; padding-top: %1px; padding-right: %1px; padding-bottom: %2px;")
+//                                           .arg(ICON_PADDING).arg(ICON_PADDING_BOTTOM);
+//const QString PaintCtrlBarIconBtnCSS = QString("border-style:none; padding-left: %1px; padding-top: %2px; padding-right: %1px; padding-bottom: %1px;")
+//                                           .arg(ICON_PADDING).arg(ICON_PADDING_TOP);
+
 
 enum class PaintType
 {
@@ -77,8 +87,8 @@ struct PaintBtn
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval);
 QIcon changedSVGColor(QString path, QString color, QSize size);
-void addSpacerLine(QGridLayout *layout, const Qt::Orientation &orie, const int &length = 30, const int &row = 0, const int &col = 0);
-void addSpacerLine(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = 30);
+void addSpacerLine(QGridLayout *layout, const Qt::Orientation &orie, const int &length = ICON_SIZE - 2 * ICON_PADDING, const int &row = 0, const int &col = 0);
+void addSpacerLine(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = ICON_SIZE - 2 * ICON_PADDING);
 void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = 0);    // 添加弹簧
 int countItemsformLayout(const QGridLayout* layout, const Qt::Orientation& orie, const int& idx = 0);
 double dpiScale(const QScreen* scrn = qGuiApp->primaryScreen());

@@ -95,7 +95,12 @@ ScreenShot::~ScreenShot()
 void ScreenShot::capture()
 {
     originalPixmap();
+
+#ifdef Q_OS_WIN
     show();
+#else
+    showFullScreen();         // Linux supports virtual multi-screen, Mac only one screen
+#endif
 }
 
 void ScreenShot::btnPin()
@@ -439,7 +444,7 @@ void ScreenShot::initUI()
     }
 #endif
 
-    resize(m_vdRect.size());
+    setFixedSize(m_vdRect.size());  // fix: 在 Ubuntu 22.04 顶部状态栏和任务栏，全屏位置错误
     move(m_vdRect.topLeft());
 #else // Q_OS_MAC
     QRect geom = curScrn(QCursor::pos())->geometry();

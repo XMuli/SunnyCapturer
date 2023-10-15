@@ -45,6 +45,11 @@ void General::initUI()
     ui->cbAutostart->setChecked(CONF_MANAGE.property("XGeneral_autostart").toBool());
     ui->btnFont->resize(ui->cbbLanguage->size());
 
+#if defined(Q_OS_WIN)
+#else
+    ui->cbAutostart->hide();
+#endif
+
     connect(ui->cbbLanguage, &QComboBox::currentTextChanged, this, &General::onCbbLanguageCurrentTextChanged);
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }

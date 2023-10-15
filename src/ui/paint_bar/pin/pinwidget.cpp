@@ -14,6 +14,9 @@
 #include <QGraphicsView>
 #include <QShortcut>
 #include <QKeySequence>
+#include <QStringList>
+#include <QFont>
+#include "../../../data/configmanager.h"
 #include "../toolbar_level/paintbarhelper.h"
 
 
@@ -54,6 +57,23 @@ void PinWidget::initUI()
 
 void PinWidget::initMenu()
 {
+    QStringList list = CONF_MANAGE.property("XGeneral_font").toString().split(",");
+    if (list.size() < 2) {
+        list .clear();
+
+#if defined(Q_OS_WIN)
+        list << "Microsoft YaHei" << "9";
+#elif defined(Q_OS_LINUX)
+        list << "WenQuanYi Micro Hei" << "9";
+#elif defined(Q_OS_MAC)
+        list << "PingFang SC" << "11";
+#endif
+
+    }
+    const QFont font(list.at(0), list.at(1).toInt());
+    setFont(font);
+    m_menu->setFont(font);
+
     const auto aCopy = m_menu->addAction(tr("Copy image"));
     const auto aSave = m_menu->addAction(tr("Save image as .."));
     m_menu->addSeparator();
