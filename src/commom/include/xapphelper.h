@@ -1,4 +1,4 @@
-#ifndef XAPPHELPER_H
+﻿#ifndef XAPPHELPER_H
 #define XAPPHELPER_H
 
 

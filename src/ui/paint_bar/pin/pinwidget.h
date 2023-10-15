@@ -1,4 +1,4 @@
-#ifndef PINWIDGET_H
+﻿#ifndef PINWIDGET_H
 #define PINWIDGET_H
 
 #include <QWidget>

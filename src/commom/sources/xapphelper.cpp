@@ -1,4 +1,4 @@
-#include "xapphelper.h"
+﻿#include "xapphelper.h"
 
 #include <QSharedMemory>
 #include <QSystemSemaphore>

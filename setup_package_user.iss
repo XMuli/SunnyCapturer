@@ -3,8 +3,8 @@
 #pragma parseroption -p
 #define MyAppName "Sunny"
 #define MyAppVersion "1.2.0"
-#define MyAppPublisher "XMuli Teams"
-#define MyAppURL "https://github.com/XMuli/Sunny"
+#define MyAppPublisher "Vincent Teams"
+#define MyAppURL "https://sunny.xmuli.tech"
 #define MyAppExeName "Sunny.exe"
 #define MyArchitecture "x64"   ; x64    x86
 #define MyCOMPILER_ID "MSVC"   ; WinGW  MSVC
@@ -80,7 +80,7 @@ Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
 Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
 Source: "{#MyBinDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
