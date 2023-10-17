@@ -71,6 +71,11 @@ void PaintToolBar::initBtns()
         tb->setAutoRaise(true);
         tb->setToolButtonStyle(Qt::ToolButtonIconOnly);
         tb->setStyleSheet(szIconBtnCSS);
+//        tb->setStyleSheet(szIconBtnCSS +
+//                                         "QToolButton:hover {"
+//                                         "    /* 在悬浮状态下的样式 */"
+//                                         "    border: 1px solid #00FF00; /* 例如，设置一个绿色边框 */"
+//                                         "}");
         tb->setIcon(QIcon(":/resources/icons/paint_tool_bar/paint_btn/" + it.name + ".svg"));
         tb->setContentsMargins(0, 0, 0, 0);
         tb->setIconSize(size);
@@ -81,6 +86,7 @@ void PaintToolBar::initBtns()
 
         m_layout->addWidget(tb, Qt::AlignCenter);
         if (it.bAddSpacer) addSpacerLine(m_layout, m_orie);
+        if (it.type == PaintType::PT_undo || it.type == PaintType::PT_redo) tb->setDisabled(true);
 
 
         // 若是要实现，则需要调优
@@ -162,6 +168,18 @@ void PaintToolBar::paintBtnsExclusive(const QToolButton* tBtn, const bool& bSpik
     }
 }
 
+PaintBtn *PaintToolBar::findPaintBtn(const PaintType &type)
+{
+    PaintBtn *btn = nullptr;
+
+    for (PaintBtn& it : m_btns) {
+        if (it.type == type)
+            btn = &it;
+    }
+
+    return btn;
+}
+
 // 一级工具栏，有某个绘画按钮被按下
 bool PaintToolBar::hadDrawBtnsChecked() const
 {
@@ -240,4 +258,13 @@ void PaintToolBar::onPaintBtnReleased()
 
     adjustSize();
     qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked();
+}
+
+void PaintToolBar::onAutoDisableUndoAndRedo(const bool &undoDisable, const bool &redoDisable)
+{
+    PaintBtn* btn = findPaintBtn(PaintType::PT_undo);
+    if (btn && btn->btn) btn->btn->setDisabled(undoDisable);
+
+    btn = findPaintBtn(PaintType::PT_redo);
+    if (btn && btn->btn) btn->btn->setDisabled(redoDisable);
 }

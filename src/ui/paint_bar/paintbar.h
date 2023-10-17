@@ -36,6 +36,8 @@ signals:
     void sigTextFontFamilyChanged(const QFont &font);                                  // PaintCtrlBar 字体 被发生改变时候
     void sigSetTextFontSizeComboBoxValue(const QString &fontSize);                     // sync 修改下拉列表的字体的大小
 
+    void sigAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);  // ScreenShot 控制图标置灰
+
 private slots:
     void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable);
 

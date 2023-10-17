@@ -21,6 +21,7 @@ private:
     void initUI();
     void initBtns();
     void paintBtnsExclusive(const QToolButton* tBtn = nullptr, const bool& bSpik = true);
+    PaintBtn* findPaintBtn(const PaintType& type);
 
 //    void onBtnRectangle();
 //    void onBtnEllipse();
@@ -42,6 +43,7 @@ signals:
 
 public slots:
     void onPaintBtnReleased();
+    void onAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);  // ScreenShot 控制图标置灰
 
 private:
     Qt::Orientation m_orie;

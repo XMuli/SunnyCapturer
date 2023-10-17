@@ -42,9 +42,11 @@ private:
     void imageQuickSave();
 
     void setTextFontSize(const int& stepY, const int &width, const bool& bMouse, const bool& bShowPointTips = true);
+    void autoDisableUndoAndRedo();
 
 signals:
     void sigSetTextFontSizeComboBoxValue(const QString &fontSize);     // sync 修改下拉列表的字体的大小
+    void sigAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);
 
 public slots:
     void onPaintBtnRelease(const PaintType& type, const bool& isCheckable);
@@ -134,3 +136,4 @@ const QRect xrectToQRect(const XRECT &rect);
 
 
 #endif // SCREENSHOT_H
+

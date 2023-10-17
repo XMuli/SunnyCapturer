@@ -141,6 +141,8 @@ void ScreenShot::btnUndo()
             m_paintNode.serialNode.letter = serialChar;
         }
     }
+
+    autoDisableUndoAndRedo();
 }
 
 void ScreenShot::btnRedo()
@@ -155,6 +157,7 @@ void ScreenShot::btnRedo()
         if (xTextEdit) xTextEdit->show();
     }
 
+    autoDisableUndoAndRedo();
 }
 
 void ScreenShot::btnSave()
@@ -485,7 +488,7 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
-
+    connect(this, &ScreenShot::sigAutoDisableUndoAndRedo, m_paintBar, &PaintBar::sigAutoDisableUndoAndRedo);
 }
 
 void ScreenShot::drawShadowOverlay(const QRect &fullRect, const QRect &pickedRect, QPainter& pa) const
@@ -602,6 +605,15 @@ void ScreenShot::setTextFontSize(const int& stepY, const int& width, const bool 
     const QString& szWidth = QString::number(tWidth);
     if (bShowPointTips) showPointTips(szWidth + "pt");
     if (bMouse) emit sigSetTextFontSizeComboBoxValue(szWidth);  // 同步修改下拉列表的字体大小
+}
+
+void ScreenShot::autoDisableUndoAndRedo()
+{
+    const bool bUndoDisable = m_redo.size() > 0 ? false : true;
+    const bool bRedoDisable = m_undo.size() > 0 ? false : true;
+    emit sigAutoDisableUndoAndRedo(bUndoDisable, bRedoDisable);
+
+    qDebug() << "----#c-->m_undo.size():" << m_undo.size() << "m_redo.size():" << m_redo.size() << bUndoDisable << bRedoDisable;
 }
 
 void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
@@ -1070,7 +1082,7 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
                         m_paintNode.xTextEdit = showCreatorRichText(m_edit->document(), m_paintNode.node.absoluteRect, this);
                         m_edit->hide();
                         m_redo.push_back(m_paintNode);
-
+                        autoDisableUndoAndRedo();
                     }
 
 //                    m_edit->document()->clear();
@@ -1090,8 +1102,10 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
         m_paintNode.node = m_node;
         m_paintNode.bShow = false;
-        if (m_paintNode.pst != PaintShapeType::PST_text) // 特例, PST_text 在 MousePress 里面去 push_back
+        if (m_paintNode.pst != PaintShapeType::PST_text) { // 特例, PST_text 在 MousePress 里面去 push_back
             m_redo.push_back(m_paintNode);
+            autoDisableUndoAndRedo();
+        }
 
         // 归零可能会干扰下次操作的一些参数
         m_node.trackPos.clear();
@@ -1347,4 +1361,5 @@ const QRect xrectToQRect(const XRECT &rect)
 {
     return QRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 }
+
 
