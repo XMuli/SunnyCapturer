@@ -3,6 +3,7 @@
 #include <QSystemSemaphore>
 #include <QSharedMemory>
 #include <QDebug>
+#include "xapphelper.h"
 
 //#include "xlog.h"
 #include "ui/screenshot/tray.h"
@@ -23,6 +24,9 @@
 //#include "ui/paint_bar/paintbar.h"
 //#include "ui/paint_bar/pin/pinwidget.h"
 
+//#include <qt_windows.h>
+
+
 int main(int argc, char *argv[])
 {
 //    qInstallMessageHandler(XMessageOutput);
@@ -36,6 +40,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain(QStringLiteral("github.com/XMuli"));
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false); // fix: 默认情况下，当关闭最后一个窗口时，Qt 应用程序会自动退出
+
+#if defined(Q_OS_WIN)
+    SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);//注冊异常捕获函数
+#endif
+
 
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
     QSharedMemory sharedMemory;
@@ -51,6 +60,14 @@ int main(int argc, char *argv[])
         qDebug() << "There is already an instance of the application running (by QSharedMemory)!";
         return 1;
     }
+
+    int* ptr = nullptr; // 尝试访问空指针
+    *ptr = 42; // 这将导致崩溃
+
+//    QWidget* ptr = nullptr;
+//    ptr->show();
+
+
 
     // 创建系统信号量, 再尝试获取系统信号量，如果已经被其他实例持有，程序就退出, 判断是为了确保在多个进程同时启动时，只有一个进程能够继续执行。QSystemSemaphore用于创建系统信号量，如果系统信号量已经被其他实例持有（比如由于上一次程序异常退出导致信号量未被释放），则acquire函数会返回false，
     QSystemSemaphore systemSemaphore(uniqueKey, 1, QSystemSemaphore::Open);

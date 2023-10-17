@@ -7,7 +7,7 @@ set(project_version_path 1)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.10.16")
+add_definitions(-DXBUILD_TIME="2023.10.17")
 
 
 set(CMAKE_AUTOUIC ON)

@@ -1,6 +1,7 @@
 ﻿#include "x11windowsrect.h"
 #include <locale> // 添加这行
 #include <codecvt>
+#include <stdint.h>
 
 X11WindowsRect::X11WindowsRect()
     : m_display(XOpenDisplay(nullptr))
