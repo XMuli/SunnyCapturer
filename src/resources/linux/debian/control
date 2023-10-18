@@ -1,0 +1,19 @@
+Source: Sunny
+Section: unknown
+Priority: optional
+Maintainer: XMuli <xmulitech@gmail.com>
+Build-Depends: 
+ cmake (>= 3.13~),
+ debhelper (>= 11),
+ qtbase5-dev (>= 5.15.2~)
+# qt5-default (>= 5.12.0~),
+#  qttools5-dev (>= 5.12.0),
+Standards-Version: 1.1.0
+Homepage: https://sunny.xmuli.tech
+#Vcs-Browser: https://salsa.debian.org/debian/Sunny
+#Vcs-Git: https://salsa.debian.org/debian/Sunny.git
+
+Package: Sunny
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Simple and beautiful screenshot software tool for Windows, MacOS and Linux

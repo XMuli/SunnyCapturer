@@ -388,28 +388,29 @@ elseif (UNIX)
 
     set(CMAKE_INSTALL_PREFIX /usr)
     # install icon
-    install (
-        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/logo/logo.svg
-        DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps"
-        RENAME tech.xmuli.sunny.svg
-    )
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/logo/logo.svg
+             DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps"
+             RENAME tech.xmuli.sunny.svg
+             )
     # install shortcut
-    install (
-        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/tech.xmuli.sunny.desktop
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications"
-    )
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/tech.xmuli.sunny.desktop
+             DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications"
+             )
+    # install metainfo.xml
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/appstream/tech.xmuli.sunny.metainfo.xml
+             DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
+             )
 
     set (INSTALL_TARGETS_DEFAULT_ARGS
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Devel
-    )
+        )
 
     # install exe(linux)
-    install (
-        TARGETS ${project_name}
-        ${INSTALL_TARGETS_DEFAULT_ARGS}
-    )
+    install (TARGETS ${project_name}
+             ${INSTALL_TARGETS_DEFAULT_ARGS}
+             )
 
     message("---------->:" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.so)
     message("---------->RUNTIME:" ${RUNTIME})
@@ -421,22 +422,19 @@ elseif (UNIX)
     message("---------->INSTALL_TARGETS_DEFAULT_ARGS:" ${INSTALL_TARGETS_DEFAULT_ARGS})
     message("---------->qm:" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations")
 
-    install (
-        FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    )
+    install (FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}
+             )
 
-    install(
-        DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*.qm"
-    )
+    install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
+             DESTINATION ${CMAKE_INSTALL_BINDIR}
+             FILES_MATCHING PATTERN "*.qm"
+             )
 
-    install(
-        DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*.*"
-    )
+    install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
+             DESTINATION ${CMAKE_INSTALL_BINDIR}
+             FILES_MATCHING PATTERN "*.*"
+             )
 
     feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
