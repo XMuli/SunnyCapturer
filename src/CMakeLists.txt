@@ -146,15 +146,23 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 endif()
 
 # 定义一些 qt bin 的基础变量
-set(qt_binray_dir "${Qt5_DIR}/../../../bin")   # C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5/../../../bin
-set(lupdate_path "${qt_binray_dir}/lupdate")
-set(lrelease_path "${qt_binray_dir}/lrelease")
 
-if(APPLE)
-    set(windeployqt "${qt_binray_dir}/macdeployqt")
-elseif(UNIX)
-elseif(WIN32)
-    set(windeployqt "${qt_binray_dir}/windeployqt.exe")
+set(qt_binray_dir "${Qt5_DIR}/../../../bin")   # C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5/../../../bin
+
+if(UNIX)  # using apt install qt5-devtools*
+    set(lupdate_path "lupdate")
+    set(lrelease_path "lrelease")
+elseif()
+    set(lupdate_path "${qt_binray_dir}/lupdate")
+    set(lrelease_path "${qt_binray_dir}/lrelease")
+
+    if(WIN32)
+        set(windeployqt "${qt_binray_dir}/windeployqt.exe")
+    elseif(APPLE)
+        set(windeployqt "${qt_binray_dir}/macdeployqt")
+    elseif(UNIX)
+        # custom deployqt
+    endif()
 endif()
 
 message("Qt5_DIR:" ${Qt5_DIR})
@@ -183,10 +191,10 @@ endforeach()
 
 file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
-if(UNIX)
-    file(GLOB sh_files "${source_root}/linux/debian/*.sh")
-    file(COPY ${sh_files} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-endif()
+#if(UNIX)
+#    file(GLOB sh_files "${source_root}/linux/debian/*.sh")
+#    file(COPY ${sh_files} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+#endif()
 #************************************************* update .ts, and generate .qm *******************************************************
 set(ts_dir "${CMAKE_CURRENT_SOURCE_DIR}/translations")
 if(APPLE)
@@ -341,6 +349,8 @@ endif()
 include(GNUInstallDirs)
 include (FeatureSummary)  # using  set_package_properties
 
+message("CMAKE_INSTALL_DATADIR: ${CMAKE_INSTALL_DATADIR}")
+
 if (WIN32)
 elseif (APPLE)
 elseif (UNIX)
@@ -387,29 +397,46 @@ elseif (UNIX)
     endif ()
 
     set(CMAKE_INSTALL_PREFIX /usr)
-    # install icon
+    # [/usr/share] -------------------------
+    # install /usr/share/applications/tech.xmuli.sunny.desktop
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/tech.xmuli.sunny.desktop
+             DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications"
+             )
+    # install /usr/share/icons/hicolor/scalable/apps/tech.xmuli.sunny.svg
     install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/logo/logo.svg
              DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps"
              RENAME tech.xmuli.sunny.svg
              )
-    # install shortcut
-    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/tech.xmuli.sunny.desktop
-             DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications"
-             )
-    # install metainfo.xml
+    # install /usr/share/metainfo/tech.xmuli.sunny.metainfo.xml
     install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/appstream/tech.xmuli.sunny.metainfo.xml
              DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
              )
-
-    set (INSTALL_TARGETS_DEFAULT_ARGS
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Devel
-        )
-
-    # install exe(linux)
+    # [/usr/local] -------------------------
+    # install /usr/local/Sunny/xconfig.ini
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.ini
+             DESTINATION "/usr/local/${project_name}"
+             )
+    # install /usr/local/Sunny/translations/Sunny_*.qm
+    install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
+             DESTINATION "/usr/local/${project_name}"
+             FILES_MATCHING PATTERN "*.qm"
+             )
+     # install /usr/local/Sunny/resources folder
+    install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
+             DESTINATION "/usr/local/${project_name}"
+             FILES_MATCHING PATTERN "*.*"
+             )
+    # [/usr/lib] -------------------------
+    # install /usr/lib/libWindowsRect.so
+    install (FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}
+             )
+    # [/usr/bin] -------------------------
+    # install /usr/bin/Sunny
     install (TARGETS ${project_name}
-             ${INSTALL_TARGETS_DEFAULT_ARGS}
+             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Devel
              )
 
     message("---------->:" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.so)
@@ -419,22 +446,7 @@ elseif (UNIX)
     message("---------->CMAKE_INSTALL_BINDIR:" ${CMAKE_INSTALL_BINDIR})
     message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
     message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
-    message("---------->INSTALL_TARGETS_DEFAULT_ARGS:" ${INSTALL_TARGETS_DEFAULT_ARGS})
     message("---------->qm:" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations")
-
-    install (FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
-             DESTINATION ${CMAKE_INSTALL_LIBDIR}
-             )
-
-    install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
-             DESTINATION ${CMAKE_INSTALL_BINDIR}
-             FILES_MATCHING PATTERN "*.qm"
-             )
-
-    install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
-             DESTINATION ${CMAKE_INSTALL_BINDIR}
-             FILES_MATCHING PATTERN "*.*"
-             )
 
     feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

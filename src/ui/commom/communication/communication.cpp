@@ -90,9 +90,11 @@ void Communication::loadTranslation(const QString &language)
     // 创建 QTranslator 对象
     static QTranslator* translator = nullptr;
     if (!translator) translator = new QTranslator(this);
+    QString qmDir = qGuiApp->applicationDirPath() + "/translations/";
+    #if defined(Q_OS_LINUX)
+        qmDir = QString("/usr/local/%1/translations/").arg(XPROJECT_NAME);
+    #endif
 
-    // 构建翻译文件的路径
-    const QString& qmDir = qGuiApp->applicationDirPath() + "/translations/";
     const QString& qmName = QString("%1_%2.qm").arg(XPROJECT_NAME).arg(toLocaleName(temp));
     const QString& qmPath = qmDir + qmName;
     qDebug() << "loadTranslation qmPath:" << qmPath;

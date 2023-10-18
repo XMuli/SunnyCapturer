@@ -27,10 +27,7 @@ LicenseUI::~LicenseUI()
 
 void LicenseUI::readLicenseBlocks()
 {
-    QString exePath = QApplication::applicationFilePath();
-    QString licensePath = exePath.left(exePath.lastIndexOf(QDir::separator()) + 1) + "resources/licenses/tripartite";
-    QString readmePath = licensePath + QDir::separator() + "README.txt";
-
+    QString readmePath = ":/resources/licenses/tripartite/README.txt";
     QFile readmeFile(readmePath);
     if (readmeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&readmeFile);
@@ -55,10 +52,7 @@ void LicenseUI::readLicenseBlocks()
 
 void LicenseUI::displayLicenses()
 {
-    QString licensePath = QApplication::applicationFilePath().left(
-                              QApplication::applicationFilePath().lastIndexOf(QDir::separator()) + 1) +
-                          "resources/licenses/tripartite";
-
+    const QString& licensePath = ":/resources/licenses/tripartite";
     int idx = 1;
     for (const QString &block : readmeBlocks) {
         QStringList lines = block.split('\n');

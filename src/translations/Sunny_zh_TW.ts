@@ -392,6 +392,10 @@ and specify -1 to let Sunny decide for you.</source>
         <source>Vertical</source>
         <translation>豎直</translation>
     </message>
+    <message>
+        <source>CRASH</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ResetUI</name>

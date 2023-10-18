@@ -265,8 +265,14 @@ void ConfigManager::onSyncToFile()
 
 ConfigManager::ConfigManager(QObject *parent)
     : QObject(parent)
-    , m_settings(new QSettings(qApp->applicationDirPath() + "/xconfig.ini", QSettings::IniFormat, this))
+    , m_settings(nullptr)
 {
+    QString xconfigDir = qApp->applicationDirPath();
+#if defined(Q_OS_LINUX)
+    xconfigDir = QString("/usr/local/%1").arg(XPROJECT_NAME);
+#endif
+
+    m_settings = new QSettings(xconfigDir + "/xconfig.ini", QSettings::IniFormat, this);
     m_settings->setIniCodec("UTF-8"); // 禁用自动转义
     readFromFile();
 }
