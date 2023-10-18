@@ -61,8 +61,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int* ptr = nullptr; // 尝试访问空指针
-    *ptr = 42; // 这将导致崩溃
+//    int* ptr = nullptr; // 尝试访问空指针
+//    *ptr = 42; // 这将导致崩溃
 
 //    QWidget* ptr = nullptr;
 //    ptr->show();
