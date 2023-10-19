@@ -43,14 +43,14 @@ private:
         QString fileContent;
     };
 
-    QStringList readmeBlocks;
-    QList<LicenseBlock> licenseBlocks;
-
     void readLicenseBlocks();
     void displayLicenses();
 
 private:
     Ui::LicenseUI *ui;
+
+    QStringList m_readmeBlocks;
+    QList<LicenseBlock> m_licenseBlocks;
 };
 
 #endif // LICENSEUI_H

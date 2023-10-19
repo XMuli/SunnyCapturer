@@ -92,6 +92,9 @@ void SideSettingUI::initUI()
     connect(m_hotkeys, &AbsSettingUI::sigBtnResetClicked, hotkeys, &Hotkeys::onBtnResetClicked);
 //    connect(m_tokens, &AbsSettingUI::sigBtnResetClicked, this, &SideSettingUI::onBtnResetClicked);
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
+
+    ui->tbTokens->hide();   // 暂时隐藏
+    m_tokens->hide();       // 暂时隐藏
 }
 
 void SideSettingUI::onSideGroupChanged(int idx)

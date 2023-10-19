@@ -43,14 +43,10 @@
         <file>resources/icons/paint_tool_bar/paint_btn/translate.svg</file>
         <file>resources/logo/logo.ico</file>
         <file>resources/logo/logo.svg</file>
-        <file>resources/licenses/tripartite/abumq_easylogging++_MIT_LICENSE</file>
         <file>resources/licenses/tripartite/abumq_easylogging++_MIT_LICENSE.txt</file>
-        <file>resources/licenses/tripartite/bricke_Qt-AES_Unlicense_LICENSE</file>
         <file>resources/licenses/tripartite/bricke_Qt-AES_Unlicense_LICENSE.txt</file>
-        <file>resources/licenses/tripartite/nlohmann_json_MIT_LICENSE</file>
         <file>resources/licenses/tripartite/nlohmann_json_MIT_LICENSE.txt</file>
         <file>resources/licenses/tripartite/README.txt</file>
-        <file>resources/licenses/tripartite/Skycoder42_QHotkey_LICENSE</file>
         <file>resources/licenses/tripartite/Skycoder42_QHotkey_LICENSE.txt</file>
         <file>resources/licenses/License.md</file>
         <file>resources/licenses/Other.md</file>

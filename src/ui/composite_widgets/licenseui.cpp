@@ -11,7 +11,7 @@ LicenseUI::LicenseUI(QWidget *parent) :
     readLicenseBlocks();
     displayLicenses();
 
-    QString name = QString("<a href='%1' style='color: #008000;'>%2</a>").arg("https://github.com/XMuli/Sunny").arg(XPROJECT_NAME);
+    QString name = QString("<a href='%1' style='color: #008000;'>%2</a>").arg("https://sunny.xmuli.tech").arg(XPROJECT_NAME);
     QString author = QString("<a href='%1' style='color: #008000;'>%2</a>").arg("https://github.com/XMuli").arg("XMuli");
     QString copyright = QString(tr("Copyright (C) 2023 %1. All rights reserved.<br>The birth of this project is inseparable from these open source software")).arg(author);
     QString introduce = QString("<html><body><b>%1</b><br>%2<br></body></html>").arg(name).arg(copyright);
@@ -39,12 +39,12 @@ void LicenseUI::readLicenseBlocks()
             if (!line.isEmpty()) {
                 block += line + "\n";
             } else {
-                readmeBlocks.append(block.trimmed());
+                m_readmeBlocks.append(block.trimmed());
                 block.clear();
             }
         }
 
-        readmeBlocks.append(block.trimmed());
+        m_readmeBlocks.append(block.trimmed());
 
         readmeFile.close();
     }
@@ -54,7 +54,9 @@ void LicenseUI::displayLicenses()
 {
     const QString& licensePath = ":/resources/licenses/tripartite";
     int idx = 1;
-    for (const QString &block : readmeBlocks) {
+
+    qDebug() << "--->m_readmeBlocks:" << m_readmeBlocks.size();
+    for (const QString &block : m_readmeBlocks) {
         QStringList lines = block.split('\n');
 
         if (lines.size() >= 4) {
@@ -80,7 +82,7 @@ void LicenseUI::displayLicenses()
                     licenseBlock.projectIntroduction = projectIntroduction;
                     licenseBlock.fileContent = fileContent;
 
-                    licenseBlocks.append(licenseBlock);
+                    m_licenseBlocks.append(licenseBlock);
 
                     file.close();
                 }
@@ -90,7 +92,7 @@ void LicenseUI::displayLicenses()
 
     // Display the license blocks
     auto& textBrowser = ui->textBrowser;
-    for (auto it = licenseBlocks.begin(); it != licenseBlocks.end(); ++it) {
+    for (auto it = m_licenseBlocks.begin(); it != m_licenseBlocks.end(); ++it) {
          const LicenseBlock &licenseBlock = *it;
         // Library Name
 //        textBrowser->append(QString("<font size='+1'><b>%1</b></font>").arg(licenseBlock.libraryName));
@@ -116,7 +118,7 @@ void LicenseUI::displayLicenses()
         textBrowser->append(licenseBlock.fileContent);
         textBrowser->append("");
 
-        if (std::next(it) != licenseBlocks.end()) {
+        if (std::next(it) != m_licenseBlocks.end()) {
             // Separator
             textBrowser->append("--------------------------------------------------------------------------------");
             textBrowser->append("");

@@ -639,6 +639,7 @@ void drawBorderMacOS(QPainter &pa, const QRect &rt, int num)
 void drawBorderDDE(QPainter &pa, const QRect &rt, int num)
 {
     pa.save();
+//    pa.setRenderHint(QPainter::Antialiasing, true);
     pa.setPen(QPen(QColor(14, 112, 255), borderWidth()));
     pa.setBrush(Qt::NoBrush);
     pa.drawRect(rt);

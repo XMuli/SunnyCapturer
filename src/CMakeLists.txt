@@ -55,6 +55,7 @@ set(custom_ui_files
     ui/include/verspacerline.h
     ui/include/tips.h
     ui/include/xtextedit.h
+    ui/include/xtoolbutton.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -74,6 +75,7 @@ set(custom_ui_files
     ui/common_widgets/verspacerline.cpp
     ui/common_widgets/tips.cpp
     ui/common_widgets/xtextedit.cpp
+    ui/common_widgets/xtoolbutton.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -152,7 +154,7 @@ set(qt_binray_dir "${Qt5_DIR}/../../../bin")   # C:/Qt/5.15.2/msvc2019_64/lib/cm
 if(UNIX)  # using apt install qt5-devtools*
     set(lupdate_path "lupdate")
     set(lrelease_path "lrelease")
-elseif()
+else()
     set(lupdate_path "${qt_binray_dir}/lupdate")
     set(lrelease_path "${qt_binray_dir}/lrelease")
 
