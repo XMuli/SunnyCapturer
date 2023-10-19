@@ -5,9 +5,11 @@ Maintainer: XMuli <xmulitech@gmail.com>
 Build-Depends: 
  cmake (>= 3.13~),
  debhelper (>= 11),
- qtbase5-dev (>= 5.15.2~)
-# qt5-default (>= 5.12.0~),
-#  qttools5-dev (>= 5.12.0),
+ qtbase5-dev (>= 5.15.2~),
+ qttools5-dev-tools (>= 5.15.2~),
+ qttools5-dev (>= 5.15.2~),
+ libqt5x11extras5-dev (>= 5.15.2~),
+ libqt5svg5-dev  (>= 5.15.2~)
 Standards-Version: 1.1.0
 Homepage: https://sunny.xmuli.tech
 #Vcs-Browser: https://salsa.debian.org/debian/Sunny

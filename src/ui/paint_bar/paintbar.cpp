@@ -17,7 +17,7 @@ PaintBar::PaintBar(const Qt::Orientation &orie, QWidget *parent)
     , m_layout(nullptr)
     , m_orie(orie)
     , m_paintToolBar(new PaintToolBar(orie, this))
-    , m_paintCtrlBar(new PaintCtrlBar(orie, this))
+    , m_paintCtrlBar(new PaintCtrlBar(ICON_SIZE, orie, this))
 
 {
     initUI();

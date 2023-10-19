@@ -77,7 +77,9 @@ void ColorPicker::initUI()
     }
 
     const int halfCount = colors.size() / 2;
+    setContentsMargins(0, 0, 0, 0);
     m_gridLayout->setContentsMargins(0, 0, 0, 0);
+    m_gridLayout->setSpacing(0);
     initPickupBtn(colors.at(3));
 
     m_colorsGroup->setExclusive(true);
@@ -101,8 +103,8 @@ void ColorPicker::initUI()
             horSpace = 0;
         }
 
-        m_gridLayout->setHorizontalSpacing(horSpace);
-        m_gridLayout->setVerticalSpacing(verSpace);
+        m_gridLayout->setHorizontalSpacing(0);
+        m_gridLayout->setVerticalSpacing(0);
     }
 
     connect(m_colorsGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonReleased), this, &ColorPicker::onPickedColor);

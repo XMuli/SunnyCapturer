@@ -14,6 +14,6 @@ void XToolButton::paintEvent(QPaintEvent *event)
     pa.setRenderHint(QPainter::Antialiasing);
 
     if (underMouse()) {  // 鼠标悬浮时绘制红色透明效果
-        pa.fillRect(rect(), QColor(255, 0, 0, 128));
+        pa.fillRect(rect(), QColor(0, 0, 0, 0.1 * 255));
     }
 }

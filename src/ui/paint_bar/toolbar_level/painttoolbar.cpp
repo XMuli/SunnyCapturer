@@ -9,6 +9,7 @@
 #include <QKeySequence>
 #include "paintbarhelper.h"
 #include "communication.h"
+#include "xtoolbutton.h"
 #include "../../../data/configmanager.h"
 
 PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
@@ -64,18 +65,13 @@ void PaintToolBar::initBtns()
         auto& tb = it.btn;
         const double& scal = dpiScale();
         const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
-        tb = new QToolButton();
+        tb = new XToolButton();
         tb->setObjectName(it.name);
         tb->setProperty(PROPERTY_PAINT_TYPR, QVariant::fromValue(it.type));
         tb->setChecked(false);
         tb->setAutoRaise(true);
         tb->setToolButtonStyle(Qt::ToolButtonIconOnly);
         tb->setStyleSheet(szIconBtnCSS);
-//        tb->setStyleSheet(szIconBtnCSS +
-//                                         "QToolButton:hover {"
-//                                         "    /* 在悬浮状态下的样式 */"
-//                                         "    border: 1px solid #00FF00; /* 例如，设置一个绿色边框 */"
-//                                         "}");
         tb->setIcon(QIcon(":/resources/icons/paint_tool_bar/paint_btn/" + it.name + ".svg"));
         tb->setContentsMargins(0, 0, 0, 0);
         tb->setIconSize(size);

@@ -15,7 +15,7 @@ class PaintCtrlBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PaintCtrlBar(const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);
+    explicit PaintCtrlBar(const int& colorPickerIconSize, const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);
     virtual ~PaintCtrlBar();
 
 private:

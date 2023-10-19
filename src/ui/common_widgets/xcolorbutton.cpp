@@ -26,27 +26,30 @@ void XColorButton::paintEvent(QPaintEvent *e)
     QColor wihte = QColor(255, 255, 255, 0.4 * 255);
     QColor black = QColor(0, 0, 0, 0.7 * 255);
 
+    int margin = 2;
     if (underMouse()) {
         // 如果鼠标悬停在按钮上，绘制升起效果
-        painter.setPen(QPen(wihte, 1));
-        painter.setBrush(Qt::NoBrush);
-        painter.drawRect(rect().adjusted(1, 1, -1, -1));
+//        painter.setPen(QPen(wihte, 1));
+//        painter.setBrush(Qt::NoBrush);
+//        margin = 0;
+//        painter.drawRect(rect().adjusted(margin, margin, -margin, -margin));
 
         painter.setPen(QPen(black, 1));
         painter.setBrush(m_color);
-        painter.drawRect(rect().adjusted(2, 2, -2, -2));
+        margin -= 1;
+        painter.drawRect(rect().adjusted(margin, margin, -margin, -margin));
     } else {
         // 在边框上绘制1px的黑色线
         painter.setPen(QPen(black, 1));
         painter.setBrush(m_color);
-        painter.drawRect(rect().adjusted(1, 1, -1, -1));
+        painter.drawRect(rect().adjusted(margin, margin, -margin, -margin));
     }
 
     if (m_pickType == ColorPickerType::CT_horizontal) {
         if (isChecked()) {
             painter.setPen(QPen(black, 1));
             painter.setBrush(Qt::white);
-            const int margin = 6;
+            const int margin = rect().width() / 3;
             const QRect& rt = rect().adjusted(margin, margin, -margin, -margin);
             painter.drawRect(rt);
         }

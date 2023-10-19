@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include "horspacerline.h"
 #include "verspacerline.h"
+#include "xtoolbutton.h"
 #include "../../../data/configmanager.h"
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
@@ -102,7 +103,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCt
     QButtonGroup* group = new QButtonGroup(absBtnsCtrl);
     group->setExclusive(exclusive);
     for (int i = 0; i < items.size(); ++i) {
-        QToolButton* btn = new QToolButton();
+        XToolButton* btn = new XToolButton();
         btn->setStyleSheet(szIconBtnCSS);
         const double& scal = dpiScale();
         const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
@@ -131,7 +132,7 @@ QButtonGroup* creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCt
             absBtnsCtrl->addWidget(btn, false);
         }
 
-        QObject::connect(btn, &QToolButton::toggled, [btn]() {
+        QObject::connect(btn, &XToolButton::toggled, [btn]() {
 
             const QString path = ":/resources/icons/paint_tool_bar/paint_ctrl_btn/" + btn->objectName() + ".svg";
             const QIcon origIcon(path);

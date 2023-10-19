@@ -331,6 +331,7 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
 
         if (paintNode.id == 0) {
             QPen pen(paintNode.pen);
+            pen.setWidth(paintNode.markerPenWidth);
             pen.setColor(color);
             pa.setPen(pen);
             pa.setBrush(Qt::NoBrush);

@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.5)
 set(project_name Sunny)
 set(project_version_major 1)
 set(project_version_minor 2)
-set(project_version_path 1)
+set(project_version_path 2)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.10.17")
+add_definitions(-DXBUILD_TIME="2023.10.20")
 
 
 set(CMAKE_AUTOUIC ON)
@@ -461,8 +461,7 @@ elseif (UNIX)
     set (CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
     set (CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
     # 设置Debian软件包的依赖关系
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5x11extras5")
-
+    set (CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5x11extras5, libqt5svg5")
     set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
     set (CPACK_DEBIAN_PACKAGE_SHILIBDEPS ON)
 

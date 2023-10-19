@@ -129,6 +129,7 @@ struct PaintNode
     int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
     int     pixelatedFuzzy = 10;                                // PST_mosaic: mosaic、 blur    模糊值
     int     smoothFuzzy = 10;
+    int     markerPenWidth = 20;                                // 记号笔的宽度
 
     QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???

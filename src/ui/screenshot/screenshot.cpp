@@ -1286,10 +1286,11 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
 
     int width = -1;
     if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+    } else if (m_paintNode.pst == PaintShapeType::PST_marker_pen) {
+        m_paintNode.markerPenWidth += stepY;
+        showPointTips(QString::number(m_paintNode.markerPenWidth));
     } else if (m_paintNode.pst == PaintShapeType::PST_text) {
-
         setTextFontSize(stepY, width, true);
-
     } else {
         const int min = 1;
         const int max = 200;

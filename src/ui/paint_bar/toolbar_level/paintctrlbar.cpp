@@ -12,13 +12,14 @@
 #include "communication.h"
 #include "horspacerline.h"
 #include "verspacerline.h"
+#include "xtoolbutton.h"
 #include "../../data/configmanager.h"
 
 #define PIXELATED_MOSAIC_VAL  "pixelatedMosaicValue"
 #define SMOOTH_MOSAIC_VAL  "smoothMosaicValue"
 #define MOSAIC_DEFAUTLE_VAL 10
 
-PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
+PaintCtrlBar::PaintCtrlBar(const int &colorPickerIconSize, const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
     , m_layout(nullptr)
     , m_orie(orie)
@@ -30,13 +31,12 @@ PaintCtrlBar::PaintCtrlBar(const Qt::Orientation &orie, QWidget *parent)
     , m_textCtrl(nullptr)
     , m_serialCtrl(nullptr)
     , m_pointCtrl(nullptr)
-    , m_colorPicker(new ColorPicker(QSize(14, 14) * dpiScale(), orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
+    , m_colorPicker(new ColorPicker(QSize(colorPickerIconSize, colorPickerIconSize) * dpiScale() / 2, orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
     , m_mosaicSliderCtrl(initSliderCtrl())
 {
     initUI();
-
     connect(m_colorPicker, &ColorPicker::sigPickedColor, this, &PaintCtrlBar::sigPickedColor);
 }
 
@@ -210,7 +210,7 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable)
             ctrl = m_serialCtrl;
         }
 
-        const auto& btns = ctrl->findChildren<QToolButton*>();
+        const auto& btns = ctrl->findChildren<XToolButton*>();
         for (int i = 0; i < btns.count(); ++i) {
             if (btns.at(i)->isChecked()) return i;
         }
@@ -245,7 +245,7 @@ AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
 
         int id = -1;
         if (m_mosaicCtrl && m_mosaicSliderCtrl) {
-            const auto btns = m_mosaicCtrl->findChildren<QToolButton*>();
+            const auto btns = m_mosaicCtrl->findChildren<XToolButton*>();
             for (int i = 0; i < btns.size(); ++i) {
                 if (btns.at(i)->isChecked()) id = i;
             }
@@ -275,7 +275,7 @@ AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
 void PaintCtrlBar::setCurrMosaicBtnfuzzyValue()
 {
     if (m_mosaicCtrl && m_mosaicSliderCtrl) {
-        const auto btns = m_mosaicCtrl->findChildren<QToolButton*>();
+        const auto btns = m_mosaicCtrl->findChildren<XToolButton*>();
         int id = -1;
         for (int i = 0; i < btns.size(); ++i) {
             if (btns.at(i)->isChecked()) id = i;
@@ -345,7 +345,7 @@ void PaintCtrlBar::onIdReleased(int id)
 //            qDebug() << "Button" << it << "isCheckable():" << it->isCheckable() << "isChecked():" << it->isChecked();
 //        }
 
-//        QToolButton *btn = qobject_cast<QToolButton*>(buttonGroup->button(id));
+//        XToolButton *btn = qobject_cast<XToolButton*>(buttonGroup->button(id));
 //        if (btn) {
 //        }
     //    }
