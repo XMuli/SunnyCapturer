@@ -251,7 +251,8 @@ QRect toAbsoluteRect(const QRect &rect)
     return ret;
 }
 
-void drawShape(const PaintNode &paintNode, QPainter &pa)
+// isFinishScreenShot: true-完成截图操作，将要保存
+void drawShape(const PaintNode &paintNode, QPainter &pa, const bool &isFinishScreenShot)
 {
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing);
@@ -364,6 +365,29 @@ void drawShape(const PaintNode &paintNode, QPainter &pa)
         // nothing, 在外面 showCreatorRichText() 处理了， 绘画图片感觉也可以参考; 以及 btnUndo(), btnRedo() 中实现隐藏和展示
 //        if (!paintNode.xTextEdit) return;
 //        paintNode.xTextEdit->setVisible(paintNode.xTextEditShow);
+
+        const XTextEdit* edit = paintNode.xTextEdit;
+        if (isFinishScreenShot && edit) {
+
+            QTextDocument* doc = edit->document();
+            QImage image(doc->size().toSize(), QImage::Format_ARGB32_Premultiplied);
+            image.fill(Qt::transparent); // 设置背景为透明
+            QPainter tPa(&image);
+            doc->drawContents(&tPa);
+            tPa.end();
+
+            const QPoint& topLeft = edit->mapToParent(QPoint(0,0));
+            const QRect rect(topLeft, image.size());
+            pa.drawImage(rect, image);
+
+            static int i = 0;
+            image.save(QString("D:/textedit_%1.png").arg(i++));
+            qDebug() << "--->" << edit->rect() << doc->size() << image.rect() << rect << edit->toPlainText()
+                     << edit->mapToParent(QPoint(0,0))
+                     << edit->mapToGlobal(QPoint(0,0));
+
+
+        }
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
         QString str;
         if (paintNode.id == 0) {

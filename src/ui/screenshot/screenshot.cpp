@@ -111,7 +111,7 @@ void ScreenShot::btnPin()
 #endif
 
     const auto& rect = m_node.absoluteRect;
-    PinWidget* w = new PinWidget(finishDrewPixmap(rect), nullptr);
+    PinWidget* w = new PinWidget(finishDrewPixmap(rect, true), nullptr);
     const int opacity = CONF_MANAGE.property("XPin_opacity").toInt();
     const int max = CONF_MANAGE.property("XPin_maximum_size").toInt();
     w->setWindowOpacity(opacity / 100.0);
@@ -179,10 +179,10 @@ void ScreenShot::btnCancel()
 
 void ScreenShot::btnFinish()
 {
-    const QPixmap& pixmap = finishPixmap();
+    const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
 
-//    QPixmap tPix1 = finishPixmap();
-//    QPixmap tPix2= finishPixmap();
+//    QPixmap tPix1 = finishDrewPixmap(m_node.absoluteRect);
+//    QPixmap tPix2= finishDrewPixmap(m_node.absoluteRect);
 
 //#if 1 // 测试效果代码
 //    smoothMosaic(tPix1);
@@ -221,16 +221,26 @@ QPixmap ScreenShot::finishPixmap()
     return m_mosaicPix.copy(m_node.absoluteRect);
 }
 
-QPixmap ScreenShot::finishDrewPixmap(const QRect &rect)
+QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrigPix)
 {
-    QPixmap pix = m_origPix.copy(rect);  // 默认深拷贝全部大小
-    QPainter pa(&pix);
-    pa.restore();
-    for (const auto& it : m_redo) drawShape(it, pa);
+    if (isDrawOnOrigPix) {
+        QPainter pa(&m_origPix);
+        pa.save();
+        for (const auto& it : m_redo) drawShape(it, pa, true);
 
-//    drawShape(m_paintNode, pa);
-    pa.save();
-    return pix;
+        //    drawShape(m_paintNode, pa, true);
+        pa.restore();
+        return m_origPix.copy(rect);
+    } else {
+        QPixmap pix = m_origPix.copy(rect);  // 默认深拷贝全部大小
+        QPainter pa(&pix);
+        pa.save();
+        for (const auto& it : m_redo) drawShape(it, pa);
+
+        //    drawShape(m_paintNode, pa);
+        pa.restore();
+        return pix;
+    }
 }
 
 
@@ -410,7 +420,16 @@ void ScreenShot::initUI()
     m_pickedRectTips->raise();
     m_pointTips->raise();
 
+    onPickedColor(CONF_PBS_DATA.paPen.color());
+    m_paintNode.pen = CONF_PBS_DATA.paPen;
+    m_paintNode.brush = CONF_PBS_DATA.paBrush;
+
     // 初始化上一次的效果
+    QTextCharFormat format = m_edit->currentCharFormat();
+    format.foreground().setColor(m_paintNode.pen.color());    // fix: 默认描边的颜色边框为黑色
+    format.setTextOutline(QPen(format.foreground().color(), 1));
+    m_edit->mergeCurrentCharFormat(format);
+
     setTextFontSize(0, CONF_PBS_DATA.fontSize, false, false);
     TextFlags flags;
     CONF_PBS_DATA.textBold ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
@@ -428,9 +447,7 @@ void ScreenShot::initUI()
 
     m_timerPoint->setInterval(5000);
     monitorsInfo();
-    onPickedColor(CONF_PBS_DATA.paPen.color());
-    m_paintNode.pen = CONF_PBS_DATA.paPen;
-    m_paintNode.brush = CONF_PBS_DATA.paBrush;
+
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
@@ -576,7 +593,7 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
 
 bool ScreenShot::imageSave(const QString &path)
 {
-    const QPixmap& pixmap = finishPixmap();
+    const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
     if (pixmap.isNull()) return false;
 
     QTime startTime = QTime::currentTime();
@@ -1078,8 +1095,8 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
                     if (!m_edit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
 
                         m_paintNode.node.absoluteRect = QRect(m_node.pt, m_edit->rect().size());
-                        qDebug() << "------$4--->m_edit->rect():" << m_edit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect;
                         m_paintNode.xTextEdit = showCreatorRichText(m_edit->document(), m_paintNode.node.absoluteRect, this);
+                        qDebug() << "------$4--->m_edit->rect():" << m_edit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect << "m_paintNode.xTextEdit:" << m_paintNode.xTextEdit;
                         m_edit->hide();
                         m_redo.push_back(m_paintNode);
                         autoDisableUndoAndRedo();

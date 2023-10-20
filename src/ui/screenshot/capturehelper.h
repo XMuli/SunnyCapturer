@@ -147,7 +147,7 @@ struct PaintNode
 
 
 XTextEdit* showCreatorRichText(const QTextDocument *doc, const QRect &rect, QWidget *w);
-void drawShape(const PaintNode& paintNode, QPainter& pa);      // 绘画当某一步骤的图案
+void drawShape(const PaintNode& paintNode, QPainter& pa, const bool& isFinishScreenShot = false);      // 绘画当某一步骤的图案
 
 void drawArrow(QPainter& pa, const QPoint& p1, const QPoint& p2, int arrowSize = 20);
 void pixelatedMosaic(QPixmap &pixmap, const int& px = 20);

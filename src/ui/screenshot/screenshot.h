@@ -33,7 +33,7 @@ private:
     void btnCancel();
     void btnFinish();
     QPixmap finishPixmap();
-    QPixmap finishDrewPixmap(const QRect& rect = QRect());
+    QPixmap finishDrewPixmap(const QRect& rect = QRect(), const bool& isDrawOnOrigPix = false);
 
     void originalPixmap();
     void setMosaicPix();
