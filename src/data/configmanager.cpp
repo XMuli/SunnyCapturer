@@ -20,7 +20,7 @@ ConfigManager::instance().setIniValue(QString("/") + root + "/" + key, val)
 #define SET_PROPERTY_AND_MEMBER_VALUE(root, key, defVal) \
     GET_VALUE_PROPERTY(key) = READ_INI(root, key, defVal); \
     setProperty(key, GET_VALUE_PROPERTY(key)); \
-    connect(this, SIGNAL(sig ## key()), this, SLOT(onSyncToFile()));
+//    connect(this, SIGNAL(sig ## key()), this, SLOT(onSyncToFile()));   // 读写 IO 过于频繁，改为窗口关闭才写入文件
 
 
 
@@ -86,6 +86,8 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_highlight_iridescence, highlight);
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_crosshair_iridescence, crosshair);
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_show_develop_ui_log, false);
+    // XOtherData
+    SET_PROPERTY_AND_MEMBER_VALUE(XOtherData, XOtherData_manual_save_image_dir, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
     // XPaintBarStatus
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_rect, false);
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_ellipse, false);
@@ -130,6 +132,7 @@ void ConfigManager::readFromFile()
     qDebug() << GET_VALUE_PROPERTY(XPin_opacity) << GET_VALUE_PROPERTY(XPin_maximum_size);
     qDebug() << GET_VALUE_PROPERTY(XHotkeys_capture) << GET_VALUE_PROPERTY(XHotkeys_delay_capture)  << GET_VALUE_PROPERTY(XHotkeys_custiom_capture);
     qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence) << GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
+    qDebug() << GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir);
 
     qDebug() <<  GET_VALUE_PROPERTY(XPaintBarStatus_rect)
              <<  GET_VALUE_PROPERTY(XPaintBarStatus_ellipse)
@@ -211,6 +214,8 @@ void ConfigManager::writeToFile()
     WRITE_INI(XOtherControl, XOtherControl_highlight_iridescence, GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence));
     WRITE_INI(XOtherControl, XOtherControl_crosshair_iridescence, GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence));
     WRITE_INI(XOtherControl, XOtherControl_show_develop_ui_log, GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log));
+    // XOtherData
+    WRITE_INI(XOtherData, XOtherData_manual_save_image_dir, GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir));
     // XPaintBarStatus
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_rect, false);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipse, false);

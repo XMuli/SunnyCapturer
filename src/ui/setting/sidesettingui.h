@@ -17,7 +17,7 @@ class SideSettingUI : public QWidget
 
 public:
     explicit SideSettingUI(QWidget *parent = nullptr);
-    ~SideSettingUI();
+    virtual ~SideSettingUI();
 
 private:
     void initUI();
@@ -27,6 +27,9 @@ private:
 
 public slots:
     void onBtnHintClicked(bool checked = false);
+
+protected:
+    void closeEvent(QCloseEvent *e) override;
 
 private:
     Ui::SideSettingUI *ui;

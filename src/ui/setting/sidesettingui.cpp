@@ -139,6 +139,12 @@ void SideSettingUI::onBtnHintClicked(bool checked)
     }
 }
 
+void SideSettingUI::closeEvent(QCloseEvent *e)
+{
+    CONF_MANAGE.onSyncToFile();
+    QWidget::closeEvent(e);
+}
+
 //void SideSettingUI::onBtnResetClicked(bool checked)
 //{
 //    const AbsSettingUI* absUI = qobject_cast<AbsSettingUI *>(sender());

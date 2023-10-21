@@ -127,9 +127,9 @@ struct PaintNode
     bool bShow = false;                                         // true-在 paintEvent 中绘画;反之则不绘画
 
     int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
-    int     pixelatedFuzzy = 10;                                // PST_mosaic: mosaic、 blur    模糊值
-    int     smoothFuzzy = 10;
-    int     markerPenWidth = 20;                                // 记号笔的宽度
+    int     pixelatedFuzzy;                                // PST_mosaic: mosaic、 blur    模糊值
+    int     smoothFuzzy;
+    int     markerPenWidth;                                // 记号笔的宽度
 
     QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
@@ -142,7 +142,20 @@ struct PaintNode
     QBrush brush; // = QBrush(Qt::red, Qt::SolidPattern);
 
     void printf() const;
-    PaintNode();   // 默认构造函数
+    // 默认构造函数
+    PaintNode()
+        : pst(PaintShapeType::PST_empty)
+        , bShow(false)
+        , id(-1)
+        , pixelatedFuzzy(10)
+        , smoothFuzzy(10)
+        , markerPenWidth(25)
+        , xTextEditType(XTextEditType::XTET_nullptr)
+        , pen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin)
+        , brush(Qt::red, Qt::SolidPattern)
+    {
+        // 在此添加其他成员变量的初始化（如果有需要的话）
+    }
 };
 
 

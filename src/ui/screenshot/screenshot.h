@@ -96,6 +96,7 @@ protected:
     void wheelEvent(QWheelEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
+    void closeEvent(QCloseEvent *e) override;
 
 private:
     QScreen*                 m_primaryScreen;

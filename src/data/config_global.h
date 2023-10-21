@@ -67,6 +67,10 @@ constexpr const char* XOtherControl_highlight_iridescence("highlight_iridescence
 constexpr const char* XOtherControl_crosshair_iridescence("crosshair_iridescence");
 constexpr const char* XOtherControl_show_develop_ui_log("show_develop_ui_log");
 
+// XOtherData
+constexpr const char* XOtherData("XOtherData");
+constexpr const char* XOtherData_manual_save_image_dir("manual_save_image_dir");
+
 // XPaintBarStatus
 constexpr const char* XPaintBarStatus = "XPaintBarStatus";
 constexpr const char* XPaintBarStatus_rect = "rect";

@@ -575,8 +575,15 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
     const QString& imageName = QString("Sunny_%1").arg(dateTimeString);
 
     if (types == ImageSaveType::IST_manual_save) {
+        const QString& dir = CONF_MANAGE.property("XOtherData_manual_save_image_dir").toString();
         const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
-        path = QFileDialog::getSaveFileName(this, tr("Save Files"), imageName, fileter);
+        path = QFileDialog::getSaveFileName(this, tr("Save Files"), dir + "/" + imageName, fileter);
+
+        if (!path.isEmpty()) {
+            const QFileInfo fileInfo(path);
+            CONF_MANAGE.setProperty("XOtherData_manual_save_image_dir", fileInfo.path());
+        }
+
     } else if (types == ImageSaveType::IST_quick_save) {
         if (CONF_MANAGE.property("XOutput_quick_save_enable").toBool())
             path = CONF_MANAGE.property("XOutput_quick_save_path").toString() + "/" + imageName + ".png";
@@ -1373,6 +1380,12 @@ void ScreenShot::paintEvent(QPaintEvent *e)
         prinftWindowsRects(pa);
         printfDevelopProjectInfo(pa);
     }
+}
+
+void ScreenShot::closeEvent(QCloseEvent *e)
+{
+    CONF_MANAGE.onSyncToFile();
+    QWidget::closeEvent(e);
 }
 
 const QRect xrectToQRect(const XRECT &rect)

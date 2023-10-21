@@ -145,6 +145,8 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XOtherControl_highlight_iridescence);
     SET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence);
     SET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
+    // XOtherData
+    SET_VALUE_PROPERTY(XOtherData_manual_save_image_dir);
     // XPaintBarStatus
     SET_VALUE_PROPERTY(XPaintBarStatus_rect);
     SET_VALUE_PROPERTY(XPaintBarStatus_ellipse);
@@ -178,19 +180,21 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
 
 public:
     void readFromFile();
-    void writeToFile();
-    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
+    void writeToFile();    // 便于开发测试，才将在这两个设置为 public 的
 
 private:
     void setIniValue(const QString& key, const QVariant& value);
     QVariant getIniValue(const QString& key, const QVariant& defaultValue = QVariant()) const;
 
-private slots:
+public:
     void onSyncToFile();
 
 private:
     explicit ConfigManager(QObject *parent = nullptr);
     virtual ~ConfigManager() = default;
+
+public:
+    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
 
 private:
     QSettings* m_settings;

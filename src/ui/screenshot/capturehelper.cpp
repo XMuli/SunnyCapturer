@@ -529,18 +529,7 @@ void PaintNode::printf() const
                     .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height());
 }
 
-// 默认构造函数
-PaintNode::PaintNode()
-    : pst(PaintShapeType::PST_empty),
-    bShow(false),
-    id(-1),
-    pixelatedFuzzy(10),
-    smoothFuzzy(10),
-    xTextEditType(XTextEditType::XTET_nullptr),
-    pen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
-    brush(Qt::red, Qt::SolidPattern) {
-    // 在此添加其他成员变量的初始化（如果有需要的话）
-}
+
 
 XTextEdit* showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w)
 {

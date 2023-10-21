@@ -217,4 +217,5 @@ Tray::~Tray()
     if (m_setting) m_setting->deleteLater();
     if (m_trayMenu) m_trayMenu->deleteLater();
     if (m_trayIcon) m_trayIcon->deleteLater();
+    CONF_MANAGE.onSyncToFile();
 }
