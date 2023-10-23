@@ -1220,6 +1220,68 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
     m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
 }
 
+// Move or Stretch;
+// Ctrl + towards: 外扩
+// Shift + towards: 内缩
+// towards: 水平移动
+void ScreenShot::adjustPickedRect(QKeyEvent *e)
+{
+    const int pos = 1;
+    int totalPos = pos;
+    const int rate = 10;
+    const bool& ctrl = e->modifiers() == Qt::ControlModifier;
+    const bool& shift = e->modifiers() == Qt::ShiftModifier;
+    const bool left(e->key() == Qt::Key_A | e->key() == Qt::Key_Left);
+    const bool top(e->key() == Qt::Key_W | e->key() == Qt::Key_Up);
+    const bool right(e->key() == Qt::Key_D | e->key() == Qt::Key_Right);
+    const bool down(e->key() == Qt::Key_S | e->key() == Qt::Key_Down);
+
+    if (shift | ctrl) totalPos = pos * rate;
+
+    QRect& rt = m_node.absoluteRect;
+    if (!rt.isValid()) return;
+
+    if (m_actionType == ActionType::AT_wait) {
+        if (ctrl | shift) m_actionType = ActionType::AT_stretch_picked_rect;
+        else m_actionType = ActionType::AT_move_picked_rect;
+    }
+
+    bool bUpdate = false;
+    if (m_actionType == ActionType::AT_stretch_picked_rect) {
+        if (ctrl) {
+            if (left) rt.setLeft(rt.left() - totalPos);
+            if (top) rt.setTop(rt.top() - totalPos);
+            if (right) rt.setRight(rt.right() + totalPos);
+            if (down) rt.setBottom(rt.bottom() + totalPos);
+        } else if (shift) {
+            if (left) rt.setLeft(rt.left() + totalPos);
+            if (top) rt.setTop(rt.top() + totalPos);
+            if (right) rt.setRight(rt.right() - totalPos);
+            if (down) rt.setBottom(rt.bottom() - totalPos);
+        } else {
+            qDebug() << "m_actionType == ActionType::AT_stretch_picked_rect, but none Modifier!";
+        }
+
+        bUpdate = true;
+    } else if (m_actionType == ActionType::AT_move_picked_rect) {
+        if (left) rt.moveLeft(rt.left() - totalPos);
+        if (top) rt.moveTop(rt.top() - totalPos);
+        if (right) rt.moveRight(rt.right() + totalPos);
+        if (down) rt.moveBottom(rt.bottom() + totalPos);
+
+        bUpdate = true;
+    }
+
+    if (bUpdate) {
+        m_node.pickedRect = m_node.absoluteRect;
+        showCustomWidget(m_paintBar);
+        showPickedRectTips();
+        update();
+    }
+
+    m_actionType = ActionType::AT_wait;
+}
+
 // 对 m_node.pickedRect 进行偏移，且  pickedRect 同步给 p1，p2
 void ScreenShot::setMovePickedRect()
 {
@@ -1339,9 +1401,10 @@ void ScreenShot::keyReleaseEvent(QKeyEvent *e)
         e->accept();
         // hide() 和 close() 区别: https://stackoverflow.com/questions/39407564
         // 销毁再不会有问题,由单例改写为 new 形式了。排查：1. tray 有关，改用 qpushbutton 和 close即可； 2.单例有关，该市建议修改为 new 指针的比较合适
-    } else {
-        QWidget::keyReleaseEvent(e);
     }
+
+    adjustPickedRect(e);
+    QWidget::keyReleaseEvent(e);
 }
 
 

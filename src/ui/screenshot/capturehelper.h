@@ -21,9 +21,9 @@ enum class ActionType {
     AT_select_drawn_shape,               // 选择已绘画的图形(不算当前正在绘画中的)
     AT_drawing_shap,
     AT_move_drawn_shape,
-    AT_move_picked_rect,
+    AT_move_picked_rect,                 // 移动采摘的矩形
     AT_stretch_drawn_shape,
-    AT_stretch_picked_rect
+    AT_stretch_picked_rect               // 拉伸采摘的矩形
 };
 
 QString actionTypeToString(ActionType actionType);

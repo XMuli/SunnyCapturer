@@ -87,6 +87,7 @@ private:
     void dealMousePressEvent(QMouseEvent *e);
     void dealMouseReleaseEvent(QMouseEvent *e);
     void dealMouseMoveEvent(QMouseEvent *e);
+    void adjustPickedRect(QKeyEvent* e);                                           // Move or Stretch
 
 protected:
     // [核心: 窗口的绘画的坐标都是 (0, 0) 开始； 对于绝对坐标，可以考虑转换为 相对坐标来计算 ！！！ 统一]
