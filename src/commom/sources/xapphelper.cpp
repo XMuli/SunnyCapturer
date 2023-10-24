@@ -41,7 +41,7 @@ void releaseSystemSemaphore(const QString &uniqueKey)
 }
 
 
-#if defined(Q_OS_WIN)
+#ifdef _MSC_VER
 
 void GetExceptionDescription(DWORD errCode, QString &err)
 {

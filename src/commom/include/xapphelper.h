@@ -8,7 +8,7 @@ bool ensureSingleInstance(const QString &uniqueKey = "SunnyUniqueKey");
 void releaseSystemSemaphore(const QString &uniqueKey = "SunnyUniqueKey");
 
 
-#if defined(Q_OS_WIN)  // generat dump file
+#ifdef _MSC_VER  // 在 MSVC 编译器下的代码
     #include <Windows.h>
     #include <DbgHelp.h>
     #include <string>
@@ -24,8 +24,6 @@ void releaseSystemSemaphore(const QString &uniqueKey = "SunnyUniqueKey");
     void GetExceptionDescription(DWORD errCode,QString& err);
     LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException);
 #endif
-
-
 
 
 #endif // XAPPHELPER_H

@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 
 set(project_name Sunny)
 set(project_version_major 1)
-set(project_version_minor 2)
-set(project_version_path 2)
+set(project_version_minor 0)
+set(project_version_path 0)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.10.20")
+add_definitions(-DXBUILD_TIME="2023.10.24")
 
 
 set(CMAKE_AUTOUIC ON)
@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 各种调试开关
-add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+#add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 #add_compile_definitions(LOG_MORE_INFO_DEVELOP)       # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)       # 便于调试, 当前光标所在的所有 窗口矩形 的信息
@@ -285,7 +285,7 @@ target_include_directories(${project_name} PRIVATE                              
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/commom/communication
     ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include
 )
-target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY)                         # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装
+target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY UNICODE _UNICODE)                         # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装
 
 set_target_properties(${project_name} PROPERTIES
     ${BUNDLE_ID_OPTION}
@@ -314,9 +314,8 @@ if(MSVC)
     # 开启 UNICODE 等常规
     target_compile_definitions(${project_name} PRIVATE
         WIN32_LEAN_AND_MEAN                                                                  # Header files containing only the common APIs
-        _CRT_SECURE_NO_WARNINGS                                                              # Unsafe functions such as strcpy, scanf, etc. are allowed
-        UNICODE
-        _UNICODE)
+        _CRT_SECURE_NO_WARNINGS                                                              # Unsafe functions such as strcpy, scanf, etc. are allowed)
+    )
 endif()
 
 

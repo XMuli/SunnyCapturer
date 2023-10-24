@@ -2,12 +2,12 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 #pragma parseroption -p
 #define MyAppName "Sunny"
-#define MyAppVersion "1.2.2"
+#define MyAppVersion "1.0.0"
 #define MyAppPublisher "Vincent Teams"
 #define MyAppURL "https://sunny.xmuli.tech"
-#define MyAppExeName "Sunny.exe"
+#define MyAppExeName "Sunny.exe"                     
 #define MyArchitecture "x64"   ; x64    x86
-#define MyCOMPILER_ID "msvc"   ; WinGW  MSVC
+#define MyCOMPILER_ID "msvc"   ; MinGW  MSVC
 #define MySrc "."
 #define MyBinDir "bin"         ; 相对于 .iss 文件的路径
 #define MyOutputDir "../Archived"
