@@ -147,6 +147,7 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
     // XOtherData
     SET_VALUE_PROPERTY(XOtherData_manual_save_image_dir);
+    SET_VALUE_PROPERTY(XOtherData_detection_min_windows_level_depth);
     // XPaintBarStatus
     SET_VALUE_PROPERTY(XPaintBarStatus_rect);
     SET_VALUE_PROPERTY(XPaintBarStatus_ellipse);

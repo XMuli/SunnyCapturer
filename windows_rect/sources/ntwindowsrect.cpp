@@ -9,6 +9,58 @@ bool WindowsRectFilter(HWND hwnd)
     return false;
 }
 
+
+BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
+{
+    POINT pos;
+    pos.x = ((int)(short)LOWORD(lParam));
+    pos.y = ((int)(short)HIWORD(lParam));
+
+    RectNode node;
+    RECT rect;
+
+    if (IsWindowVisible(hwnd)) {
+        wchar_t windowText[MAX_PATH] = L"";
+        //        wchar_t procPathDevice[MAX_PATH] = L"";
+        GetWindowText(hwnd, windowText, MAX_PATH);
+        node.title = windowText;
+
+        GetWindowRect(hwnd, &rect);
+        GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+        node.procPath = windowPathFromProcessID(node.ntPocessId);
+
+        //        DWORD result = QueryDosDevice(node.procPath.c_str(), procPathDevice, MAX_PATH);
+        //        if (result != 0) { // 如果转换成功，targetPath 中将包含目标路径信息
+        //            std::wcout << L"Converted Path: " << procPathDevice << std::endl;
+        //        } else { // 转换失败
+        //            GetModuleFileName(NULL, procPathDevice, MAX_PATH);
+        //            std::wcerr << L"Error converting path. node.procPath.c_str():" << node.procPath.c_str() << L" procPathDevice:" << procPathDevice << L"  GetLastError():" << GetLastError() << std::endl;
+        //        }
+
+        //        node.procPathDevice = std::wstring(procPathDevice);
+        node.exeName = windowExeName(node.procPath);
+        node.rect = rect2xrect(rect);
+
+        const int x = rect.left;
+        const int y = rect.top;
+        const int width = rect.right - rect.left;
+        const int height = rect.bottom - rect.top;
+
+        int idx = 0;
+        if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
+            g_rectNodes.push_back(node);
+            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
+                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
+                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
+
+            EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+// MSDN !!!: EnumWindows continues until the last top-level window is enumerated or the callback function returns FALSE.
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
     POINT pos;
@@ -51,16 +103,15 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
             std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
                        << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
                        << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
+
+            EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
+            return FALSE; // 只需命中一次
         }
     }
     return TRUE;
 }
 
 
-BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
-{
-    return TRUE;
-}
 
 RECT xrect2rect(const XRECT &rt)
 {

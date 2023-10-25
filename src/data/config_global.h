@@ -70,6 +70,7 @@ constexpr const char* XOtherControl_show_develop_ui_log("show_develop_ui_log");
 // XOtherData
 constexpr const char* XOtherData("XOtherData");
 constexpr const char* XOtherData_manual_save_image_dir("manual_save_image_dir");
+constexpr const char* XOtherData_detection_min_windows_level_depth("detection_min_windows_level_depth");  // 自动检测窗口的深度， flase-最大的窗口， true-其子窗口
 
 // XPaintBarStatus
 constexpr const char* XPaintBarStatus = "XPaintBarStatus";

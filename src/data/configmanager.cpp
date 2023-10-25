@@ -88,6 +88,7 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherControl, XOtherControl_show_develop_ui_log, false);
     // XOtherData
     SET_PROPERTY_AND_MEMBER_VALUE(XOtherData, XOtherData_manual_save_image_dir, QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
+    SET_PROPERTY_AND_MEMBER_VALUE(XOtherData, XOtherData_detection_min_windows_level_depth, true);
     // XPaintBarStatus
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_rect, false);
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_ellipse, false);
@@ -131,7 +132,8 @@ void ConfigManager::readFromFile()
              << GET_VALUE_PROPERTY(XOutput_quick_save_enable) << GET_VALUE_PROPERTY(XOutput_quick_save_path)  << GET_VALUE_PROPERTY(XOutput_auto_save_enable) << GET_VALUE_PROPERTY(XOutput_auto_save_path);
     qDebug() << GET_VALUE_PROPERTY(XPin_opacity) << GET_VALUE_PROPERTY(XPin_maximum_size);
     qDebug() << GET_VALUE_PROPERTY(XHotkeys_capture) << GET_VALUE_PROPERTY(XHotkeys_delay_capture)  << GET_VALUE_PROPERTY(XHotkeys_custiom_capture);
-    qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence) << GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log);
+    qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence)
+             << GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log) << GET_VALUE_PROPERTY(XOtherData_detection_min_windows_level_depth);
     qDebug() << GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir);
 
     qDebug() <<  GET_VALUE_PROPERTY(XPaintBarStatus_rect)
@@ -216,6 +218,7 @@ void ConfigManager::writeToFile()
     WRITE_INI(XOtherControl, XOtherControl_show_develop_ui_log, GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log));
     // XOtherData
     WRITE_INI(XOtherData, XOtherData_manual_save_image_dir, GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir));
+    WRITE_INI(XOtherData, XOtherData_detection_min_windows_level_depth, GET_VALUE_PROPERTY(XOtherData_detection_min_windows_level_depth));
     // XPaintBarStatus
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_rect, false);
     WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipse, false);

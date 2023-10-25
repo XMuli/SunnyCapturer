@@ -834,7 +834,7 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
     QRect rect;
     QRect relativelyRect;
     if (m_rectNodes.size()) {
-        const RectNode it = m_rectNodes.at(0);
+        const RectNode it = m_rectNodes.at( CONF_MANAGE.property("XOtherData_detection_min_windows_level_depth").toBool() ? 0 : m_rectNodes.size() - 1);
         rect = xrectToQRect(it.rect);
         relativelyRect = xrectToQRect(it.relativelyRect);
 
@@ -894,7 +894,7 @@ void ScreenShot::rectNodesMapFromGlobal()
 void ScreenShot::firstRectNodesAssignmentNode()
 {
     if (m_rectNodes.size() == 0) return;
-    const auto& it = m_rectNodes.at(0);
+    const auto& it = m_rectNodes.at(CONF_MANAGE.property("XOtherData_detection_min_windows_level_depth").toBool() ? 0 : m_rectNodes.size() - 1);
     const auto& relativelyRect = xrectToQRect(it.relativelyRect);
 
     m_node.p1 = relativelyRect.topLeft();
@@ -1434,7 +1434,10 @@ void ScreenShot::keyReleaseEvent(QKeyEvent *e)
     } else if (e->key() == Qt::Key_QuoteLeft || e->key() == Qt::Key_Agrave) {  // 重音符号键 ` 或者 波浪键 ~
         const bool& showWindowsInfo = CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool();
         CONF_MANAGE.setProperty("XOtherControl_show_develop_ui_log", !showWindowsInfo);
-
+    } else if (e->key() == Qt::Key_Tab) {
+        const bool& bMinLevelDepth = CONF_MANAGE.property("XOtherData_detection_min_windows_level_depth").toBool();
+        CONF_MANAGE.setProperty("XOtherData_detection_min_windows_level_depth", !bMinLevelDepth);
+        firstRectNodesAssignmentNode();
     }
 
     adjustPickedRect(e);
