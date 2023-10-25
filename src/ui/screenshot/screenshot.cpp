@@ -112,13 +112,15 @@ void ScreenShot::btnPin()
 #endif
 
     const auto& rect = m_node.absoluteRect;
+
     PinWidget* w = new PinWidget(finishDrewPixmap(rect, true), nullptr);
     const int opacity = CONF_MANAGE.property("XPin_opacity").toInt();
     const int max = CONF_MANAGE.property("XPin_maximum_size").toInt();
+    const int& margin = w->layoutMargin();
     w->setWindowOpacity(opacity / 100.0);
     w->setMaximumSize(QSize(max, max));
     w->resize(rect.size());
-    w->move(mapToGlobal(rect.topLeft()));
+    w->move(mapToGlobal(rect.topLeft()) - QPoint(margin, margin)); // fix: 边框偏移给归位
     w->show();
 
     close();
@@ -230,6 +232,10 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
         for (const auto& it : m_redo) drawShape(it, pa, true);
 
         //    drawShape(m_paintNode, pa, true);
+
+        if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool())
+            prinftWindowsRects(pa);
+
         pa.restore();
         return m_origPix.copy(rect);
     } else {
@@ -572,8 +578,10 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
 {
     QString path = "";
     QDateTime dateTime = QDateTime::currentDateTime(); // 获取当前日期和时间
-    QString dateTimeString = dateTime.toString("yyyyMMdd_hhmmss");
-    const QString& imageName = QString("Sunny_%1").arg(dateTimeString);
+
+    const auto& fileName = formatToFileName(CONF_MANAGE.property("XOutput_flie_name").toString());
+    QString dateTimeString = dateTime.toString(fileName);
+    const QString& imageName = QString("%1").arg(dateTimeString);
 
     if (types == ImageSaveType::IST_manual_save) {
         const QString& dir = CONF_MANAGE.property("XOtherData_manual_save_image_dir").toString();
@@ -835,7 +843,7 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
         const int fixHeight = 20;
         int nCount = 1;
 
-        pa.fillRect(QRect(relativelyRect.topLeft(), QSize(500, fixHeight * 8)), QColor(0, 0, 0, 0.8 * 255));
+        pa.fillRect(QRect(relativelyRect.topLeft(), QSize(800, fixHeight * 8)), QColor(0, 0, 0, 0.8 * 255));
 
         pa.drawRect(relativelyRect);
         pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("rect(%1, %2, %3 * %4)")
@@ -1426,10 +1434,12 @@ void ScreenShot::keyReleaseEvent(QKeyEvent *e)
     } else if (e->key() == Qt::Key_QuoteLeft || e->key() == Qt::Key_Agrave) {  // 重音符号键 ` 或者 波浪键 ~
         const bool& showWindowsInfo = CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool();
         CONF_MANAGE.setProperty("XOtherControl_show_develop_ui_log", !showWindowsInfo);
+
     }
 
     adjustPickedRect(e);
     QWidget::keyReleaseEvent(e);
+    update();
 }
 
 

@@ -66,6 +66,9 @@ void Output::on_sbImageQuailty_valueChanged(int arg1)
 
 void Output::on_leFileName_textChanged(const QString &arg1)
 {
+    const auto& prewview = tr("Preview: ");
+    const auto& tFileName = formatToFileName(arg1);
+    ui->leFileName->setToolTip(prewview + tFileName);
     CONF_MANAGE.setProperty("XOutput_flie_name", arg1);
 }
 
@@ -117,8 +120,6 @@ void Output::onSleletedDir()
 }
 
 
-
-
 void Output::onBtnResetClicked(bool checked)
 {
     ui->sbImageQuailty->setValue(-1);
@@ -146,7 +147,8 @@ void Output::onLanguageChange(const QString qmName)
     ui->leAutoSavePath->setText(autoSavePath);
 
     const auto& prewview = tr("Preview: ");
-    ui->leFileName->setToolTip(prewview + formatToFileName(fileName));
+    const auto& tFileName = formatToFileName(fileName);
+    ui->leFileName->setToolTip(prewview + tFileName);
     ui->leQuickSavePath->setToolTip(prewview + formatToFileName(quickSavePath + "/" + fileName));
     ui->leAutoSavePath->setToolTip(prewview + formatToFileName(autoSavePath + "/" + fileName));
 }

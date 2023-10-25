@@ -25,6 +25,7 @@ class PinWidget : public QWidget
 public:
     explicit PinWidget(const QPixmap &pixmap, QWidget *parent = nullptr);
     virtual ~PinWidget();
+    const int layoutMargin() const;
 
 private:
     void initUI();

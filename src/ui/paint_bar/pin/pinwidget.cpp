@@ -37,6 +37,11 @@ PinWidget::~PinWidget()
     delete ui;
 }
 
+const int PinWidget::layoutMargin() const
+{
+    return ui->layout->margin();
+}
+
 void PinWidget::initUI()
 {
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
