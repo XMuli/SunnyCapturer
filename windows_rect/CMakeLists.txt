@@ -37,7 +37,11 @@ source_group(TREE ${src_root_path} FILES ${source_lists})
 add_library(${project_name} ${src_files})
 
 target_include_directories(${project_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)     # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
-target_compile_definitions(${project_name} PRIVATE WINDOWSRECT_LIBRARY UNICODE _UNICODE)
+target_compile_definitions(${project_name} PRIVATE WINDOWSRECT_LIBRARY UNICODE _UNICODE )
+
+if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")  # 在这里添加针对 Windows 并使用 MinGW 的配置
+    target_link_libraries(${project_name} psapi)
+endif()
 
 if(MSVC)
     set_target_properties(${project_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${trage_runtime_output_dir}")

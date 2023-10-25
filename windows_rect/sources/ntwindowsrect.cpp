@@ -1,7 +1,7 @@
 ﻿#include "ntwindowsrect.h"
+#include <psapi.h>
 
 static std::vector<RectNode> g_rectNodes;
-
 
 // 自定义的一些过滤
 bool WindowsRectFilter(HWND hwnd)
@@ -20,11 +20,24 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
     if (IsWindowVisible(hwnd)) {
         wchar_t windowText[MAX_PATH] = L"";
+//        wchar_t procPathDevice[MAX_PATH] = L"";
         GetWindowText(hwnd, windowText, MAX_PATH);
         node.title = windowText;
 
         GetWindowRect(hwnd, &rect);
+        GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+        node.procPath = windowPathFromProcessID(node.ntPocessId);
 
+//        DWORD result = QueryDosDevice(node.procPath.c_str(), procPathDevice, MAX_PATH);
+//        if (result != 0) { // 如果转换成功，targetPath 中将包含目标路径信息
+//            std::wcout << L"Converted Path: " << procPathDevice << std::endl;
+//        } else { // 转换失败
+//            GetModuleFileName(NULL, procPathDevice, MAX_PATH);
+//            std::wcerr << L"Error converting path. node.procPath.c_str():" << node.procPath.c_str() << L" procPathDevice:" << procPathDevice << L"  GetLastError():" << GetLastError() << std::endl;
+//        }
+
+//        node.procPathDevice = std::wstring(procPathDevice);
+        node.exeName = windowExeName(node.procPath);
         node.rect = rect2xrect(rect);
 
         const int x = rect.left;
@@ -36,7 +49,8 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
             g_rectNodes.push_back(node);
             std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
-                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]" << std::endl;
+                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
+                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
         }
     }
     return TRUE;
@@ -78,4 +92,22 @@ XRECT rect2xrect(const RECT &rt)
     xrect.height = rt.bottom - rt.top;
 
     return xrect;
+}
+
+std::wstring windowPathFromProcessID(DWORD processId)
+{
+    wchar_t path[MAX_PATH] = L"";
+    HANDLE hProc = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
+    GetProcessImageFileName(hProc, path, MAX_PATH);
+    CloseHandle(hProc);
+    return std::wstring(path);
+}
+
+std::wstring windowExeName(std::wstring path)
+{
+    auto pos = path.rfind(L'/');
+    if (pos == -1) pos = path.rfind(L'\\');
+    if (pos == -1) return L"";
+
+    return path.substr(pos + 1);
 }

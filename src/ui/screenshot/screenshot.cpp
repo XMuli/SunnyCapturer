@@ -16,6 +16,7 @@
 #include <QFont>
 #include <QShortcut>
 #include <QTextCharFormat>
+#include <QKeySequence>
 #include "xtextedit.h"
 #include "../paint_bar/pin/pinwidget.h"
 #include "../../data/configmanager.h"
@@ -448,10 +449,10 @@ void ScreenShot::initUI()
     m_timerPoint->setInterval(5000);
     monitorsInfo();
 
-
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);  // | Qt::WindowStaysOnTopHint
 #ifdef HALF_SCRN_DEVELOP
+    setWindowFlag(Qt::WindowStaysOnTopHint, false);
     if (m_screens.size() == 1) {
         m_vdRect.setWidth(m_vdRect.width() / 2);
     } else {
@@ -814,7 +815,7 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
 void ScreenShot::prinftWindowsRects(QPainter& pa)
 {
     pa.save();
-    pa.setPen(Qt::red);
+    pa.setPen(QColor(255, 255, 0, 1 * 255));
     pa.setBrush(Qt::NoBrush);
 
 #if LOG_CURR_POS_IN_RECTS
@@ -830,26 +831,41 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
         relativelyRect = xrectToQRect(it.relativelyRect);
 
 #endif
+        const int fixLeft = 10;
+        const int fixHeight = 20;
+        int nCount = 1;
+
+        pa.fillRect(QRect(relativelyRect.topLeft(), QSize(500, fixHeight * 8)), QColor(0, 0, 0, 0.8 * 255));
+
         pa.drawRect(relativelyRect);
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 20),  QString("it.rect(%1, %2, %3 * %4)")
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("rect(%1, %2, %3 * %4)")
                                                                   .arg(rect.x())
                                                                   .arg(rect.y())
                                                                   .arg(rect.width())
                                                                   .arg(rect.height()));
 
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 40),  QString("it.relativelyRect(%1, %2, %3 * %4)")
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("relativelyRect(%1, %2, %3 * %4)")
                                                                   .arg(relativelyRect.x())
                                                                   .arg(relativelyRect.y())
                                                                   .arg(relativelyRect.width())
                                                                   .arg(relativelyRect.height()));
 
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 60), QString::fromStdWString(it.title));
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("title: %1").arg(QString::fromStdWString(it.title)));
+
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("exeName: %1").arg(QString::fromStdWString(it.exeName)));
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("procPath: %1").arg(QString::fromStdWString(it.procPath)));
+//        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("procPathDevice: %1").arg(QString::fromStdWString(it.procPathDevice)));
+        quintptr decimalValue;
+        QString hexString = QString("0x%1").arg(it.ntPocessId, 0, 16);
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("ntPocessId: %1(10)  %2(16)").arg(it.ntPocessId).arg(hexString));
 
         //        HWND hwndDesktop = GetDesktopWindow();
         //        std::wcout << L"hwndDesktop:" << hwndDesktop << L"  it.ntHWnd:" << it.ntHWnd;
-        quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
-        QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
-        pa.drawText(relativelyRect.topLeft() + QPoint(0, 80), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
+        decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
+        hexString = QString("0x%1").arg(decimalValue, 0, 16);
+        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("hWnd: %1(10)  %2(16)").arg(decimalValue).arg(hexString));
+
+
     }
     pa.restore();
 }
@@ -1396,13 +1412,20 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
 
 void ScreenShot::keyReleaseEvent(QKeyEvent *e)
 {
+    int keyEnumValue = e->key();
+    QMetaEnum keyEnum = QMetaEnum::fromType<Qt::Key>();
+    QString keyName = keyEnum.valueToKey(keyEnumValue);
+
+    qDebug() << "e->key():" << keyName << keyEnumValue << e->text();
     if (e->key() == Qt::Key_Escape) {
-        qDebug() << "Key_Escape";
         preDestruction();
         close();
         e->accept();
         // hide() 和 close() 区别: https://stackoverflow.com/questions/39407564
         // 销毁再不会有问题,由单例改写为 new 形式了。排查：1. tray 有关，改用 qpushbutton 和 close即可； 2.单例有关，该市建议修改为 new 指针的比较合适
+    } else if (e->key() == Qt::Key_QuoteLeft || e->key() == Qt::Key_Agrave) {  // 重音符号键 ` 或者 波浪键 ~
+        const bool& showWindowsInfo = CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool();
+        CONF_MANAGE.setProperty("XOtherControl_show_develop_ui_log", !showWindowsInfo);
     }
 
     adjustPickedRect(e);
@@ -1443,7 +1466,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     // 以下部分都是 printf 一些调试参数的部分
     if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool()) {
         prinftWindowsRects(pa);
-        printfDevelopProjectInfo(pa);
+//        printfDevelopProjectInfo(pa);
     }
 }
 
