@@ -82,6 +82,9 @@ void PinWidget::initMenu()
     const auto aCopy = m_menu->addAction(tr("Copy image"));
     const auto aSave = m_menu->addAction(tr("Save image as .."));
     m_menu->addSeparator();
+    const auto aShadow = m_menu->addAction(tr("Shadow"));
+    aShadow->setCheckable(true);
+    aShadow->setChecked(true);
 
     const auto aOpicaty = new QMenu(tr("Opicaty"), this);
     const auto group = new QActionGroup(this);
@@ -103,6 +106,7 @@ void PinWidget::initMenu()
 
     connect(aCopy, &QAction::triggered, this, &PinWidget::onCopy);
     connect(aSave, &QAction::triggered, this, &PinWidget::onSave);
+    connect(aShadow, &QAction::triggered, this, &PinWidget::onShadow);
 
 
 //    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close())); // TODO 2022.07.29: 替换为 Qt5 形式
@@ -139,6 +143,24 @@ void PinWidget::onSave()
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qDebug() << "save m_pixmap tim =" << elapsed << "ms" << m_pixmap.size();
+}
+
+void PinWidget::onShadow(bool checked)
+{
+    if (checked) {
+        if (!m_shadowEffect) m_shadowEffect = new QGraphicsDropShadowEffect(this);
+
+        m_shadowEffect->setColor(highlightColor(true));
+        m_shadowEffect->setBlurRadius(ui->layout->margin() * 2);  // 对应半径
+        m_shadowEffect->setOffset(0, 0);
+        setGraphicsEffect(m_shadowEffect);   // TODO 2022.08.03: 重新加载后有点问题。
+
+        // resize(size() - QSize(1, 1));
+        // adjustSize();  // 必须手动实现才行
+        // update();
+    } else {
+        setGraphicsEffect(nullptr);          // 旧的 shadowEffect 会被 qt 底层删除，见此函数实现，所以每次都会新建
+    }
 }
 
 void PinWidget::onOpacity(const int &opacity)
@@ -199,7 +221,6 @@ void PinWidget::wheelEvent(QWheelEvent *e)
     const QPoint degrees = e->angleDelta() / 8;
     const int direction = degrees.y() > 0 ? 1 : -1;       // zooming in or out
 
-
     const int step = degrees.manhattanLength() * direction;
     const int newWidth = qBound(50, ui->label->width() + step, maximumWidth());
     const int newHeight = qBound(50, ui->label->height() + step, maximumHeight());
@@ -212,6 +233,7 @@ void PinWidget::wheelEvent(QWheelEvent *e)
 //    changeShadowColor();
     adjustSize();                                         // Reflect scaling to the label
     e->accept();
+    QWidget::wheelEvent(e);
 }
 
 void PinWidget::contextMenuEvent(QContextMenuEvent *e)

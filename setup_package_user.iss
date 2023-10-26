@@ -4,6 +4,7 @@
 #define MyAppName "Sunny"
 #define MyAppVersion "1.1.0"
 #define MyAppPublisher "Vincent Teams"
+#define MyAppCompany "XMuli"
 #define MyAppURL "https://sunny.xmuli.tech"
 #define MyAppExeName "Sunny.exe"                     
 #define MyArchitecture "x64"   ; x64    x86
@@ -103,10 +104,61 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
+[Registry]
+; 将安装路径写入注册表
+Root: HKCU; Subkey: "Software\{#MyAppCompany}\{#MyAppName}"; ValueType: string; ValueName: "InstallPath"; ValueData: "{app}"
+
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+// 获取安装路径
+//function GetInstallPath(Var szPath : String) : Boolean;
+//Var
+//  szKey : String;
+//begin
+//  szPath := '';
+//  result := false;
+//  szKey := 'Software\{#MyAppCompany}\{#MyAppName}';
+//
+//  MsgBox('GetInstallPath -> ' + szKey + ' - ' + szPath + ' - ' + IntToStr(Ord(result)), mbInformation, MB_OK);
+//
+//  if RegKeyExists(HKEY_CURRENT_USER, szKey) then
+//  begin
+//    if RegQueryStringValue(HKEY_CURRENT_USER, szKey, 'InstallPath', szPath) then
+//    begin
+//      result := true;
+//    end;
+//  end;
+//
+//  MsgBox('GetInstallPath -> ' + szKey + ' - ' + szPath + ' - ' + IntToStr(Ord(result)), mbInformation, MB_OK);
+//
+//end;
+//
+//// 安装之前若是已存在，则先卸载
+//procedure StopSelfApplication ( );
+//Var
+//  szApp, szParam ,szIntallPath: String;
+//  nRetCode : Integer;
+//  
+//begin
+//  if GetInstallPath(szIntallPath) = false then
+//  begin
+//    exit;
+//  end;
+//
+//  if DirExists(szIntallPath) then
+//  begin
+//    //  Kill the process.  
+//    szApp := 'cmd.exe';
+//    szParam := '/c Sunny.exe --quit';
+//    Exec(szApp, szParam, szIntallPath, SW_HIDE, ewWaitUntilTerminated, nRetCode);
+//    Sleep(5000);   
+//
+//    MsgBox('GetInstallPath -> ' + szIntallPath , mbInformation, MB_OK);
+//  end;
+//end;
+
 procedure InstallVCRuntime( );
 var
   szAppName, szParam, szExecutable, szArchitecture, szVCRuntimeInstalled, szFileExists: String;

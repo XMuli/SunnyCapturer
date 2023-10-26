@@ -35,6 +35,7 @@ private:
 private slots:
     void onCopy();
     void onSave();
+    void onShadow(bool checked = false);
     void onOpacity(const int& opacity);
     void changeShadowColor();
 
