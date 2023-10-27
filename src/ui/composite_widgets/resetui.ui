@@ -49,6 +49,9 @@
       </property>
       <item>
        <widget class="QToolButton" name="btnHint">
+        <property name="styleSheet">
+         <string notr="true">QToolButton { border: none; }</string>
+        </property>
         <property name="text">
          <string/>
         </property>

@@ -36,15 +36,15 @@
         <translation>作者:</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; | &lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279 (QQ)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Feedback:</source>
         <translation>反饋:</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -350,14 +350,6 @@ and specify -1 to let Sunny decide for you.</source>
 <context>
     <name>PinWidget</name>
     <message>
-        <source>Copy image</source>
-        <translation>複製圖像</translation>
-    </message>
-    <message>
-        <source>Save image as ..</source>
-        <translation>圖像另存為 ..</translation>
-    </message>
-    <message>
         <source>Opicaty</source>
         <translation>不透明度</translation>
     </message>
@@ -380,6 +372,18 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Form</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Shadow</source>
+        <translation>陰影</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>複製</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>保存</translation>
     </message>
 </context>
 <context>

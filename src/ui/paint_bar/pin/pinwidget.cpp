@@ -79,10 +79,10 @@ void PinWidget::initMenu()
     setFont(font);
     m_menu->setFont(font);
 
-    const auto aCopy = m_menu->addAction(tr("Copy image"));
-    const auto aSave = m_menu->addAction(tr("Save image as .."));
+    const auto& aCopy = m_menu->addAction(tr("Copy"));
+    const auto& aSave = m_menu->addAction(tr("Save"));
     m_menu->addSeparator();
-    const auto aShadow = m_menu->addAction(tr("Shadow"));
+    const auto& aShadow = m_menu->addAction(tr("Shadow"));
     aShadow->setCheckable(true);
     aShadow->setChecked(true);
 
@@ -101,16 +101,14 @@ void PinWidget::initMenu()
     m_menu->addMenu(aOpicaty);
     m_menu->addSeparator();
     m_menu->addSeparator();
-    auto aColse = m_menu->addAction(tr("Close"), this, &PinWidget::close, QKeySequence(Qt::CTRL + Qt::Key_W));
-
+    m_menu->addAction(tr("Close"), this, &PinWidget::close, QKeySequence(Qt::CTRL + Qt::Key_W));
 
     connect(aCopy, &QAction::triggered, this, &PinWidget::onCopy);
     connect(aSave, &QAction::triggered, this, &PinWidget::onSave);
     connect(aShadow, &QAction::triggered, this, &PinWidget::onShadow);
 
-
-//    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close())); // TODO 2022.07.29: 替换为 Qt5 形式
     new QShortcut(Qt::Key_Escape, this, SLOT(close()));
+//    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close())); // TODO 2022.07.29: 替换为 Qt5 形式
     // 使用单值捕获，不然有问题： https://zhuanlan.zhihu.com/p/346991724
     //    connect(aShadow, &QAction::triggered, this, [&, aShadow](bool checked) { aShadow->setChecked(checked); });
 }
