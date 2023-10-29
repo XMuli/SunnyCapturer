@@ -181,7 +181,7 @@ message("CMAKE_LIBRARY_OUTPUT_DIRECTORY: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")    
 message("CMAKE_ARCHIVE_OUTPUT_DIRECTORY： ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")         # 静态库的输出目录
 #************************************************* 拷贝 .ini 和资源文件 *******************************************************
 # copy "resources" 文件夹下的指定文件夹
-set(folders_to_copy "changelog" "licenses" "logo" "linux")
+set(folders_to_copy "licenses" "logo" "cpack")
 set(source_root "${CMAKE_CURRENT_SOURCE_DIR}/resources")
 set(traget_root "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
 
@@ -192,6 +192,8 @@ foreach(it ${folders_to_copy})
 endforeach()
 
 file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+file(COPY "${source_root}/debian" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
 
 #if(UNIX)
 #    file(GLOB sh_files "${source_root}/linux/debian/*.sh")
@@ -400,7 +402,7 @@ elseif (UNIX)
     set(CMAKE_INSTALL_PREFIX /usr)
     # [/usr/share] -------------------------
     # install /usr/share/applications/tech.xmuli.sunny.desktop
-    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/tech.xmuli.sunny.desktop
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/cpack/tech.xmuli.sunny.desktop
              DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications"
              )
     # install /usr/share/icons/hicolor/scalable/apps/tech.xmuli.sunny.svg
@@ -409,7 +411,7 @@ elseif (UNIX)
              RENAME tech.xmuli.sunny.svg
              )
     # install /usr/share/metainfo/tech.xmuli.sunny.metainfo.xml
-    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/linux/debian/appstream/tech.xmuli.sunny.metainfo.xml
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/cpack/appstream/tech.xmuli.sunny.metainfo.xml
              DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
              )
     # [/usr/local] -------------------------

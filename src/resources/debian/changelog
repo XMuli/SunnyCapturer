@@ -1,0 +1,22 @@
+Sunny (1.1.0) UNRELEASED; urgency=medium
+
+  * Support to Deepin V20.9-V23 compiled and ran successfully.
+  * Added the shadow effect of pins on the screen
+  * Updated translations (Chinese-Simplified, Chinese-Traditional).
+  
+ -- XMuli <xmulitech@gmail.com>  Sun, 29 Oct 2023 15:41:53 +0800
+
+Sunny (1.0.0) UNRELEASED; urgency=medium
+
+  * Support for various system style themes.
+  * Customizable transparent frosted glass effect (acrylic).
+  * Switchable orientation for the drawing toolbar: horizontal or vertical.
+  * Support for high-contrast color theme switching (via configuration file modification).
+  * Capabilities for regular screenshots, delayed screenshots, and custom screenshots.
+  * Quick and automatic saving options.
+  * Screen detection for capturing window content (window information and window depth).
+  * Ability to pin images to the screen with scaling and transparency settings.
+  * Simultaneous support for multiple text formats during editing.
+  * And more.  
+
+ -- XMuli <xmulitech@gmail.com>  Tue, 24 Oct 2023 11:17:53 +0800
