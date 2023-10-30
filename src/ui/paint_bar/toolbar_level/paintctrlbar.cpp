@@ -111,6 +111,7 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", textLists, false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CONF_PBS_DATA.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CONF_PBS_DATA.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_ocrTranslate, dir, QStringList() << "translate" << "source_language" << "upfate_translate", QStringList() << QString::number(0), false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
@@ -208,12 +209,17 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable)
             ctrl = m_textCtrl;
         } else if (type == PaintType::PT_serial) {
             ctrl = m_serialCtrl;
+        } else if (type == PaintType::PT_ocr_translate) {
+//            ctrl = m_ocrTranslate;   //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
+            m_ocrData.bTranslate = true;
+            emit sigOCRTranslateCtrlIdReleased(m_ocrData);
         }
-
         const auto& btns = ctrl->findChildren<XToolButton*>();
+
         for (int i = 0; i < btns.count(); ++i) {
             if (btns.at(i)->isChecked()) return i;
         }
+
     }
 
     return ret;
@@ -334,6 +340,12 @@ void PaintCtrlBar::onIdReleased(int id)
     } else if (paint == m_pointCtrl) {
         emit sigPointCtrlReleased(id);
         CONF_PBS_DATA.pointType = id;
+    } else if (paint == m_ocrTranslate) {
+        // TODO: 修改这儿的参数;
+        const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
+        m_ocrData.bTranslate = checked;
+
+        emit sigOCRTranslateCtrlIdReleased(m_ocrData);
     } else {
         qDebug() << "sender()->parent(): %1 is empty!";
     }
@@ -410,6 +422,10 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
         bPointCtrlShow = false;
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
+    } else if (type == PaintType::PT_ocr_translate) {
+        addWidget(m_ocrTranslate);
+        bPointCtrlShow = false;
+        bColorPickerShow = false;
     } else {
         return;
     }

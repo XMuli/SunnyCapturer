@@ -34,6 +34,7 @@ public:
 signals:
     void sigLanguageChange(const QString qmFile);
     void sigShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs); // 系统消息通知
+    void sigOCRImageGenerateFinsh(const QSize& size, const QString& path);                    // OCR 图片保存成功
 
 private:
     QString toLocaleName(const QString& language);

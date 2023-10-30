@@ -14,6 +14,7 @@
 #include "xtextedit.h"
 #include "capturehelper.h"
 #include "../paint_bar/paintbar.h"
+#include "../commom/ocr/networkocr.h"
 #include "../../commom/communication/communication.h"
 #include "windowsrect.h" // 引用位置在 Qt 库之后，避免 x11 库冲突
 
@@ -38,7 +39,7 @@ private:
     void originalPixmap();
     void setMosaicPix();
     QString imageSavePath(const ImageSaveType& types);
-    bool imageSave(const QString& path);
+    bool imageSave(const QString& path, const bool& bClose = true);
     void imageQuickSave();
 
     void setTextFontSize(const int& stepY, const int &width, const bool& bMouse, const bool& bShowPointTips = true);
@@ -60,6 +61,8 @@ public slots:
     void onPickedColor(const QColor& color);
     void onTextFontFamilyChanged(const QFont &font);
     void onTextFontSizeChanged(const QString &fontSize);
+    void onOCRTranslateCtrlIdReleased(const OCRDate& data);                                  // 开始 OCR 流程
+    void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                    // OCR 翻译后的图片已保存成功
 
 private:
     void initUI();
@@ -104,6 +107,7 @@ private:
     QList<QScreen *>         m_screens;
     QPixmap                  m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
     QPixmap                  m_mosaicPix;          // 准备使用马赛克/完成截图相关功能时候
+    QPixmap                  m_ocrGeneratePix;     // OCR 翻译后的图片
     QRect                    m_vdRect;             // virtual Desktop Rect;
 
     bool                     m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
@@ -112,6 +116,7 @@ private:
     ActionType               m_actionType;         // 当前的操作状态
     Node                     m_node;               // 一次操作的集合
     QPointer<PaintBar>       m_paintBar;           // PaintBar
+    QPointer<NetworkOCR>     m_networkOCR;         // OCR 翻译类
 
     PaintNode                m_paintNode;          // 当前绘画元素
     std::vector<PaintNode>   m_undo;               // 撤销-图案元素

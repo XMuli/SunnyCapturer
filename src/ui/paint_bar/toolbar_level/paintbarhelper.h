@@ -37,6 +37,8 @@ enum class PaintType
     PT_pin,
     PT_point,
 
+    PT_ocr_translate,   // OCR 翻译
+
     PT_undo,
     PT_redo,
 
@@ -60,6 +62,20 @@ enum class TextFlag
 Q_DECLARE_METATYPE(TextFlag)                     // 可以被 QVariant 类型存储
 Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 TextFlags
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
+
+
+struct OCRDate
+{
+    OCRDate() {}
+
+    // 自定义
+    bool bTranslate = true;
+    // API 有用接口
+    QString from = "auto";
+    QString to = "zh-CHS";
+    QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
+
+};
 
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
                                  , const QStringList& defaultChecked, const bool& bLastAddSpacer = false, const bool exclusive = true);

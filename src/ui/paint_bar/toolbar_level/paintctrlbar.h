@@ -36,6 +36,7 @@ signals:
     void sigPickedColor(const QColor& color);
     void sigTextFontFamilyChanged(const QFont &font);              // PaintCtrlBar 字体 被发生改变时候
     void sigTextFontSizeChanged(const QString &fontSize);          // PaintCtrlBar 字体大小 数值被发生改变时候
+    void sigOCRTranslateCtrlIdReleased(const OCRDate& data);       // 传递 OCR 翻译
 
 
 public slots:
@@ -48,6 +49,7 @@ public slots:
 private:
     QBoxLayout*                   m_layout;
     Qt::Orientation               m_orie;
+    OCRDate                       m_ocrData;
 
     QPointer<AbsBtnsCtrl>         m_rectCtrl;                      // 矩形
     QPointer<AbsBtnsCtrl>         m_ellipseCtrl;                   // 圆形
@@ -57,6 +59,7 @@ private:
     QPointer<AbsBtnsCtrl>         m_textCtrl;                      // 文本
     QPointer<AbsBtnsCtrl>         m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>         m_pointCtrl;                     // 线宽
+    QPointer<AbsBtnsCtrl>         m_ocrTranslate;                  // OCR 翻译
     QPointer<ColorPicker>         m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;

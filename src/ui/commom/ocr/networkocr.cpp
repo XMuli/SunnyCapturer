@@ -1,10 +1,16 @@
 #include "networkocr.h"
 #include <QByteArray>
 #include <QFile>
+#include <QImage>
 #include <QString>
 #include <QUrlQuery>
 #include <QUuid>
+#include <QStandardPaths>
+#include <QDir>
 #include "authv3util.h"
+#include "communication.h"
+#include "json.hpp"
+using json = nlohmann::json;
 
 // 您的应用 ID / 应用密钥
 QString APP_KEY = "5a3aa1167eed698d";
@@ -71,6 +77,54 @@ void NetworkOCR::onRequestFinished(QNetworkReply *reply)
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray responseData = reply->readAll();
         qDebug().noquote() << "responseData:" << responseData;
+
+
+        // 解析 JSON 数据
+        json j;
+        try {
+            j = json::parse(responseData.toStdString());
+        } catch (const std::exception& e) {
+            qDebug() << "Failed to parse JSON:" << e.what();
+            return;
+        }
+
+        if (j.contains("errorCode") && j["errorCode"] == "0" && j.contains("render_image") && j.contains("image_size")) {
+
+            QString render_image = QString::fromStdString(j["render_image"].dump());
+            QString image_size = QString::fromStdString(j["image_size"].dump());
+            QString tImageSize = image_size.mid(1, image_size.size() - 2);
+            const auto& lists = tImageSize.split(',');
+
+            QSize size(-1, -1);
+
+            if (lists.count() == 2) {
+                size.setWidth(lists.at(1).toInt());
+                size.setHeight(lists.at(0).toInt());
+            }
+
+            QByteArray byteArray = QByteArray::fromBase64(render_image.toUtf8());
+
+            // 将图像数据加载到QImage
+            QImage image;
+            if (image.loadFromData(byteArray)) {
+                const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr/";
+                QDir directory(dir);
+                if (!directory.exists() && !directory.mkpath(dir)) {
+                        qDebug() << "Failed to create directory: " << dir;
+                }
+
+                const auto& path = dir + QString("OCR_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+                image.save(path);
+
+                emit COMM.sigOCRImageGenerateFinsh(size, path);
+                qDebug() << "OCR image size:" << size << "path:" << path;
+            } else {
+                qDebug() << "Failed to load image.";
+            }
+
+        }
+
+
         //            // 反向 URL 解码数据以查看 +
         //            QString decodedData = QUrl::fromPercentEncoding(responseData);
         //            qDebug() << "decodedData:" << decodedData;

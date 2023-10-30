@@ -82,10 +82,9 @@ void PaintBar::initConnect()
     connect(m_paintCtrlBar, &PaintCtrlBar::sigTextCtrlToggled, this, &PaintBar::sigTextCtrlToggled);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigOCRTranslateCtrlIdReleased, this, &PaintBar::sigOCRTranslateCtrlIdReleased);
     connect(this, &PaintBar::sigSetTextFontSizeComboBoxValue, m_paintCtrlBar, &PaintCtrlBar::onSetTextFontSizeComboBoxValue);
     connect(this, &PaintBar::sigAutoDisableUndoAndRedo, m_paintToolBar, &PaintToolBar::onAutoDisableUndoAndRedo);
-
-
 }
 
 void PaintBar::setLowerBlurEffect(const QPixmap &pix, int radius)

@@ -51,5 +51,8 @@
         <file>resources/licenses/License.md</file>
         <file>resources/licenses/Other.md</file>
         <file>resources/licenses/PrivacyAndDataProtection.md</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/source_language.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/translate.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/upfate_translate.svg</file>
     </qresource>
 </RCC>

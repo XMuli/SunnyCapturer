@@ -34,6 +34,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_HotKeyType(type)
     , m_actionType(ActionType::AT_wait)
     , m_paintBar(new PaintBar(orie, this))
+    , m_networkOCR(new NetworkOCR(this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
@@ -419,6 +420,47 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
     CONF_PBS_DATA.fontSize = width;
 }
 
+void ScreenShot::onOCRTranslateCtrlIdReleased(const OCRDate &data)
+{
+    auto t= data.bTranslate;
+    if (!m_networkOCR || !data.bTranslate) {
+        m_ocrGeneratePix = QPixmap();
+        update();
+        return;
+    }
+
+    const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
+    QDir directory(dir);
+    if (!directory.exists() && !directory.mkpath(dir)) {
+        qDebug() << "Failed to create directory: " << dir;
+    }
+
+    const QString& path = dir + QString("%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+    const bool ok = imageSave(path, false);
+
+
+    QFile file(path);
+    if (ok && file.exists()) {
+        m_networkOCR->sendOCRRequest(path);
+    } else {
+        // 文件不存在
+        qDebug() << "OCR origin image file does not exist. path:" << path;
+    }
+}
+
+// 将图片粘贴在当前截图的窗口上
+void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
+{
+    QFile file(path);
+    if (!file.exists() || !size.isValid()) return;
+
+//    m_ocrGeneratePix = QPixmap(size);
+    m_ocrGeneratePix.load(path);
+    update();
+    // TODO:
+
+}
+
 void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -497,6 +539,7 @@ void ScreenShot::initUI()
 void ScreenShot::initConnect()
 {
     connect(m_timerPoint, &QTimer::timeout, this, &ScreenShot::onHidePointTips);
+    connect(&COMM, &Communication::sigOCRImageGenerateFinsh, this, &ScreenShot::onOCRImageGenerateFinsh);
 //    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
 //        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
 //    });
@@ -510,6 +553,8 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
     connect(m_paintBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
     connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
+    connect(m_paintBar, &PaintBar::sigOCRTranslateCtrlIdReleased, this, &ScreenShot::onOCRTranslateCtrlIdReleased);
+
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
     connect(this, &ScreenShot::sigAutoDisableUndoAndRedo, m_paintBar, &PaintBar::sigAutoDisableUndoAndRedo);
@@ -555,7 +600,9 @@ void ScreenShot::stashMosaicPixmap()
             m_paintNode.pixmap = pix;
             //            qDebug() << "----#4---->rect:" << rect;
         }
-    }
+    } /*else if (m_paintNode.pst == PaintShapeType::PST_mosaic) {
+
+    }*/
 }
 
 void ScreenShot::originalPixmap()
@@ -607,7 +654,7 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
     return path;
 }
 
-bool ScreenShot::imageSave(const QString &path)
+bool ScreenShot::imageSave(const QString &path, const bool &bClose)
 {
     const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
     if (pixmap.isNull()) return false;
@@ -617,7 +664,9 @@ bool ScreenShot::imageSave(const QString &path)
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
-    close();
+
+    if (bClose)
+        close();
 
     return ret;
 }
@@ -1466,6 +1515,10 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
     if (m_paintNode.bShow)
         drawShape(m_paintNode, pa);
+
+
+    if (!m_ocrGeneratePix.isNull())
+        pa.drawPixmap(pickedRect, m_ocrGeneratePix);
 
 //    pa.setPen(Qt::red);
 //    pa.drawRect(m_paintNode.node.absoluteRect);

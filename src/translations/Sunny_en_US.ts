@@ -329,6 +329,10 @@ and specify -1 to let Sunny decide for you.</source>
         <source>Arrow</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>translate</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Pin</name>
