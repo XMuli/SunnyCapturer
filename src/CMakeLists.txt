@@ -23,7 +23,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)       # 便于调试, 当前光标所在的所有 窗口矩形 的信息
 add_compile_definitions(QT_MESSAGELOGCONTEXT)         # Release 日志也可以输出 文件名 和 路径
 
-set(qt_moduls Widgets Xml Svg)                        # Network Multimedia WebSockets
+set(qt_moduls Widgets Xml Svg Network)                        # Network Multimedia WebSockets
 set(qt_version_moduls)
 foreach(it ${qt_moduls})
     list(APPEND qt_version_moduls Qt${QT_VERSION_MAJOR}::${it})
@@ -123,6 +123,10 @@ set(src_files
     ui/screenshot/tray.cpp
     ui/commom/communication/communication.h
     ui/commom/communication/communication.cpp
+    ui/commom/ocr/authv3util.h
+    ui/commom/ocr/authv3util.cpp
+    ui/commom/ocr/networkocr.h
+    ui/commom/ocr/networkocr.cpp
     ui/paint_bar/pin/pinwidget.h
     ui/paint_bar/pin/pinwidget.cpp
     ui/paint_bar/pin/pinwidget.ui
@@ -323,27 +327,24 @@ endif()
 
 #******************************************* 拷贝 ssl 和对应的 qt 依赖 *******************************************************
 if(APPLE)
-#    file(COPY "/usr/local/Cellar/openssl@3/3.1.1/lib/libcrypto.3.dylib" DESTINATION "${EXECUTABLE_OUTPUT_PATH}")
-#    file(COPY "/usr/local/Cellar/openssl@3/3.1.1/lib/libssl.3.dylib" DESTINATION "${exe_output_dir}")
-#    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt} ${EXECUTABLE_OUTPUT_PATH}/${project_name}.app" -verbose=1 )
-#    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}/ ${EXECUTABLE_OUTPUT_PATH}/${project_name}.app -dmg" )
-
+    file(COPY "/usr/local/Cellar/openssl@3/3.1.1/lib/libcrypto.3.dylib" DESTINATION "${EXECUTABLE_OUTPUT_PATH}")
+    file(COPY "/usr/local/Cellar/openssl@3/3.1.1/lib/libssl.3.dylib" DESTINATION "${exe_output_dir}")
+    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}" "${EXECUTABLE_OUTPUT_PATH}/${project_name}.app" "-verbose=1")
+    add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}" "${EXECUTABLE_OUTPUT_PATH}/${project_name}.app" "-dmg")
 elseif(UNIX)
-
 elseif(WIN32)
+    if(${is_x64bit})
+        set(ssl_dir "C:/Qt/Tools/OpenSSL/Win_x64/")
+        set(ssl_file "libssl-1_1-x64.dll" "libcrypto-1_1-x64.dll")
+    else()
+        set(ssl_dir "C:/Qt/Tools/OpenSSL/Win_x86/")
+        set(ssl_file "libssl-1_1.dll" "libcrypto-1_1.dll")
+    endif()
 
-#    if(${is_x64bit})
-#        set(ssl_dir "C:/Qt/Tools/OpenSSL/Win_x64/")
-#        set(ssl_file "libssl-1_1-x64.dll" "libcrypto-1_1-x64.dll")
-#    else()
-#        set(ssl_dir "C:/Qt/Tools/OpenSSL/Win_x86/")
-#        set(ssl_file "libssl-1_1.dll" "libcrypto-1_1.dll")
-#    endif()
-
-#    foreach(it ${ssl_file})
-#        file(COPY "${ssl_dir}/bin/${it}" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-#        message("--->it:" "${ssl_dir}/bin/${it}")
-#    endforeach()
+    foreach(it ${ssl_file})
+        file(COPY "${ssl_dir}/bin/${it}" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+        message("--->it:" "${ssl_dir}/bin/${it}")
+    endforeach()
 
     add_custom_command(TARGET ${project_name} POST_BUILD COMMAND "${windeployqt}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.exe" --no-opengl-sw --no-translations)
 endif()

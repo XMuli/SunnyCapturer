@@ -4,6 +4,7 @@
 #include <QSharedMemory>
 #include <QDebug>
 #include "xapphelper.h"
+#include "ui/commom/ocr/networkocr.h"
 
 //#include "xlog.h"
 #include "ui/screenshot/tray.h"
@@ -81,6 +82,9 @@ int main(int argc, char *argv[])
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
+
+    NetworkOCR networkOCR;
+    networkOCR.sendOCRRequest();
 
 
 

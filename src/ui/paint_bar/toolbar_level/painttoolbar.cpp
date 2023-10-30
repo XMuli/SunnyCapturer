@@ -63,7 +63,7 @@ void PaintToolBar::initBtns()
     for (int i = 0; i < m_btns.size(); ++i) {
         auto& it = m_btns.at(i);
         auto& tb = it.btn;
-        const double& scal = dpiScale();
+        const double& scal = dpiScale(qGuiApp->screenAt(QCursor::pos()));
         const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
         tb = new XToolButton();
         tb->setObjectName(it.name);

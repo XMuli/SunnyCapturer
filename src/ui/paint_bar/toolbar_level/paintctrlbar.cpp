@@ -31,7 +31,7 @@ PaintCtrlBar::PaintCtrlBar(const int &colorPickerIconSize, const Qt::Orientation
     , m_textCtrl(nullptr)
     , m_serialCtrl(nullptr)
     , m_pointCtrl(nullptr)
-    , m_colorPicker(new ColorPicker(QSize(colorPickerIconSize, colorPickerIconSize) * dpiScale() / 2, orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
+    , m_colorPicker(new ColorPicker(QSize(colorPickerIconSize, colorPickerIconSize) * dpiScale(qGuiApp->screenAt(QCursor::pos())) / 2, orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
     , m_mosaicSliderCtrl(initSliderCtrl())
