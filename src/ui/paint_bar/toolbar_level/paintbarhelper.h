@@ -38,6 +38,7 @@ enum class PaintType
     PT_point,
 
     PT_ocr_translate,   // OCR 翻译
+    PT_ocr_text,        // OCR 生成文本
 
     PT_undo,
     PT_redo,
@@ -63,19 +64,35 @@ Q_DECLARE_METATYPE(TextFlag)                     // 可以被 QVariant 类型存
 Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 TextFlags
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 
-
-struct OCRDate
+// OcrTranslateData 都是调用 YouDao API
+struct OcrTranslateData
 {
-    OCRDate() {}
+    OcrTranslateData() {}
 
     // 自定义
     bool bTranslate = true;
-    // API 有用接口
+    // API Tranlstates 有用接口
     QString from = "auto";
     QString to = "zh-CHS";
     QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
-
 };
+
+
+// OcrTextType + OcrTextData 都是调用 BaiDu API
+enum class OcrTextType
+{
+    OTT_ocr_text_standard,                      // 通用文字识别（标准版）           1000 次/month
+    OTT_ocr_text_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
+    OTT_ocr_text_high_precision,                // 通用文字识别（高精度版）         1000 次/month
+    OTT_ocr_text_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
+};
+
+struct OcrTextData
+{
+    OcrTextType ocrTextType =  OcrTextType::OTT_ocr_text_high_precision_location;
+};
+Q_DECLARE_METATYPE(OcrTextData)                     // 可以被 QVariant 类型存储
+
 
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
                                  , const QStringList& defaultChecked, const bool& bLastAddSpacer = false, const bool exclusive = true);

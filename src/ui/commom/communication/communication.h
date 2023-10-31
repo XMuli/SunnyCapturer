@@ -6,6 +6,9 @@
 #include <QWidget>
 #include "qhotkey.h"
 #include "../../data/configmanager.h"
+#include "../../paint_bar/toolbar_level/paintbarhelper.h"
+#include "json.hpp"
+using json = nlohmann::json;
 
 #define COMM Communication::instance()
 
@@ -35,6 +38,7 @@ signals:
     void sigLanguageChange(const QString qmFile);
     void sigShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs); // 系统消息通知
     void sigOCRImageGenerateFinsh(const QSize& size, const QString& path);                    // OCR 图片保存成功
+    void sigOCRTextGenerateFinsh(const QByteArray& obj, const OcrTextData& ocrTextData);                                                     // OCR Text 保存成功
 
 private:
     QString toLocaleName(const QString& language);

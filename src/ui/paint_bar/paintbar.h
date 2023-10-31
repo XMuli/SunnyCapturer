@@ -35,7 +35,8 @@ signals:
     void sigTextFontSizeChanged(const QString &text);                                  // PaintCtrlBar 拉列表的字体的大小被修改
     void sigTextFontFamilyChanged(const QFont &font);                                  // PaintCtrlBar 字体 被发生改变时候
     void sigSetTextFontSizeComboBoxValue(const QString &fontSize);                     // sync 修改下拉列表的字体的大小
-    void sigOCRTranslateCtrlIdReleased(const OCRDate& data);                           // PaintCtrlBar OCR 翻译
+    void sigOCRTranslateCtrlIdReleased(const OcrTranslateData& data);                  // PaintCtrlBar OCR 翻译
+    void sigOCRTextCtrlIdReleased(const OcrTextData& data);                            // PaintCtrlBar OCR Text
 
     void sigAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);  // ScreenShot 控制图标置灰
 

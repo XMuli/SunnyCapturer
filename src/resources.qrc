@@ -54,5 +54,8 @@
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/source_language.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/translate.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/upfate_translate.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_btn/ocr_text.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_copy.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_orderd.svg</file>
     </qresource>
 </RCC>

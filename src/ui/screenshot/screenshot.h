@@ -12,6 +12,7 @@
 #include <QPointer>
 #include "tips.h"
 #include "xtextedit.h"
+#include "xocrtextedit.h"
 #include "capturehelper.h"
 #include "../paint_bar/paintbar.h"
 #include "../commom/ocr/networkocr.h"
@@ -61,8 +62,10 @@ public slots:
     void onPickedColor(const QColor& color);
     void onTextFontFamilyChanged(const QFont &font);
     void onTextFontSizeChanged(const QString &fontSize);
-    void onOCRTranslateCtrlIdReleased(const OCRDate& data);                                  // 开始 OCR 流程
-    void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                    // OCR 翻译后的图片已保存成功
+    void onOCRTranslateCtrlIdReleased(const OcrTranslateData& data);                              // 开始 OCR Translate
+    void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                         // OCR Translate 后的图片已保存成功
+    void onOCRTextCtrlIdReleased(const OcrTextData &data);                                        // 开始 OCR Text
+    void onOCRTextGenerateFinsh(const QByteArray& response, const OcrTextData& ocrTextData);           // OCR Text 后的文本已解析成功
 
 private:
     void initUI();
@@ -127,6 +130,8 @@ private:
     std::vector<RectNode>    m_rectNodes;
 
     QPointer<XTextEdit>      m_edit;
+    QPointer<XOcrTextEdit>   m_ocrTextEdit;
+
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;

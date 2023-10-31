@@ -55,6 +55,7 @@ set(custom_ui_files
     ui/include/verspacerline.h
     ui/include/tips.h
     ui/include/xtextedit.h
+    ui/include/xocrtextedit.h
     ui/include/xtoolbutton.h
     # h composite_widgets
     ui/include/xblureffect.h
@@ -75,6 +76,7 @@ set(custom_ui_files
     ui/common_widgets/verspacerline.cpp
     ui/common_widgets/tips.cpp
     ui/common_widgets/xtextedit.cpp
+    ui/common_widgets/xocrtextedit.cpp
     ui/common_widgets/xtoolbutton.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp

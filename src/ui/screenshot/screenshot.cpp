@@ -38,6 +38,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
+    , m_ocrTextEdit(new XOcrTextEdit(this))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -420,9 +421,9 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
     CONF_PBS_DATA.fontSize = width;
 }
 
-void ScreenShot::onOCRTranslateCtrlIdReleased(const OCRDate &data)
+void ScreenShot::onOCRTranslateCtrlIdReleased(const OcrTranslateData &data)
 {
-    auto t= data.bTranslate;
+    auto t = data.bTranslate;
     if (!m_networkOCR || !data.bTranslate) {
         m_ocrGeneratePix = QPixmap();
         update();
@@ -435,13 +436,13 @@ void ScreenShot::onOCRTranslateCtrlIdReleased(const OCRDate &data)
         qDebug() << "Failed to create directory: " << dir;
     }
 
-    const QString& path = dir + QString("%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+    const QString& path = dir + QString("OCRTranslate_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
     const bool ok = imageSave(path, false);
 
 
     QFile file(path);
     if (ok && file.exists()) {
-        m_networkOCR->sendYouDaoOcrTranslateRequest(path);
+        m_networkOCR->sendYouDaoOcrTranslateRequest(data, path);
     } else {
         // 文件不存在
         qDebug() << "OCR origin image file does not exist. path:" << path;
@@ -458,6 +459,86 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
     m_ocrGeneratePix.load(path);
     update();
     // TODO:
+
+}
+
+void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
+{
+    const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
+    QDir directory(dir);
+    if (!directory.exists() && !directory.mkpath(dir)) {
+        qDebug() << "Failed to create directory: " << dir;
+    }
+
+    const QString& path = dir + QString("OCRText_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+    const bool ok = imageSave(path, false);
+
+
+    QFile file(path);
+    if (ok && file.exists()) {
+        m_networkOCR->sendBaiDuOcrTextRequest(data, path);
+    } else {
+        // 文件不存在
+        qDebug() << "OCR origin image file does not exist. path:" << path;
+    }
+
+}
+
+void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTextData &ocrTextData)
+{
+    json j;
+    try {
+        j = json::parse(response.toStdString());
+    } catch (const std::exception& e) {
+        qDebug() << "Failed to parse JSON:" << e.what();
+        return;
+    }
+
+    const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
+    if (!bValid) return;
+
+    m_ocrTextEdit->resize(m_node.absoluteRect.size());
+    m_ocrTextEdit->move(m_node.absoluteRect.topLeft());
+    m_ocrTextEdit->clear();
+
+    if (!m_ocrTextEdit->isVisible()) m_ocrTextEdit->show();
+
+    if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_standard) {
+    } else if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_standard_location) {
+    } else if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_high_precision) {
+    } else if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_high_precision_location) {
+
+//        qDebug() << "------>j:" << QString::fromStdString(j.dump());
+        // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
+        for (const auto& item : j["words_result"]) {
+            std::string words = item["words"];
+            json location = item["location"];
+            int left = location["left"];
+            int top = location["top"];
+
+            QString text = QString::fromStdString(words);
+
+            // 插入到 QTextEdit 中
+            QTextCursor cursor(m_ocrTextEdit->textCursor());
+            cursor.movePosition(QTextCursor::Start);
+            cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, top);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, left);
+            cursor.insertText(text);
+            cursor.insertText("\n");
+        }
+
+//        // 遍历 "words_result" 数组并将 "words" 和 "location" 字段的内容组合
+//        for (const auto& item : j["words_result"]) {
+//            std::string words = item["words"];
+//            json location = item["location"];
+//            std::string combinedText = words + " - " + location.dump(); // 组合 "words" 和 "location" 字段内容
+//            QString text = QString::fromStdString(combinedText);
+
+//            // 插入到 QTextEdit 中
+//            m_ocrTextEdit->append(text);
+//        }
+    }
+
 
 }
 
@@ -489,6 +570,7 @@ void ScreenShot::initUI()
     onTextCtrlToggled(flags);
 
     m_edit->hide();
+    m_ocrTextEdit->hide();
     m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_paintBar->hide();
     m_pointTips->hide();
@@ -540,6 +622,7 @@ void ScreenShot::initConnect()
 {
     connect(m_timerPoint, &QTimer::timeout, this, &ScreenShot::onHidePointTips);
     connect(&COMM, &Communication::sigOCRImageGenerateFinsh, this, &ScreenShot::onOCRImageGenerateFinsh);
+    connect(&COMM, &Communication::sigOCRTextGenerateFinsh, this, &ScreenShot::onOCRTextGenerateFinsh);
 //    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
 //        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
 //    });
@@ -554,6 +637,7 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
     connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
     connect(m_paintBar, &PaintBar::sigOCRTranslateCtrlIdReleased, this, &ScreenShot::onOCRTranslateCtrlIdReleased);
+    connect(m_paintBar, &PaintBar::sigOCRTextCtrlIdReleased, this, &ScreenShot::onOCRTextCtrlIdReleased);
 
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);

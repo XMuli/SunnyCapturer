@@ -10,10 +10,11 @@
 #include <QMessageBox>
 #include <QStringList>
 #include <QMetaObject>
+#include <QMetaEnum>
+#include <QMetaMethod>
 #include "authv3util.h"
 #include "communication.h"
 #include "json.hpp"
-#include "qmetaobject.h"
 using json = nlohmann::json;
 
 // 您的应用 ID / 应用密钥
@@ -23,16 +24,17 @@ QString APP_SECRET = "tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T";
 NetworkOCR::NetworkOCR(QObject *parent)
     : QObject{parent}
     , m_networkManager(new QNetworkAccessManager(this))
+//    , m_eventLoop(new QEventLoop(this))
 {
     connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
 
     sendBaiDuAccessToken();
 }
 
-void NetworkOCR::sendBaiDuOcrTextRequest(const QString &path)
+void NetworkOCR::sendBaiDuOcrTextRequest(const OcrTextData &data, const QString &path)
 {
     // 从文件中读取图像数据并进行base64编码
-    QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/accurate?access_token=24.220a36c4d45a235d7f7ae1d302f3f458.2592000.1701329540.282335-42093112"/*m_baiDuToken*/);
+    QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/accurate?access_token=" + m_baiDuToken);  // "24.220a36c4d45a235d7f7ae1d302f3f458.2592000.1701329540.282335-42093112"
     QNetworkRequest request(url);
     QByteArray postData = "image=" + QUrl::toPercentEncoding(base64FromFileContent(path)) + "&detect_direction=false&vertexes_location=false&paragraph=false&probability=false";
 //    qDebug() << "postData:" << postData;
@@ -40,11 +42,12 @@ void NetworkOCR::sendBaiDuOcrTextRequest(const QString &path)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     request.setRawHeader("Accept", "application/json");
     request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_ocr_text));
+    request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<OcrTextData>(data));   // 当前 发送的请求线路
 
     m_networkManager->post(request, postData);
 }
 
-void NetworkOCR::sendYouDaoOcrTranslateRequest(const QString &path)
+void NetworkOCR::sendYouDaoOcrTranslateRequest(const OcrTranslateData &data, const QString &path)
 {
     QString base64DataUtf8 = base64FromFileContent(path);
 
@@ -158,6 +161,7 @@ void NetworkOCR::sendBaiDuAccessToken(const QString &client_id, const QString &c
     params.addQueryItem("grant_type", "client_credentials");
 
     m_networkManager->post(request, params.query().toUtf8());
+//    m_eventLoop->exec();   // 阻塞
 }
 
 void NetworkOCR::dealBaiDuAccessToken(QNetworkReply *reply)
@@ -182,6 +186,7 @@ void NetworkOCR::dealBaiDuAccessToken(QNetworkReply *reply)
         if (!j.empty() && j.contains("access_token")) {
             m_baiDuToken = QString::fromStdString(j["access_token"]);
             qDebug() << "m_baiDuToken:" << m_baiDuToken;
+//            m_eventLoop->quit();
         }
     } else {
         qWarning() << replyErrorShowText(dataHead);
@@ -199,18 +204,12 @@ void NetworkOCR::dealBaiDuOcrTextRequest(QNetworkReply *reply)
     }
 
     if (dataHead.at(0) == "200") {
-        json j;
-        try {
-            j = json::parse(response.toStdString());
-        } catch (const std::exception& e) {
-            qDebug() << "Failed to parse JSON:" << e.what();
-            return;
-        }
 
-//        if (!j.empty() && j.contains("access_token")) {
-//            m_baiDuToken = QString::fromStdString(j["access_token"]);
-//            qDebug() << "m_baiDuToken:" << m_baiDuToken;
-//        }
+
+        const OcrTextData& ocrTextData = reply->request().attribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1)).value<OcrTextData>();
+        emit COMM.sigOCRTextGenerateFinsh(response, ocrTextData);
+
+
     } else {
         qWarning() << replyErrorShowText(dataHead);
     }

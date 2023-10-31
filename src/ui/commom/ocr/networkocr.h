@@ -6,6 +6,8 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QPointer>
+#include <QEventLoop>
+#include "../paint_bar/toolbar_level/paintbarhelper.h"
 
 // youdao API: https://ai.youdao.com/DOCSIRMA/html/trans/api/tpfy/index.html
 // 在线测试图片的 base64: https://tool.jisuapi.com/base642pic.html
@@ -16,6 +18,9 @@
     API Key:     BFuLK0VlWbH8l2WeLlDapfhc
     Secret Key:  b2QwlwEb2uRCUt4s6XethYtjbNHpzdtR
  */
+
+//class OcrTranslateData;
+//class OcrTextData;
 
 class NetworkOCR : public QObject
 {
@@ -33,8 +38,8 @@ public:
 
     explicit NetworkOCR(QObject *parent = nullptr);
     virtual ~NetworkOCR() = default;
-    void sendBaiDuOcrTextRequest(const QString& path);           // 待翻译图片路径
-    void sendYouDaoOcrTranslateRequest(const QString& path);     // 待翻译图片路径
+    void sendBaiDuOcrTextRequest(const OcrTextData& data, const QString& path);           // 待翻译图片路径
+    void sendYouDaoOcrTranslateRequest(const OcrTranslateData& data, const QString& path);     // 待翻译图片路径
 
 private:
     // base
@@ -56,6 +61,7 @@ private slots:
 private:
     QString                              m_baiDuToken;
     QPointer<QNetworkAccessManager>      m_networkManager;
+//    QPointer<QEventLoop>                 m_eventLoop;  // 获取 m_token 后才能够使用相关 API
 };
 
 #endif // NETWORKOCR_H

@@ -83,6 +83,7 @@ void PaintBar::initConnect()
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigOCRTranslateCtrlIdReleased, this, &PaintBar::sigOCRTranslateCtrlIdReleased);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigOCRTextCtrlIdReleased, this, &PaintBar::sigOCRTextCtrlIdReleased);
     connect(this, &PaintBar::sigSetTextFontSizeComboBoxValue, m_paintCtrlBar, &PaintCtrlBar::onSetTextFontSizeComboBoxValue);
     connect(this, &PaintBar::sigAutoDisableUndoAndRedo, m_paintToolBar, &PaintToolBar::onAutoDisableUndoAndRedo);
 }
