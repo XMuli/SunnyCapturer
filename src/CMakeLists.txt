@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.5)
 set(project_name Sunny)
 set(project_version_major 1)
 set(project_version_minor 1)
-set(project_version_path 0)
+set(project_version_path 1)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.10.29")
+add_definitions(-DXBUILD_TIME="2023.10.31")
 
 
 set(CMAKE_AUTOUIC ON)
@@ -141,6 +141,7 @@ source_group(TREE ${src_root_path} FILES ${source_lists})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ui/include")                                    # 修复 Qt Design 使用提升自定义控件后， MinGW 找不到而编译失败; 且 MSVC 和 MinGW 使用提升时候，都不需要加上 相对路径
 include_directories("${CMAKE_SOURCE_DIR}/tripartite/QHotkey")
 include_directories("${CMAKE_SOURCE_DIR}/tripartite/include/json")
+include_directories("${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes")
 
 
 #********************************************** 判断且定义 x64/x86 变量 (get kit architecture bit) ****************************

@@ -441,7 +441,7 @@ void ScreenShot::onOCRTranslateCtrlIdReleased(const OCRDate &data)
 
     QFile file(path);
     if (ok && file.exists()) {
-        m_networkOCR->sendOCRRequest(path);
+        m_networkOCR->sendYouDaoOcrTranslateRequest(path);
     } else {
         // 文件不存在
         qDebug() << "OCR origin image file does not exist. path:" << path;

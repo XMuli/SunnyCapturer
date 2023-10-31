@@ -83,8 +83,9 @@ int main(int argc, char *argv[])
 
     TRAY; // 启动托盘
 
-//    NetworkOCR networkOCR;
-//    networkOCR.sendOCRRequest();
+    NetworkOCR networkOCR;
+    networkOCR.sendBaiDuOcrTextRequest("C:/Users/Venn/Desktop/Sunny_20231030_114240.png");
+//    networkOCR.sendYouDaoOcrTranslateRequest();
 
 
 
