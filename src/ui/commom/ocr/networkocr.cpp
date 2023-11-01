@@ -37,11 +37,9 @@ NetworkOCR::NetworkOCR(QObject *parent)
 void NetworkOCR::sendBaiDuOcrTextRequest(const OcrTextData &data, const QString &path)
 {
     // 从文件中读取图像数据并进行base64编码
-    QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/accurate?access_token=" + m_baiDuToken);  // "24.220a36c4d45a235d7f7ae1d302f3f458.2592000.1701329540.282335-42093112"
+    QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/accurate?access_token=" + m_baiDuToken);
     QNetworkRequest request(url);
     QByteArray postData = "image=" + QUrl::toPercentEncoding(base64FromFileContent(path)) + "&detect_direction=false&vertexes_location=false&paragraph=false&probability=false";
-//    qDebug() << "postData:" << postData;
-
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     request.setRawHeader("Accept", "application/json");
     request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_ocr_text));

@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 各种调试开关
-#add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 #add_compile_definitions(LOG_MORE_INFO_DEVELOP)       # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)       # 便于调试, 当前光标所在的所有 窗口矩形 的信息
@@ -57,6 +57,7 @@ set(custom_ui_files
     ui/include/xtextedit.h
     ui/include/xocrtextedit.h
     ui/include/xtoolbutton.h
+    ui/include/switchbutton.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -78,6 +79,7 @@ set(custom_ui_files
     ui/common_widgets/xtextedit.cpp
     ui/common_widgets/xocrtextedit.cpp
     ui/common_widgets/xtoolbutton.cpp
+    ui/common_widgets/switchbutton.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -97,14 +99,21 @@ set(custom_ui_files
     ui/composite_widgets/licenseui.cpp
     ui/composite_widgets/licenseui.ui
 
-    ui/paint_bar/common/absbtnsctrl.h
-    ui/paint_bar/common/absbtnsctrl.cpp
+    ui/paint_bar/toolbar_level/common/absbtnsctrl.h
+    ui/paint_bar/toolbar_level/common/absbtnsctrl.cpp
     ui/paint_bar/toolbar_level/painttoolbar.h
     ui/paint_bar/toolbar_level/painttoolbar.cpp
     ui/paint_bar/toolbar_level/paintbarhelper.h
     ui/paint_bar/toolbar_level/paintbarhelper.cpp
     ui/paint_bar/toolbar_level/paintctrlbar.h
     ui/paint_bar/toolbar_level/paintctrlbar.cpp
+    ui/paint_bar/toolbar_level/ocr_text/xocrtextctrl.h
+    ui/paint_bar/toolbar_level/ocr_text/xocrtextctrl.cpp
+    ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.h
+    ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.cpp
+    ui/paint_bar/toolbar_level/pin/pinwidget.h
+    ui/paint_bar/toolbar_level/pin/pinwidget.cpp
+    ui/paint_bar/toolbar_level/pin/pinwidget.ui
     ui/paint_bar/paintbar.h
     ui/paint_bar/paintbar.cpp
 )
@@ -129,9 +138,8 @@ set(src_files
     ui/commom/ocr/authv3util.cpp
     ui/commom/ocr/networkocr.h
     ui/commom/ocr/networkocr.cpp
-    ui/paint_bar/pin/pinwidget.h
-    ui/paint_bar/pin/pinwidget.cpp
-    ui/paint_bar/pin/pinwidget.ui
+
+
 
     resources.qrc
     resources/logo/resources.rc

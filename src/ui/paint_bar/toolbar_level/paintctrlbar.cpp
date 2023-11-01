@@ -51,6 +51,8 @@ PaintCtrlBar::~PaintCtrlBar()
     m_pointCtrl->deleteLater();
     m_markerPenCtrl->deleteLater();
     m_colorPicker->deleteLater();
+    m_ocrTranslateCtrl->deleteLater();
+    m_ocrTextCtrl->deleteLater();
 
     m_fontFamily->deleteLater();
     m_fontScale->deleteLater();
@@ -103,6 +105,9 @@ void PaintCtrlBar::initBtns()
     if (CONF_PBS_DATA.textStrikeout) textLists << "3";
     if (CONF_PBS_DATA.textUnderline) textLists << "4";
     const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
+
+    m_ocrTranslateCtrl = new OcrTranslateCtrl(m_orie, this);
+//    m_ocrTextCtrl = new XOcrTextCtrl(m_orie, this);
     connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << QString::number(CONF_PBS_DATA.rectintType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() << QString::number(CONF_PBS_DATA.ellipseType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << QString::number(CONF_PBS_DATA.arrowType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
@@ -111,11 +116,13 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", textLists, false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CONF_PBS_DATA.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CONF_PBS_DATA.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_ocrTranslate, dir, QStringList() << "translate" << "source_language" << "upfate_translate", QStringList() << QString::number(0), false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_ocrText, dir, QStringList() << "ocr_text_orderd" << "ocr_copy" , QStringList() << QString::number(0), false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+//    connect(m_ocrTranslateCtrl, &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+            connect(creatorAbsBtnsCtrl(m_orie, m_ocrTextCtrl, dir, QStringList() << "ocr_text_edit" << "ocr_text_copy" << "oct_text_update", QStringList() << QString::number(-1)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
+    m_ocrTranslateCtrl->hide();
+//    m_ocrTextCtrl->hide();
     m_fontFamily->setEditable(false);
     m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
@@ -279,6 +286,12 @@ AbsBtnsCtrl* PaintCtrlBar::initSliderCtrl()
     return absBtnsCtrl;
 }
 
+AbsBtnsCtrl *PaintCtrlBar::initOcrTranslateCtrl()
+{
+
+    return nullptr;
+}
+
 void PaintCtrlBar::setCurrMosaicBtnfuzzyValue()
 {
     if (m_mosaicCtrl && m_mosaicSliderCtrl) {
@@ -341,12 +354,12 @@ void PaintCtrlBar::onIdReleased(int id)
     } else if (paint == m_pointCtrl) {
         emit sigPointCtrlReleased(id);
         CONF_PBS_DATA.pointType = id;
-    } else if (paint == m_ocrTranslate) {
+    } else if (paint == m_ocrTranslateCtrl) {
         const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
         m_ocrTranslateDate.bTranslate = checked;
 
         emit sigOCRTranslateCtrlIdReleased(m_ocrTranslateDate);
-    } else if (paint == m_ocrText) {
+    } else if (paint == m_ocrTextCtrl) {
 //        const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
 //        m_ocrTextDate;  TODO: 修改参数,切换通道，使用其它方案来刷新
         emit sigOCRTextCtrlIdReleased(m_ocrTextDate);
@@ -427,11 +440,11 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
     } else if (type == PaintType::PT_ocr_translate) {
-        addWidget(m_ocrTranslate);
+        addWidget(m_ocrTranslateCtrl);
         bPointCtrlShow = false;
         bColorPickerShow = false;
     } else if (type == PaintType::PT_ocr_text) {
-        addWidget(m_ocrText);
+        addWidget(m_ocrTextCtrl);
         bPointCtrlShow = false;
         bColorPickerShow = false;
     } else {

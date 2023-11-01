@@ -6,6 +6,9 @@
 #include "xapphelper.h"
 #include "ui/commom/ocr/networkocr.h"
 
+#include "ui/paint_bar/toolbar_level/ocr_text/xocrtextctrl.h"
+#include "ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.h"
+
 //#include "xlog.h"
 #include "ui/screenshot/tray.h"
 //#include "xapphelper.h"
@@ -46,6 +49,8 @@ int main(int argc, char *argv[])
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);//注冊异常捕获函数
 #endif
 
+//    XOcrTextCtrl ocrTextCtrl(Qt::Horizontal);
+//    ocrTextCtrl.show();
 
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
     QSharedMemory sharedMemory;

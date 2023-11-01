@@ -18,7 +18,7 @@
 #include <QTextCharFormat>
 #include <QKeySequence>
 #include "xtextedit.h"
-#include "../paint_bar/pin/pinwidget.h"
+#include "../paint_bar/toolbar_level/pin/pinwidget.h"
 #include "../../data/configmanager.h"
 
 QFont ScreenShot::m_textFont = QFont("Microsoft YaHei", 16);

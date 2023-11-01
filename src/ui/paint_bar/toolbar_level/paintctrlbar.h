@@ -8,7 +8,9 @@
 #include <QGridLayout>
 #include <QFontComboBox>
 #include "colorpicker.h"
-#include "../common/absbtnsctrl.h"
+#include "common/absbtnsctrl.h"
+#include "ocr_text/xocrtextctrl.h"
+#include "ocr_translate/ocrtranslatectrl.h"
 #include "paintbarhelper.h"
 
 class PaintCtrlBar : public QWidget
@@ -24,6 +26,7 @@ private:
     void hideAllBtnsCtrl();
     int  btnIdIschecked(const PaintType& type, const bool &isCheckable);
     AbsBtnsCtrl *initSliderCtrl();
+    AbsBtnsCtrl *initOcrTranslateCtrl();
 
     void  setCurrMosaicBtnfuzzyValue();
     void addWidget(QWidget *w, const bool& bAddSpaceLine = true, int stretch = 0, Qt::Alignment alignment = Qt::AlignCenter);
@@ -61,8 +64,8 @@ private:
     QPointer<AbsBtnsCtrl>         m_textCtrl;                      // 文本
     QPointer<AbsBtnsCtrl>         m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>         m_pointCtrl;                     // 线宽
-    QPointer<AbsBtnsCtrl>         m_ocrTranslate;                  // OCR 翻译
-    QPointer<AbsBtnsCtrl>         m_ocrText;                       // OCR 转换为文本
+    QPointer<OcrTranslateCtrl>    m_ocrTranslateCtrl;                  // OCR 翻译
+    QPointer<AbsBtnsCtrl>         m_ocrTextCtrl;                       // OCR 转换为文本
     QPointer<ColorPicker>         m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;

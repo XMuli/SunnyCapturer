@@ -55,7 +55,9 @@
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/translate.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/upfate_translate.svg</file>
         <file>resources/icons/paint_tool_bar/paint_btn/ocr_text.svg</file>
-        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_copy.svg</file>
-        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_orderd.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_copy.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/oct_text_update.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_edit.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_model_switch.svg</file>
     </qresource>
 </RCC>

@@ -211,6 +211,26 @@
     </message>
 </context>
 <context>
+    <name>NetworkOCR</name>
+    <message>
+        <source>Status Code: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Reason Phrase: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your BaiDu [APIKey Or SecretKey] is empty, please check and re-enter it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Output</name>
     <message>
         <source>Form</source>
@@ -333,6 +353,10 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>translate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OCR</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
