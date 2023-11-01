@@ -71,10 +71,14 @@ struct OcrTranslateData
 
     // 自定义
     bool bTranslate = true;
-    // API Tranlstates 有用接口
+    // YouDao API Tranlstates 有用接口
     QString from = "auto";
     QString to = "zh-CHS";
     QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
+
+    // BaiDu API Image Tranlstates 有用接口
+    QString fromLang = "zh";
+    QString toLang = "en";
 };
 
 

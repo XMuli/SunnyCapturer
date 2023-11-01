@@ -14,9 +14,9 @@
 
 
 /*! BaiDu:
-    AppID:       42093112
-    API Key:     BFuLK0VlWbH8l2WeLlDapfhc
-    Secret Key:  b2QwlwEb2uRCUt4s6XethYtjbNHpzdtR
+    AppID:       42146679
+    API Key:     u0fpmxS2WSvGb3lEUywiU3VX
+    Secret Key:  SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6
  */
 
 //class OcrTranslateData;
@@ -39,6 +39,8 @@ public:
     explicit NetworkOCR(QObject *parent = nullptr);
     virtual ~NetworkOCR() = default;
     void sendBaiDuOcrTextRequest(const OcrTextData& data, const QString& path);           // 待翻译图片路径
+
+    void sendBaiDuOcrTranslateRequest(const OcrTranslateData& data, const QString& path);     // 待翻译图片路径   https://cloud.baidu.com/doc/MT/s/mki483xpu
     void sendYouDaoOcrTranslateRequest(const OcrTranslateData& data, const QString& path);     // 待翻译图片路径
 
 private:
@@ -48,7 +50,7 @@ private:
     QString base64FromFileContent(const QString& path, bool urlencoded = false);                   // 图片转 base64
     // BaiDu
     const bool validityBaiDuKey(const QString& client_id, const QString& client_secret) const;             // 校验 BaiDu key 的有效性
-    void sendBaiDuAccessToken(const QString& client_id = "BFuLK0VlWbH8l2WeLlDapfhc", const QString& client_secret = "b2QwlwEb2uRCUt4s6XethYtjbNHpzdtR");  // 获取 BaiDu 的鉴权
+    void sendBaiDuAccessToken(const QString& client_id = "u0fpmxS2WSvGb3lEUywiU3VX", const QString& client_secret = "SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6");  // 获取 BaiDu 的鉴权
 
     void dealBaiDuAccessToken(QNetworkReply* reply);
     void dealBaiDuOcrTextRequest(QNetworkReply* reply);

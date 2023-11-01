@@ -12,6 +12,9 @@
 #include <QMetaObject>
 #include <QMetaEnum>
 #include <QMetaMethod>
+#include <QHttpPart>
+#include <QHttpPart>
+#include <QHttpPart>
 #include "authv3util.h"
 #include "communication.h"
 #include "json.hpp"
@@ -45,6 +48,48 @@ void NetworkOCR::sendBaiDuOcrTextRequest(const OcrTextData &data, const QString 
     request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<OcrTextData>(data));   // 当前 发送的请求线路
 
     m_networkManager->post(request, postData);
+}
+
+void NetworkOCR::sendBaiDuOcrTranslateRequest(const OcrTranslateData &data, const QString &path)
+{
+    QUrl url("https://aip.baidubce.com/file/2.0/mt/pictrans/v1");
+    QUrlQuery query;
+    query.addQueryItem("access_token", m_baiDuToken);
+    url.setQuery(query);
+
+    QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+    QHttpPart imagePart;
+    imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("multipart/form-data; boundary=---------------------------1234567890"));
+    imagePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"image\"; filename=\"" + QFileInfo(path).fileName() + "\""));
+
+    QFile *file = new QFile(path);
+    file->open(QIODevice::ReadOnly);
+    imagePart.setBodyDevice(file);
+    file->setParent(multiPart);
+    multiPart->append(imagePart);
+
+    QUrlQuery params;
+    params.addQueryItem("from", "zh");
+    params.addQueryItem("to", "en");
+    params.addQueryItem("v", "3");
+    params.addQueryItem("paste", "1");
+
+    url.setQuery(params);
+
+    QNetworkRequest request(url);
+
+    QNetworkReply *reply = m_networkManager->post(request, multiPart);
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray responseData = reply->readAll();
+        qDebug() << "---#1>responseData:" << responseData;
+    } else {
+        qDebug() << "Error: " << reply->errorString();
+    }
+
 }
 
 void NetworkOCR::sendYouDaoOcrTranslateRequest(const OcrTranslateData &data, const QString &path)
