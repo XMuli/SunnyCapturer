@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5)
 project(Sunny)
 
 add_subdirectory(tripartite/QHotkey)  # 三方库置顶，避免被下面统一的路径修改所干扰
@@ -13,6 +13,9 @@ if(WIN32)
     set(trage_archive_output_dir "${CMAKE_SOURCE_DIR}/bin")
     message(STATUS "Now is Windows system")
 elseif(APPLE)
+    set(trage_runtime_output_dir "${CMAKE_SOURCE_DIR}/bin")
+    set(trage_library_output_dir "${CMAKE_SOURCE_DIR}/bin/library")
+    set(trage_archive_output_dir "${CMAKE_SOURCE_DIR}/bin/archive")
     message(STATUS "Now is MacOS system")
 elseif(UNIX)
     set(trage_runtime_output_dir "${CMAKE_SOURCE_DIR}/bin")
@@ -27,6 +30,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${trage_library_output_dir}")         # 共�
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${trage_archive_output_dir}")         # 静态库（静态链接库）的 .lib .a(linux归档文件)静态库的输出目录
 
 file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})                      # 创建输出目录
+#file(MAKE_DIRECTORY ${trage_runtime_output_dir})
+#file(MAKE_DIRECTORY ${trage_library_output_dir})
+#file(MAKE_DIRECTORY ${trage_archive_output_dir})
 
 # 实际上在不同系统 + 不同编译器上，编译后的产物的实际如下表效果
 #----------------------------- Windows10 + MSVC 2022 -------------------------------------------

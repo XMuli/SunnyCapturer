@@ -600,17 +600,17 @@ void ScreenShot::initUI()
     setFixedSize(m_vdRect.size());  // fix: 在 Ubuntu 22.04 顶部状态栏和任务栏，全屏位置错误
     move(m_vdRect.topLeft());
 #else // Q_OS_MAC
-    QRect geom = curScrn(QCursor::pos())->geometry();
-    m_captureScrnRt = geom;
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);   // 窗口置顶 + 隐藏标题栏
+    m_vdRect = currentScreen()->geometry();
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 #ifdef HALF_SCRN_DEVELOP
-    if (m_scrns.size() == 1)
-        geom.setWidth(geom.width() / 2);
+//    setWindowFlag(Qt::WindowStaysOnTopHint, false);
+//    if (m_screens.size() == 1)
+//        m_vdRect.setWidth(m_vdRect.width() / 2);
 #endif
 
-    setFixedSize(geom.size());   // resize() cannot get the desired effect
-    move(geom.topLeft());
-    qDebug() << "#2-->" << geom << "   " << this->rect();
+    setFixedSize(m_vdRect.size());   // resize() cannot get the desired effect
+    move(m_vdRect.topLeft());
+    qDebug() << "#2-->" << m_vdRect << "   " << this->rect();
 #endif
 
 
@@ -812,8 +812,8 @@ QScreen *ScreenShot::currentScreen(const QPoint &pos) const
 
 #if defined(Q_OS_MACOS)
     // In macos, mouse position at the bottom or right edge of the screen will crash
-    if (!scrn && (pos.x() >= m_captureScrnRt.right() || pos.y() >= m_captureScrnRt.bottom()))
-        scrn = qGuiApp->screenAt(m_captureScrnRt.bottomRight() - QPoint(1, 1));
+    if (!scrn && (pos.x() >= m_vdRect.right() || pos.y() >= m_vdRect.bottom()))
+        scrn = qGuiApp->screenAt(m_vdRect.bottomRight() - QPoint(1, 1));
 #endif
 
     //if (!scrn) curScrn = qGuiApp->primaryScreen();
