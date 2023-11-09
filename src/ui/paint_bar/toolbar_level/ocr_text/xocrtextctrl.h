@@ -26,6 +26,7 @@ private:
     QComboBox*    m_cbbFrom;
     QComboBox*    m_cbbTo;
 
+public:
     XToolButton*  m_tbdit;
     XToolButton*  m_tbCopy;
     XToolButton*  m_tbUpdate;

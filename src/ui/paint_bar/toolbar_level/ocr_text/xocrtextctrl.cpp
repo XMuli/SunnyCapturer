@@ -20,7 +20,8 @@ XOcrTextCtrl::XOcrTextCtrl(const Qt::Orientations &orien, QWidget *parent)
 
     addWidget(m_tbdit, false);
     addWidget(m_tbCopy, false);
-    addWidget(m_tbUpdate, false);
+//    addWidget(m_tbUpdate, false);
+    m_tbUpdate->hide();
 }
 
 void XOcrTextCtrl::initUI()
@@ -32,7 +33,7 @@ void XOcrTextCtrl::initUI()
 
     const QString& dir = ":/resources/icons/paint_tool_bar/paint_ctrl_btn/";
     m_tbModelSwitch = creatorXToolButton(dir, "ocr_text_model_switch", true);
-    m_tbdit = creatorXToolButton(dir, "ocr_text_edit", true);
+    m_tbdit = creatorXToolButton(dir, "ocr_text_edit", false);
     m_tbCopy = creatorXToolButton(dir, "ocr_text_copy", false);
     m_tbUpdate = creatorXToolButton(dir, "oct_text_update", false);
 

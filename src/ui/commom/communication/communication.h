@@ -40,6 +40,10 @@ signals:
     void sigOCRImageGenerateFinsh(const QSize& size, const QString& path);                    // OCR 图片保存成功
     void sigOCRTextGenerateFinsh(const QByteArray& obj, const OcrTextData& ocrTextData);                                                     // OCR Text 保存成功
 
+
+    void sigOcrTranslateCtrlHide();                                                     // OCR 翻译 隐藏
+    void sigOcrTextCtrlHide();                                                          // OCR 文本 隐藏
+
 private:
     QString toLocaleName(const QString& language);
 
@@ -58,6 +62,7 @@ private:
 
 
 std::map<QString, QString> languageMap();
+std::map<QString, QString> youDaoLanguageMapCode();
 std::map<const QString, const bool> themesMap();
 QStringList getQSSFileNames(const QString& path = qApp->applicationDirPath() + "/resources/qss");
 

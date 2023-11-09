@@ -62,10 +62,12 @@ public slots:
     void onPickedColor(const QColor& color);
     void onTextFontFamilyChanged(const QFont &font);
     void onTextFontSizeChanged(const QString &fontSize);
-    void onOCRTranslateCtrlIdReleased(const OcrTranslateData& data);                              // 开始 OCR Translate
+    void onOcrTranslateCtrlIdReleased(const OcrTranslateData& data);                              // 开始 OCR Translate
     void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                         // OCR Translate 后的图片已保存成功
     void onOCRTextCtrlIdReleased(const OcrTextData &data);                                        // 开始 OCR Text
     void onOCRTextGenerateFinsh(const QByteArray& response, const OcrTextData& ocrTextData);           // OCR Text 后的文本已解析成功
+    void onOcrTranslateCtrlHide();
+    void onOcrTextCtrlHide();
 
 private:
     void initUI();

@@ -75,10 +75,6 @@ struct OcrTranslateData
     QString from = "auto";
     QString to = "zh-CHS";
     QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
-
-    // BaiDu API Image Tranlstates 有用接口
-    QString fromLang = "zh";
-    QString toLang = "en";
 };
 
 
@@ -93,7 +89,19 @@ enum class OcrTextType
 
 struct OcrTextData
 {
+    // 自定义
+    int btnId = -1;                  // 是哪一个按钮被按下
+    bool bTranslate = true;
+
     OcrTextType ocrTextType =  OcrTextType::OTT_ocr_text_high_precision_location;
+
+    // BaiDu API Image Tranlstates 有用接口
+    QString fromLang = "zh";
+    QString toLang = "en";
+
+    bool allowWrite = false;
+
+
 };
 Q_DECLARE_METATYPE(OcrTextData)                     // 可以被 QVariant 类型存储
 

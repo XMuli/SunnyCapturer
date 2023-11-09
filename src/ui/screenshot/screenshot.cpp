@@ -229,17 +229,25 @@ QPixmap ScreenShot::finishPixmap()
 QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrigPix)
 {
     if (isDrawOnOrigPix) {
-        QPainter pa(&m_origPix);
-        pa.save();
-        for (const auto& it : m_redo) drawShape(it, pa, true);
 
-        //    drawShape(m_paintNode, pa, true);
+        if (m_ocrGeneratePix.isNull()) {
+            QPainter pa(&m_origPix);
+            pa.save();
+            for (const auto& it : m_redo) drawShape(it, pa, true);
 
-        if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool())
-            prinftWindowsRects(pa);
+            //    drawShape(m_paintNode, pa, true);
 
-        pa.restore();
-        return m_origPix.copy(rect);
+            if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool())
+                prinftWindowsRects(pa);
+
+            pa.restore();
+            return m_origPix.copy(rect);
+
+        } else {
+
+            return m_ocrGeneratePix.copy();
+        }
+
     } else {
         QPixmap pix = m_origPix.copy(rect);  // 默认深拷贝全部大小
         QPainter pa(&pix);
@@ -270,10 +278,21 @@ void ScreenShot::showPointTips(const QString &text)
 
 void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckable)
 {
+    static PaintType paintType = PaintType::PT_rectangle;
+
     if (isCheckable) {
 
         if (m_paintBar->hadDrawBtnsChecked()) {
             m_actionType = ActionType::AT_drawing_shap;
+
+            if (paintType == PaintType::PT_ocr_translate && type != PaintType::PT_ocr_translate) {
+                m_ocrGeneratePix = QPixmap();
+                update();
+            } else if (paintType == PaintType::PT_ocr_text && type != PaintType::PT_ocr_text) {
+                m_ocrTextEdit->clear();
+                m_ocrTextEdit->hide();
+                update();
+            }
 
             if (type == PaintType::PT_rectangle) {
                 m_paintNode.pst = PaintShapeType::PST_rect;
@@ -326,6 +345,8 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
     // 优化, 不使用马赛克功能时候，就释放相关内存
     if (type != PaintType::PT_mosaic && !m_mosaicPix.isNull())
         m_mosaicPix = QPixmap();
+
+    paintType = type;
 }
 
 void ScreenShot::onPaintCtrlIdReleased(const int &id)
@@ -421,14 +442,25 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
     CONF_PBS_DATA.fontSize = width;
 }
 
-void ScreenShot::onOCRTranslateCtrlIdReleased(const OcrTranslateData &data)
+void ScreenShot::onOcrTranslateCtrlIdReleased(const OcrTranslateData &data)
 {
-    auto t = data.bTranslate;
+//    auto t = data.bTranslate;
     if (!m_networkOCR || !data.bTranslate) {
         m_ocrGeneratePix = QPixmap();
         update();
         return;
     }
+
+//    static QString from = "auto";
+//    static QString from = "auto";
+//    static QString to = "zh-CHS";
+//    if (data.from == from && data.to == to) {
+//        return;
+//    }
+
+//    from = data.from;
+//    to = data.to;
+
 
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
     QDir directory(dir);
@@ -466,6 +498,28 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 
 void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
 {
+
+
+    const int id = data.btnId;
+    if (id == 0) {
+
+        m_ocrTextEdit->setReadOnly(!data.allowWrite);
+        if (!data.bTranslate)
+            return;
+
+    } else if (id == 1) {
+        QClipboard* clipboard = QApplication::clipboard();
+        clipboard->setText(m_ocrTextEdit->toPlainText());
+
+        if (!data.bTranslate)
+            return;
+
+    } else if (id == 2) {
+        // 直接刷新
+    }  else {
+        qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrTextData is empty!";
+    }
+
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
     QDir directory(dir);
     if (!directory.exists() && !directory.mkpath(dir)) {
@@ -544,6 +598,18 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
 
 }
 
+void ScreenShot::onOcrTranslateCtrlHide()
+{
+    m_ocrGeneratePix = QPixmap();
+    update();
+}
+
+void ScreenShot::onOcrTextCtrlHide()
+{
+    m_ocrTextEdit->clear();
+    m_ocrTextEdit->hide();
+}
+
 void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -572,6 +638,7 @@ void ScreenShot::initUI()
     onTextCtrlToggled(flags);
 
     m_edit->hide();
+    m_ocrTextEdit->setReadOnly(true);
     m_ocrTextEdit->hide();
     m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_paintBar->hide();
@@ -625,6 +692,8 @@ void ScreenShot::initConnect()
     connect(m_timerPoint, &QTimer::timeout, this, &ScreenShot::onHidePointTips);
     connect(&COMM, &Communication::sigOCRImageGenerateFinsh, this, &ScreenShot::onOCRImageGenerateFinsh);
     connect(&COMM, &Communication::sigOCRTextGenerateFinsh, this, &ScreenShot::onOCRTextGenerateFinsh);
+    connect(&COMM, &Communication::sigOcrTranslateCtrlHide, this, &ScreenShot::onOcrTranslateCtrlHide);
+    connect(&COMM, &Communication::sigOcrTextCtrlHide, this, &ScreenShot::onOcrTextCtrlHide);
 //    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
 //        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
 //    });
@@ -638,8 +707,8 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
     connect(m_paintBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
     connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
-    connect(m_paintBar, &PaintBar::sigOCRTranslateCtrlIdReleased, this, &ScreenShot::onOCRTranslateCtrlIdReleased);
-    connect(m_paintBar, &PaintBar::sigOCRTextCtrlIdReleased, this, &ScreenShot::onOCRTextCtrlIdReleased);
+    connect(m_paintBar, &PaintBar::sigOcrTranslateCtrlIdReleased, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
+    connect(m_paintBar, &PaintBar::sigOcrTextCtrlIdReleased, this, &ScreenShot::onOCRTextCtrlIdReleased);
 
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);

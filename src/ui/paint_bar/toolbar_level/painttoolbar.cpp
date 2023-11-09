@@ -1,5 +1,7 @@
 ﻿#include "painttoolbar.h"
 #include <QDebug>
+#include <QTimer>
+#include <QTime>
 #include <QMouseEvent>
 #include <QVariant>
 #include <QHBoxLayout>
@@ -169,21 +171,21 @@ bool PaintToolBar::hadDrawBtnsChecked() const
     return false;
 }
 
-#include <QTimer>
-#include <QTime>
 void PaintToolBar::onPaintBtnReleased()
 {
     QToolButton* btn = qobject_cast<QToolButton*>(sender());
     if (!btn) return;
     const PaintType& type = btn->property(PROPERTY_PAINT_TYPR).value<PaintType>();
-    emit sigPaintToolBtnsRelease(type, btn->isCheckable());
+
+
+    emit sigPaintToolBtnsRelease(type, btn->isCheckable(), btn->isChecked());
 
     if (btn->isCheckable()) {
         paintBtnsExclusive(btn, true);
     }
 
     adjustSize();
-    qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << btn->isCheckable() << btn->isChecked();
+    qDebug() << "------------->onBtnReleased:" << btn << btn->objectName() << "isCheckable:" << btn->isCheckable() << "isChecked:" << btn->isChecked();
 }
 
 void PaintToolBar::onAutoDisableUndoAndRedo(const bool &undoDisable, const bool &redoDisable)

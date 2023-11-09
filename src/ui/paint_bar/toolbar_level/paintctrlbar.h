@@ -24,7 +24,7 @@ private:
     void initUI();
     void initBtns();
     void hideAllBtnsCtrl();
-    int  btnIdIschecked(const PaintType& type, const bool &isCheckable);
+    int  btnIdIschecked(const PaintType& type, const bool &isCheckable, const bool &isChecked);
     AbsBtnsCtrl *initSliderCtrl();
     AbsBtnsCtrl *initOcrTranslateCtrl();
 
@@ -39,15 +39,22 @@ signals:
     void sigPickedColor(const QColor& color);
     void sigTextFontFamilyChanged(const QFont &font);                       // PaintCtrlBar 字体 被发生改变时候
     void sigTextFontSizeChanged(const QString &fontSize);                   // PaintCtrlBar 字体大小 数值被发生改变时候
-    void sigOCRTranslateCtrlIdReleased(const OcrTranslateData& data);       // 传递 OCR 翻译
-    void sigOCRTextCtrlIdReleased(const OcrTextData& data);                 // 传递 OCR Text
+    void sigOcrTranslateCtrlIdReleased(const OcrTranslateData& data);       // 传递 OCR 翻译
+    void sigOcrTextCtrlIdReleased(const OcrTextData& data);                 // 传递 OCR Text
 
+private slots:
+    // 传递 OCR 翻译具体
+    void onOcrTranslateStatusChanged(bool checked);
+    void onOcrTranslateCopy(bool checked);
+    void onCbbFromCurrentTextChanged(const QString &text);
+    void onCbbToCurrentTextChanged(const QString &text);
+    // 传递 OCR Text
 
 public slots:
     void onIdReleased(int id);
     void onTextCtrlToggled(int id, bool checked);
     void onMosaicCtrlIdReleased(int id);
-    void onPaintBtnRelease(const PaintType& type, const bool &isCheckable);
+    void onPaintBtnRelease(const PaintType& type, const bool &isCheckable, const bool &isChecked);
     void onSetTextFontSizeComboBoxValue(const QString &fontSize);     // sync 修改下拉列表的字体的大小
 
 private:

@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 
 set(project_name Sunny)
 set(project_version_major 1)
-set(project_version_minor 1)
-set(project_version_path 2)
+set(project_version_minor 2)
+set(project_version_path 0)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2023.11.01")
+add_definitions(-DXBUILD_TIME="2023.11.10")
 
 
 set(CMAKE_AUTOUIC ON)
@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 各种调试开关
-add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+#add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 #add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 #add_compile_definitions(LOG_MORE_INFO_DEVELOP)       # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 #add_compile_definitions(LOG_CURR_POS_IN_RECTS)       # 便于调试, 当前光标所在的所有 窗口矩形 的信息
@@ -168,8 +168,20 @@ endif()
 set(qt_binray_dir "${Qt5_DIR}/../../../bin")   # C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5/../../../bin
 
 if(UNIX)  # using apt install qt5-devtools*
-    set(lupdate_path "lupdate")
-    set(lrelease_path "lrelease")
+#    set(lupdate_path "lupdate")
+#    set(lrelease_path "lrelease")
+
+    execute_process(COMMAND lsb_release -i OUTPUT_VARIABLE LSB_ID)
+    if (LSB_ID MATCHES "Deepin" OR LSB_ID MATCHES "UOS")
+        set(lupdate_path "/usr/lib/qt5/bin/lupdate")
+        set(lrelease_path "/usr/lib/qt5/bin/lrelease")
+        message("This is a Deepin or UOS system.")
+    else()
+        set(lupdate_path "lupdate")
+        set(lrelease_path "lrelease")
+        message("This is other linux system.")
+    endif()
+
 else()
     set(lupdate_path "${qt_binray_dir}/lupdate")
     set(lrelease_path "${qt_binray_dir}/lrelease")

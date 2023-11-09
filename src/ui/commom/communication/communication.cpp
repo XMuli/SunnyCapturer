@@ -174,3 +174,22 @@ QStringList getQSSFileNames(const QString &path)
     return qssFileNames;
 }
 
+
+std::map<QString, QString> youDaoLanguageMapCode()
+{
+    static  std::map<QString, QString> map = { {"auto", "auto"}
+                                              , {"English", "en"}
+                                              , {"中文简体", "zh-CHS"}
+                                              , {"中文繁体", "zh-CHT"}
+                                              , {"德语", "de"}
+                                              , {"西班牙语", "es"}
+                                              , {"法语", "fr"}
+                                              , {"日语", "ja"}
+                                              , {"韩语", "ko"}
+                                              , {"俄语", "ru"}
+                                              , {"泰语", "th"}
+                                              , {"土耳其语", "de"}
+                                              , {"粤语", "yue"}};
+    return map;
+
+}

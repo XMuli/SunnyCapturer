@@ -101,9 +101,9 @@ void NetworkOCR::sendYouDaoOcrTranslateRequest(const OcrTranslateData &data, con
 
     QUrlQuery postData;
     postData.addQueryItem("q", QUrl::toPercentEncoding(base64DataUtf8)); // fix 【重要】: 是 Qt 框架中用于将字符串转换为百分号编码（percent encoding）格式的函数。这个编码方式也称为 URL 编码或 URI 编码。它将字符串中的特殊字符以 % 符号后跟两位十六进制数字的形式进行编码，
-    postData.addQueryItem("from", "auto");
-    postData.addQueryItem("to", "zh-CHS");
-    postData.addQueryItem("render", "1");
+    postData.addQueryItem("from", data.from);
+    postData.addQueryItem("to", data.to);
+    postData.addQueryItem("render", data.render);
     postData.addQueryItem("type", "1");
 
     // 创建 QMap 并添加参数

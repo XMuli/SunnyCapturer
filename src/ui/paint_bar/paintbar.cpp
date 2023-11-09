@@ -1,4 +1,5 @@
 ﻿#include "paintbar.h"
+#include "communication.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDebug>
@@ -82,8 +83,8 @@ void PaintBar::initConnect()
     connect(m_paintCtrlBar, &PaintCtrlBar::sigTextCtrlToggled, this, &PaintBar::sigTextCtrlToggled);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
     connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigOCRTranslateCtrlIdReleased, this, &PaintBar::sigOCRTranslateCtrlIdReleased);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigOCRTextCtrlIdReleased, this, &PaintBar::sigOCRTextCtrlIdReleased);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigOcrTranslateCtrlIdReleased, this, &PaintBar::sigOcrTranslateCtrlIdReleased);
+    connect(m_paintCtrlBar, &PaintCtrlBar::sigOcrTextCtrlIdReleased, this, &PaintBar::sigOcrTextCtrlIdReleased);
     connect(this, &PaintBar::sigSetTextFontSizeComboBoxValue, m_paintCtrlBar, &PaintCtrlBar::onSetTextFontSizeComboBoxValue);
     connect(this, &PaintBar::sigAutoDisableUndoAndRedo, m_paintToolBar, &PaintToolBar::onAutoDisableUndoAndRedo);
 }
@@ -109,9 +110,9 @@ void PaintBar::disableBlurEffect()
     m_blurPixmap = QPixmap();
 }
 
-void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheckable)
+void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheckable, const bool& isChecked)
 {
-    m_paintCtrlBar->onPaintBtnRelease(type, isCheckable);
+    m_paintCtrlBar->onPaintBtnRelease(type, isCheckable, isChecked);
 
     int space;
     if (hadDrawBtnsChecked()) {
@@ -120,12 +121,13 @@ void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheck
     } else {
         space = 0;
         m_paintCtrlBar->hide();
+
     }
 
     m_layout->setSpacing(space);
     QTimer::singleShot(10, this, [this](){ adjustSize(); }); // fix: 点击 text 时， 时间太短 pickColor 控件还没有 adjustSize() 调整好
 
-    emit sigPaintToolBtnsRelease(type, isCheckable);
+    emit sigPaintToolBtnsRelease(type, isCheckable, isChecked);
 }
 
 void PaintBar::resizeEvent(QResizeEvent *e)

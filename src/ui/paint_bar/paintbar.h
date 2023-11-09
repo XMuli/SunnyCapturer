@@ -30,18 +30,18 @@ signals:
     void sigMosaicSliderValueChanged(int id, int val);                                 // PaintCtrlBar Slider 数值被发生改变时候
     void sigPickedColor(const QColor& color);                                          // PaintCtrlBar 调色盘 选取新颜色时候
 
-    void sigPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable);      // paintToolBar 按钮被按下
+    void sigPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable, const bool& isChecked);      // paintToolBar 按钮被按下
     void sigPaintCtrlIdReleased(const int& id);                                        // PaintCtrlBar 按钮被按下
     void sigTextFontSizeChanged(const QString &text);                                  // PaintCtrlBar 拉列表的字体的大小被修改
     void sigTextFontFamilyChanged(const QFont &font);                                  // PaintCtrlBar 字体 被发生改变时候
     void sigSetTextFontSizeComboBoxValue(const QString &fontSize);                     // sync 修改下拉列表的字体的大小
-    void sigOCRTranslateCtrlIdReleased(const OcrTranslateData& data);                  // PaintCtrlBar OCR 翻译
-    void sigOCRTextCtrlIdReleased(const OcrTextData& data);                            // PaintCtrlBar OCR Text
+    void sigOcrTranslateCtrlIdReleased(const OcrTranslateData& data);                  // PaintCtrlBar OCR 翻译
+    void sigOcrTextCtrlIdReleased(const OcrTextData& data);                            // PaintCtrlBar OCR Text
 
     void sigAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);  // ScreenShot 控制图标置灰
 
 private slots:
-    void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable);
+    void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable, const bool &isChecked);
 
 protected:
     void resizeEvent(QResizeEvent *e) override;

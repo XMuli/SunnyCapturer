@@ -39,7 +39,7 @@ private:
 //    void onBtnFinis();
 
 signals:
-    void sigPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable);
+    void sigPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable, const bool& isChecked);
 
 public slots:
     void onPaintBtnReleased();
