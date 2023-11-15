@@ -44,6 +44,8 @@ set(commom_files
     data/config_global.h
     data/configmanager.h
     data/configmanager.cpp
+    ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.h
+    ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.cpp
 )
 
 set(custom_ui_files
@@ -69,6 +71,7 @@ set(custom_ui_files
     ui/include/hotkeys.h
     ui/include/about.h
     ui/include/licenseui.h
+    ui/include/tokens.h
     #  cpp common_widgets
     ui/common_widgets/xblureffect.cpp
     ui/common_widgets/xcolorbutton.cpp
@@ -98,6 +101,8 @@ set(custom_ui_files
     ui/composite_widgets/pin.ui
     ui/composite_widgets/licenseui.cpp
     ui/composite_widgets/licenseui.ui
+    ui/composite_widgets/tokens.cpp
+    ui/composite_widgets/tokens.ui
 
     ui/paint_bar/toolbar_level/common/absbtnsctrl.h
     ui/paint_bar/toolbar_level/common/absbtnsctrl.cpp

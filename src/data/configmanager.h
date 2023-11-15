@@ -97,6 +97,34 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     Q_OBJECT
     FRIEND_CREAT_SINGLETION(ConfigManager);
 
+public:
+    void readFromFile();
+    void writeToFile();    // 便于开发测试，才将在这两个设置为 public 的
+
+    // 加密解密 API-Key
+    QByteArray encryptString(const QString& input);
+    QString decryptString(const QByteArray& input);
+
+private:
+    void setIniValue(const QString& key, const QVariant& value);
+    QVariant getIniValue(const QString& key, const QVariant& defaultValue = QVariant()) const;
+
+public:
+    void onSyncToFile();
+
+private:
+    explicit ConfigManager(QObject *parent = nullptr);
+    virtual ~ConfigManager() = default;
+
+public:
+    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
+
+private:
+    QSettings* m_settings;
+    QString m_key;
+    QString m_iv;
+
+private:   // 为了便于查看，故属性声明放在最下面
     // General
     SET_VALUE_PROPERTY(XGeneral_language) //生成对应的属性，信号，类成员变量
     SET_VALUE_PROPERTY(XGeneral_log_level)
@@ -140,6 +168,11 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XHotkeys_capture);
     SET_VALUE_PROPERTY(XHotkeys_delay_capture);
     SET_VALUE_PROPERTY(XHotkeys_custiom_capture);
+    // Tokens
+    SET_VALUE_PROPERTY(XTokens_youdao_app_id);
+    SET_VALUE_PROPERTY(XTokens_youdao_secret_key);
+    SET_VALUE_PROPERTY(XTokens_baidu_api_key);
+    SET_VALUE_PROPERTY(XTokens_baidu_secret_key);
     // XOtherControl
     SET_VALUE_PROPERTY(XOtherControl_blur_effect_adius);
     SET_VALUE_PROPERTY(XOtherControl_highlight_iridescence);
@@ -178,27 +211,6 @@ class ConfigManager : public QObject, public ISingleton<ConfigManager>
     SET_VALUE_PROPERTY(XPaintBarStatus_pointType);
     SET_VALUE_PROPERTY(XPaintBarStatus_paPen);
     SET_VALUE_PROPERTY(XPaintBarStatus_paBrush);
-
-public:
-    void readFromFile();
-    void writeToFile();    // 便于开发测试，才将在这两个设置为 public 的
-
-private:
-    void setIniValue(const QString& key, const QVariant& value);
-    QVariant getIniValue(const QString& key, const QVariant& defaultValue = QVariant()) const;
-
-public:
-    void onSyncToFile();
-
-private:
-    explicit ConfigManager(QObject *parent = nullptr);
-    virtual ~ConfigManager() = default;
-
-public:
-    PaintBarStatus m_paintBarStatus;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
-
-private:
-    QSettings* m_settings;
 };
 
 

@@ -2,6 +2,10 @@
 #include <QApplication>
 #include <QPen>
 #include <QBrush>
+#include <QString>
+#include <QByteArray>
+#include <QCryptographicHash>
+#include "qaesencryption.h"
 
 #if 1
 #define WRITE_INI(root, key, val) \
@@ -74,6 +78,11 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_capture, "F6");
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_delay_capture, "Ctrl+F6");
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_custiom_capture, "Shift+F6");
+    // Tokens
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_app_id, encryptString("5a3aa1167eed698d"));
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_secret_key, encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T"));
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_baidu_api_key, encryptString("u0fpmxS2WSvGb3lEUywiU3VX"));
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_baidu_secret_key, encryptString("SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6"));
     // XOtherControl
     QStringList highlight;
     highlight << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
@@ -170,6 +179,11 @@ void ConfigManager::writeToFile()
     WRITE_INI(XHotkeys, XHotkeys_capture, GET_VALUE_PROPERTY(XHotkeys_capture));
     WRITE_INI(XHotkeys, XHotkeys_delay_capture, GET_VALUE_PROPERTY(XHotkeys_delay_capture));
     WRITE_INI(XHotkeys, XHotkeys_custiom_capture, GET_VALUE_PROPERTY(XHotkeys_custiom_capture));
+    // Tokens
+    WRITE_INI(XTokens, XTokens_youdao_app_id, GET_VALUE_PROPERTY(XTokens_youdao_app_id));
+    WRITE_INI(XTokens, XTokens_youdao_secret_key, GET_VALUE_PROPERTY(XTokens_youdao_secret_key));
+    WRITE_INI(XTokens, XTokens_baidu_api_key, GET_VALUE_PROPERTY(XTokens_baidu_api_key));
+    WRITE_INI(XTokens, XTokens_baidu_secret_key, GET_VALUE_PROPERTY(XTokens_baidu_secret_key));
     // XOtherControl
     WRITE_INI(XOtherControl, XOtherControl_blur_effect_adius, GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius));
     WRITE_INI(XOtherControl, XOtherControl_highlight_iridescence, GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence));
@@ -178,6 +192,27 @@ void ConfigManager::writeToFile()
     // XOtherData
     WRITE_INI(XOtherData, XOtherData_manual_save_image_dir, GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir));
     WRITE_INI(XOtherData, XOtherData_detection_min_windows_level_depth, GET_VALUE_PROPERTY(XOtherData_detection_min_windows_level_depth));
+}
+
+QByteArray ConfigManager::encryptString(const QString &input)
+{
+    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
+    QByteArray hashKey = QCryptographicHash::hash(m_key.toLocal8Bit(), QCryptographicHash::Sha256);
+    QByteArray hashIV = QCryptographicHash::hash(m_iv.toLocal8Bit(), QCryptographicHash::Md5);
+    QByteArray encodeText = encryption.encode(input.toLocal8Bit(), hashKey, hashIV);
+
+    return encodeText;
+}
+
+QString ConfigManager::decryptString(const QByteArray &input)
+{
+    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
+    QByteArray hashKey = QCryptographicHash::hash(m_key.toLocal8Bit(), QCryptographicHash::Sha256);
+    QByteArray hashIV = QCryptographicHash::hash(m_iv.toLocal8Bit(), QCryptographicHash::Md5);
+    QByteArray decodeText = encryption.decode(input, hashKey, hashIV);
+    QString decodedString = QString(encryption.removePadding(decodeText));
+
+    return decodedString;
 }
 
 void ConfigManager::setIniValue(const QString &key, const QVariant &value)
@@ -200,6 +235,8 @@ void ConfigManager::onSyncToFile()
 ConfigManager::ConfigManager(QObject *parent)
     : QObject(parent)
     , m_settings(nullptr)
+    , m_key("key-s%Prup7BWa6Wn%pB")
+    , m_iv("IV-Q#3VZjPbmS!wZfZL")
 {
     QString xconfigDir = qApp->applicationDirPath();
 #if defined(Q_OS_LINUX)

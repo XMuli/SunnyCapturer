@@ -20,9 +20,6 @@
 #include "json.hpp"
 using json = nlohmann::json;
 
-// 您的应用 ID / 应用密钥
-QString APP_KEY = "5a3aa1167eed698d";
-QString APP_SECRET = "tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T";
 
 NetworkOCR::NetworkOCR(QObject *parent)
     : QObject{parent}
@@ -106,6 +103,10 @@ void NetworkOCR::sendYouDaoOcrTranslateRequest(const OcrTranslateData &data, con
     postData.addQueryItem("render", data.render);
     postData.addQueryItem("type", "1");
 
+    // 您的 YouDao 应用 ID / 应用密钥
+    QString APP_KEY = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
+    QString APP_SECRET = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
+
     // 创建 QMap 并添加参数
     QMap<QString, QString> params;
     params["appKey"] = APP_KEY;
@@ -183,7 +184,9 @@ const bool NetworkOCR::validityBaiDuKey(const QString &client_id, const QString 
     if (client_id.isEmpty() || client_secret.isEmpty()) {
         const QString title(tr("Warning"));
         const QString msg(tr("Your BaiDu [APIKey Or SecretKey] is empty, please check and re-enter it!"));
-                QMessageBox::warning(nullptr, title, msg); // 暂时屏蔽
+
+        qDebug() << title + msg;
+//        QMessageBox::warning(nullptr, title, msg); // 暂时屏蔽
         return false;
     } else {
         return true;

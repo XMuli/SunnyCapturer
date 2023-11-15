@@ -7,6 +7,7 @@
 #include "pin.h"
 #include "hotkeys.h"
 #include "about.h"
+#include "tokens.h"
 #include "communication.h"
 
 SideSettingUI::SideSettingUI(QWidget *parent)
@@ -49,7 +50,7 @@ void SideSettingUI::initUI()
     const auto& output = new Output();
     const auto& pin = new Pin();
     const auto& hotkeys = new Hotkeys();
-    const auto& tokens = new QWidget();
+    const auto& tokens = new Tokens();
 //    const auto& about = new About();
 
     m_general->insertWidget(0, general);
@@ -77,7 +78,6 @@ void SideSettingUI::initUI()
     });
 //    connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &SideSettingUI::onSideGroupChanged);
 
-
     connect(m_general, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
     connect(m_interface, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
     connect(m_output, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
@@ -90,11 +90,9 @@ void SideSettingUI::initUI()
     connect(m_output, &AbsSettingUI::sigBtnResetClicked, output, &Output::onBtnResetClicked);
     connect(m_pin, &AbsSettingUI::sigBtnResetClicked, pin, &Pin::onBtnResetClicked);
     connect(m_hotkeys, &AbsSettingUI::sigBtnResetClicked, hotkeys, &Hotkeys::onBtnResetClicked);
-//    connect(m_tokens, &AbsSettingUI::sigBtnResetClicked, this, &SideSettingUI::onBtnResetClicked);
+    connect(m_tokens, &AbsSettingUI::sigBtnResetClicked, tokens, &Tokens::onBtnResetClicked);
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 
-    ui->tbTokens->hide();   // 暂时隐藏
-    m_tokens->hide();       // 暂时隐藏
 }
 
 void SideSettingUI::onSideGroupChanged(int idx)

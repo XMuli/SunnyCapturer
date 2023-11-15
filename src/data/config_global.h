@@ -60,6 +60,12 @@ constexpr const char* XHotkeys_capture("capture");
 constexpr const char* XHotkeys_delay_capture("delay_capture");
 constexpr const char* XHotkeys_custiom_capture("custiom_capture");
 
+// Tokens
+constexpr const char* XTokens_youdao_app_id("youdao_app_id");
+constexpr const char* XTokens_youdao_secret_key("youdao_secret_key");
+constexpr const char* XTokens_baidu_api_key("baidu_api_key");
+constexpr const char* XTokens_baidu_secret_key("baidu_secret_key");
+
 // XOtherControl
 constexpr const char* XOtherControl = "XOtherControl";
 constexpr const char* XOtherControl_blur_effect_adius("blur_effect_adius");  // 仅提供配置文件修改

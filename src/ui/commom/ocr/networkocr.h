@@ -7,6 +7,7 @@
 #include <QNetworkAccessManager>
 #include <QPointer>
 #include <QEventLoop>
+#include "../../data/configmanager.h"
 #include "../paint_bar/toolbar_level/paintbarhelper.h"
 
 // youdao API: https://ai.youdao.com/DOCSIRMA/html/trans/api/tpfy/index.html
@@ -49,8 +50,9 @@ private:
     const QString replyErrorShowText(const QStringList& dataHead);
     QString base64FromFileContent(const QString& path, bool urlencoded = false);                   // 图片转 base64
     // BaiDu
-    const bool validityBaiDuKey(const QString& client_id, const QString& client_secret) const;             // 校验 BaiDu key 的有效性
-    void sendBaiDuAccessToken(const QString& client_id = "u0fpmxS2WSvGb3lEUywiU3VX", const QString& client_secret = "SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6");  // 获取 BaiDu 的鉴权
+    const bool validityBaiDuKey(const QString& client_id, const QString& client_secret) const;     // 校验 BaiDu key 的有效性
+    void sendBaiDuAccessToken(const QString& client_id = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_api_key).toByteArray())
+                              , const QString& client_secret = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray()));  // 获取 BaiDu 的鉴权
 
     void dealBaiDuAccessToken(QNetworkReply* reply);
     void dealBaiDuOcrTextRequest(QNetworkReply* reply);
