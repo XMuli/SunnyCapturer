@@ -81,5 +81,11 @@ XToolButton *AbsBtnsCtrl::creatorXToolButton(const QString& dir, const QString& 
         btn->setIcon(icon);
     }
 
+    QObject::connect(btn, &XToolButton::toggled, [btn, path]() {
+        const QIcon origIcon(path);
+        const QIcon newIcon(changedSVGColor(path, highlightColor(), btn->iconSize()));
+        btn->setIcon(btn->isChecked() ? newIcon : origIcon);
+    });
+
     return btn;
 }

@@ -38,7 +38,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
-    , m_ocrTextEdit(new XOcrTextEdit(this))
+    , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -498,23 +498,17 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 
 void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
 {
-
-
-    const int id = data.btnId;
-    if (id == 0) {
-
+    if (data.operate == OcrTextOperate::OTO_is_allow_edit) {
         m_ocrTextEdit->setReadOnly(!data.allowWrite);
-        if (!data.bTranslate)
-            return;
+        return;
 
-    } else if (id == 1) {
+    } else if (data.operate == OcrTextOperate::OTO_text_copy) {
+
         QClipboard* clipboard = QApplication::clipboard();
         clipboard->setText(m_ocrTextEdit->toPlainText());
+        return;
 
-        if (!data.bTranslate)
-            return;
-
-    } else if (id == 2) {
+    } else if (data.operate == OcrTextOperate::OTO_update) {
         // 直接刷新
     }  else {
         qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrTextData is empty!";
@@ -559,10 +553,12 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
 
     if (!m_ocrTextEdit->isVisible()) m_ocrTextEdit->show();
 
-    if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_standard) {
-    } else if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_standard_location) {
-    } else if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_high_precision) {
-    } else if (ocrTextData.ocrTextType == OcrTextType::OTT_ocr_text_high_precision_location) {
+
+    qDebug() << "ocrTextData.pipeline:" << (int)ocrTextData.pipeline;
+    if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard) {
+    } else if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location) {
+    } else if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision
+               || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location) {
 
 //        qDebug() << "------>j:" << QString::fromStdString(j.dump());
         // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
@@ -582,17 +578,6 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
             cursor.insertText(text);
             cursor.insertText("\n");
         }
-
-//        // 遍历 "words_result" 数组并将 "words" 和 "location" 字段的内容组合
-//        for (const auto& item : j["words_result"]) {
-//            std::string words = item["words"];
-//            json location = item["location"];
-//            std::string combinedText = words + " - " + location.dump(); // 组合 "words" 和 "location" 字段内容
-//            QString text = QString::fromStdString(combinedText);
-
-//            // 插入到 QTextEdit 中
-//            m_ocrTextEdit->append(text);
-//        }
     }
 
 

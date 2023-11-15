@@ -52,12 +52,11 @@
         <file>resources/licenses/Other.md</file>
         <file>resources/licenses/PrivacyAndDataProtection.md</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/source_language.svg</file>
-        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/translate.svg</file>
-        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/upfate_translate.svg</file>
         <file>resources/icons/paint_tool_bar/paint_btn/ocr_text.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_copy.svg</file>
-        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/oct_text_update.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_edit.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_model_switch.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_translate.svg</file>
+        <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_update.svg</file>
     </qresource>
 </RCC>

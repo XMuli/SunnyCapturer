@@ -18,4 +18,5 @@ void XOcrTextEdit::initUI()
 //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setContextMenuPolicy(Qt::NoContextMenu);
+//    setWindowFlags(Qt::FramelessWindowHint);
 }

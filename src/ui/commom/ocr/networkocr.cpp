@@ -247,12 +247,8 @@ void NetworkOCR::dealBaiDuOcrTextRequest(QNetworkReply *reply)
     }
 
     if (dataHead.at(0) == "200") {
-
-
         const OcrTextData& ocrTextData = reply->request().attribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1)).value<OcrTextData>();
         emit COMM.sigOCRTextGenerateFinsh(response, ocrTextData);
-
-
     } else {
         qWarning() << replyErrorShowText(dataHead);
     }

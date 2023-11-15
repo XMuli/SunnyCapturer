@@ -78,29 +78,35 @@ struct OcrTranslateData
 };
 
 
-// OcrTextType + OcrTextData 都是调用 BaiDu API
-enum class OcrTextType
+// OcrTextPipeline + OcrTextData 都是调用 BaiDu API
+enum class OcrTextPipeline
 {
-    OTT_ocr_text_standard,                      // 通用文字识别（标准版）           1000 次/month
-    OTT_ocr_text_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
-    OTT_ocr_text_high_precision,                // 通用文字识别（高精度版）         1000 次/month
-    OTT_ocr_text_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
+    OTP_ocr_text_standard,                      // 通用文字识别（标准版）           1000 次/month
+    OTP_ocr_text_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
+    OTP_ocr_text_high_precision,                // 通用文字识别（高精度版）         1000 次/month
+    OTP_ocr_text_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
+};
+
+
+enum class OcrTextOperate
+{
+    OTO_empty,
+    OTO_is_allow_edit,
+    OTO_text_copy,
+    OTO_update          // 尝试换一个接口进行更新
 };
 
 struct OcrTextData
 {
     // 自定义
-    int btnId = -1;                  // 是哪一个按钮被按下
-    bool bTranslate = true;
-
-    OcrTextType ocrTextType =  OcrTextType::OTT_ocr_text_high_precision_location;
+    OcrTextOperate operate = OcrTextOperate::OTO_empty;                  // 是哪一个按钮被按下
+    OcrTextPipeline pipeline =  OcrTextPipeline::OTP_ocr_text_high_precision_location;
+    bool allowWrite = false;
+    bool bTranslate = false;
 
     // BaiDu API Image Tranlstates 有用接口
     QString fromLang = "zh";
     QString toLang = "en";
-
-    bool allowWrite = false;
-
 
 };
 Q_DECLARE_METATYPE(OcrTextData)                     // 可以被 QVariant 类型存储

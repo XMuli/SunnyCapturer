@@ -17,12 +17,13 @@ ConfigManager::instance().setIniValue(QString("/") + root + "/" + key, val)
 
 // 属性对象改变时  ---snyc----> member对象的值也会改变;但反之 member对象的值改变不会同步属性对象改;
 // 故此宏专门用于初次从初始化 .ini 文件，对 "属性对象 + member对象" 同时赋值; 然后在外面则，都是通过属性来修改其数值，从而发生值改变的信号
+const int width = 6;
 #define SET_PROPERTY_AND_MEMBER_VALUE(root, key, defVal) \
     GET_VALUE_PROPERTY(key) = READ_INI(root, key, defVal); \
     setProperty(key, GET_VALUE_PROPERTY(key)); \
+qDebug() << "[" << root << "/" << key << "]: " << GET_VALUE_PROPERTY(key); // << "defVal:" << defVal;
+
 //    connect(this, SIGNAL(sig ## key()), this, SLOT(onSyncToFile()));   // 读写 IO 过于频繁，改为窗口关闭才写入文件
-
-
 
 //#define CONNECT_VALUE_PROPERTY(name, val) \
 //    connect(this, SIGNAL(sig ## name()), this, SLOT(onSyncToFile()));
@@ -122,48 +123,6 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_pointType, -1);
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_paPen, QPen());
     SET_PROPERTY_AND_MEMBER_VALUE(XPaintBarStatus, XPaintBarStatus_paBrush, QBrush());
-
-    qDebug() << GET_VALUE_PROPERTY(XGeneral_language) << GET_VALUE_PROPERTY(XGeneral_themes) << GET_VALUE_PROPERTY(XGeneral_log_level)  << GET_VALUE_PROPERTY(XGeneral_font) << GET_VALUE_PROPERTY(XGeneral_autostart);
-    qDebug() << GET_VALUE_PROPERTY(XInterface_style) << GET_VALUE_PROPERTY(XInterface_orientation) << GET_VALUE_PROPERTY(XInterface_highlight) << GET_VALUE_PROPERTY(XInterface_border_width) << GET_VALUE_PROPERTY(XInterface_crosshair) << GET_VALUE_PROPERTY(XInterface_crosshair_width)
-             << GET_VALUE_PROPERTY(XInterface_custom_size_enable) << GET_VALUE_PROPERTY(XInterface_topleft_enable) << GET_VALUE_PROPERTY(XInterface_size_enable) << GET_VALUE_PROPERTY(XInterface_delay_enable)
-             << GET_VALUE_PROPERTY(XInterface_custom_rect_left) << GET_VALUE_PROPERTY(XInterface_custom_rect_top) << GET_VALUE_PROPERTY(XInterface_custom_rect_width) << GET_VALUE_PROPERTY(XInterface_custom_rect_height) << GET_VALUE_PROPERTY(XInterface_custom_dealy)
-             << GET_VALUE_PROPERTY(XInterface_acrylic_effect) << GET_VALUE_PROPERTY(XInterface_auto_detect_windows) << GET_VALUE_PROPERTY(XInterface_auto_copy_to_clipbaoard) << GET_VALUE_PROPERTY(XInterface_crosshair_show);
-    qDebug() << GET_VALUE_PROPERTY(XOutput_image_quailty) << GET_VALUE_PROPERTY(XOutput_flie_name)  << GET_VALUE_PROPERTY(XOutput_config_path)
-             << GET_VALUE_PROPERTY(XOutput_quick_save_enable) << GET_VALUE_PROPERTY(XOutput_quick_save_path)  << GET_VALUE_PROPERTY(XOutput_auto_save_enable) << GET_VALUE_PROPERTY(XOutput_auto_save_path);
-    qDebug() << GET_VALUE_PROPERTY(XPin_opacity) << GET_VALUE_PROPERTY(XPin_maximum_size);
-    qDebug() << GET_VALUE_PROPERTY(XHotkeys_capture) << GET_VALUE_PROPERTY(XHotkeys_delay_capture)  << GET_VALUE_PROPERTY(XHotkeys_custiom_capture);
-    qDebug() << GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius) << GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence) << GET_VALUE_PROPERTY(XOtherControl_crosshair_iridescence)
-             << GET_VALUE_PROPERTY(XOtherControl_show_develop_ui_log) << GET_VALUE_PROPERTY(XOtherData_detection_min_windows_level_depth);
-    qDebug() << GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir);
-
-    qDebug() <<  GET_VALUE_PROPERTY(XPaintBarStatus_rect)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_ellipse)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_arrow)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_penciler)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_marker_pen)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_mosaic)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_text)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serial)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_rectType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_ellipseType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_arrowType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_marker_penType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_mosaicType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_pixelatedMosaic)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_smoothMosaic)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textBold)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textItalic)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textOutline)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textStrikeout)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_textUnderline)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_fontFamily)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_fontSize)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serialType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serialNumber)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_serialLetter)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_pointType)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_paPen)
-             <<  GET_VALUE_PROPERTY(XPaintBarStatus_paBrush);
 }
 
 void ConfigManager::writeToFile()
@@ -219,39 +178,6 @@ void ConfigManager::writeToFile()
     // XOtherData
     WRITE_INI(XOtherData, XOtherData_manual_save_image_dir, GET_VALUE_PROPERTY(XOtherData_manual_save_image_dir));
     WRITE_INI(XOtherData, XOtherData_detection_min_windows_level_depth, GET_VALUE_PROPERTY(XOtherData_detection_min_windows_level_depth));
-    // XPaintBarStatus
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_rect, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipse, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_arrow, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_penciler, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_marker_pen, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_mosaic, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serial, false);
-
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_rectType, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_ellipseType, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_arrowType, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_marker_penType, 0);
-
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_mosaicType, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_pixelatedMosaic, 10);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_smoothMosaic, 10);
-
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textBold, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textItalic, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textOutline, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textStrikeout, false);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_textUnderline, false);
-
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_fontFamily, "Microsoft YaHei");
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_fontSize, 16);
-
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serialType, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serialNumber, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_serialLetter, QChar('a'));
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_pointType, 0);
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_paPen, QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    WRITE_INI(XPaintBarStatus, XPaintBarStatus_paBrush, QBrush(Qt::red, Qt::SolidPattern));
 }
 
 void ConfigManager::setIniValue(const QString &key, const QVariant &value)

@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QToolButton>
-#include "switchbutton.h"
 #include "xtoolbutton.h"
 #include "../common/absbtnsctrl.h"
 
@@ -18,13 +17,6 @@ public:
 
 private:
     void initUI();
-
-
-private:
-    SwitchButton* m_swBtnShowModel;
-    XToolButton*  m_tbModelSwitch;
-    QComboBox*    m_cbbFrom;
-    QComboBox*    m_cbbTo;
 
 public:
     XToolButton*  m_tbdit;

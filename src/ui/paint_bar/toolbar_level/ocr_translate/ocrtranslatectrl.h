@@ -5,7 +5,6 @@
 #include <QComboBox>
 #include <QToolButton>
 #include <QLabel>
-#include "switchbutton.h"
 #include "xtoolbutton.h"
 #include "../common/absbtnsctrl.h"
 
@@ -20,7 +19,7 @@ private:
     void initUI();
 
 public:
-    SwitchButton* m_swBtnShowModel;
+    XToolButton*  m_tbTranslate;
     XToolButton*  m_tbCopy;
 
     QComboBox*    m_cbbFrom;

@@ -67,8 +67,6 @@ void PaintBar::initUI()
     setLayout(m_layout);
     m_layout->addWidget(m_paintToolBar);
     m_layout->addWidget(m_paintCtrlBar);
-
-
 }
 
 void PaintBar::initConnect()

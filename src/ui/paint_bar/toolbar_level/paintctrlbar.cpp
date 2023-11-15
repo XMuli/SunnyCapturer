@@ -107,7 +107,7 @@ void PaintCtrlBar::initBtns()
     const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
 
 
-//    m_ocrTextCtrl = new XOcrTextCtrl(m_orie, this);
+
     connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << QString::number(CONF_PBS_DATA.rectintType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() << QString::number(CONF_PBS_DATA.ellipseType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << QString::number(CONF_PBS_DATA.arrowType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
@@ -118,17 +118,22 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CONF_PBS_DATA.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     // OcrTranslateCtrl 的对象
     m_ocrTranslateCtrl = new OcrTranslateCtrl(m_orie, this);
-    connect(m_ocrTranslateCtrl->m_swBtnShowModel, &SwitchButton::statusChanged, this, &PaintCtrlBar::onOcrTranslateStatusChanged);
+    connect(m_ocrTranslateCtrl->m_tbTranslate, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateStatusChanged);
     connect(m_ocrTranslateCtrl->m_tbCopy, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateCopy);
     connect(m_ocrTranslateCtrl->m_cbbFrom, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbFromCurrentTextChanged);
     connect(m_ocrTranslateCtrl->m_cbbTo, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbToCurrentTextChanged);
     // m_ocrTextCtrl
-    connect(creatorAbsBtnsCtrl(m_orie, m_ocrTextCtrl, dir, QStringList() << "ocr_text_edit" << "ocr_text_copy" << "oct_text_update", QStringList() << QString::number(-1), false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    m_ocrTextCtrl = new XOcrTextCtrl(m_orie, this);
+    connect(m_ocrTextCtrl->m_tbdit, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTextEdit);
+    connect(m_ocrTextCtrl->m_tbCopy, &XToolButton::released, this, &PaintCtrlBar::onOcrTextCopy);
+    connect(m_ocrTextCtrl->m_tbUpdate, &XToolButton::released, this, &PaintCtrlBar::onOcrTextUpdate);
+//    connect(creatorAbsBtnsCtrl(m_orie, m_ocrTextCtrl, dir, QStringList() << "ocr_text_edit" << "ocr_text_copy" << "oct_text_update", QStringList() << QString::number(-1), false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
     m_ocrTranslateCtrl->hide();
-//    m_ocrTextCtrl->hide();
+    m_ocrTextCtrl->hide();
     m_fontFamily->setEditable(false);
     m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
@@ -364,6 +369,26 @@ void PaintCtrlBar::onCbbToCurrentTextChanged(const QString &text)
     emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
 }
 
+void PaintCtrlBar::onOcrTextEdit(bool checked)
+{
+    m_ocrTextDate.allowWrite = checked;
+    m_ocrTextDate.operate = OcrTextOperate::OTO_is_allow_edit;
+    emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
+}
+
+void PaintCtrlBar::onOcrTextCopy()
+{
+    m_ocrTextDate.operate = OcrTextOperate::OTO_text_copy;
+    emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
+}
+
+void PaintCtrlBar::onOcrTextUpdate()
+{
+    m_ocrTextDate.operate = OcrTextOperate::OTO_update;
+    m_ocrTextDate.pipeline = OcrTextPipeline::OTP_ocr_text_high_precision;
+    emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
+}
+
 void PaintCtrlBar::onIdReleased(int id)
 {
     qDebug() << "----sender（）:" << sender() << "parent():" << "   id:" << id ;
@@ -400,16 +425,6 @@ void PaintCtrlBar::onIdReleased(int id)
 
         emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
     } else if (paint == m_ocrTextCtrl) {
-        const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
-
-        if (id == 0) m_ocrTextDate.allowWrite = checked;
-//        else if (id == 1) m_ocrTextDate.allowWrite = checked;
-//        else if (id == 2) m_ocrTextDate.allowWrite = checked;
-        else qDebug() << "PaintCtrlBar::onIdReleased is m_ocrTextCtrl, and id is empty!";
-
-        m_ocrTextDate.bTranslate = false;
-        m_ocrTextDate.btnId = id;
-        emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
     } else {
         qDebug() << "sender()->parent(): %1 is empty!";
     }
