@@ -1,3 +1,6 @@
 [submodule "tripartite/QHotkey"]
 	path = tripartite/QHotkey
 	url = https://github.com/Skycoder42/QHotkey.git
+[submodule "tripartite"]
+	path = tripartite
+	url = https://github.com/XMuli/tripartite.git

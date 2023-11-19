@@ -385,7 +385,7 @@ void PaintCtrlBar::onOcrTextCopy()
 void PaintCtrlBar::onOcrTextUpdate()
 {
     m_ocrTextDate.operate = OcrTextOperate::OTO_update;
-    m_ocrTextDate.pipeline = OcrTextPipeline::OTP_ocr_text_high_precision;
+    m_ocrTextDate.pipeline = OcrTextPipeline::OTP_ocr_text_high_precision_location;
     emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
 }
 

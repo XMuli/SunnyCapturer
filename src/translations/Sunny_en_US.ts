@@ -501,6 +501,33 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
 </context>
 <context>
+    <name>Tokens</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Youdao</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>APP ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secret Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BaiDu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>API Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Tray</name>
     <message>
         <source>Capture</source>

@@ -28,6 +28,8 @@ void Tokens::initUI()
     ui->leYDApiSecret->setText(youdao_secret_key);
     ui->leBdApiKey->setText(baidu_api_key);
     ui->leBdSecretKey->setText(baidu_secret_key);
+
+    ui->gbBaiDuApi->hide();
 }
 
 void Tokens::onBtnResetClicked(bool checked)

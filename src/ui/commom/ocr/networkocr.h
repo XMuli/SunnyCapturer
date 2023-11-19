@@ -13,16 +13,8 @@
 // youdao API: https://ai.youdao.com/DOCSIRMA/html/trans/api/tpfy/index.html
 // 在线测试图片的 base64: https://tool.jisuapi.com/base642pic.html
 
-
-/*! BaiDu:
-    AppID:       42146679
-    API Key:     u0fpmxS2WSvGb3lEUywiU3VX
-    Secret Key:  SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6
- */
-
 //class OcrTranslateData;
 //class OcrTextData;
-
 class NetworkOCR : public QObject
 {
     Q_OBJECT
@@ -41,7 +33,7 @@ public:
     virtual ~NetworkOCR() = default;
     void sendBaiDuOcrTextRequest(const OcrTextData& data, const QString& path);           // 待翻译图片路径
 
-    void sendBaiDuOcrTranslateRequest(const OcrTranslateData& data, const QString& path);     // 待翻译图片路径   https://cloud.baidu.com/doc/MT/s/mki483xpu
+    void sendBaiDuOcrTranslateRequest(const OcrTranslateData& data, const QString& path);     // 待翻译图片路径   https://cloud.baidu.com/doc/MT/s/mki483xpu 【还在写中】
     void sendYouDaoOcrTranslateRequest(const OcrTranslateData& data, const QString& path);     // 待翻译图片路径
 
 private:

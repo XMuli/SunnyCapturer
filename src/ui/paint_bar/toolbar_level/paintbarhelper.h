@@ -100,7 +100,7 @@ struct OcrTextData
 {
     // 自定义
     OcrTextOperate operate = OcrTextOperate::OTO_empty;                  // 是哪一个按钮被按下
-    OcrTextPipeline pipeline =  OcrTextPipeline::OTP_ocr_text_high_precision_location;
+    OcrTextPipeline pipeline =  OcrTextPipeline::OTP_ocr_text_high_precision;
     bool allowWrite = false;
     bool bTranslate = false;
 
