@@ -78,7 +78,7 @@ $ cmake ..
 $ cmake --build . -j$(nproc)
 $ cd ..
 
-$ ../linuxdeploy-x86_64.AppImage --appdir AppDir -e bin/Sunny -d bin/resources/linux/debian/tech.xmuli.sunny.desktop -i bin/resources/logo/logo.svg --icon-filename tech.xmuli.sunny -p qt -o appimage
+$ ../linuxdeploy-x86_64.AppImage --appdir AppDir -e bin/Sunny -d bin/resources/cpack/tech.xmuli.sunny.desktop -i bin/resources/logo/logo.svg --icon-filename tech.xmuli.sunny -p qt -o appimage
 
 
 $  ./linuxdeploy-x86_64.AppImage --appdir AppDir -e build/thplayer -d assets/thplayer.desktop -i assets/thplayer.svg --icon-filename thplayer -p qt -o appimage

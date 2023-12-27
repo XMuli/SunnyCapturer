@@ -167,7 +167,7 @@ private:   // 为了便于查看，故属性声明放在最下面
     // Hotkeys
     SET_VALUE_PROPERTY(XHotkeys_capture);
     SET_VALUE_PROPERTY(XHotkeys_delay_capture);
-    SET_VALUE_PROPERTY(XHotkeys_custiom_capture);
+    SET_VALUE_PROPERTY(XHotkeys_custom_capture);
     // Tokens
     SET_VALUE_PROPERTY(XTokens_youdao_app_id);
     SET_VALUE_PROPERTY(XTokens_youdao_secret_key);

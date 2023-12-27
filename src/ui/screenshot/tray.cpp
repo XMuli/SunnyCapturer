@@ -32,7 +32,15 @@ void Tray::init()
     m_trayMenu->addAction(quit);
 
     m_trayIcon->setIcon(QIcon(":/resources/logo/logo.svg"));
-//    m_trayIcon->setToolTip("");
+    const auto& text = QString("%1 Screenshot\n"
+                               "Capture: %2\n"
+                               "Delay Capture: %3\n"
+                               "Custom Capture: %4\n")
+                           .arg(XPROJECT_NAME)
+                           .arg(CONF_MANAGE.property("XHotkeys_delay_capture").toString())
+                           .arg(CONF_MANAGE.property("XHotkeys_delay_capture").toString())
+                           .arg(CONF_MANAGE.property("custom_capture").toString());
+    m_trayIcon->setToolTip(text);
     m_trayIcon->setContextMenu(m_trayMenu);
 
     onLanguageChange("");

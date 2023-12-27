@@ -58,7 +58,7 @@ constexpr const char* XPin_maximum_size("maximum_size");
 // Hotkeys
 constexpr const char* XHotkeys_capture("capture");
 constexpr const char* XHotkeys_delay_capture("delay_capture");
-constexpr const char* XHotkeys_custiom_capture("custiom_capture");
+constexpr const char* XHotkeys_custom_capture("custom_capture");
 
 // Tokens
 constexpr const char* XTokens_youdao_app_id("youdao_app_id");

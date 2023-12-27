@@ -28,10 +28,6 @@
         <translation>版本</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Author:</source>
         <translation>作者:</translation>
     </message>
@@ -41,11 +37,15 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;偕臧&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;版權所有 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -206,8 +206,8 @@
         <translation>關於 Qt</translation>
     </message>
     <message>
-        <source>Copyright (C) 2023 %1. All rights reserved.&lt;br&gt;The birth of this project is inseparable from these open source software</source>
-        <translation>版權所有 2023  %1. 保留所有權利。&lt;br&gt;本項目的誕生離不開如下開源項目</translation>
+        <source>Copyright (C) 2023~2024 %1. All rights reserved.&lt;br&gt;The birth of this project is inseparable from these open source software</source>
+        <translation>版權所有 2023~2024 %1. 保留所有權利。&lt;br&gt;本項目的誕生離不開如下開源項目</translation>
     </message>
 </context>
 <context>
@@ -223,7 +223,7 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <source>Your BaiDu [APIKey Or SecretKey] is empty, please check and re-enter it!</source>
@@ -353,11 +353,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>translate</source>
-        <translation type="unfinished"></translation>
+        <translation>翻譯</translation>
     </message>
     <message>
         <source>OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>屏幕識圖</translation>
     </message>
 </context>
 <context>
@@ -506,11 +506,11 @@ and specify -1 to let Sunny decide for you.</source>
     <name>Tokens</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Youdao</source>
-        <translation type="unfinished"></translation>
+        <translation>有道[翻譯接口]</translation>
     </message>
     <message>
         <source>APP ID:</source>
@@ -522,7 +522,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>BaiDu</source>
-        <translation type="unfinished"></translation>
+        <translation>百度[屏幕識圖接口]</translation>
     </message>
     <message>
         <source>API Key:</source>

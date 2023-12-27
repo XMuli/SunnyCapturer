@@ -77,7 +77,7 @@ void ConfigManager::readFromFile()
     // Hotkeys
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_capture, "F6");
     SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_delay_capture, "Ctrl+F6");
-    SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_custiom_capture, "Shift+F6");
+    SET_PROPERTY_AND_MEMBER_VALUE(XHotkeys, XHotkeys_custom_capture, "Shift+F6");
     // Tokens
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_app_id, encryptString("5a3aa1167eed698d"));
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_secret_key, encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T"));
@@ -178,7 +178,7 @@ void ConfigManager::writeToFile()
     // Hotkeys
     WRITE_INI(XHotkeys, XHotkeys_capture, GET_VALUE_PROPERTY(XHotkeys_capture));
     WRITE_INI(XHotkeys, XHotkeys_delay_capture, GET_VALUE_PROPERTY(XHotkeys_delay_capture));
-    WRITE_INI(XHotkeys, XHotkeys_custiom_capture, GET_VALUE_PROPERTY(XHotkeys_custiom_capture));
+    WRITE_INI(XHotkeys, XHotkeys_custom_capture, GET_VALUE_PROPERTY(XHotkeys_custom_capture));
     // Tokens
     WRITE_INI(XTokens, XTokens_youdao_app_id, GET_VALUE_PROPERTY(XTokens_youdao_app_id));
     WRITE_INI(XTokens, XTokens_youdao_secret_key, GET_VALUE_PROPERTY(XTokens_youdao_secret_key));

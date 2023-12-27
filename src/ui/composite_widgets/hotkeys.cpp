@@ -36,7 +36,7 @@ void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
         lab = ui->labDelayCaptureStatus;
     } else if (keyEdit == ui->kseCustomCapture) {
         type = HotKeyType::HKT_custiom_capture;
-        propertyName = "XHotkeys_custiom_capture";
+        propertyName = "XHotkeys_custom_capture";
         lab = ui->labCustomCaptureStatus;
     } else {
         qDebug() << "keyEdit does not any know XKeySequenceEdit object!";
@@ -56,14 +56,14 @@ void Hotkeys::onBtnResetClicked(bool checked)
 
     CONF_MANAGE.setProperty("XHotkeys_capture", ui->kseCapture->keySequence().toString());
     CONF_MANAGE.setProperty("XHotkeys_delay_capture", ui->kseDelayCapture->keySequence().toString());
-    CONF_MANAGE.setProperty("XHotkeys_custiom_capture", ui->kseCustomCapture->keySequence().toString());
+    CONF_MANAGE.setProperty("XHotkeys_custom_capture", ui->kseCustomCapture->keySequence().toString());
 }
 
 void Hotkeys::initUI()
 {
     ui->kseCapture->setKeySequence(QKeySequence(CONF_MANAGE.property("XHotkeys_capture").toString()));
     ui->kseDelayCapture->setKeySequence(QKeySequence(CONF_MANAGE.property("XHotkeys_delay_capture").toString()));
-    ui->kseCustomCapture->setKeySequence(QKeySequence(CONF_MANAGE.property("XHotkeys_custiom_capture").toString()));
+    ui->kseCustomCapture->setKeySequence(QKeySequence(CONF_MANAGE.property("XHotkeys_custom_capture").toString()));
     setHotkeyIconStatus(ui->labCaptureStatus, HotKeyType::HKT_capture);
     setHotkeyIconStatus(ui->labDelayCaptureStatus, HotKeyType::HKT_delay_capture);
     setHotkeyIconStatus(ui->labCustomCaptureStatus, HotKeyType::HKT_custiom_capture);

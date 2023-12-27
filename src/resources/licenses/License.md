@@ -1,6 +1,6 @@
 ## Sunny- Licensing and Disclaimer
 
-### Copyright (c) 2023 XMuli
+### Copyright (c) 2023~2024 https://sunny.xmuli.tech
 
 Unless otherwise stated, all documents and software included in the Sunny installation package are the property of https://github.com/XMuli.
 
@@ -64,7 +64,6 @@ Welcome to Sunny! Before using the Sunny client, please carefully read and under
 Please read and understand the above disclaimer carefully before using the Sunny client. If you have any questions or opinions about the disclaimer, please contact us:
 
 XMuli   
-xmulitech@gmail.com   
-https://sunny.xmuli.tech
+xmulitech@gmail.com
 
 Thank you for choosing the Sunny client; we will continue to provide quality service and respect your rights.

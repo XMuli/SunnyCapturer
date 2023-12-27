@@ -13,7 +13,7 @@ LicenseUI::LicenseUI(QWidget *parent) :
 
     QString name = QString("<a href='%1' style='color: #008000;'>%2</a>").arg("https://sunny.xmuli.tech").arg(XPROJECT_NAME);
     QString author = QString("<a href='%1' style='color: #008000;'>%2</a>").arg("https://github.com/XMuli").arg("XMuli");
-    QString copyright = QString(tr("Copyright (C) 2023 %1. All rights reserved.<br>The birth of this project is inseparable from these open source software")).arg(author);
+    QString copyright = QString(tr("Copyright (C) 2023~2024 %1. All rights reserved.<br>The birth of this project is inseparable from these open source software")).arg(author);
     QString introduce = QString("<html><body><b>%1</b><br>%2<br></body></html>").arg(name).arg(copyright);
     ui->labIntroduce->setText(introduce);
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});

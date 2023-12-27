@@ -12,7 +12,7 @@ Communication::Communication(QObject *parent)
     : QObject(parent)
     , m_hkCapture(new QHotkey(CONF_MANAGE.property("XHotkeys_capture").toString(), true, qApp))   //The hotkey will be automatically registered
     , m_hkDelayCapture(new QHotkey(CONF_MANAGE.property("XHotkeys_delay_capture").toString(), true, qApp))
-    , m_hkCustiomCapture(new QHotkey(CONF_MANAGE.property("custiom_capture").toString(), true, qApp))
+    , m_hkCustiomCapture(new QHotkey(CONF_MANAGE.property("custom_capture").toString(), true, qApp))
 {
     init();
 }
