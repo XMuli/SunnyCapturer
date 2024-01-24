@@ -1,4 +1,9 @@
-﻿#include "painttoolbar.h"
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#include "painttoolbar.h"
 #include <QDebug>
 #include <QTimer>
 #include <QTime>

@@ -1,4 +1,9 @@
-﻿#ifndef PAINTBARHELPER_H
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#ifndef PAINTBARHELPER_H
 #define PAINTBARHELPER_H
 
 #include <QObject>

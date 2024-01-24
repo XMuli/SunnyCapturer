@@ -1,3 +1,8 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2023-2024 XMuli
+# SPDX-GitHub: https://github.com/XMuli/Sunny
+# SPDX-Author: XMuli <xmulitech@gmail.com>
+
 cmake_minimum_required(VERSION 3.5)
 project(Sunny)
 
@@ -30,7 +35,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${trage_library_output_dir}")         # 共�
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${trage_archive_output_dir}")         # 静态库（静态链接库）的 .lib .a(linux归档文件)静态库的输出目录
 
 file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})                      # 创建输出目录
-#file(MAKE_DIRECTORY ${trage_runtime_output_dir})
+# file(MAKE_DIRECTORY ${trage_runtime_output_dir})
 #file(MAKE_DIRECTORY ${trage_library_output_dir})
 #file(MAKE_DIRECTORY ${trage_archive_output_dir})
 

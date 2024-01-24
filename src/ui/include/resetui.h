@@ -1,4 +1,9 @@
-﻿#ifndef RESETUI_H
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#ifndef RESETUI_H
 #define RESETUI_H
 
 #include "xwidget_global.h"

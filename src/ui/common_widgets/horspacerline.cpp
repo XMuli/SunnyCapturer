@@ -1,4 +1,9 @@
-﻿#include "horspacerline.h"
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#include "horspacerline.h"
 
 //frameRect:    QRect       //控件矩形
 //frameWidth:   const int   //框架的宽度

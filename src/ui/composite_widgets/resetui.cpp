@@ -1,4 +1,9 @@
-﻿#include "resetui.h"
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#include "resetui.h"
 #include "ui_resetui.h"
 #include "communication.h"
 

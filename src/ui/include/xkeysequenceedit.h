@@ -1,4 +1,9 @@
-﻿#ifndef XKEYSEQUENCEEDIT_H
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#ifndef XKEYSEQUENCEEDIT_H
 #define XKEYSEQUENCEEDIT_H
 
 #include "xwidget_global.h"

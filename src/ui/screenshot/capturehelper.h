@@ -1,4 +1,9 @@
-﻿#ifndef CAPTUREHELPER_H
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#ifndef CAPTUREHELPER_H
 #define CAPTUREHELPER_H
 #include <QObject>
 #include <QColor>

@@ -1,4 +1,9 @@
-﻿#ifndef ABSSETTINGUI_H
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#ifndef ABSSETTINGUI_H
 #define ABSSETTINGUI_H
 
 #include <QWidget>

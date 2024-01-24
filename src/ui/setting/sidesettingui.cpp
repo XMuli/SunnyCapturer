@@ -1,4 +1,9 @@
-﻿#include "sidesettingui.h"
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#include "sidesettingui.h"
 #include "pin.h"
 #include "ui_sidesettingui.h"
 #include "general.h"

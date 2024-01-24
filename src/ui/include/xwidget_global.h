@@ -1,4 +1,9 @@
-﻿#ifndef XWIDGET_GLOBAL_H
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#ifndef XWIDGET_GLOBAL_H
 #define XWIDGET_GLOBAL_H
 
 #include <QtCore/qglobal.h>
