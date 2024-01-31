@@ -28,24 +28,20 @@
         <translation>版本</translation>
     </message>
     <message>
-        <source>Author:</source>
-        <translation>作者:</translation>
-    </message>
-    <message>
-        <source>Feedback:</source>
-        <translation>反馈:</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;偕臧&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;版权所有 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Author: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;作者: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QQ Group: &lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QQ群: &lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;反馈: &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -214,12 +210,13 @@
     <name>NetworkOCR</name>
     <message>
         <source>Status Code: </source>
-        <translation type="unfinished"></translation>
+        <translation>状态码: </translation>
     </message>
     <message>
         <source>
 Reason Phrase: </source>
-        <translation type="unfinished"></translation>
+        <translation>
+原因短语: </translation>
     </message>
     <message>
         <source>Warning</source>
@@ -470,10 +467,6 @@ and specify -1 to let Sunny decide for you.</source>
 <context>
     <name>SideSettingUI</name>
     <message>
-        <source>Settings</source>
-        <translation>设置</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>常规</translation>
     </message>
@@ -501,16 +494,16 @@ and specify -1 to let Sunny decide for you.</source>
         <source>About</source>
         <translation>关于</translation>
     </message>
+    <message>
+        <source>Settings [Free]</source>
+        <translation>设置 [免费]</translation>
+    </message>
 </context>
 <context>
     <name>Tokens</name>
     <message>
         <source>Form</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Youdao</source>
-        <translation>有道[翻译接口]</translation>
     </message>
     <message>
         <source>APP ID:</source>
@@ -521,12 +514,16 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>BaiDu</source>
-        <translation>百度[屏幕识图接口]</translation>
-    </message>
-    <message>
         <source>API Key:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translate [Youdao]</source>
+        <translation>翻译 [有道接口]</translation>
+    </message>
+    <message>
+        <source>OCR [BaiDu]</source>
+        <translation>屏幕识图 [百度接口]</translation>
     </message>
 </context>
 <context>

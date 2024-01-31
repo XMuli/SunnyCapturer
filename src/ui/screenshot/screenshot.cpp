@@ -1672,12 +1672,12 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
     drawShadowOverlay(rect(), pickedRect, pa);
     drawBorder(pa, pickedRect);
-    showCrosshair(pa, mapFromGlobal(QCursor::pos()), m_vdRect);
+    showCrosshair(pa, mapFromGlobal(QCursor::pos()), rect());
 
     // 以下部分都是 printf 一些调试参数的部分
     if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool()) {
         prinftWindowsRects(pa);
-//        printfDevelopProjectInfo(pa);
+        printfDevelopProjectInfo(pa);
     }
 }
 

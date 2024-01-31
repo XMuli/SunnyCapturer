@@ -3,14 +3,6 @@ A screenshot tool, and to achieve the function of the general module encapsulati
 
 
 
-
-
-
-
-
-
-
-
 ```bash
 #【方式一】 在 Ubuntu 22.04 打包为 .deb ----------------------------------------------
 nano ~/.bashrc

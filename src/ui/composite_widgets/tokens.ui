@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_9">
      <property name="title">
-      <string>Youdao</string>
+      <string>Translate [Youdao]</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_9">
       <property name="leftMargin">
@@ -84,7 +84,7 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="gbBaiDuApi">
      <property name="title">
-      <string>BaiDu</string>
+      <string>OCR [BaiDu]</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
       <property name="leftMargin">

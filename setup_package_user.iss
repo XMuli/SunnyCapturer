@@ -8,10 +8,10 @@
 #define MyAppURL "https://sunny.xmuli.tech"
 #define MyAppExeName "Sunny.exe"                     
 #define MyArchitecture "x64"   ; x64    x86
-#define MyCOMPILER_ID "msvc"   ; mingw  msvc
+#define MyCOMPILER_ID "x64"   ; mingw  msvc
 #define MySrc "."
 #define MyBinDir "bin"         ; 相对于 .iss 文件的路径
-#define MyOutputDir "../Archived"
+#define MyOutputDir "./"
 #define MyGUID "{9A015CFA-E381-4CFA-8496-07E627B373DB}"
 
 [Setup]
