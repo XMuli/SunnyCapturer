@@ -1,0 +1,27 @@
+v1.3(2024.02.01)
+- Upgrade to v1.3
+- Support "Image Translation" and "OCR", allow private account.
+- Adjust the UI detail style, add the alert effect of tray taskbar.
+- Fix the situation that crosshairs may not work under multi-screen.
+
+
+
+v1.2
+- 移植到 Deepin V20.9 成功编译和运行
+- 新增图钉在屏幕的阴影效果
+- 更新翻译(中文-简体、中文-繁体)
+
+v1.0
+Sunny 截图是一款简洁且漂亮的截图的软件工具，支持 Windows，MacOS，Linux 平台. Site: https://sunny.xmuli.tech
+
+特色功能:
+- 支持多种系统风格样式
+- 支持自定义透明磨砂效果(亚克力)
+- 支持绘画工具栏方位切换：水平或竖直
+- 支持高亮色主题切换(配置文件修改)
+- 支持常规截图、延时截图、自定义截图
+- 支持快捷保存和自动保存
+- 支持篡窗口的屏幕检测(窗口信息和窗口深度)
+- 支持图片钉在屏幕，且缩放和透明度设置
+- 文字编辑时刻，同一时刻支持多种不同格式
+- 更多

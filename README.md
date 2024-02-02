@@ -4,7 +4,18 @@ A screenshot tool, and to achieve the function of the general module encapsulati
 
 
 ```bash
+
+
+# 使用 dch -i 或用 dch -v version-revision 来指定版本  https://blog.csdn.net/qq_33154343/article/details/123778207
+
+sudo apt update
+sudo apt install cmake gcc g++ wget tar dh-make debmake lintian devscripts       
+sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qtcreator   # qt可以运行一个初始项目
+
 #【方式一】 在 Ubuntu 22.04 打包为 .deb ----------------------------------------------
+
+
+
 nano ~/.bashrc
 # 补充 git tab 补全
 if [ -f /etc/bash_completion ]; then
@@ -63,7 +74,7 @@ $ sudo apt install libfuse2
 
 $ wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 $ wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-$ chmod +x linuxdeploy-*.AppImage
+$ chmod +x linuxdeploy*.AppImage
 
 $ mkdir build && cd build
 $ cmake ..
