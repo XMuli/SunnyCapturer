@@ -21,6 +21,7 @@
 #include "capturehelper.h"
 #include "../paint_bar/paintbar.h"
 #include "../commom/ocr/networkocr.h"
+#include "../paint_bar/toolbar_level/ocr_text/xocrdlg.h"
 #include "../../commom/communication/communication.h"
 #include "windowsrect.h" // 引用位置在 Qt 库之后，避免 x11 库冲突
 
@@ -138,6 +139,7 @@ private:
 
     QPointer<XTextEdit>      m_edit;
     QPointer<XOcrTextEdit>   m_ocrTextEdit;
+    QPointer<XOcrDlg>        m_ocrDlg;
 
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;

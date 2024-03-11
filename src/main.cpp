@@ -10,8 +10,6 @@
 #include <QDebug>
 #include "xapphelper.h"
 #include "ui/commom/ocr/networkocr.h"
-
-#include "ui/paint_bar/toolbar_level/ocr_text/xocrtextctrl.h"
 #include "ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.h"
 
 //#include "xlog.h"

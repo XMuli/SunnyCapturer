@@ -44,6 +44,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
     , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
+    , m_ocrDlg(new XOcrDlg(nullptr))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -503,21 +504,21 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 
 void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
 {
-    if (data.operate == OcrTextOperate::OTO_is_allow_edit) {
-        m_ocrTextEdit->setReadOnly(!data.allowWrite);
-        return;
+    // if (data.operate == OcrTextOperate::OTO_is_allow_edit) {
+    //     m_ocrTextEdit->setReadOnly(!data.allowWrite);
+    //     return;
 
-    } else if (data.operate == OcrTextOperate::OTO_text_copy) {
+    // } else if (data.operate == OcrTextOperate::OTO_text_copy) {
 
-        QClipboard* clipboard = QApplication::clipboard();
-        clipboard->setText(m_ocrTextEdit->toPlainText());
-        return;
+    //     QClipboard* clipboard = QApplication::clipboard();
+    //     clipboard->setText(m_ocrTextEdit->toPlainText());
+    //     return;
 
-    } else if (data.operate == OcrTextOperate::OTO_update) {
-        // 直接刷新
-    }  else {
-        qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrTextData is empty!";
-    }
+    // } else if (data.operate == OcrTextOperate::OTO_update) {
+    //     // 直接刷新
+    // }  else {
+    //     qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrTextData is empty!";
+    // }
 
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
     QDir directory(dir);
@@ -549,43 +550,58 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
         return;
     }
 
+    const QString& text = QString::fromStdString(j.dump());
+    qDebug().noquote() << "------>j:" << text;
     const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
-    if (!bValid) return;
+    if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
+        m_ocrDlg->setRightText(text);
+    } else {
+        if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location
+            ||ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location) {
+            // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
+            for (const auto& item : j["words_result"]) {
+                std::string words = item["words"];
+                QString text = QString::fromStdString(words);
 
-    m_ocrTextEdit->resize(m_node.absoluteRect.size());
-    m_ocrTextEdit->move(m_node.absoluteRect.topLeft());
-    m_ocrTextEdit->clear();
+                const bool& containLocation = ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location;
+                if (containLocation) {
+                    json location = item["location"];
+                    int left = location["left"];
+                    int top = location["top"];
 
-    if (!m_ocrTextEdit->isVisible()) m_ocrTextEdit->show();
+                    // 插入到 QTextEdit 中
+                    QTextCursor cursor(m_ocrTextEdit->textCursor());
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, top);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, left);
 
-
-    qDebug() << "ocrTextData.pipeline:" << (int)ocrTextData.pipeline;
-    if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard) {
-    } else if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location) {
-    } else if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision
-               || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location) {
-
-//        qDebug() << "------>j:" << QString::fromStdString(j.dump());
-        // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
-        for (const auto& item : j["words_result"]) {
-            std::string words = item["words"];
-            json location = item["location"];
-            int left = location["left"];
-            int top = location["top"];
-
-            QString text = QString::fromStdString(words);
-
-            // 插入到 QTextEdit 中
-            QTextCursor cursor(m_ocrTextEdit->textCursor());
-            cursor.movePosition(QTextCursor::Start);
-            cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, top);
-            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, left);
-            cursor.insertText(text);
-            cursor.insertText("\n");
+                    cursor.insertText(text);
+                    cursor.insertText("\n");
+                }
+                m_ocrDlg->appendRightText(text);
+            }
         }
     }
 
+    // m_ocrTextEdit->resize(m_node.absoluteRect.size());
+    // m_ocrTextEdit->move(m_node.absoluteRect.topLeft());
+    // m_ocrTextEdit->clear();
 
+    // if (!m_ocrTextEdit->isVisible()) m_ocrTextEdit->show();
+
+    // 显示 OCR 弹窗
+    const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
+    m_ocrDlg->setLeftPixmap(pixmap);
+    const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
+    if (screen) {
+        const QPoint& center = screen->geometry().center(); // 获取屏幕的中心坐标
+        m_ocrDlg->move(center - QPoint(m_ocrDlg->width() / 2, m_ocrDlg->height() / 2));
+    }
+
+    if (!m_ocrDlg->isVisible()) m_ocrDlg->show();
+    m_ocrDlg->activateWindow();
+
+    close();
 }
 
 void ScreenShot::onOcrTranslateCtrlHide()
@@ -612,6 +628,9 @@ void ScreenShot::initUI()
     m_paintNode.pen = CONF_PBS_DATA.paPen;
     m_paintNode.brush = CONF_PBS_DATA.paBrush;
 
+
+    m_ocrDlg->resize(1880, 1026);
+    m_ocrDlg->hide();
     // 初始化上一次的效果
     QTextCharFormat format = m_edit->currentCharFormat();
     format.foreground().setColor(m_paintNode.pen.color());    // fix: 默认描边的颜色边框为黑色

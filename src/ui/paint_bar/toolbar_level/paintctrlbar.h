@@ -14,7 +14,6 @@
 #include <QFontComboBox>
 #include "colorpicker.h"
 #include "common/absbtnsctrl.h"
-#include "ocr_text/xocrtextctrl.h"
 #include "ocr_translate/ocrtranslatectrl.h"
 #include "paintbarhelper.h"
 
@@ -53,10 +52,7 @@ private slots:
     void onOcrTranslateCopy(bool checked);
     void onCbbFromCurrentTextChanged(const QString &text);
     void onCbbToCurrentTextChanged(const QString &text);
-    // 传递 OCR Text
-    void onOcrTextEdit(bool checked);
-    void onOcrTextCopy();
-    void onOcrTextUpdate();
+
 
 public slots:
     void onIdReleased(int id);
@@ -80,7 +76,6 @@ private:
     QPointer<AbsBtnsCtrl>         m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>         m_pointCtrl;                     // 线宽
     QPointer<OcrTranslateCtrl>    m_ocrTranslateCtrl;                  // OCR 翻译
-    QPointer<XOcrTextCtrl>         m_ocrTextCtrl;                       // OCR 转换为文本
     QPointer<ColorPicker>         m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;

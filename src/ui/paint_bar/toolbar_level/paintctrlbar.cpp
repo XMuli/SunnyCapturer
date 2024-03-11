@@ -57,7 +57,6 @@ PaintCtrlBar::~PaintCtrlBar()
     m_markerPenCtrl->deleteLater();
     m_colorPicker->deleteLater();
     m_ocrTranslateCtrl->deleteLater();
-    m_ocrTextCtrl->deleteLater();
 
     m_fontFamily->deleteLater();
     m_fontScale->deleteLater();
@@ -127,18 +126,11 @@ void PaintCtrlBar::initBtns()
     connect(m_ocrTranslateCtrl->m_tbCopy, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateCopy);
     connect(m_ocrTranslateCtrl->m_cbbFrom, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbFromCurrentTextChanged);
     connect(m_ocrTranslateCtrl->m_cbbTo, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbToCurrentTextChanged);
-    // m_ocrTextCtrl
-    m_ocrTextCtrl = new XOcrTextCtrl(m_orie, this);
-    connect(m_ocrTextCtrl->m_tbdit, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTextEdit);
-    connect(m_ocrTextCtrl->m_tbCopy, &XToolButton::released, this, &PaintCtrlBar::onOcrTextCopy);
-    connect(m_ocrTextCtrl->m_tbUpdate, &XToolButton::released, this, &PaintCtrlBar::onOcrTextUpdate);
-//    connect(creatorAbsBtnsCtrl(m_orie, m_ocrTextCtrl, dir, QStringList() << "ocr_text_edit" << "ocr_text_copy" << "oct_text_update", QStringList() << QString::number(-1), false, false), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
 
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
     m_ocrTranslateCtrl->hide();
-    m_ocrTextCtrl->hide();
     m_fontFamily->setEditable(false);
     m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
@@ -374,26 +366,6 @@ void PaintCtrlBar::onCbbToCurrentTextChanged(const QString &text)
     emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
 }
 
-void PaintCtrlBar::onOcrTextEdit(bool checked)
-{
-    m_ocrTextDate.allowWrite = checked;
-    m_ocrTextDate.operate = OcrTextOperate::OTO_is_allow_edit;
-    emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
-}
-
-void PaintCtrlBar::onOcrTextCopy()
-{
-    m_ocrTextDate.operate = OcrTextOperate::OTO_text_copy;
-    emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
-}
-
-void PaintCtrlBar::onOcrTextUpdate()
-{
-    m_ocrTextDate.operate = OcrTextOperate::OTO_update;
-    m_ocrTextDate.pipeline = OcrTextPipeline::OTP_ocr_text_high_precision_location;
-    emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
-}
-
 void PaintCtrlBar::onIdReleased(int id)
 {
     qDebug() << "----sender（）:" << sender() << "parent():" << "   id:" << id ;
@@ -429,7 +401,6 @@ void PaintCtrlBar::onIdReleased(int id)
         m_ocrTranslateDate.bTranslate = checked;
 
         emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
-    } else if (paint == m_ocrTextCtrl) {
     } else {
         qDebug() << "sender()->parent(): %1 is empty!";
     }
@@ -512,7 +483,6 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
         bColorPickerShow = false;
         if (!isChecked) emit COMM.sigOcrTranslateCtrlHide();
     } else if (type == PaintType::PT_ocr_text) {
-        addWidget(m_ocrTextCtrl, false);
         bPointCtrlShow = false;
         bColorPickerShow = false;
         if (!isChecked) emit COMM.sigOcrTextCtrlHide();
