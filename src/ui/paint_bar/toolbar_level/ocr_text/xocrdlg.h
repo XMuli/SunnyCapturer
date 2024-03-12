@@ -7,6 +7,7 @@
 #define XOCRDLG_H
 
 #include <QAction>
+#include <QMouseEvent>
 #include <QScrollBar>
 #include <QWidget>
 
@@ -25,23 +26,24 @@ public:
     void setLeftPixmap(const QPixmap& pix);
     void setRightText(const QString& text);
     void appendRightText(const QString& text);
-    void setOcrSize();
 
 private slots:
-    void zoomIn();
-    void zoomOut();
-    void normalSize();
+    void onZoomIn();
+    void onZoomOut();
+    void onNormalSize();
 
 private:
+    void pixmapMoveCenter();
+    void updateTitleText();
     void scaleImage(double factor);
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
 
+protected:
+    void wheelEvent(QWheelEvent *e) override;
+
 private:
     Ui::XOcrDlg *ui;
-    double  m_scaleFactor = 1;
-//    QAction *m_actZoomIn;
-//    QAction *m_actZoomOut;
-//    QAction *m_actNormalSize;
+    double  m_scaleFactor;
 };
 
 #endif // XOCRDLG_H

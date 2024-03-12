@@ -140,7 +140,7 @@ private:
 
     QPointer<XTextEdit>      m_edit;
     QPointer<XOcrTextEdit>   m_ocrTextEdit;
-    QPointer<XImageViewer>   m_imgViewer;
+    QPointer<XOcrDlg>        m_ocrDlg;
 
 
 

@@ -13,28 +13,33 @@
 XOcrDlg::XOcrDlg(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::XOcrDlg)
+    , m_scaleFactor(1.0)
 {
     ui->setupUi(this);
+
     auto& lable = ui->label;
     lable->setBackgroundRole(QPalette::Base);
+    // lable->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);   // 会扩展拉伸
     lable->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);   // 会扩展拉伸
-//    lable->setAlignment(Qt::AlignCenter);
-    lable->setScaledContents(true);
+    lable->setAlignment(Qt::AlignCenter);
 
     auto& scrollArea = ui->scrollArea;
 //    scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidgetResizable(true);
     scrollArea->setVisible(true);
 
-//    ui->splitter->setStretchFactor(0, 4);
+    // 设置Splitter的大小比例
+    const auto& width =  rect().width() - ui->mainLayout->margin() * 2; // ui->splitter->width();
+    QList<int> sizes;
+    sizes <<  width * 0.75 << width * 0.25;
+    ui->splitter->setSizes(sizes);
+
 //    ui->splitter->setStretchFactor(0, 1);
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus),  this, [this](){zoomIn();});
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Equal),  this, [this](){zoomIn();});
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Underscore),  this, [this](){zoomOut();});
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus),  this, [this](){zoomOut();});
-//    new QShortcut(QKeySequence::ZoomIn,  this, [this](){zoomIn();});
-//    new QShortcut(QKeySequence::ZoomOut,  this, [this](){zoomOut();});
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N),  this, [this](){normalSize();});
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus),  this, [this](){onZoomIn();});
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Equal),  this, [this](){onZoomIn();});
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Underscore),  this, [this](){onZoomOut();});
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus),  this, [this](){onZoomOut();});          // QKeySequence::ZoomIn  ZoomOut
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N),  this, [this](){onNormalSize();});
 }
 
 XOcrDlg::~XOcrDlg()
@@ -47,14 +52,10 @@ void XOcrDlg::setLeftPixmap(const QPixmap &pix)
     if (pix.isNull()) return;
     ui->label->setPixmap(pix);
 
-//    ui->label->setPixmap(QPixmap("C:/Users/Venn/Pictures/111.jpg"));
+   // ui->label->setPixmap(QPixmap("C:/Users/Venn/Pictures/2023.10.29_224643.png_proc.jpg"));
     m_scaleFactor = 1.0;
-//    ui->label->adjustSize();
-
-    const auto& text = QString("pix: %1 * %2  label: %3 * %4")
-                           .arg(pix.width()).arg(pix.height())
-                           .arg(ui->label->rect().width()).arg(ui->label->rect().height());
-    setWindowTitle(text);
+    ui->label->adjustSize();
+    updateTitleText();
 }
 
 void XOcrDlg::setRightText(const QString &text)
@@ -68,30 +69,42 @@ void XOcrDlg::appendRightText(const QString &text)
     ui->textEdit->append(text);
 }
 
-void XOcrDlg::setOcrSize()
-{
-    // 设置Splitter的大小比例
-    const auto& width =  rect().width() - ui->mainLayout->margin() * 2; // ui->splitter->width();
-    QList<int> sizes;
-    sizes <<  width * 0.75 << width * 0.25;
 
-    ui->splitter->setSizes(sizes);
-}
-
-void XOcrDlg::zoomIn()
+void XOcrDlg::onZoomIn()
 {
     scaleImage(1.25);
 }
 
-void XOcrDlg::zoomOut()
+void XOcrDlg::onZoomOut()
 {
-    scaleImage(0.8);
+    scaleImage(0.75);
 }
 
-void XOcrDlg::normalSize()
+void XOcrDlg::onNormalSize()
 {
     ui->label->adjustSize();
     m_scaleFactor = 1.0;
+    pixmapMoveCenter();
+}
+
+void XOcrDlg::pixmapMoveCenter()
+{
+    auto& label = ui->label;
+    const auto& size = label->size();
+    label->setScaledContents(true);
+
+    const auto& p1 = ui->scrollArea->rect().center();
+    label->move(p1 - QPoint(size.width() / 2, size.height() / 2));
+    updateTitleText();
+}
+
+void XOcrDlg::updateTitleText()
+{
+    const auto& text = QString(tr("original [%1 * %2]   current [%3 * %4]   zoom: %5%"))
+                           .arg(ui->label->pixmap()->rect().width()).arg(ui->label->pixmap()->rect().height())
+                           .arg(ui->label->rect().width()).arg(ui->label->rect().height())
+                           .arg(int(m_scaleFactor * 100));
+    setWindowTitle(text);
 }
 
 void XOcrDlg::scaleImage(double factor)
@@ -102,16 +115,27 @@ void XOcrDlg::scaleImage(double factor)
     adjustScrollBar(ui->scrollArea->horizontalScrollBar(), factor);
     adjustScrollBar(ui->scrollArea->verticalScrollBar(), factor);
 
-//    zoomInAct->setEnabled(m_scaleFactor < 3.0);
-//    zoomOutAct->setEnabled(m_scaleFactor > 0.333);
-
-    const auto& text = QString("pix: %1 * %2  label: %3 * %4")
-                           .arg(ui->label->pixmap()->rect().width()).arg(ui->label->pixmap()->rect().height())
-                           .arg(ui->label->rect().width()).arg(ui->label->rect().height());
-    setWindowTitle(text);
+    pixmapMoveCenter();
 }
 
 void XOcrDlg::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
     scrollBar->setValue(int(factor * scrollBar->value() + ((factor - 1) * scrollBar->pageStep()/2)));
 }
+
+// 滚轮缩放此图
+void XOcrDlg::wheelEvent(QWheelEvent *e)
+{
+    QPoint degrees = e->angleDelta() / 8;
+    if (degrees.isNull()) return;
+    QPoint step = degrees / 15;
+
+    QWidget *childWidget = childAt(e->pos());
+    // qDebug() << "wheelEvent childWidget:" << childWidget << e->pos();
+    if (childWidget && (childWidget == ui->scrollAreaWidgetContents || childWidget == ui->label))
+       step.y() > 0 ? onZoomIn() : onZoomOut();
+
+    e->ignore();
+}
+
+
