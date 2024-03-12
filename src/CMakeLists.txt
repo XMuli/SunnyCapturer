@@ -12,7 +12,7 @@ set(project_version_path 1)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2024.03.12")
+add_definitions(-DXBUILD_TIME="2024.03.13")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -128,6 +128,9 @@ set(custom_ui_files
     ui/paint_bar/toolbar_level/ocr_text/xocrdlg.ui
     ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.h
     ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.cpp
+    ui/paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.h
+    ui/paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.cpp
+    ui/paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.ui
     ui/paint_bar/toolbar_level/pin/pinwidget.h
     ui/paint_bar/toolbar_level/pin/pinwidget.cpp
     ui/paint_bar/toolbar_level/pin/pinwidget.ui

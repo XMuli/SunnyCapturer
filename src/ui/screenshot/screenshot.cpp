@@ -45,6 +45,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_edit(new XTextEdit(this))
     , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
     , m_ocrDlg(new XOcrDlg(nullptr))
+    , m_imgTranslateDlg(new ImageTranslateDlg(nullptr))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -250,7 +251,6 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
             return m_origPix.copy(rect);
 
         } else {
-
             return m_ocrGeneratePix.copy();
         }
 
@@ -493,13 +493,27 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const OcrTranslateData &data)
 void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 {
     QFile file(path);
-    if (!file.exists() || !size.isValid()) return;
+    if (file.exists() && size.isValid()) {
+        m_ocrGeneratePix = QPixmap(size);
+        m_ocrGeneratePix.load(path);
+        update();
+    }
 
-//    m_ocrGeneratePix = QPixmap(size);
-    m_ocrGeneratePix.load(path);
-    update();
-    // TODO:
+    // 显示 图片翻译 弹窗
+    const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, false);
+    m_imgTranslateDlg->setLeftPixmap(pixmap);
+    m_imgTranslateDlg->setRightPixmap(size, path);
+    const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
+    if (screen) {
+        const auto& rect = screen->geometry();
+        const QPoint& center = rect.center(); // 获取屏幕的中心坐标
+        m_imgTranslateDlg->resize(rect.width() * 0.64, rect.height() * 0.64);
+        m_imgTranslateDlg->move(center - QPoint(m_imgTranslateDlg->width() / 2, m_imgTranslateDlg->height() / 2));
+    }
 
+    if (!m_imgTranslateDlg->isVisible()) m_imgTranslateDlg->show();
+    m_imgTranslateDlg->activateWindow();
+    close();
 }
 
 void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
@@ -631,6 +645,7 @@ void ScreenShot::initUI()
     m_paintNode.brush = CONF_PBS_DATA.paBrush;
 
     m_ocrDlg->hide();
+    m_imgTranslateDlg->hide();
     // 初始化上一次的效果
     QTextCharFormat format = m_edit->currentCharFormat();
     format.foreground().setColor(m_paintNode.pen.color());    // fix: 默认描边的颜色边框为黑色

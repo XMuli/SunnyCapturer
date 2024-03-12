@@ -15,6 +15,7 @@
 #include <QPaintEvent>
 #include <QRect>
 #include <QPointer>
+
 #include "tips.h"
 #include "ximageviewer.h"
 #include "xtextedit.h"
@@ -23,6 +24,7 @@
 #include "../paint_bar/paintbar.h"
 #include "../commom/ocr/networkocr.h"
 #include "../paint_bar/toolbar_level/ocr_text/xocrdlg.h"
+#include "../paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.h"
 #include "../../commom/communication/communication.h"
 #include "windowsrect.h" // 引用位置在 Qt 库之后，避免 x11 库冲突
 
@@ -70,9 +72,9 @@ public slots:
     void onTextFontFamilyChanged(const QFont &font);
     void onTextFontSizeChanged(const QString &fontSize);
     void onOcrTranslateCtrlIdReleased(const OcrTranslateData& data);                              // 开始 OCR Translate
-    void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                         // OCR Translate 后的图片已保存成功
+    void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                         // OCR 图片翻译 后的图片已保存成功
     void onOCRTextCtrlIdReleased(const OcrTextData &data);                                        // 开始 OCR Text
-    void onOCRTextGenerateFinsh(const QByteArray& response, const OcrTextData& ocrTextData);           // OCR Text 后的文本已解析成功
+    void onOCRTextGenerateFinsh(const QByteArray& response, const OcrTextData& ocrTextData);      // OCR 提取文字 后的文本已解析成功
     void onOcrTranslateCtrlHide();
     void onOcrTextCtrlHide();
 
@@ -138,9 +140,10 @@ private:
     Qt::Orientation          m_orie;
     std::vector<RectNode>    m_rectNodes;
 
-    QPointer<XTextEdit>      m_edit;
-    QPointer<XOcrTextEdit>   m_ocrTextEdit;
-    QPointer<XOcrDlg>        m_ocrDlg;
+    QPointer<XTextEdit>           m_edit;
+    QPointer<XOcrTextEdit>        m_ocrTextEdit;
+    QPointer<XOcrDlg>             m_ocrDlg;              // OCR 文字提取
+    QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 
 
 

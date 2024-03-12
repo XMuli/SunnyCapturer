@@ -283,18 +283,17 @@ void NetworkOCR::dealYouDaoOcrTranslateRequest(QNetworkReply *reply)
         return;
     }
 
+    // 解析 JSON 数据
+    json j;
+    try {
+        j = json::parse(response.toStdString());
+    } catch (const std::exception& e) {
+        qDebug() << "Failed to parse JSON:" << e.what();
+        return;
+    }
+
     if (dataHead.at(0) == "200") {
-        // 解析 JSON 数据
-        json j;
-        try {
-            j = json::parse(response.toStdString());
-        } catch (const std::exception& e) {
-            qDebug() << "Failed to parse JSON:" << e.what();
-            return;
-        }
-
         if (j.contains("errorCode") && j["errorCode"] == "0" && j.contains("render_image") && j.contains("image_size")) {
-
             QString render_image = QString::fromStdString(j["render_image"].dump());
             QString image_size = QString::fromStdString(j["image_size"].dump());
             QString tImageSize = image_size.mid(1, image_size.size() - 2);
@@ -326,11 +325,13 @@ void NetworkOCR::dealYouDaoOcrTranslateRequest(QNetworkReply *reply)
                 qDebug() << "Failed to load image.";
             }
 
-        }
+            //            // 反向 URL 解码数据以查看 +
+            //            QString decodedData = QUrl::fromPercentEncoding(responseData);
+            //            qDebug() << "decodedData:" << decodedData;
 
-        //            // 反向 URL 解码数据以查看 +
-        //            QString decodedData = QUrl::fromPercentEncoding(responseData);
-        //            qDebug() << "decodedData:" << decodedData;
+        } else {
+            emit COMM.sigOCRImageGenerateFinsh(QSize(), QString::fromStdString(j.dump()));   // 返回具体的错误码
+        }
 
     } else {
         qWarning() << replyErrorShowText(dataHead);
