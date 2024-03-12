@@ -594,9 +594,14 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
     m_ocrDlg->setLeftPixmap(pixmap);
     const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
     if (screen) {
-        const QPoint& center = screen->geometry().center(); // 获取屏幕的中心坐标
+        const auto& rect = screen->geometry();
+        const QPoint& center = rect.center(); // 获取屏幕的中心坐标
+        m_ocrDlg->resize(rect.width() * 0.64, rect.height() * 0.64);
         m_ocrDlg->move(center - QPoint(m_ocrDlg->width() / 2, m_ocrDlg->height() / 2));
     }
+
+
+    m_ocrDlg->setOcrSize();
 
     if (!m_ocrDlg->isVisible()) m_ocrDlg->show();
     m_ocrDlg->activateWindow();
