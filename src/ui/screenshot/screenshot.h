@@ -16,6 +16,7 @@
 #include <QRect>
 #include <QPointer>
 #include "tips.h"
+#include "ximageviewer.h"
 #include "xtextedit.h"
 #include "xocrtextedit.h"
 #include "capturehelper.h"
@@ -139,7 +140,9 @@ private:
 
     QPointer<XTextEdit>      m_edit;
     QPointer<XOcrTextEdit>   m_ocrTextEdit;
-    QPointer<XOcrDlg>        m_ocrDlg;
+    QPointer<XImageViewer>   m_imgViewer;
+
+
 
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;

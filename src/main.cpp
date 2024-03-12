@@ -18,6 +18,8 @@
 
 // test
 #include "data/configmanager.h"
+#include "ximagedlg.h"
+#include "ximageviewer.h"
 //#include "xtextedit.h"
 //#include "tips.h"
 //#include <QWidget>
@@ -90,6 +92,7 @@ int main(int argc, char *argv[])
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
+
 
 //    NetworkOCR networkOCR;
 //    networkOCR.sendBaiDuOcrTextRequest("C:/Users/Venn/Desktop/Sunny_20231030_114240.png");

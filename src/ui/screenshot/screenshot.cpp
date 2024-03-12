@@ -44,7 +44,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
     , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
-    , m_ocrDlg(new XOcrDlg(nullptr))
+    , m_imgViewer(new XImageViewer(nullptr))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -554,7 +554,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
     qDebug().noquote() << "------>j:" << text;
     const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
     if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
-        m_ocrDlg->setRightText(text);
+        m_imgViewer->setRightText(text);
     } else {
         if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location
             ||ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location) {
@@ -578,7 +578,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
                     cursor.insertText(text);
                     cursor.insertText("\n");
                 }
-                m_ocrDlg->appendRightText(text);
+                m_imgViewer->appendRightText(text);
             }
         }
     }
@@ -591,20 +591,20 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
 
     // 显示 OCR 弹窗
     const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
-    m_ocrDlg->setLeftPixmap(pixmap);
+    m_imgViewer->setLeftPixmap(pixmap);
     const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
     if (screen) {
         const auto& rect = screen->geometry();
         const QPoint& center = rect.center(); // 获取屏幕的中心坐标
-        m_ocrDlg->resize(rect.width() * 0.64, rect.height() * 0.64);
-        m_ocrDlg->move(center - QPoint(m_ocrDlg->width() / 2, m_ocrDlg->height() / 2));
+        m_imgViewer->resize(rect.width() * 0.64, rect.height() * 0.64);
+        m_imgViewer->move(center - QPoint(m_imgViewer->width() / 2, m_imgViewer->height() / 2));
     }
 
 
-    m_ocrDlg->setOcrSize();
+    // m_imgViewer->setOcrSize();
 
-    if (!m_ocrDlg->isVisible()) m_ocrDlg->show();
-    m_ocrDlg->activateWindow();
+    if (!m_imgViewer->isVisible()) m_imgViewer->show();
+    m_imgViewer->activateWindow();
 
     close();
 }
@@ -634,8 +634,8 @@ void ScreenShot::initUI()
     m_paintNode.brush = CONF_PBS_DATA.paBrush;
 
 
-    m_ocrDlg->resize(1880, 1026);
-    m_ocrDlg->hide();
+    m_imgViewer->resize(1880, 1026);
+    m_imgViewer->hide();
     // 初始化上一次的效果
     QTextCharFormat format = m_edit->currentCharFormat();
     format.foreground().setColor(m_paintNode.pen.color());    // fix: 默认描边的颜色边框为黑色

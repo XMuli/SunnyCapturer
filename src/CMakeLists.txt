@@ -64,6 +64,9 @@ set(custom_ui_files
     ui/include/xocrtextedit.h
     ui/include/xtoolbutton.h
     ui/include/switchbutton.h
+
+    ui/include/ximagedlg.h
+    ui/include/ximageviewer.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -87,6 +90,10 @@ set(custom_ui_files
     ui/common_widgets/xocrtextedit.cpp
     ui/common_widgets/xtoolbutton.cpp
     ui/common_widgets/switchbutton.cpp
+    ui/common_widgets/ximagedlg.cpp
+    ui/common_widgets/ximagedlg.ui
+    ui/common_widgets/ximageviewer.cpp
+    ui/common_widgets/ximageviewer.ui
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
