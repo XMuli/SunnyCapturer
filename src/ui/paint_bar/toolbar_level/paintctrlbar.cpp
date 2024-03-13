@@ -226,6 +226,8 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
         } else if (type == PaintType::PT_serial) {
             ctrl = m_serialCtrl;
         } else if (type == PaintType::PT_ocr_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
+            m_ocrTranslateDate.from = CONF_GET_PROPERTY(XTokens_iamge_translate_from).toString();
+            m_ocrTranslateDate.to = CONF_GET_PROPERTY(XTokens_iamge_translate_to).toString();
             m_ocrTranslateDate.bTranslate = true;
             if (isChecked)
                 emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);

@@ -103,7 +103,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QComboBox" name="comboBox"/>
+       <widget class="QComboBox" name="cbbFrom"/>
       </item>
       <item>
        <widget class="QLabel" name="label">
@@ -125,7 +125,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox_2"/>
+       <widget class="QComboBox" name="cbbTo"/>
       </item>
       <item>
        <spacer name="horizontalSpacer">

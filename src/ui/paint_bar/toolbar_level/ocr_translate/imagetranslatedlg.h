@@ -18,6 +18,10 @@ public:
     void setLeftPixmap(const QPixmap& pix);
     void setRightPixmap(const QSize &size, const QString &path);
 
+private slots:
+    void on_cbbFrom_currentTextChanged(const QString &text);
+    void on_cbbTo_currentTextChanged(const QString &text);
+
 private:
     Ui::ImageTranslateDlg *ui;
 };

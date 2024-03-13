@@ -20,11 +20,14 @@ OcrTranslateCtrl::OcrTranslateCtrl(const Qt::Orientations &orien, QWidget *paren
 
 void OcrTranslateCtrl::initUI()
 {
-    const auto& currLanguageFrom = "auto"; //CONF_MANAGE.property("XGeneral_language").toString();
-    const auto& currLanguageTo = "中文简体";
-
     const auto& cbbFrom = youDaoLanguageMapCode();
     const auto& cbbTo = youDaoLanguageMapCode();
+    const auto& currLanguageFrom = findKeyByValue(cbbFrom, CONF_GET_PROPERTY(XTokens_iamge_translate_from).toString());
+    const auto& currLanguageTo = findKeyByValue(cbbTo, CONF_GET_PROPERTY(XTokens_iamge_translate_to).toString());
+
+    // const auto& currLanguageFrom = "auto"; //GET_VALUE_PROPERTY(XTokens_iamge_translate_from);
+    // const auto& currLanguageTo = "中文简体";
+
     for (const auto& it : cbbFrom) m_cbbFrom->addItem(it.first, it.second);
     for (const auto& it : cbbTo) m_cbbTo->addItem(it.first, it.second);
 

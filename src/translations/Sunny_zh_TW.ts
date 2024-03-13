@@ -109,6 +109,17 @@
     </message>
 </context>
 <context>
+    <name>ImageTranslateDlg</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Interface</name>
     <message>
         <source>Form</source>
@@ -522,8 +533,12 @@ and specify -1 to let Sunny decide for you.</source>
         <translation>翻譯 [有道接口]</translation>
     </message>
     <message>
-        <source>OCR [BaiDu]</source>
-        <translation>屏幕識圖 [百度接口]</translation>
+        <source>OCR</source>
+        <translation type="unfinished">屏幕識圖</translation>
+    </message>
+    <message>
+        <source>Channel %1: %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -543,6 +558,35 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Quit</source>
         <translation>退出</translation>
+    </message>
+</context>
+<context>
+    <name>XImageDlg</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XImageViewer</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XOcrDlg</name>
+    <message>
+        <source>OCR</source>
+        <translation type="unfinished">屏幕識圖</translation>
+    </message>
+    <message>
+        <source>original [%1 * %2]   current [%3 * %4]   zoom: %5%</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

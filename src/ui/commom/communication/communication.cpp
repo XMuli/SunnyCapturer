@@ -179,12 +179,15 @@ QStringList getQSSFileNames(const QString &path)
 }
 
 
+
+// https://ai.youdao.com/DOCSIRMA/html/trans/api/tpfy/index.html
 std::map<QString, QString> youDaoLanguageMapCode()
 {
     static  std::map<QString, QString> map = { {"auto", "auto"}
                                               , {"English", "en"}
                                               , {"中文简体", "zh-CHS"}
                                               , {"中文繁体", "zh-CHT"}
+                                              , {"粤语", "yue"}
                                               , {"德语", "de"}
                                               , {"西班牙语", "es"}
                                               , {"法语", "fr"}
@@ -193,7 +196,26 @@ std::map<QString, QString> youDaoLanguageMapCode()
                                               , {"俄语", "ru"}
                                               , {"泰语", "th"}
                                               , {"土耳其语", "de"}
-                                              , {"粤语", "yue"}};
+                                              , {"白俄罗斯语", "be"}
+                                              , {"孟加拉语", "bn"}
+                                              , {"捷克语", "cs"}
+                                              , {"丹麦语", "da"}
+                                              , {"希腊语", "el"}
+                                              , {"芬兰语", "fi"}
+                                              , {"匈牙利语", "hu"}
+                                              , {"缅甸语", "my"}
+                                              , {"挪威语", "no"}
+                                              , {"阿拉伯语", "ar"}
+                                              };
     return map;
 
+}
+
+QString findKeyByValue(const std::map<QString, QString> &myMap, const QString &value)
+{
+    for (const auto& pair : myMap) {
+        if (pair.second == value)
+            return pair.first; // 返回匹配的键
+    }
+    return ""; // 如果没有找到匹配的值，则返回空字符串
 }

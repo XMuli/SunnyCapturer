@@ -86,6 +86,8 @@ void ConfigManager::readFromFile()
     // Tokens
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_app_id, encryptString("5a3aa1167eed698d"));
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_secret_key, encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T"));
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_iamge_translate_from, "auto");
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_iamge_translate_to, "zh-CHS");
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_baidu_api_key, encryptString("u0fpmxS2WSvGb3lEUywiU3VX"));
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_baidu_secret_key, encryptString("SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6"));
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_ocr_channel, 0);
@@ -189,6 +191,8 @@ void ConfigManager::writeToFile()
     // Tokens
     WRITE_INI(XTokens, XTokens_youdao_app_id, GET_VALUE_PROPERTY(XTokens_youdao_app_id));
     WRITE_INI(XTokens, XTokens_youdao_secret_key, GET_VALUE_PROPERTY(XTokens_youdao_secret_key));
+    WRITE_INI(XTokens, XTokens_iamge_translate_from, GET_VALUE_PROPERTY(XTokens_iamge_translate_from));
+    WRITE_INI(XTokens, XTokens_iamge_translate_to, GET_VALUE_PROPERTY(XTokens_iamge_translate_to));
     WRITE_INI(XTokens, XTokens_baidu_api_key, GET_VALUE_PROPERTY(XTokens_baidu_api_key));
     WRITE_INI(XTokens, XTokens_baidu_secret_key, GET_VALUE_PROPERTY(XTokens_baidu_secret_key));
     WRITE_INI(XTokens, XTokens_ocr_channel, GET_VALUE_PROPERTY(XTokens_ocr_channel));
