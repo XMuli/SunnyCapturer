@@ -5,14 +5,16 @@
 
 #include "tokens.h"
 #include "ui_tokens.h"
+#include <QIcon>
 #include "../../data/configmanager.h"
+#include "../paint_bar/toolbar_level/paintbarhelper.h"
+#include "communication.h"
 
 Tokens::Tokens(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Tokens)
 {
     ui->setupUi(this);
-
     initUI();
 }
 
@@ -28,11 +30,26 @@ void Tokens::initUI()
 
     const QString& baidu_api_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_api_key).toByteArray());
     const QString& baidu_secret_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray());
+    const QString& ocr_channel = CONF_GET_PROPERTY(XTokens_ocr_channel).toString();
+
 
     ui->leYDAppID->setText(youdao_app_id);
     ui->leYDApiSecret->setText(youdao_secret_key);
     ui->leBdApiKey->setText(baidu_api_key);
     ui->leBdSecretKey->setText(baidu_secret_key);
+
+    // high_precision,                // 通用文字识别（高精度版）         1000 次/month
+    // high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
+    // standard,                      // 通用文字识别（标准版）           1000 次/month
+    // standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
+    const QStringList list = {"high", "high_location", "standard", "standard_location"};
+
+    for (int i = 0; i < list.count(); ++i) {
+        const QString& text = QString(tr("Channel %1: %2").arg(i).arg(list.at(i)));
+        ui->cbbChannel->addItem(text, list.at(i));
+        ui->cbbChannel->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/baidu.svg"));
+    }
+    ui->cbbChannel->setCurrentIndex(list.indexOf(ocr_channel));
 }
 
 void Tokens::onBtnResetClicked(bool checked)
@@ -64,6 +81,9 @@ void Tokens::on_leBdSecretKey_textChanged(const QString &arg1)
     CONF_SET_PROPERTY(XTokens_baidu_secret_key, CONF_MANAGE.encryptString(arg1));
 }
 
-
-
+void Tokens::on_cbbChannel_currentIndexChanged(int index)
+{
+    const QString& channel = ui->cbbChannel->currentData().toString();
+    CONF_SET_PROPERTY(XTokens_ocr_channel, channel);
+}
 

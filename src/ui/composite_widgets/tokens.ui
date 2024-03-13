@@ -13,7 +13,10 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="2,1">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="7,3">
+   <property name="verticalSpacing">
+    <number>20</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_9">
      <property name="title">
@@ -35,16 +38,6 @@
       <item>
        <widget class="QWidget" name="widget_8" native="true">
         <layout class="QGridLayout" name="gridLayout_8">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>APP ID:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="leYDApiSecret">
            <property name="styleSheet">
@@ -52,6 +45,16 @@
            </property>
            <property name="echoMode">
             <enum>QLineEdit::Password</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Secret Key:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -65,10 +68,10 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_8">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_11">
            <property name="text">
-            <string>Secret Key:</string>
+            <string>APP ID:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -84,7 +87,7 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="gbBaiDuApi">
      <property name="title">
-      <string>OCR [BaiDu]</string>
+      <string>OCR</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
       <property name="leftMargin">
@@ -102,27 +105,7 @@
       <item>
        <widget class="QWidget" name="widget_6" native="true">
         <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>API Key:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="leBdApiKey">
-           <property name="styleSheet">
-            <string notr="true">lineedit-password-character: 42;</string>
-           </property>
-           <property name="echoMode">
-            <enum>QLineEdit::Normal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Secret Key:</string>
@@ -133,12 +116,48 @@
           </widget>
          </item>
          <item row="1" column="1">
+          <widget class="QLineEdit" name="leBdApiKey">
+           <property name="styleSheet">
+            <string notr="true">lineedit-password-character: 42;</string>
+           </property>
+           <property name="echoMode">
+            <enum>QLineEdit::Normal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
           <widget class="QLineEdit" name="leBdSecretKey">
            <property name="styleSheet">
             <string notr="true">lineedit-password-character: 42;</string>
            </property>
            <property name="echoMode">
             <enum>QLineEdit::Password</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>API Key:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="cbbChannel"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="labIcon">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>

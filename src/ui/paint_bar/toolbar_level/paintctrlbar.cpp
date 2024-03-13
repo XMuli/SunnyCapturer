@@ -231,6 +231,16 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
                 emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
         } else if (type == PaintType::PT_ocr_text) {       //不需要向外传递，模拟切换过来，就直接相应【初次】 OCR 提取文字
             m_ocrTextDate.bTranslate = true;
+
+            // OCR 线路发生改变，需要重新赋值
+            const auto& text = CONF_GET_PROPERTY(XTokens_ocr_channel).toString();
+            OcrChannel ocr;
+            if (text == "high") ocr = OcrChannel::OCR_high_precision;
+            else if (text == "high_location") ocr = OcrChannel::OCR_high_precision_location;
+            else if (text == "standard") ocr = OcrChannel::OCR_standard;
+            else if (text == "standard_location") ocr = OcrChannel::OCR_standard_location;
+            m_ocrTextDate.pipeline = ocr;
+
             if (isChecked) emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
         }
 

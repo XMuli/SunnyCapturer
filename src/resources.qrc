@@ -58,5 +58,6 @@
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_model_switch.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_translate.svg</file>
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_update.svg</file>
+        <file>resources/icons/setting/tokens/baidu.svg</file>
     </qresource>
 </RCC>

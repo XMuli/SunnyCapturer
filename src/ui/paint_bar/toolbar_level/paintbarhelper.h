@@ -83,14 +83,15 @@ struct OcrTranslateData
 };
 
 
-// OcrTextPipeline + OcrTextData 都是调用 BaiDu API
-enum class OcrTextPipeline
+// OcrChannel + OcrTextData 都是调用 BaiDu API
+enum class OcrChannel
 {
-    OTP_ocr_text_standard,                      // 通用文字识别（标准版）           1000 次/month
-    OTP_ocr_text_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
-    OTP_ocr_text_high_precision,                // 通用文字识别（高精度版）         1000 次/month
-    OTP_ocr_text_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
+    OCR_high_precision,                // 通用文字识别（高精度版）         1000 次/month
+    OCR_high_precision_location,       // 通用文字识别（高精度含位置版）     500 次/month
+    OCR_standard,                      // 通用文字识别（标准版）           1000 次/month
+    OCR_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
 };
+Q_DECLARE_METATYPE(OcrChannel)                     // 可以被 QVariant 类型存储
 
 
 enum class OcrTextOperate
@@ -105,7 +106,7 @@ struct OcrTextData
 {
     // 自定义
     OcrTextOperate operate = OcrTextOperate::OTO_empty;                  // 是哪一个按钮被按下
-    OcrTextPipeline pipeline =  OcrTextPipeline::OTP_ocr_text_high_precision;
+    OcrChannel pipeline =  OcrChannel::OCR_high_precision;
     bool allowWrite = false;
     bool bTranslate = false;
 

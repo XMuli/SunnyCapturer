@@ -88,6 +88,8 @@ void ConfigManager::readFromFile()
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_youdao_secret_key, encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T"));
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_baidu_api_key, encryptString("u0fpmxS2WSvGb3lEUywiU3VX"));
     SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_baidu_secret_key, encryptString("SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6"));
+    SET_PROPERTY_AND_MEMBER_VALUE(XTokens, XTokens_ocr_channel, 0);
+
     // XOtherControl
     QStringList highlight;
     highlight << "#DF4187" << "#FF5D00" << "#F8CB00" << "#23C400"
@@ -189,6 +191,7 @@ void ConfigManager::writeToFile()
     WRITE_INI(XTokens, XTokens_youdao_secret_key, GET_VALUE_PROPERTY(XTokens_youdao_secret_key));
     WRITE_INI(XTokens, XTokens_baidu_api_key, GET_VALUE_PROPERTY(XTokens_baidu_api_key));
     WRITE_INI(XTokens, XTokens_baidu_secret_key, GET_VALUE_PROPERTY(XTokens_baidu_secret_key));
+    WRITE_INI(XTokens, XTokens_ocr_channel, GET_VALUE_PROPERTY(XTokens_ocr_channel));
     // XOtherControl
     WRITE_INI(XOtherControl, XOtherControl_blur_effect_adius, GET_VALUE_PROPERTY(XOtherControl_blur_effect_adius));
     WRITE_INI(XOtherControl, XOtherControl_highlight_iridescence, GET_VALUE_PROPERTY(XOtherControl_highlight_iridescence));

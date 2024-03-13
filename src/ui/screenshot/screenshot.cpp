@@ -570,14 +570,14 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTex
     if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
         m_ocrDlg->setRightText(text);
     } else {
-        if (ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location
-            ||ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location) {
+        if (ocrTextData.pipeline == OcrChannel::OCR_standard || ocrTextData.pipeline == OcrChannel::OCR_standard_location
+            ||ocrTextData.pipeline == OcrChannel::OCR_high_precision || ocrTextData.pipeline == OcrChannel::OCR_high_precision_location) {
             // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
             for (const auto& item : j["words_result"]) {
                 std::string words = item["words"];
                 QString text = QString::fromStdString(words);
 
-                const bool& containLocation = ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location || ocrTextData.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location;
+                const bool& containLocation = ocrTextData.pipeline == OcrChannel::OCR_standard_location || ocrTextData.pipeline == OcrChannel::OCR_high_precision_location;
                 if (containLocation) {
                     json location = item["location"];
                     int left = location["left"];

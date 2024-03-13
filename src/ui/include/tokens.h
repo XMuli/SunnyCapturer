@@ -33,6 +33,8 @@ private slots:
     void on_leBdApiKey_textChanged(const QString &arg1);
     void on_leBdSecretKey_textChanged(const QString &arg1);
 
+    void on_cbbChannel_currentIndexChanged(int index);
+
 private:
     Ui::Tokens *ui;
 };

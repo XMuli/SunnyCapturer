@@ -32,22 +32,21 @@ NetworkOCR::NetworkOCR(QObject *parent)
 //    , m_eventLoop(new QEventLoop(this))
 {
     connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
-
     sendBaiDuAccessToken();
 }
 
 void NetworkOCR::sendBaiDuOcrTextRequest(const OcrTextData &data, const QString &path)
 {
-    // OTP_ocr_text_standard,                      // 通用文字识别（标准版）           1000 次/month
-    // OTP_ocr_text_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
-    // OTP_ocr_text_high_precision,                // 通用文字识别（高精度版）         1000 次/month
-    // OTP_ocr_text_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
+    // OTP_standard,                      // 通用文字识别（标准版）           1000 次/month
+    // OCR_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
+    // OCR_high_precision,                // 通用文字识别（高精度版）         1000 次/month
+    // OCR_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
 
     QString para1 = "accurate";
-    if (data.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision_location) para1 = "accurate";
-    else if (data.pipeline == OcrTextPipeline::OTP_ocr_text_high_precision) para1 = "accurate_basic";
-    else if (data.pipeline == OcrTextPipeline::OTP_ocr_text_standard_location) para1 = "general";
-    else if (data.pipeline == OcrTextPipeline::OTP_ocr_text_standard) para1 = "general_basic";
+    if (data.pipeline == OcrChannel::OCR_high_precision_location) para1 = "accurate";
+    else if (data.pipeline == OcrChannel::OCR_high_precision) para1 = "accurate_basic";
+    else if (data.pipeline == OcrChannel::OCR_standard_location) para1 = "general";
+    else if (data.pipeline == OcrChannel::OCR_standard) para1 = "general_basic";
     ;
     // 从文件中读取图像数据并进行base64编码
     QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/" + para1 + "?access_token=" + m_baiDuToken);
