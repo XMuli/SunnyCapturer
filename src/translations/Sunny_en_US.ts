@@ -558,24 +558,6 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
 </context>
 <context>
-    <name>XImageDlg</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>XImageViewer</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>XOcrDlg</name>
     <message>
         <source>OCR</source>

@@ -17,23 +17,6 @@
 
 // test
 #include "data/configmanager.h"
-#include "ximagedlg.h"
-#include "ximageviewer.h"
-//#include "xtextedit.h"
-//#include "tips.h"
-//#include <QWidget>
-//#include "colorpicker.h"
-//#include "ui/setting/sidesettingui.h"
-
-//#include "ui/include/colorpicker.h"
-//#include "ui/screenshot/screenshot.h"
-//#include "ui/paint_bar/toolbar_level/painttoolbar.h"
-//#include "ui/paint_bar/toolbar_level/paintctrlbar.h"
-//#include "ui/paint_bar/paintbar.h"
-//#include "ui/paint_bar/pin/pinwidget.h"
-
-//#include <qt_windows.h>
-
 
 int main(int argc, char *argv[])
 {

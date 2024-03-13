@@ -64,9 +64,6 @@ set(custom_ui_files
     ui/include/xocrtextedit.h
     ui/include/xtoolbutton.h
     ui/include/switchbutton.h
-
-    ui/include/ximagedlg.h
-    ui/include/ximageviewer.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -80,20 +77,16 @@ set(custom_ui_files
     ui/include/licenseui.h
     ui/include/tokens.h
     #  cpp common_widgets
-    ui/common_widgets/xblureffect.cpp
-    ui/common_widgets/xcolorbutton.cpp
-    ui/common_widgets/xkeysequenceedit.cpp
-    ui/common_widgets/horspacerline.cpp
-    ui/common_widgets/verspacerline.cpp
-    ui/common_widgets/tips.cpp
-    ui/common_widgets/xtextedit.cpp
-    ui/common_widgets/xocrtextedit.cpp
-    ui/common_widgets/xtoolbutton.cpp
-    ui/common_widgets/switchbutton.cpp
-    ui/common_widgets/ximagedlg.cpp
-    ui/common_widgets/ximagedlg.ui
-    ui/common_widgets/ximageviewer.cpp
-    ui/common_widgets/ximageviewer.ui
+    ui/composite_widgets/xblureffect.cpp
+    ui/composite_widgets/xcolorbutton.cpp
+    ui/composite_widgets/xkeysequenceedit.cpp
+    ui/composite_widgets/horspacerline.cpp
+    ui/composite_widgets/verspacerline.cpp
+    ui/composite_widgets/tips.cpp
+    ui/composite_widgets/xtextedit.cpp
+    ui/composite_widgets/xocrtextedit.cpp
+    ui/composite_widgets/xtoolbutton.cpp
+    ui/composite_widgets/switchbutton.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp

@@ -17,7 +17,6 @@
 #include <QPointer>
 
 #include "tips.h"
-#include "ximageviewer.h"
 #include "xtextedit.h"
 #include "xocrtextedit.h"
 #include "capturehelper.h"
