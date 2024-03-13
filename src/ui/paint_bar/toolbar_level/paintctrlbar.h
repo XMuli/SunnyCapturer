@@ -14,7 +14,6 @@
 #include <QFontComboBox>
 #include "colorpicker.h"
 #include "common/absbtnsctrl.h"
-#include "ocr_translate/ocrtranslatectrl.h"
 #include "paintbarhelper.h"
 
 class PaintCtrlBar : public QWidget
@@ -43,16 +42,8 @@ signals:
     void sigPickedColor(const QColor& color);
     void sigTextFontFamilyChanged(const QFont &font);                       // PaintCtrlBar 字体 被发生改变时候
     void sigTextFontSizeChanged(const QString &fontSize);                   // PaintCtrlBar 字体大小 数值被发生改变时候
-    void sigOcrTranslateCtrlIdReleased(const OcrTranslateData& data);       // 传递 OCR 翻译
-    void sigOcrTextCtrlIdReleased(const OcrTextData& data);                 // 传递 OCR Text
-
-private slots:
-    // 传递 OCR 翻译具体
-    void onOcrTranslateStatusChanged(bool checked);
-    void onOcrTranslateCopy(bool checked);
-    void onCbbFromCurrentTextChanged(const QString &text);
-    void onCbbToCurrentTextChanged(const QString &text);
-
+    void sigImgTranslate(const ImgTranslateData& data);       // 传递 OCR 翻译
+    void sigOcr(const OcrData& data);                 // 传递 OCR Text
 
 public slots:
     void onIdReleased(int id);
@@ -64,8 +55,8 @@ public slots:
 private:
     QBoxLayout*                   m_layout;
     Qt::Orientation               m_orie;
-    OcrTranslateData              m_ocrTranslateDate;
-    OcrTextData                   m_ocrTextDate;
+    ImgTranslateData              m_imgTransDate;
+    OcrData                   m_ocrTextDate;
 
     QPointer<AbsBtnsCtrl>         m_rectCtrl;                      // 矩形
     QPointer<AbsBtnsCtrl>         m_ellipseCtrl;                   // 圆形
@@ -75,7 +66,6 @@ private:
     QPointer<AbsBtnsCtrl>         m_textCtrl;                      // 文本
     QPointer<AbsBtnsCtrl>         m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>         m_pointCtrl;                     // 线宽
-    QPointer<OcrTranslateCtrl>    m_ocrTranslateCtrl;                  // OCR 翻译
     QPointer<ColorPicker>         m_colorPicker;                   // 取色板
     QPointer<QFontComboBox>       m_fontFamily;
     QPointer<QComboBox>           m_fontScale;

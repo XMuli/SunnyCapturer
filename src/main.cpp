@@ -10,7 +10,6 @@
 #include <QDebug>
 #include "xapphelper.h"
 #include "ui/commom/ocr/networkocr.h"
-#include "ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.h"
 
 //#include "xlog.h"
 #include "ui/screenshot/tray.h"
@@ -95,8 +94,8 @@ int main(int argc, char *argv[])
 
 
 //    NetworkOCR networkOCR;
-//    networkOCR.sendBaiDuOcrTextRequest("C:/Users/Venn/Desktop/Sunny_20231030_114240.png");
-//    networkOCR.sendYouDaoOcrTranslateRequest();
+//    networkOCR.sendBaiDuOcrRequest("C:/Users/Venn/Desktop/Sunny_20231030_114240.png");
+//    networkOCR.sendYouDaoImgTranslateRequest();
 
 
 

@@ -71,10 +71,10 @@ public slots:
     void onPickedColor(const QColor& color);
     void onTextFontFamilyChanged(const QFont &font);
     void onTextFontSizeChanged(const QString &fontSize);
-    void onOcrTranslateCtrlIdReleased(const OcrTranslateData& data);                              // 开始 OCR Translate
+    void onOcrTranslateCtrlIdReleased(const ImgTranslateData& data);                              // 开始 OCR Translate
     void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                         // OCR 图片翻译 后的图片已保存成功
-    void onOCRTextCtrlIdReleased(const OcrTextData &data);                                        // 开始 OCR Text
-    void onOCRTextGenerateFinsh(const QByteArray& response, const OcrTextData& ocrTextData);      // OCR 提取文字 后的文本已解析成功
+    void onOCRTextCtrlIdReleased(const OcrData &data);                                        // 开始 OCR Text
+    void onOCRTextGenerateFinsh(const QByteArray& response, const OcrData& ocrTextData);      // OCR 提取文字 后的文本已解析成功
     void onOcrTranslateCtrlHide();
     void onOcrTextCtrlHide();
 

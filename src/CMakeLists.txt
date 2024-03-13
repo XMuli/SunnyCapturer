@@ -126,8 +126,6 @@ set(custom_ui_files
     ui/paint_bar/toolbar_level/ocr_text/xocrdlg.h
     ui/paint_bar/toolbar_level/ocr_text/xocrdlg.cpp
     ui/paint_bar/toolbar_level/ocr_text/xocrdlg.ui
-    ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.h
-    ui/paint_bar/toolbar_level/ocr_translate/ocrtranslatectrl.cpp
     ui/paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.h
     ui/paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.cpp
     ui/paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.ui

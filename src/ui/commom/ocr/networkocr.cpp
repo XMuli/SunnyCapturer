@@ -35,7 +35,7 @@ NetworkOCR::NetworkOCR(QObject *parent)
     sendBaiDuAccessToken();
 }
 
-void NetworkOCR::sendBaiDuOcrTextRequest(const OcrTextData &data, const QString &path)
+void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
 {
     // OTP_standard,                      // 通用文字识别（标准版）           1000 次/month
     // OCR_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
@@ -54,13 +54,13 @@ void NetworkOCR::sendBaiDuOcrTextRequest(const OcrTextData &data, const QString 
     QByteArray postData = "image=" + QUrl::toPercentEncoding(base64FromFileContent(path)) + "&detect_direction=false&vertexes_location=false&paragraph=false&probability=false";
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     request.setRawHeader("Accept", "application/json");
-    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_ocr_text));
-    request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<OcrTextData>(data));   // 当前 发送的请求线路
+    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_text));
+    request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<OcrData>(data));   // 当前 发送的请求线路
 
     m_networkManager->post(request, postData);
 }
 
-void NetworkOCR::sendBaiDuOcrTranslateRequest(const OcrTranslateData &data, const QString &path)
+void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, const QString &path)
 {
     QUrl url("https://aip.baidubce.com/file/2.0/mt/pictrans/v1");
     QUrlQuery query;
@@ -102,14 +102,14 @@ void NetworkOCR::sendBaiDuOcrTranslateRequest(const OcrTranslateData &data, cons
 
 }
 
-void NetworkOCR::sendYouDaoOcrTranslateRequest(const OcrTranslateData &data, const QString &path)
+void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, const QString &path)
 {
     QString base64DataUtf8 = base64FromFileContent(path);
 
     // 构造POST请求
     QNetworkRequest request(QUrl("https://openapi.youdao.com/ocrtransapi"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_youdao_ocr_translate));
+    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_youdao_img_translate));
 
     QUrlQuery postData;
     postData.addQueryItem("q", QUrl::toPercentEncoding(base64DataUtf8)); // fix 【重要】: 是 Qt 框架中用于将字符串转换为百分号编码（percent encoding）格式的函数。这个编码方式也称为 URL 编码或 URI 编码。它将字符串中的特殊字符以 % 符号后跟两位十六进制数字的形式进行编码，
@@ -254,29 +254,29 @@ void NetworkOCR::dealBaiDuAccessToken(QNetworkReply *reply)
     }
 }
 
-void NetworkOCR::dealBaiDuOcrTextRequest(QNetworkReply *reply)
+void NetworkOCR::dealBaiDuOcrRequest(QNetworkReply *reply)
 {
     const QStringList& dataHead = rawHeader(reply);
     QByteArray response = reply->readAll();
-        qDebug().noquote() << " dealBaiDuOcrTextRequest reply -> Content:" << response;
+        qDebug().noquote() << " dealBaiDuOcrRequest reply -> Content:" << response;
     if (response.isEmpty()) {
         qWarning() << "reply->readAll() is empty!  retrn;!!!";
         return;
     }
 
     if (dataHead.at(0) == "200") {
-        const OcrTextData& ocrTextData = reply->request().attribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1)).value<OcrTextData>();
+        const OcrData& ocrTextData = reply->request().attribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1)).value<OcrData>();
         emit COMM.sigOCRTextGenerateFinsh(response, ocrTextData);
     } else {
         qWarning() << replyErrorShowText(dataHead);
     }
 }
 
-void NetworkOCR::dealYouDaoOcrTranslateRequest(QNetworkReply *reply)
+void NetworkOCR::dealYouDaoImgTranslateRequest(QNetworkReply *reply)
 {
     const QStringList& dataHead = rawHeader(reply);
     QByteArray response = reply->readAll();
-    qDebug().noquote() << " dealYouDaoOcrTranslateRequest reply -> Content:" << response;
+    qDebug().noquote() << " dealYouDaoImgTranslateRequest reply -> Content:" << response;
     if (response.isEmpty()) {
         qWarning()<<"reply->readAll() is empty!  retrn;!!!";
         return;
@@ -351,10 +351,10 @@ void NetworkOCR::onRequestFinished(QNetworkReply *reply)
 
         if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_access_token) {
             dealBaiDuAccessToken(reply);
-        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_ocr_text) {
-            dealBaiDuOcrTextRequest(reply);
-        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_youdao_ocr_translate) {
-            dealYouDaoOcrTranslateRequest(reply);
+        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_text) {
+            dealBaiDuOcrRequest(reply);
+        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_youdao_img_translate) {
+            dealYouDaoImgTranslateRequest(reply);
         } else {
             qDebug() << "***************** RESP_TYPE::RT_empty not match resp type! If you forget to set request->setAttribute(QNetworkRequest::User, nType);, it will look like this*****************";
         }

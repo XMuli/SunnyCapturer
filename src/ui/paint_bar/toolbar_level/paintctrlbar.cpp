@@ -56,7 +56,7 @@ PaintCtrlBar::~PaintCtrlBar()
     m_pointCtrl->deleteLater();
     m_markerPenCtrl->deleteLater();
     m_colorPicker->deleteLater();
-    m_ocrTranslateCtrl->deleteLater();
+    // m_ocrTranslateCtrl->deleteLater();
 
     m_fontFamily->deleteLater();
     m_fontScale->deleteLater();
@@ -121,16 +121,16 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CONF_PBS_DATA.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CONF_PBS_DATA.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     // OcrTranslateCtrl 的对象
-    m_ocrTranslateCtrl = new OcrTranslateCtrl(m_orie, this);
-    connect(m_ocrTranslateCtrl->m_tbTranslate, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateStatusChanged);
-    connect(m_ocrTranslateCtrl->m_tbCopy, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateCopy);
-    connect(m_ocrTranslateCtrl->m_cbbFrom, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbFromCurrentTextChanged);
-    connect(m_ocrTranslateCtrl->m_cbbTo, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbToCurrentTextChanged);
+    // m_ocrTranslateCtrl = new OcrTranslateCtrl(m_orie, this);
+    // connect(m_ocrTranslateCtrl->m_tbTranslate, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateStatusChanged);
+    // connect(m_ocrTranslateCtrl->m_tbCopy, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateCopy);
+    // connect(m_ocrTranslateCtrl->m_cbbFrom, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbFromCurrentTextChanged);
+    // connect(m_ocrTranslateCtrl->m_cbbTo, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbToCurrentTextChanged);
 
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
 
-    m_ocrTranslateCtrl->hide();
+    // m_ocrTranslateCtrl->hide();
     m_fontFamily->setEditable(false);
     m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
@@ -226,11 +226,11 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
         } else if (type == PaintType::PT_serial) {
             ctrl = m_serialCtrl;
         } else if (type == PaintType::PT_ocr_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
-            m_ocrTranslateDate.from = CONF_GET_PROPERTY(XTokens_iamge_translate_from).toString();
-            m_ocrTranslateDate.to = CONF_GET_PROPERTY(XTokens_iamge_translate_to).toString();
-            m_ocrTranslateDate.bTranslate = true;
+            m_imgTransDate.from = CONF_GET_PROPERTY(XTokens_iamge_translate_from).toString();
+            m_imgTransDate.to = CONF_GET_PROPERTY(XTokens_iamge_translate_to).toString();
+            m_imgTransDate.bTranslate = true;
             if (isChecked)
-                emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
+                emit sigImgTranslate(m_imgTransDate);
         } else if (type == PaintType::PT_ocr_text) {       //不需要向外传递，模拟切换过来，就直接相应【初次】 OCR 提取文字
             m_ocrTextDate.bTranslate = true;
 
@@ -243,7 +243,7 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
             else if (text == "standard_location") ocr = OcrChannel::OCR_standard_location;
             m_ocrTextDate.pipeline = ocr;
 
-            if (isChecked) emit sigOcrTextCtrlIdReleased(m_ocrTextDate);
+            if (isChecked) emit sigOcr(m_ocrTextDate);
         }
 
         const auto& btns = ctrl->findChildren<XToolButton*>();
@@ -346,38 +346,6 @@ void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch,
     w->show();
 }
 
-void PaintCtrlBar::onOcrTranslateStatusChanged(bool checked)
-{
-    m_ocrTranslateDate.bTranslate = checked;
-
-    emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
-
-}
-
-void PaintCtrlBar::onOcrTranslateCopy(bool checked)
-{
-    // TODO 2023.11.09:直接拷贝这张图片还是？拷贝解析后的文本？
-//    emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
-}
-
-void PaintCtrlBar::onCbbFromCurrentTextChanged(const QString &text)
-{
-    const auto& map = youDaoLanguageMapCode();
-    auto it = map.find(text);
-    m_ocrTranslateDate.from = it != map.cend() ? it->second : "";
-
-    emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
-}
-
-void PaintCtrlBar::onCbbToCurrentTextChanged(const QString &text)
-{
-    const auto& map = youDaoLanguageMapCode();
-    auto it = map.find(text);
-    m_ocrTranslateDate.to = it != map.cend() ? it->second : "";
-
-    emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
-}
-
 void PaintCtrlBar::onIdReleased(int id)
 {
     qDebug() << "----sender（）:" << sender() << "parent():" << "   id:" << id ;
@@ -408,11 +376,6 @@ void PaintCtrlBar::onIdReleased(int id)
     } else if (paint == m_pointCtrl) {
         emit sigPointCtrlReleased(id);
         CONF_PBS_DATA.pointType = id;
-    } else if (paint == m_ocrTranslateCtrl) {
-        const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
-        m_ocrTranslateDate.bTranslate = checked;
-
-        emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
     } else {
         qDebug() << "sender()->parent(): %1 is empty!";
     }
@@ -490,7 +453,6 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
     } else if (type == PaintType::PT_ocr_translate) {
-        addWidget(m_ocrTranslateCtrl, false);
         bPointCtrlShow = false;
         bColorPickerShow = false;
         if (!isChecked) emit COMM.sigOcrTranslateCtrlHide();

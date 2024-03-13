@@ -448,25 +448,13 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
     CONF_PBS_DATA.fontSize = width;
 }
 
-void ScreenShot::onOcrTranslateCtrlIdReleased(const OcrTranslateData &data)
+void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 {
-//    auto t = data.bTranslate;
     if (!m_networkOCR || !data.bTranslate) {
         m_ocrGeneratePix = QPixmap();
         update();
         return;
     }
-
-//    static QString from = "auto";
-//    static QString from = "auto";
-//    static QString to = "zh-CHS";
-//    if (data.from == from && data.to == to) {
-//        return;
-//    }
-
-//    from = data.from;
-//    to = data.to;
-
 
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
     QDir directory(dir);
@@ -480,8 +468,8 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const OcrTranslateData &data)
 
     QFile file(path);
     if (ok && file.exists()) {
-        m_networkOCR->sendYouDaoOcrTranslateRequest(data, path);
-//        m_networkOCR->sendBaiDuOcrTranslateRequest(data, path);
+        m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
+//        m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
 
     } else {
         // 文件不存在
@@ -516,7 +504,7 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
     close();
 }
 
-void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
+void ScreenShot::onOCRTextCtrlIdReleased(const OcrData &data)
 {
     // if (data.operate == OcrTextOperate::OTO_is_allow_edit) {
     //     m_ocrTextEdit->setReadOnly(!data.allowWrite);
@@ -531,7 +519,7 @@ void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
     // } else if (data.operate == OcrTextOperate::OTO_update) {
     //     // 直接刷新
     // }  else {
-    //     qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrTextData is empty!";
+    //     qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrData is empty!";
     // }
 
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
@@ -546,7 +534,7 @@ void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
 
     QFile file(path);
     if (ok && file.exists()) {
-        m_networkOCR->sendBaiDuOcrTextRequest(data, path);
+        m_networkOCR->sendBaiDuOcrRequest(data, path);
     } else {
         // 文件不存在
         qDebug() << "OCR origin image file does not exist. path:" << path;
@@ -554,7 +542,7 @@ void ScreenShot::onOCRTextCtrlIdReleased(const OcrTextData &data)
 
 }
 
-void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrTextData &ocrTextData)
+void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrData &ocrTextData)
 {
     json j;
     try {
@@ -731,8 +719,8 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
     connect(m_paintBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
     connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
-    connect(m_paintBar, &PaintBar::sigOcrTranslateCtrlIdReleased, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
-    connect(m_paintBar, &PaintBar::sigOcrTextCtrlIdReleased, this, &ScreenShot::onOCRTextCtrlIdReleased);
+    connect(m_paintBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
+    connect(m_paintBar, &PaintBar::sigOcr, this, &ScreenShot::onOCRTextCtrlIdReleased);
 
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);

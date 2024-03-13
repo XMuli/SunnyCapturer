@@ -69,10 +69,10 @@ Q_DECLARE_METATYPE(TextFlag)                     // 可以被 QVariant 类型存
 Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 TextFlags
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 
-// OcrTranslateData 都是调用 YouDao API
-struct OcrTranslateData
+// ImgTranslateData 都是调用 YouDao API
+struct ImgTranslateData
 {
-    OcrTranslateData() {}
+    ImgTranslateData() {}
 
     // 自定义
     bool bTranslate = true;
@@ -83,7 +83,7 @@ struct OcrTranslateData
 };
 
 
-// OcrChannel + OcrTextData 都是调用 BaiDu API
+// OcrChannel + OcrData 都是调用 BaiDu API
 enum class OcrChannel
 {
     OCR_high_precision,                // 通用文字识别（高精度版）         1000 次/month
@@ -102,7 +102,7 @@ enum class OcrTextOperate
     OTO_update          // 尝试换一个接口进行更新
 };
 
-struct OcrTextData
+struct OcrData
 {
     // 自定义
     OcrTextOperate operate = OcrTextOperate::OTO_empty;                  // 是哪一个按钮被按下
@@ -115,7 +115,7 @@ struct OcrTextData
     QString toLang = "en";
 
 };
-Q_DECLARE_METATYPE(OcrTextData)                     // 可以被 QVariant 类型存储
+Q_DECLARE_METATYPE(OcrData)                     // 可以被 QVariant 类型存储
 
 
 QButtonGroup *creatorAbsBtnsCtrl(const Qt::Orientation& orie, QPointer<AbsBtnsCtrl>& absBtnsCtrl, const QString& dir, const QStringList& items
