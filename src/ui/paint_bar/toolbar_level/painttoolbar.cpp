@@ -55,8 +55,8 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial"), true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin to screen") + " (Ctrl + P)", false, true);
 
-    m_btns.emplace_back(nullptr, PaintType::PT_ocr_translate, "translate", tr("translate") + " (Ctrl + T)", true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_ocr_text, "ocr_text", tr("OCR") + " (Ctrl + O)", true, true);
+    m_btns.emplace_back(nullptr, PaintType::PT_img_translate, "translate", tr("translate") + " (Ctrl + T)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_ocr, "ocr_text", tr("OCR") + " (Ctrl + O)", true, true);
 
     m_btns.emplace_back(nullptr, PaintType::PT_undo, "undo", tr("Undo") + " (Ctrl + Z)", false, false);
     m_btns.emplace_back(nullptr, PaintType::PT_redo, "redo", tr("Redo") + " (Ctrl + Y)", false, true);
@@ -108,8 +108,8 @@ void PaintToolBar::initBtns()
         CREATOR_QSHORTCUT(PaintType::PT_serial, Qt::CTRL + Qt::Key_8)
 #endif
         CREATOR_QSHORTCUT(PaintType::PT_pin, Qt::CTRL + Qt::Key_P)
-        CREATOR_QSHORTCUT(PaintType::PT_ocr_translate, Qt::CTRL + Qt::Key_T)
-        CREATOR_QSHORTCUT(PaintType::PT_ocr_text, Qt::CTRL + Qt::Key_O)
+        CREATOR_QSHORTCUT(PaintType::PT_img_translate, Qt::CTRL + Qt::Key_T)
+        CREATOR_QSHORTCUT(PaintType::PT_ocr, Qt::CTRL + Qt::Key_O)
         CREATOR_QSHORTCUT(PaintType::PT_undo, Qt::CTRL + Qt::Key_Z)
         CREATOR_QSHORTCUT(PaintType::PT_redo, Qt::CTRL + Qt::Key_Y)
         CREATOR_QSHORTCUT(PaintType::PT_save, Qt::CTRL + Qt::Key_S)

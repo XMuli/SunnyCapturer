@@ -66,7 +66,8 @@ private:
 };
 
 std::map<QString, QString> languageMap();
-std::map<QString, QString> youDaoLanguageMapCode();
+std::map<QString, QString> languageMapCodeYouDao();
+std::map<QString, QString> languageMapCodeBaiDu();
 std::map<const QString, const bool> themesMap();
 QString findKeyByValue(const std::map<QString, QString>& myMap, const QString& value);
 QStringList getQSSFileNames(const QString& path = qApp->applicationDirPath() + "/resources/qss");

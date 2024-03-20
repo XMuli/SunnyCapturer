@@ -529,15 +529,23 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Translate [Youdao]</source>
-        <translation>翻译 [有道接口]</translation>
+        <source>Channel</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>OCR</source>
-        <translation type="unfinished">屏幕识图</translation>
+        <source>OCR：</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Channel %1: %2</source>
+        <source>Image Translate：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BaiDu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Youdao</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

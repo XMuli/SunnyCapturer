@@ -80,8 +80,8 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
 
     // Convert query parameters to QHttpPart and append to multiPart
     QList<QPair<QString, QString>> queryParams = {
-        {"from", "en"},
-        {"to", "zh"},
+        {"from", data.from_baidu},
+        {"to", data.to_baidu},
         {"v", "3"},
         {"paste", "1"}
     };

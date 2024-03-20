@@ -181,34 +181,56 @@ QStringList getQSSFileNames(const QString &path)
 
 
 // https://ai.youdao.com/DOCSIRMA/html/trans/api/tpfy/index.html
-std::map<QString, QString> youDaoLanguageMapCode()
+std::map<QString, QString> languageMapCodeYouDao()
 {
-    static  std::map<QString, QString> map = { {"auto", "auto"}
-                                              , {"English", "en"}
-                                              , {"中文简体", "zh-CHS"}
-                                              , {"中文繁体", "zh-CHT"}
-                                              , {"粤语", "yue"}
-                                              , {"德语", "de"}
-                                              , {"西班牙语", "es"}
-                                              , {"法语", "fr"}
-                                              , {"日语", "ja"}
-                                              , {"韩语", "ko"}
-                                              , {"俄语", "ru"}
-                                              , {"泰语", "th"}
-                                              , {"土耳其语", "de"}
-                                              , {"白俄罗斯语", "be"}
-                                              , {"孟加拉语", "bn"}
-                                              , {"捷克语", "cs"}
-                                              , {"丹麦语", "da"}
-                                              , {"希腊语", "el"}
-                                              , {"芬兰语", "fi"}
-                                              , {"匈牙利语", "hu"}
-                                              , {"缅甸语", "my"}
-                                              , {"挪威语", "no"}
-                                              , {"阿拉伯语", "ar"}
-                                              };
+    static std::map<QString, QString> map = { {"auto", "auto"},
+        {"中文简体", "zh-CHS"}, {"中文繁体", "zh-CHT"}, {"English", "en"}, {"日语", "ja"}, {"韩语", "ko"},
+        {"俄语", "ru"}, {"德语", "de"}, {"西班牙语", "es"}, {"法语", "fr"}, {"阿拉伯语", "ar"},
+        {"葡萄牙语", "pt"}, {"意大利语", "it"}, {"印度尼西亚语", "id"}, {"荷兰语", "nl"}, {"泰语", "th"},
+        {"越南语", "vi"}, {"泰米尔语", "ta"}, {"土耳其语", "tr"}, {"瑞典语", "sv"}, {"挪威语", "no"},
+        {"芬兰语", "fi"}, {"丹麦语", "da"}, {"希腊语", "el"}, {"捷克语", "cs"}, {"波兰语", "pl"},
+        {"匈牙利语", "hu"}, {"罗马尼亚语", "ro"}, {"乌克兰语", "uk"}, {"马来语", "ms"}, {"斯洛伐克语", "sk"},
+        {"克罗地亚语", "hr"}, {"爱沙尼亚语", "et"}, {"立陶宛语", "lt"}, {"斯洛文尼亚语", "sl"}, {"拉脱维亚语", "lv"},
+        {"波斯尼亚语", "bs"}, {"塞尔维亚语(拉丁文)", "sr-Latn"}, {"塞尔维亚语(西里尔文)", "sr-Cyrl"}, {"阿尔巴尼亚语", "sq"},
+        {"马其顿语", "mk"}, {"马耳他语", "mt"}, {"海地克里奥尔语", "ht"}, {"尼泊尔语", "ne"}, {"孟加拉语", "bn"},
+        {"尼泊尔语", "ne"}, {"乌尔都语", "ur"}, {"斯瓦希里语", "sw"}, {"哈萨克语", "kk"}, {"吉尔吉斯语", "ky"},
+        {"塔吉克语", "tg"}, {"土库曼语", "tk"}, {"乌兹别克语", "uz"}, {"阿塞拜疆语", "az"}, {"亚美尼亚语", "hy"},
+        {"格鲁吉亚语", "ka"}, {"波斯语", "fa"}, {"希伯来语", "he"}, {"阿姆哈拉语", "am"}, {"海威语", "haw"},
+        {"斐济语", "fj"}, {"塞索托语", "st"}, {"索托语", "nso"}, {"斯瓦蒂语", "ss"}, {"南非祖鲁语", "zu"},
+        {"阿维斯扎纳语", "awa"}, {"巴斯克语", "eu"}, {"瓦鲁语", "war"}, {"依地语", "yi"}, {"哈萨克语", "kk"}
+    };
+
     return map;
 
+}
+
+// https://ai.baidu.com/ai-doc/MT/mki483xpu
+std::map<QString, QString> languageMapCodeBaiDu()
+{
+    static  std::map<QString, QString> map = { {"auto", "auto"}
+        , {"English", "en"}
+        , {"中文", "zh"}
+        , {"日语", "jp"}
+        , {"韩语", "kor"}
+        , {"葡萄牙语", "pt"}
+        , {"法语", "fra"}
+        , {"德语", "de"}
+        , {"意大利语", "it"}
+        , {"西班牙", "ru"}
+        , {"泰语", "spa"}
+        , {"俄语", "ru"}
+        , {"荷兰语", "nl"}
+        , {"马来语", "may"}
+        , {"丹麦语", "dan"}
+        , {"瑞典语", "swe"}
+        , {"印尼语", "id"}
+        , {"波兰语", "pl"}
+        , {"罗马尼亚语", "rom"}
+        , {"土耳其语", "tr"}
+        , {"希腊语", "el"}
+        , {"匈牙利语", "hu"}
+    };
+    return map;
 }
 
 QString findKeyByValue(const std::map<QString, QString> &myMap, const QString &value)

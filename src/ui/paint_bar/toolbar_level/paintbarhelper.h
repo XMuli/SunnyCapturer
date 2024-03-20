@@ -42,8 +42,8 @@ enum class PaintType
     PT_pin,
     PT_point,
 
-    PT_ocr_translate,   // OCR 翻译
-    PT_ocr_text,        // OCR 生成文本
+    PT_img_translate,   // OCR 翻译
+    PT_ocr,        // OCR 生成文本
 
     PT_undo,
     PT_redo,
@@ -76,10 +76,16 @@ struct ImgTranslateData
 
     // 自定义
     bool bTranslate = true;
+    QString channel = "baidu";         // image translate channel, 仅 baidu 和 youdao 两个数值
+
     // YouDao API Tranlstates 有用接口
     QString from = "auto";
     QString to = "zh-CHS";
     QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
+
+    // BaiDu API Tranlstates 有用接口
+    QString from_baidu = "auto";
+    QString to_baidu = "zh";
 };
 Q_DECLARE_METATYPE(ImgTranslateData)            // 可以被 QVariant 类型存储
 

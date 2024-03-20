@@ -176,11 +176,14 @@ private:   // 为了便于查看，故属性声明放在最下面
     // Tokens
     SET_VALUE_PROPERTY(XTokens_youdao_app_id);
     SET_VALUE_PROPERTY(XTokens_youdao_secret_key);
-    SET_VALUE_PROPERTY(XTokens_iamge_translate_from);
-    SET_VALUE_PROPERTY(XTokens_iamge_translate_to);
+    SET_VALUE_PROPERTY(XTokens_iamge_translate_from_youdao);
+    SET_VALUE_PROPERTY(XTokens_iamge_translate_to_youdao);
+    SET_VALUE_PROPERTY(XTokens_iamge_translate_from_baidu);
+    SET_VALUE_PROPERTY(XTokens_iamge_translate_to_baidu);
     SET_VALUE_PROPERTY(XTokens_baidu_api_key);
     SET_VALUE_PROPERTY(XTokens_baidu_secret_key);
     SET_VALUE_PROPERTY(XTokens_ocr_channel);
+    SET_VALUE_PROPERTY(XTokens_iamge_translate_channel);
     // XOtherControl
     SET_VALUE_PROPERTY(XOtherControl_blur_effect_adius);
     SET_VALUE_PROPERTY(XOtherControl_highlight_iridescence);

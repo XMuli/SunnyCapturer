@@ -291,10 +291,10 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
         if (m_paintBar->hadDrawBtnsChecked()) {
             m_actionType = ActionType::AT_drawing_shap;
 
-            if (paintType == PaintType::PT_ocr_translate && type != PaintType::PT_ocr_translate) {
+            if (paintType == PaintType::PT_img_translate && type != PaintType::PT_img_translate) {
                 m_ocrGeneratePix = QPixmap();
                 update();
-            } else if (paintType == PaintType::PT_ocr_text && type != PaintType::PT_ocr_text) {
+            } else if (paintType == PaintType::PT_ocr && type != PaintType::PT_ocr) {
                 m_ocrTextEdit->clear();
                 m_ocrTextEdit->hide();
                 update();
@@ -468,8 +468,11 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 
     QFile file(path);
     if (ok && file.exists()) {
-//        m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
-        m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
+
+        if (data.channel == "youdao")
+            m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
+        else if (data.channel == "baidu")
+            m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
 
     } else {
         // 文件不存在

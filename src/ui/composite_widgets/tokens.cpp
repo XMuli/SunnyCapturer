@@ -31,7 +31,7 @@ void Tokens::initUI()
     const QString& baidu_api_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_api_key).toByteArray());
     const QString& baidu_secret_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray());
     const QString& ocr_channel = CONF_GET_PROPERTY(XTokens_ocr_channel).toString();
-
+    const QString& iamge_translate_channel = CONF_GET_PROPERTY(XTokens_iamge_translate_channel).toString();
 
     ui->leYDAppID->setText(youdao_app_id);
     ui->leYDApiSecret->setText(youdao_secret_key);
@@ -43,13 +43,24 @@ void Tokens::initUI()
     // standard,                      // 通用文字识别（标准版）           1000 次/month
     // standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
     const QStringList list = {"high", "high_location", "standard", "standard_location"};
-
     for (int i = 0; i < list.count(); ++i) {
-        const QString& text = QString(tr("Channel %1: %2").arg(i).arg(list.at(i)));
-        ui->cbbChannel->addItem(text, list.at(i));
-        ui->cbbChannel->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/baidu.svg"));
+        const QString& text = QString("%1 %2").arg(i).arg(list.at(i));
+        ui->cbbOcr->addItem(text, list.at(i));
+        ui->cbbOcr->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/baidu.svg"));
     }
-    ui->cbbChannel->setCurrentIndex(list.indexOf(ocr_channel));
+    ui->cbbOcr->setCurrentIndex(list.indexOf(ocr_channel));
+
+    const QStringList imgTranslate = {"baidu", "youdao"};  /*"baidu_fanyi",*/
+    for (int i = 0; i < imgTranslate.count(); ++i) {
+        const QString& text = QString("%1 %2").arg(i).arg(imgTranslate.at(i));
+        ui->cbbImgTranslate->addItem(text, imgTranslate.at(i));
+
+        QString iconName = "baidu";
+        if (text.contains("baidu")) iconName =  "baidu";
+        else if (text.contains("youdao")) iconName =  "youdao";
+        ui->cbbImgTranslate->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/" + iconName + ".svg"));
+    }
+    ui->cbbImgTranslate->setCurrentIndex(imgTranslate.indexOf(iamge_translate_channel));
 }
 
 void Tokens::onBtnResetClicked(bool checked)
@@ -83,7 +94,13 @@ void Tokens::on_leBdSecretKey_textChanged(const QString &arg1)
 
 void Tokens::on_cbbChannel_currentIndexChanged(int index)
 {
-    const QString& channel = ui->cbbChannel->currentData().toString();
+    const QString& channel = ui->cbbOcr->currentData().toString();
     CONF_SET_PROPERTY(XTokens_ocr_channel, channel);
+}
+
+void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
+{
+    const QString& channel = ui->cbbImgTranslate->currentData().toString();
+    CONF_SET_PROPERTY(XTokens_iamge_translate_channel, channel);
 }
 

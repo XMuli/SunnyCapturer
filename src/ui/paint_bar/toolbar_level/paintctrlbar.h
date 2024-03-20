@@ -42,8 +42,8 @@ signals:
     void sigPickedColor(const QColor& color);
     void sigTextFontFamilyChanged(const QFont &font);                       // PaintCtrlBar 字体 被发生改变时候
     void sigTextFontSizeChanged(const QString &fontSize);                   // PaintCtrlBar 字体大小 数值被发生改变时候
-    void sigImgTranslate(const ImgTranslateData& data);       // 传递 OCR 翻译
-    void sigOcr(const OcrData& data);                 // 传递 OCR Text
+    void sigImgTranslate(const ImgTranslateData& data);                     // 传递 图片翻译
+    void sigOcr(const OcrData& data);                                       // 传递 文字提取
 
 public slots:
     void onIdReleased(int id);

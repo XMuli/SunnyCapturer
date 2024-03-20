@@ -23,7 +23,7 @@
 #include "../paint_bar/paintbar.h"
 #include "../commom/ocr/networkocr.h"
 #include "../paint_bar/toolbar_level/ocr_text/xocrdlg.h"
-#include "../paint_bar/toolbar_level/ocr_translate/imagetranslatedlg.h"
+#include "../paint_bar/toolbar_level/img_translate/imagetranslatedlg.h"
 #include "../../commom/communication/communication.h"
 #include "windowsrect.h" // 引用位置在 Qt 库之后，避免 x11 库冲突
 

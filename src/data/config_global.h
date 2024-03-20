@@ -68,11 +68,14 @@ constexpr const char* XHotkeys_custom_capture("custom_capture");
 // Tokens
 constexpr const char* XTokens_youdao_app_id("youdao_app_id");
 constexpr const char* XTokens_youdao_secret_key("youdao_secret_key");
-constexpr const char* XTokens_iamge_translate_from("iamge_translate_from");
-constexpr const char* XTokens_iamge_translate_to("iamge_translate_to");
+constexpr const char* XTokens_iamge_translate_from_youdao("iamge_translate_from_youdao");
+constexpr const char* XTokens_iamge_translate_to_youdao("iamge_translate_to_youdao");
+constexpr const char* XTokens_iamge_translate_from_baidu("iamge_translate_from_baidu");
+constexpr const char* XTokens_iamge_translate_to_baidu("iamge_translate_to_baidu");
 constexpr const char* XTokens_baidu_api_key("baidu_api_key");
 constexpr const char* XTokens_baidu_secret_key("baidu_secret_key");
 constexpr const char* XTokens_ocr_channel("ocr_channel");
+constexpr const char* XTokens_iamge_translate_channel("iamge_translate_channel");
 
 // XOtherControl
 constexpr const char* XOtherControl = "XOtherControl";

@@ -225,13 +225,24 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
             ctrl = m_textCtrl;
         } else if (type == PaintType::PT_serial) {
             ctrl = m_serialCtrl;
-        } else if (type == PaintType::PT_ocr_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
-            m_imgTransDate.from = CONF_GET_PROPERTY(XTokens_iamge_translate_from).toString();
-            m_imgTransDate.to = CONF_GET_PROPERTY(XTokens_iamge_translate_to).toString();
+        } else if (type == PaintType::PT_img_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
+
+            // 线路发生改变，需要重新赋值
+            const auto& channel = CONF_GET_PROPERTY(XTokens_iamge_translate_channel).toString();
+            m_imgTransDate.channel = channel;
+            if (channel == "baidu") {
+                m_imgTransDate.from_baidu = CONF_GET_PROPERTY(XTokens_iamge_translate_from_baidu).toString();
+                m_imgTransDate.to_baidu = CONF_GET_PROPERTY(XTokens_iamge_translate_to_baidu).toString();
+
+            } else if (channel == "youdao") {
+                m_imgTransDate.from = CONF_GET_PROPERTY(XTokens_iamge_translate_from_youdao).toString();
+                m_imgTransDate.to = CONF_GET_PROPERTY(XTokens_iamge_translate_to_youdao).toString();
+            }
+
             m_imgTransDate.bTranslate = true;
             if (isChecked)
                 emit sigImgTranslate(m_imgTransDate);
-        } else if (type == PaintType::PT_ocr_text) {       //不需要向外传递，模拟切换过来，就直接相应【初次】 OCR 提取文字
+        } else if (type == PaintType::PT_ocr) {       //不需要向外传递，模拟切换过来，就直接相应【初次】 OCR 提取文字
             m_ocrTextDate.bTranslate = true;
 
             // OCR 线路发生改变，需要重新赋值
@@ -452,11 +463,11 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
         bPointCtrlShow = false;
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
-    } else if (type == PaintType::PT_ocr_translate) {
+    } else if (type == PaintType::PT_img_translate) {
         bPointCtrlShow = false;
         bColorPickerShow = false;
         if (!isChecked) emit COMM.sigOcrTranslateCtrlHide();
-    } else if (type == PaintType::PT_ocr_text) {
+    } else if (type == PaintType::PT_ocr) {
         bPointCtrlShow = false;
         bColorPickerShow = false;
         if (!isChecked) emit COMM.sigOcrTextCtrlHide();
