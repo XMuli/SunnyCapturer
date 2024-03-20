@@ -81,6 +81,7 @@ struct ImgTranslateData
     QString to = "zh-CHS";
     QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
 };
+Q_DECLARE_METATYPE(ImgTranslateData)            // 可以被 QVariant 类型存储
 
 
 // OcrChannel + OcrData 都是调用 BaiDu API

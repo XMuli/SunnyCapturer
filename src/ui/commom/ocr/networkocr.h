@@ -51,6 +51,7 @@ private:
                               , const QString& client_secret = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray()));  // 获取 BaiDu 的鉴权
     void dealBaiDuAccessToken(QNetworkReply* reply);
     void dealBaiDuOcrRequest(QNetworkReply* reply);
+    void dealBaiDuImgTranslateRequest(QNetworkReply* reply);
     void dealYouDaoImgTranslateRequest(QNetworkReply* reply);
 
 private slots:

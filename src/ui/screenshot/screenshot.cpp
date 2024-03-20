@@ -468,8 +468,8 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 
     QFile file(path);
     if (ok && file.exists()) {
-        m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
-//        m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
+//        m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
+        m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
 
     } else {
         // 文件不存在

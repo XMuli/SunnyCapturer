@@ -17,6 +17,26 @@
 
 // test
 #include "data/configmanager.h"
+#include <QCoreApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QHttpMultiPart>
+#include <QHttpPart>
+#include <QUrlQuery>
+#include <QCoreApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QHttpMultiPart>
+#include <QHttpPart>
+#include <QDebug>
+#include <QHttpMultiPart>
+#include <QHttpPart>
+#include <QUrl>
 
 int main(int argc, char *argv[])
 {
@@ -74,6 +94,7 @@ int main(int argc, char *argv[])
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
+
 
 
 //    NetworkOCR networkOCR;

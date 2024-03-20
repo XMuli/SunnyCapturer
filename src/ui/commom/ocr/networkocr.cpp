@@ -69,8 +69,8 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
 
     QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     QHttpPart imagePart;
-    imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("multipart/form-data; boundary=---------------------------1234567890"));
-    imagePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"image\"; filename=\"" + QFileInfo(path).fileName() + "\""));
+    imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("image/png"));
+    imagePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"image\"; filename=\"" + QFileInfo(path).fileName() + "\";"));
 
     QFile *file = new QFile(path);
     file->open(QIODevice::ReadOnly);
@@ -78,27 +78,39 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
     file->setParent(multiPart);
     multiPart->append(imagePart);
 
-    QUrlQuery params;
-    params.addQueryItem("from", "zh");
-    params.addQueryItem("to", "en");
-    params.addQueryItem("v", "3");
-    params.addQueryItem("paste", "1");
+    // Convert query parameters to QHttpPart and append to multiPart
+    QList<QPair<QString, QString>> queryParams = {
+        {"from", "en"},
+        {"to", "zh"},
+        {"v", "3"},
+        {"paste", "1"}
+    };
 
-    url.setQuery(params);
+    foreach (auto param, queryParams) {
+        QHttpPart paramPart;
+        paramPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + param.first + "\""));
+        paramPart.setBody(param.second.toUtf8());
+        multiPart->append(paramPart);
+    }
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_img_translate));
+    request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<ImgTranslateData>(data));   // 当前 发送的请求线路
+
 
     QNetworkReply *reply = m_networkManager->post(request, multiPart);
-    QEventLoop loop;
-    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+//    QEventLoop loop;
+//    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+//    loop.exec();      // 不阻塞好像会有返回为空的 bug？
 
-    if (reply->error() == QNetworkReply::NoError) {
-        QByteArray responseData = reply->readAll();
-        qDebug() << "---#1>responseData:" << responseData;
-    } else {
-        qDebug() << "Error: " << reply->errorString();
-    }
+
+//    if (reply->error() == QNetworkReply::NoError) {
+//        QByteArray responseData = reply->readAll();
+//        qDebug().quote() << "---#1>responseData:" << responseData;
+//    } else {
+//        qDebug() << "Error: " << reply->errorString();
+//    }
+
 
 }
 
@@ -272,6 +284,65 @@ void NetworkOCR::dealBaiDuOcrRequest(QNetworkReply *reply)
     }
 }
 
+// Ref: https://ai.baidu.com/ai-doc/MT/mki483xpu
+void NetworkOCR::dealBaiDuImgTranslateRequest(QNetworkReply *reply)
+{
+    const QStringList& dataHead = rawHeader(reply);
+    QByteArray response = reply->readAll();
+    qDebug().noquote() << " dealBaiDuImgTranslateRequest reply -> Content:" << response;
+    if (response.isEmpty()) {
+        qWarning()<<"reply->readAll() is empty!  retrn;!!!";
+        return;
+    }
+
+    // 解析 JSON 数据
+    json j;
+    try {
+        j = json::parse(response.toStdString());
+    } catch (const std::exception& e) {
+        qDebug() << "Failed to parse JSON:" << e.what();
+        return;
+    }
+
+    if (dataHead.at(0) == "200") {
+        if (j.contains("error_code") && j["error_code"] == "0" && j.contains("data") && j.contains("data") && j["data"].contains("pasteImg")) {
+            QString render_image = QString::fromStdString(j["data"]["pasteImg"].dump());
+
+            QByteArray byteArray = QByteArray::fromBase64(render_image.toUtf8());
+
+            // 将图像数据加载到QImage
+            QImage image;
+            if (image.loadFromData(byteArray)) {
+                const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr/";
+                QDir directory(dir);
+                if (!directory.exists() && !directory.mkpath(dir)) {
+                    qDebug() << "Failed to create directory: " << dir;
+                }
+
+                const auto& path = dir + QString("BaiDu_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+                image.save(path);
+
+
+
+                emit COMM.sigOCRImageGenerateFinsh(image.size(), path);
+                qDebug() << "OCR image size:" << image.size() << "path:" << path;
+            } else {
+                qDebug() << "Failed to load image.";
+            }
+
+            //            // 反向 URL 解码数据以查看 +
+            //            QString decodedData = QUrl::fromPercentEncoding(responseData);
+            //            qDebug() << "decodedData:" << decodedData;
+
+        } else {
+            emit COMM.sigOCRImageGenerateFinsh(QSize(), QString::fromStdString(j.dump()));   // 返回具体的错误码
+        }
+
+    } else {
+        qWarning() << replyErrorShowText(dataHead);
+    }
+}
+
 void NetworkOCR::dealYouDaoImgTranslateRequest(QNetworkReply *reply)
 {
     const QStringList& dataHead = rawHeader(reply);
@@ -353,6 +424,8 @@ void NetworkOCR::onRequestFinished(QNetworkReply *reply)
             dealBaiDuAccessToken(reply);
         } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_text) {
             dealBaiDuOcrRequest(reply);
+        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_img_translate) {
+            dealBaiDuImgTranslateRequest(reply);
         } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_youdao_img_translate) {
             dealYouDaoImgTranslateRequest(reply);
         } else {
