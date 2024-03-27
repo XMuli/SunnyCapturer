@@ -16,10 +16,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Professional</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -28,19 +24,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Author: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QQ Group: &lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Feedback&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -111,11 +103,11 @@
 <context>
     <name>ImageTranslateDlg</name>
     <message>
-        <source>Form</source>
+        <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>To</source>
+        <source>Image Translation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

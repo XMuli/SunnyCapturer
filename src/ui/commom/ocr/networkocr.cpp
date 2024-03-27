@@ -258,7 +258,7 @@ void NetworkOCR::dealBaiDuAccessToken(QNetworkReply *reply)
 
         if (!j.empty() && j.contains("access_token")) {
             m_baiDuToken = QString::fromStdString(j["access_token"]);
-            qDebug() << "m_baiDuToken:" << m_baiDuToken;
+//            qDebug() << "m_baiDuToken:" << m_baiDuToken;
 //            m_eventLoop->quit();
         }
     } else {
@@ -270,7 +270,7 @@ void NetworkOCR::dealBaiDuOcrRequest(QNetworkReply *reply)
 {
     const QStringList& dataHead = rawHeader(reply);
     QByteArray response = reply->readAll();
-        qDebug().noquote() << " dealBaiDuOcrRequest reply -> Content:" << response;
+//        qDebug().noquote() << " dealBaiDuOcrRequest reply -> Content:" << response;
     if (response.isEmpty()) {
         qWarning() << "reply->readAll() is empty!  retrn;!!!";
         return;
@@ -289,7 +289,7 @@ void NetworkOCR::dealBaiDuImgTranslateRequest(QNetworkReply *reply)
 {
     const QStringList& dataHead = rawHeader(reply);
     QByteArray response = reply->readAll();
-    qDebug().noquote() << " dealBaiDuImgTranslateRequest reply -> Content:" << response;
+//    qDebug().noquote() << " dealBaiDuImgTranslateRequest reply -> Content:" << response;
     if (response.isEmpty()) {
         qWarning()<<"reply->readAll() is empty!  retrn;!!!";
         return;
@@ -347,7 +347,7 @@ void NetworkOCR::dealYouDaoImgTranslateRequest(QNetworkReply *reply)
 {
     const QStringList& dataHead = rawHeader(reply);
     QByteArray response = reply->readAll();
-    qDebug().noquote() << " dealYouDaoImgTranslateRequest reply -> Content:" << response;
+//    qDebug().noquote() << " dealYouDaoImgTranslateRequest reply -> Content:" << response;
     if (response.isEmpty()) {
         qWarning()<<"reply->readAll() is empty!  retrn;!!!";
         return;

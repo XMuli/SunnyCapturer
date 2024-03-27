@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Image Translation</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="9,0">
    <item>
@@ -34,8 +34,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>355</width>
-         <height>465</height>
+         <width>351</width>
+         <height>455</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -58,8 +58,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>354</width>
-         <height>465</height>
+         <width>351</width>
+         <height>455</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">

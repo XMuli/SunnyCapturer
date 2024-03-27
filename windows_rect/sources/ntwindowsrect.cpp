@@ -49,9 +49,9 @@ BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
         int idx = 0;
         if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
             g_rectNodes.push_back(node);
-            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
-                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
-                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
+//            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
+//                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
+//                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
 
             EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
             return FALSE;
@@ -100,9 +100,9 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         int idx = 0;
         if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
             g_rectNodes.push_back(node);
-            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
-                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
-                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
+//            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
+//                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
+//                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
 
             EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
             return FALSE; // 只需命中一次
@@ -126,7 +126,7 @@ RECT xrect2rect(const XRECT &rt)
 
 void enumWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos)
 {
-    std::wcout << L"--->pos(" << pos.x << L", " << pos.y << L")" << std::endl;
+//    std::wcout << L"--->pos(" << pos.x << L", " << pos.y << L")" << std::endl;
     g_rectNodes.clear();
     EnumWindows(EnumWindowsProc, MAKELPARAM(pos.x, pos.y));
     rectNodes = g_rectNodes;

@@ -127,7 +127,7 @@
             <string notr="true">lineedit-password-character: 42;</string>
            </property>
            <property name="echoMode">
-            <enum>QLineEdit::Normal</enum>
+            <enum>QLineEdit::Password</enum>
            </property>
           </widget>
          </item>
@@ -194,7 +194,7 @@
             <string notr="true">lineedit-password-character: 42;</string>
            </property>
            <property name="echoMode">
-            <enum>QLineEdit::Normal</enum>
+            <enum>QLineEdit::Password</enum>
            </property>
           </widget>
          </item>

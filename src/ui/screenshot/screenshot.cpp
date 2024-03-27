@@ -450,6 +450,7 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
 
 void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 {
+    hide();
     if (!m_networkOCR || !data.bTranslate) {
         m_ocrGeneratePix = QPixmap();
         update();
@@ -483,6 +484,7 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 // 将图片粘贴在当前截图的窗口上
 void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 {
+    hide();
     QFile file(path);
     if (file.exists() && size.isValid()) {
         m_ocrGeneratePix = QPixmap(size);
@@ -556,7 +558,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
     }
 
     const QString& text = QString::fromStdString(j.dump());
-    qDebug().noquote() << "------>j:" << text;
+//    qDebug().noquote() << "------>j:" << text;
     const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
     if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
         m_ocrDlg->setRightText(text);
@@ -1132,8 +1134,7 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
         const QRect rect = screen ? screen->geometry() : QRect();
 
         QRect rt(mapFromGlobal(rect.topLeft()), rect.size());
-
-        qDebug() << "#-->rect:" << rect << "rt:" << rt;
+//        qDebug() << "#-->rect:" << rect << "rt:" << rt;
         return rt;
     };
 
@@ -1214,7 +1215,7 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     m_node.p1 = e->pos();
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
+//    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
     if (m_actionType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p1);
@@ -1304,7 +1305,7 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
+//    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
@@ -1407,7 +1408,7 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
+//    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
@@ -1562,7 +1563,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         }
 
         w->move(pt);
-        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
+//        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
         isShow ? w->show() : w->hide();
     } else if (w == m_pickedRectTips) {
 

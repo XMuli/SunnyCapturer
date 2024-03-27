@@ -16,10 +16,6 @@
         <translation>開源許可</translation>
     </message>
     <message>
-        <source>Professional</source>
-        <translation>專業版</translation>
-    </message>
-    <message>
         <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
         <translation>Version 1.0.0-msvc (yyyy.MM.dd)</translation>
     </message>
@@ -28,20 +24,16 @@
         <translation>版本</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;版權所有 2023~2024 Sunny.xmuli.tech&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Author: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;作者: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;作者: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;偕臧&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QQ Group: &lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QQ群: &lt;a href=&quot;https://qm.qq.com/cgi-bin/qm/qr?k=jsD03QzMohGZm0TqYAFh3BvKOpCGlTcT&amp;amp;jump_from=webapi&amp;amp;authKey=DMUwiCQ6ta95PoH8JmtZ+Jz9y7Ozg3yinEsxmm92rNXZRVeMPD7NRgjU+dmUI8Xu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;418103279&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Feedback&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;反饋&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;反饋: &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;版權所有 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -111,12 +103,12 @@
 <context>
     <name>ImageTranslateDlg</name>
     <message>
-        <source>Form</source>
+        <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>To</source>
-        <translation type="unfinished"></translation>
+        <source>Image Translation</source>
+        <translation>圖片翻譯</translation>
     </message>
 </context>
 <context>
@@ -530,23 +522,23 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>線路</translation>
     </message>
     <message>
         <source>OCR：</source>
-        <translation type="unfinished"></translation>
+        <translation>提取文字：</translation>
     </message>
     <message>
         <source>Image Translate：</source>
-        <translation type="unfinished"></translation>
+        <translation>圖片翻譯：</translation>
     </message>
     <message>
         <source>BaiDu</source>
-        <translation type="unfinished"></translation>
+        <translation>百度</translation>
     </message>
     <message>
         <source>Youdao</source>
-        <translation type="unfinished"></translation>
+        <translation>有道</translation>
     </message>
 </context>
 <context>
@@ -572,11 +564,11 @@ and specify -1 to let Sunny decide for you.</source>
     <name>XOcrDlg</name>
     <message>
         <source>OCR</source>
-        <translation type="unfinished">屏幕識圖</translation>
+        <translation>提取文字</translation>
     </message>
     <message>
         <source>original [%1 * %2]   current [%3 * %4]   zoom: %5%</source>
-        <translation type="unfinished"></translation>
+        <translation>原始 [%1 * %2]   當前 [%3 * %4]   縮放: %5%</translation>
     </message>
 </context>
 </TS>

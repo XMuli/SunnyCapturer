@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 #pragma parseroption -p
 #define MyAppName "Sunny"
-#define MyAppVersion "1.3.1"
-#define MyAppPublisher "XMuli Teams"
+#define MyAppVersion "1.4.0"
+#define MyAppPublisher "Zhang Wengeng"
 #define MyAppCompany "XMuli"
 #define MyAppURL "https://sunny.xmuli.tech"
 #define MyAppExeName "Sunny.exe"                     
