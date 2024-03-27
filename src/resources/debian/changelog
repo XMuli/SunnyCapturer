@@ -1,3 +1,14 @@
+Sunny (1.4.0) UNRELEASED; urgency=medium
+
+  * Support line switching, "OCR" and "Images Translate".
+  * OCR times increased to 3500 times/month 
+  * Increase the number of picture recognition to **10000 times/year** + Others
+  * Adopt new style pop-up window design.
+  * more: [Wiki: 6. Image Translation & OCR](https://github.com/XMuli/SunnyPages/wiki/6.-Image-Translation-&-OCR-%7C-%E5%9B%BE%E7%89%87%E7%BF%BB%E8%AF%91-&-%E6%96%87%E5%AD%97%E6%8F%90%E5%8F%96)
+
+ -- XMuli <Vincent@Vincent-PC.localdomain>  Wed, 27 Mar 2024 19:16:41 +0800
+
+
 Sunny (1.3.0) UNRELEASED; urgency=medium
 
   * Support for image translation and OCR

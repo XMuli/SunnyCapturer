@@ -81,6 +81,7 @@ $ cmake ..
 $ cmake --build . -j$(nproc)
 $ cd ..
 
+$ dos2unix ../src/resources/cpack/tech.xmuli.sunny.desktop
 $ ../linuxdeploy-x86_64.AppImage --appdir AppDir -e bin/Sunny -d bin/resources/cpack/tech.xmuli.sunny.desktop -i bin/resources/logo/logo.svg --icon-filename tech.xmuli.sunny -p qt -o appimage
 
 
