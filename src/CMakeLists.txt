@@ -48,6 +48,8 @@ set(commom_files
     data/config_global.h
     data/configmanager.h
     data/configmanager.cpp
+    data/configjson.h
+    data/configjson.cpp
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.h
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.cpp
 )
@@ -231,6 +233,7 @@ foreach(it ${folders_to_copy})
 endforeach()
 
 file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 file(COPY "${source_root}/debian" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 

@@ -134,6 +134,9 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     QString APP_KEY = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
     QString APP_SECRET = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
 
+//    QString APP_KEY = CONF_MANAGE.decryptString(QByteArray::fromStdString(CJ_GET("tokens.youdao_app_id").dump()));
+//    QString APP_SECRET = CONF_MANAGE.decryptString(QByteArray::fromStdString(CJ_GET("tokens.youdao_secret_key").dump()));
+
     // 创建 QMap 并添加参数
     QMap<QString, QString> params;
     params["appKey"] = APP_KEY;

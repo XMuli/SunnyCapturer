@@ -11,6 +11,7 @@
 #include <QWidget>
 #include "qhotkey.h"
 #include "../../data/configmanager.h"
+#include "../../data/configjson.h"
 #include "../../paint_bar/toolbar_level/paintbarhelper.h"
 #include "json.hpp"
 using json = nlohmann::json;

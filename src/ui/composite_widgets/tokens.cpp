@@ -7,6 +7,7 @@
 #include "ui_tokens.h"
 #include <QIcon>
 #include "../../data/configmanager.h"
+#include "../../data/configjson.h"
 #include "../paint_bar/toolbar_level/paintbarhelper.h"
 #include "communication.h"
 
@@ -74,33 +75,38 @@ void Tokens::onBtnResetClicked(bool checked)
 
 void Tokens::on_leYDAppID_textChanged(const QString &arg1)
 {
-    CONF_SET_PROPERTY(XTokens_youdao_app_id, CONF_MANAGE.encryptString(arg1));
+//    CONF_SET_PROPERTY(XTokens_youdao_app_id, CONF_MANAGE.encryptString(arg1));
+    CJ_SET("tokens.youdao_app_id", CJ.encryptString(arg1));
 }
 
 void Tokens::on_leYDApiSecret_textChanged(const QString &arg1)
 {
-    CONF_SET_PROPERTY(XTokens_youdao_secret_key, CONF_MANAGE.encryptString(arg1));
+//    CONF_SET_PROPERTY(XTokens_youdao_secret_key, CONF_MANAGE.encryptString(arg1));
+    CJ_SET("tokens.youdao_secret_key", CJ.encryptString(arg1));
+
 }
 
 void Tokens::on_leBdApiKey_textChanged(const QString &arg1)
 {
-    CONF_SET_PROPERTY(XTokens_baidu_api_key, CONF_MANAGE.encryptString(arg1));
+//    CONF_SET_PROPERTY(XTokens_baidu_api_key, CONF_MANAGE.encryptString(arg1));
+    CJ_SET("tokens.baidu_api_key", CJ.encryptString(arg1));
 }
 
 void Tokens::on_leBdSecretKey_textChanged(const QString &arg1)
 {
-    CONF_SET_PROPERTY(XTokens_baidu_secret_key, CONF_MANAGE.encryptString(arg1));
+//    CONF_SET_PROPERTY(XTokens_baidu_secret_key, CONF_MANAGE.encryptString(arg1));
+    CJ_SET("tokens.baidu_secret_key", CJ.encryptString(arg1));
 }
 
 void Tokens::on_cbbChannel_currentIndexChanged(int index)
 {
     const QString& channel = ui->cbbOcr->currentData().toString();
-    CONF_SET_PROPERTY(XTokens_ocr_channel, channel);
 }
 
 void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
 {
     const QString& channel = ui->cbbImgTranslate->currentData().toString();
-    CONF_SET_PROPERTY(XTokens_iamge_translate_channel, channel);
+//    CONF_SET_PROPERTY(XTokens_iamge_translate_channel, channel);
+    CJ_SET("tokens.iamge_translate_channel", channel.toStdString());
 }
 

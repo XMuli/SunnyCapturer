@@ -70,7 +70,9 @@ void ImageTranslateDlg::on_cbbFrom_currentTextChanged(const QString &text)
     auto it = map.find(text);
     const auto& from = it != map.cend() ? it->second : "auto";;
 
-    iamge_translate_channel == "baidu" ?  CONF_SET_PROPERTY(XTokens_iamge_translate_from_baidu, from) : CONF_SET_PROPERTY(XTokens_iamge_translate_from_youdao, from);
+
+//    iamge_translate_channel == "baidu" ?  CONF_SET_PROPERTY(XTokens_iamge_translate_from_baidu, from) : CONF_SET_PROPERTY(XTokens_iamge_translate_from_youdao, from);
+    iamge_translate_channel == "baidu" ?  CJ_SET("tokens.iamge_translate_from_baidu", from.toStdString()) : CJ_SET("tokens.iamge_translate_from_youdao", from.toStdString());
 
 }
 void ImageTranslateDlg::on_cbbTo_currentTextChanged(const QString &text)
@@ -80,5 +82,6 @@ void ImageTranslateDlg::on_cbbTo_currentTextChanged(const QString &text)
 
     auto it = map.find(text);
     const auto& to = it != map.cend() ? it->second : "auto";
-    iamge_translate_channel == "baidu" ?  CONF_SET_PROPERTY(XTokens_iamge_translate_to_baidu, to) : CONF_SET_PROPERTY(XTokens_iamge_translate_to_youdao, to);
+//    iamge_translate_channel == "baidu" ?  CONF_SET_PROPERTY(XTokens_iamge_translate_to_baidu, to) : CONF_SET_PROPERTY(XTokens_iamge_translate_to_youdao, to);
+    iamge_translate_channel == "baidu" ?  CJ_SET("tokens.iamge_translate_to_baidu", to.toStdString()) : CJ_SET("tokens.iamge_translate_to_youdao", to.toStdString());
 }
