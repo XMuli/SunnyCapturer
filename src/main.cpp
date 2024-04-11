@@ -91,7 +91,10 @@ int main(int argc, char *argv[])
     }
 
     CJ;//.initJson();
-    CJ.writeToFile();
+//    CJ.writeToFile();
+
+
+
 
 //    QByteArray t = QString("abcd1231").toUtf8();
 //    std::string tt = t.toBase64().toStdString();
@@ -99,28 +102,28 @@ int main(int argc, char *argv[])
 //    CJ.setKeyValue("tokens.youdao_app_id", tt);
 //    CJ.writeToFile();
 
-//    auto t1 = QString::fromStdString(CJ.getKeyValue("tokens.youdao_app_id").dump());
-//    QByteArray byteArray = QByteArray::fromBase64(t1.toLatin1()); // 解码 Base64 字符串
+    auto t1 = QString::fromStdString(CJ.getKeyValue("tokens.baidu_api_key").dump());
+    QByteArray byteArray = QByteArray::fromBase64(t1.toLatin1()); // 解码 Base64 字符串
 
-//    qDebug() << "---==>" <<QString(byteArray);
-
-
-
-    auto t1 = CJ.encryptString("u0fpmxS2WSvGb3lEUywiU3VX");
-    auto t2 = CJ.encryptString("SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6");
-    auto t3 = CJ.encryptString("5a3aa1167eed698d");
-    auto t4 = CJ.encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T");
+    qDebug() << "---==>" << t1 << QString(byteArray);
 
 
-    auto b1 = CJ.decryptString(t1);
-    auto b2 = CJ.decryptString(t2);
-    auto b3 = CJ.decryptString(t3);
-    auto b4 = CJ.decryptString(t4);
 
-    qDebug() << "---==>" << QString::fromStdString(t1) << b1;
-    qDebug() << "---==>" << QString::fromStdString(t2) << b2;
-    qDebug() << "---==>" << QString::fromStdString(t3) << b3;
-    qDebug() << "---==>" << QString::fromStdString(t4) << b4;
+//    auto t1 = CJ.encryptString("u0fpmxS2WSvGb3lEUywiU3VX");
+//    auto t2 = CJ.encryptString("SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6");
+//    auto t3 = CJ.encryptString("5a3aa1167eed698d");
+//    auto t4 = CJ.encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T");
+
+
+//    auto b1 = CJ.decryptString(t1);
+//    auto b2 = CJ.decryptString(t2);
+//    auto b3 = CJ.decryptString(t3);
+//    auto b4 = CJ.decryptString(t4);
+
+//    qDebug() << "---==>" << QString::fromStdString(t1) << b1;
+//    qDebug() << "---==>" << QString::fromStdString(t2) << b2;
+//    qDebug() << "---==>" << QString::fromStdString(t3) << b3;
+//    qDebug() << "---==>" << QString::fromStdString(t4) << b4;
     CONF_MANAGE; //.writeToFile()b
 //    initPaintBarStatus(CONF_MANAGb.m_paintBarStatus);
     COMM.loadTranslation("");

@@ -7,6 +7,7 @@
 #include <QBrush>
 #include <QString>
 #include <QCryptographicHash>
+#include <QMutex>
 #include "qaesencryption.h"
 
 
@@ -130,7 +131,6 @@ void ConfigJson::readFromFile()
     m_j = ordered_json::parse(data.toStdString()); // Convert JSON data to ordered_json
     file.close();
 
-
     QString jsonString = QString::fromStdString(m_j.dump());
     jsonString.replace("\\", ""); // Remove escape characters
     qDebug().noquote() << "ConfigJson content:" << jsonString;
@@ -166,6 +166,10 @@ void ConfigJson::setKeyValue(const QString &key, const ordered_json &val)
 
 ordered_json ConfigJson::getKeyValue(const QString &key)
 {
+    QString jsonString = QString::fromStdString(m_j.dump());
+    jsonString.replace("\\", ""); // Remove escape characters
+    qDebug().noquote() << "ConfigJson content:" << jsonString;
+
     QStringList keys = key.split('.'); // 使用点号分隔键
     ordered_json* currentObj = &m_j;
     for (const QString& k : keys) {
@@ -180,6 +184,8 @@ ordered_json ConfigJson::getKeyValue(const QString &key)
 
 std::string ConfigJson::encryptString(const QString &input)
 {
+    if (input.isEmpty()) return std::string();
+
     QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
     QByteArray hashKey = QCryptographicHash::hash(m_key.toLocal8Bit(), QCryptographicHash::Sha256);
     QByteArray hashIV = QCryptographicHash::hash(m_iv.toLocal8Bit(), QCryptographicHash::Md5);
@@ -190,8 +196,9 @@ std::string ConfigJson::encryptString(const QString &input)
 
 QString ConfigJson::decryptString(const std::string&input)
 {
-    QByteArray byte = QByteArray::fromBase64(QString::fromStdString(input).toUtf8());
+    if (input.empty()) return QString();
 
+    QByteArray byte = QByteArray::fromBase64(QString::fromStdString(input).toUtf8());
     QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
     QByteArray hashKey = QCryptographicHash::hash(m_key.toLocal8Bit(), QCryptographicHash::Sha256);
     QByteArray hashIV = QCryptographicHash::hash(m_iv.toLocal8Bit(), QCryptographicHash::Md5);

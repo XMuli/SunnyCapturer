@@ -31,7 +31,11 @@ NetworkOCR::NetworkOCR(QObject *parent)
     , m_networkManager(new QNetworkAccessManager(this))
 //    , m_eventLoop(new QEventLoop(this))
 {
-    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
+//    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
+
+    //    std::string baidu_api_key = CJ.getKeyValue("tokens.baidu_api_key").dump();      // 返回空， 填到 sendBaiDuAccessToken 中导致后面崩溃
+    //    std::string baidu_api_key2 = CJ.getKeyValue("tokens.baidu_api_key").dump(); // 则不返回空，正常
+
     sendBaiDuAccessToken();
 }
 
@@ -131,11 +135,10 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     postData.addQueryItem("type", "1");
 
     // 您的 YouDao 应用 ID / 应用密钥
-    QString APP_KEY = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
-    QString APP_SECRET = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
-
-//    QString APP_KEY = CONF_MANAGE.decryptString(QByteArray::fromStdString(CJ_GET("tokens.youdao_app_id").dump()));
-//    QString APP_SECRET = CONF_MANAGE.decryptString(QByteArray::fromStdString(CJ_GET("tokens.youdao_secret_key").dump()));
+//    QString APP_KEY = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
+//    QString APP_SECRET = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
+    QString APP_KEY = CJ.decryptString(CJ.getKeyValue("tokens.youdao_app_id").dump());
+    QString APP_SECRET = CJ.decryptString(CJ.getKeyValue("tokens.youdao_secret_key").dump());
 
     // 创建 QMap 并添加参数
     QMap<QString, QString> params;

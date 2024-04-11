@@ -9,7 +9,8 @@ using ordered_json = nlohmann::ordered_json;
 
 #define CJ ConfigJson::instance()
 #define CJ_SET(name, val) CJ.setKeyValue(#name, val)    // 直接设置单例里面的键值对
-#define CJ_GET(name) CJ.getKeyValue(#name)              // 直接获取单例里面的键值对
+//#define CJ_GET(name) CJ.getKeyValue(#name)              // 直接获取单例里面的键值对
+#define CJ_GET_QSTR(name) QString::fromStdString(CJ.getKeyValue(#name).dump())    // 直接获取单例里面的键值对，这个宏会有问题，会导致读取不出来？？为什么
 
 
 class ConfigJson : public QObject, public ISingleton<ConfigJson>
