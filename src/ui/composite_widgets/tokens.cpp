@@ -26,14 +26,6 @@ Tokens::~Tokens()
 
 void Tokens::initUI()
 {
-
-//    const QString& youdao_app_id = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
-//    const QString& youdao_secret_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
-
-//    const QString& baidu_api_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_api_key).toByteArray());
-//    const QString& baidu_secret_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray());
-//    const QString& ocr_channel = CONF_GET_PROPERTY(XTokens_ocr_channel).toString();
-//    const QString& iamge_translate_channel = CONF_GET_PROPERTY(XTokens_iamge_translate_channel).toString();
     const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
     const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
 
@@ -48,10 +40,6 @@ void Tokens::initUI()
     ui->leBdApiKey->setText(baidu_api_key);
     ui->leBdSecretKey->setText(baidu_secret_key);
 
-    // high_precision,                // 通用文字识别（高精度版）         1000 次/month
-    // high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
-    // standard,                      // 通用文字识别（标准版）           1000 次/month
-    // standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
     const QStringList list = {"high", "high_location", "standard", "standard_location"};
     for (int i = 0; i < list.count(); ++i) {
         const QString& text = QString("%1 %2").arg(i).arg(list.at(i));
@@ -84,26 +72,22 @@ void Tokens::onBtnResetClicked(bool checked)
 
 void Tokens::on_leYDAppID_textChanged(const QString &arg1)
 {
-//    CONF_SET_PROPERTY(XTokens_youdao_app_id, CONF_MANAGE.encryptString(arg1));
     CJ_SET("tokens.youdao_app_id", CJ.encryptString(arg1));
 }
 
 void Tokens::on_leYDApiSecret_textChanged(const QString &arg1)
 {
-//    CONF_SET_PROPERTY(XTokens_youdao_secret_key, CONF_MANAGE.encryptString(arg1));
     CJ_SET("tokens.youdao_secret_key", CJ.encryptString(arg1));
 
 }
 
 void Tokens::on_leBdApiKey_textChanged(const QString &arg1)
 {
-//    CONF_SET_PROPERTY(XTokens_baidu_api_key, CONF_MANAGE.encryptString(arg1));
     CJ_SET("tokens.baidu_api_key", CJ.encryptString(arg1));
 }
 
 void Tokens::on_leBdSecretKey_textChanged(const QString &arg1)
 {
-//    CONF_SET_PROPERTY(XTokens_baidu_secret_key, CONF_MANAGE.encryptString(arg1));
     CJ_SET("tokens.baidu_secret_key", CJ.encryptString(arg1));
 }
 
@@ -115,7 +99,6 @@ void Tokens::on_cbbChannel_currentIndexChanged(int index)
 void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
 {
     const QString& channel = ui->cbbImgTranslate->currentData().toString();
-//    CONF_SET_PROPERTY(XTokens_iamge_translate_channel, channel);
     CJ_SET("tokens.iamge_translate_channel", channel.toStdString());
 }
 

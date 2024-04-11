@@ -40,17 +40,12 @@ NetworkOCR::NetworkOCR(QObject *parent)
 
 void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
 {
-    // OTP_standard,                      // 通用文字识别（标准版）           1000 次/month
-    // OCR_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
-    // OCR_high_precision,                // 通用文字识别（高精度版）         1000 次/month
-    // OCR_high_precision_location        // 通用文字识别（高精度含位置版）     500 次/month
-
     QString para1 = "accurate";
     if (data.pipeline == OcrChannel::OCR_high_precision_location) para1 = "accurate";
     else if (data.pipeline == OcrChannel::OCR_high_precision) para1 = "accurate_basic";
     else if (data.pipeline == OcrChannel::OCR_standard_location) para1 = "general";
     else if (data.pipeline == OcrChannel::OCR_standard) para1 = "general_basic";
-    ;
+
     // 从文件中读取图像数据并进行base64编码
     QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/" + para1 + "?access_token=" + m_baiDuToken);
     QNetworkRequest request(url);
@@ -134,8 +129,6 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     postData.addQueryItem("type", "1");
 
     // 您的 YouDao 应用 ID / 应用密钥
-//    QString APP_KEY = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
-//    QString APP_SECRET = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
     QString APP_KEY = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
     QString APP_SECRET = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
 
@@ -227,8 +220,6 @@ const bool NetworkOCR::validityBaiDuKey(const QString &client_id, const QString 
 
 void NetworkOCR::sendBaiDuAccessToken(const QString &client_id, const QString &client_secret)
 {
-    // client_id = "u0fpmxS2WSvGb3lEUywiU3VX";
-    // client_secret = "SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6";
     if (!validityBaiDuKey(client_id, client_secret)) return;
     if (!m_baiDuToken.isEmpty()) return;
 

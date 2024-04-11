@@ -62,7 +62,11 @@ struct ContextData
 
 
 
+/***************************************************************************************************************
 
+*.ui  ⇆  ConfigJson::instance().ordered_json m_j  ⇆  xconfig.json
+
+***************************************************************************************************************/
 
 class ConfigJson : public QObject, public ISingleton<ConfigJson>
 {

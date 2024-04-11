@@ -48,8 +48,6 @@ private:
     QString base64FromFileContent(const QString& path, bool urlencoded = false);                   // 图片转 base64
     // BaiDu
     const bool validityBaiDuKey(const QString& client_id, const QString& client_secret) const;     // 校验 BaiDu key 的有效性
-//    void sendBaiDuAccessToken(const QString& client_id = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_api_key).toByteArray())
-//                              , const QString& client_secret = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray()));  // 获取 BaiDu 的鉴权
     void sendBaiDuAccessToken(const QString& client_id, const QString& client_secret);  // 获取 BaiDu 的鉴权
 
     void dealBaiDuAccessToken(QNetworkReply* reply);

@@ -228,17 +228,6 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
         } else if (type == PaintType::PT_img_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
 
             // 线路发生改变，需要重新赋值
-//            const auto& channel = CONF_GET_PROPERTY(XTokens_iamge_translate_channel).toString();
-//            m_imgTransDate.channel = channel;
-//            if (channel == "baidu") {
-//                m_imgTransDate.from_baidu = CONF_GET_PROPERTY(XTokens_iamge_translate_from_baidu).toString();
-//                m_imgTransDate.to_baidu = CONF_GET_PROPERTY(XTokens_iamge_translate_to_baidu).toString();
-
-//            } else if (channel == "youdao") {
-//                m_imgTransDate.from = CONF_GET_PROPERTY(XTokens_iamge_translate_from_youdao).toString();
-//                m_imgTransDate.to = CONF_GET_PROPERTY(XTokens_iamge_translate_to_youdao).toString();
-//            }
-
             const auto& channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
             m_imgTransDate.channel = channel;
             if (channel == "baidu") {
@@ -257,7 +246,6 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
             m_ocrTextDate.bTranslate = true;
 
             // OCR 线路发生改变，需要重新赋值
-//            const auto& text = CONF_GET_PROPERTY(XTokens_ocr_channel).toString();
             const auto& text = CJ.getKeyValue("tokens.ocr_channel");
             OcrChannel ocr;
             if (text == "high") ocr = OcrChannel::OCR_high_precision;
