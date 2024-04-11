@@ -8,6 +8,7 @@
 #include <QString>
 #include <QCryptographicHash>
 #include <QMutex>
+#include <iostream>
 #include "qaesencryption.h"
 
 
@@ -132,7 +133,7 @@ void ConfigJson::readFromFile()
     file.close();
 
     QString jsonString = QString::fromStdString(m_j.dump());
-    jsonString.replace("\\", ""); // Remove escape characters
+    // jsonString.replace("\\", ""); // Remove escape characters
     qDebug().noquote() << "ConfigJson content:" << jsonString;
 }
 
@@ -159,26 +160,23 @@ void ConfigJson::setKeyValue(const QString &key, const ordered_json &val)
     QStringList keys = key.split('.'); // 使用点号分隔键
     ordered_json* currentObj = &m_j;
     for (const QString& k : keys) {
-        currentObj = &((*currentObj)[k.toStdString()]);
+        currentObj = &((*currentObj)[k.toUtf8().constData()]);
     }
     *currentObj = val;
 }
 
 ordered_json ConfigJson::getKeyValue(const QString &key)
 {
-    QString jsonString = QString::fromStdString(m_j.dump());
-    jsonString.replace("\\", ""); // Remove escape characters
-    qDebug().noquote() << "ConfigJson content:" << jsonString;
-
     QStringList keys = key.split('.'); // 使用点号分隔键
     ordered_json* currentObj = &m_j;
     for (const QString& k : keys) {
         auto it = currentObj->find(k.toStdString());
-        if (it == currentObj->end()) {
+        if (it == currentObj->end())
             return ordered_json(); // 如果键不存在，返回默认值
-        }
+
         currentObj = &it.value();
     }
+
     return *currentObj;
 }
 

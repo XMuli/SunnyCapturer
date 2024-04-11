@@ -87,5 +87,13 @@ $ ../linuxdeploy-x86_64.AppImage --appdir AppDir -e bin/Sunny -d bin/resources/c
 
 $  ./linuxdeploy-x86_64.AppImage --appdir AppDir -e build/thplayer -d assets/thplayer.desktop -i assets/thplayer.svg --icon-filename thplayer -p qt -o appimage
 $ mv TouHou_Player*.AppImage thplayer-linux.AppImage
+
+
+
+#【MacOS Ventura 13.2.1】-------------------------------------------------------------
+新的方法(2020-05-22)：
+前提： 进入 /Users/winks/Qt/5.15.2/clang_64/bin 路径下
+先使用 qtcreator 进行编译后，打包为 *.dmg 格式：
+☁  bin [master] ⚡  /Users/winks/Qt/5.15.2/clang_64/bin/macdeployqt Sunny.app -dmg
 ```
 

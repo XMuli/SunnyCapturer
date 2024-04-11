@@ -34,13 +34,13 @@ void Tokens::initUI()
 //    const QString& baidu_secret_key = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_baidu_secret_key).toByteArray());
 //    const QString& ocr_channel = CONF_GET_PROPERTY(XTokens_ocr_channel).toString();
 //    const QString& iamge_translate_channel = CONF_GET_PROPERTY(XTokens_iamge_translate_channel).toString();
-    const QString& youdao_app_id = CJ.decryptString(CJ.getKeyValue("tokens.youdao_app_id").dump());
-    const QString& youdao_secret_key = CJ.decryptString(CJ.getKeyValue("tokens.youdao_secret_key").dump());
+    const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
+    const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
 
-    const QString& baidu_api_key = CJ.decryptString(CJ.getKeyValue("tokens.baidu_api_key").dump());
-    const QString& baidu_secret_key = CJ.decryptString(CJ.getKeyValue("tokens.baidu_secret_key").dump());
-    const QString& ocr_channel = QString::fromStdString(CJ.getKeyValue("tokens.ocr_channel").dump());
-    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");  宏有问题，需要排查
+    const QString& baidu_api_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_api_key"));
+    const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_secret_key"));
+    const QString& ocr_channel = CJ_GET_QSTR("tokens.ocr_channel");
+    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");  // 宏有问题，需要排查
 
     qDebug() << "youdao_app_id: " << youdao_app_id << " ocr_channel: " << ocr_channel;
     ui->leYDAppID->setText(youdao_app_id);

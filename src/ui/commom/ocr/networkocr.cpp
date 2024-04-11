@@ -31,12 +31,11 @@ NetworkOCR::NetworkOCR(QObject *parent)
     , m_networkManager(new QNetworkAccessManager(this))
 //    , m_eventLoop(new QEventLoop(this))
 {
-//    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
+   connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
 
-    //    std::string baidu_api_key = CJ.getKeyValue("tokens.baidu_api_key").dump();      // 返回空， 填到 sendBaiDuAccessToken 中导致后面崩溃
-    //    std::string baidu_api_key2 = CJ.getKeyValue("tokens.baidu_api_key").dump(); // 则不返回空，正常
-
-    sendBaiDuAccessToken();
+   const QString &client_id = CJ.decryptString(CJ_GET_STR("tokens.baidu_api_key"));
+   const QString &client_secret = CJ.decryptString(CJ_GET_STR("tokens.baidu_secret_key"));
+   sendBaiDuAccessToken(client_id, client_secret);
 }
 
 void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
@@ -137,8 +136,8 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     // 您的 YouDao 应用 ID / 应用密钥
 //    QString APP_KEY = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_app_id).toByteArray());
 //    QString APP_SECRET = CONF_MANAGE.decryptString(CONF_GET_PROPERTY(XTokens_youdao_secret_key).toByteArray());
-    QString APP_KEY = CJ.decryptString(CJ.getKeyValue("tokens.youdao_app_id").dump());
-    QString APP_SECRET = CJ.decryptString(CJ.getKeyValue("tokens.youdao_secret_key").dump());
+    QString APP_KEY = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
+    QString APP_SECRET = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
 
     // 创建 QMap 并添加参数
     QMap<QString, QString> params;
@@ -228,6 +227,8 @@ const bool NetworkOCR::validityBaiDuKey(const QString &client_id, const QString 
 
 void NetworkOCR::sendBaiDuAccessToken(const QString &client_id, const QString &client_secret)
 {
+    // client_id = "u0fpmxS2WSvGb3lEUywiU3VX";
+    // client_secret = "SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6";
     if (!validityBaiDuKey(client_id, client_secret)) return;
     if (!m_baiDuToken.isEmpty()) return;
 

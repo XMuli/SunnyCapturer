@@ -430,22 +430,22 @@ void ScreenShot::onPickedColor(const QColor &color)
     format.setForeground(QBrush(color));
     m_edit->mergeCurrentCharFormat(format);
 
-    CONF_PBS_DATA.paPen.setColor(color);
-    CONF_PBS_DATA.paBrush.setColor(color);
+    CJ_CD.paPen.setColor(color);
+    CJ_CD.paBrush.setColor(color);
 }
 
 void ScreenShot::onTextFontFamilyChanged(const QFont &font)
 {
     m_textFont.setFamily(font.family());
     m_edit->setFont(m_textFont);
-    CONF_PBS_DATA.fontFamily = font.family();
+    CJ_CD.fontFamily = font.family();
 }
 
 void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
 {
     const int& width = fontSize.toInt();
     setTextFontSize(0, width, false);
-    CONF_PBS_DATA.fontSize = width;
+    CJ_CD.fontSize = width;
 }
 
 void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
@@ -633,9 +633,9 @@ void ScreenShot::initUI()
     m_pickedRectTips->raise();
     m_pointTips->raise();
 
-    onPickedColor(CONF_PBS_DATA.paPen.color());
-    m_paintNode.pen = CONF_PBS_DATA.paPen;
-    m_paintNode.brush = CONF_PBS_DATA.paBrush;
+    onPickedColor(CJ_CD.paPen.color());
+    m_paintNode.pen = CJ_CD.paPen;
+    m_paintNode.brush = CJ_CD.paBrush;
 
     m_ocrDlg->hide();
     m_imgTranslateDlg->hide();
@@ -645,13 +645,13 @@ void ScreenShot::initUI()
     format.setTextOutline(QPen(format.foreground().color(), 1));
     m_edit->mergeCurrentCharFormat(format);
 
-    setTextFontSize(0, CONF_PBS_DATA.fontSize, false, false);
+    setTextFontSize(0, CJ_CD.fontSize, false, false);
     TextFlags flags;
-    CONF_PBS_DATA.textBold ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
-    CONF_PBS_DATA.textItalic ? flags |= TextFlag::TF_italic : flags &= ~TextFlags(TextFlag::TF_italic);
-    CONF_PBS_DATA.textOutline ? flags |= TextFlag::TF_outline : flags &= ~TextFlags(TextFlag::TF_outline);
-    CONF_PBS_DATA.textStrikeout ? flags |= TextFlag::TF_strikeout : flags &= ~TextFlags(TextFlag::TF_strikeout);
-    CONF_PBS_DATA.textUnderline ? flags |= TextFlag::TF_underline : flags &= ~TextFlags(TextFlag::TF_underline);
+    CJ_CD.textBold ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
+    CJ_CD.textItalic ? flags |= TextFlag::TF_italic : flags &= ~TextFlags(TextFlag::TF_italic);
+    CJ_CD.textOutline ? flags |= TextFlag::TF_outline : flags &= ~TextFlags(TextFlag::TF_outline);
+    CJ_CD.textStrikeout ? flags |= TextFlag::TF_strikeout : flags &= ~TextFlags(TextFlag::TF_strikeout);
+    CJ_CD.textUnderline ? flags |= TextFlag::TF_underline : flags &= ~TextFlags(TextFlag::TF_underline);
     onTextCtrlToggled(flags);
 
     m_edit->hide();
@@ -709,7 +709,7 @@ void ScreenShot::initConnect()
     connect(m_timerPoint, &QTimer::timeout, this, &ScreenShot::onHidePointTips);
     connect(&COMM, &Communication::sigOCRImageGenerateFinsh, this, &ScreenShot::onOCRImageGenerateFinsh);
     connect(&COMM, &Communication::sigOCRTextGenerateFinsh, this, &ScreenShot::onOCRTextGenerateFinsh);
-    connect(&COMM, &Communication::sigOcrTranslateCtrlHide, this, &ScreenShot::onOcrTranslateCtrlHide);
+    connect(&COMM, &Communication::sigImgTranslateCtrlHide, this, &ScreenShot::onOcrTranslateCtrlHide);
     connect(&COMM, &Communication::sigOcrTextCtrlHide, this, &ScreenShot::onOcrTextCtrlHide);
 //    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
 //        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
@@ -1632,7 +1632,7 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         m_paintNode.pen.setWidthF(width);
         showPointTips(QString::number(width));
 
-        CONF_PBS_DATA.paPen = m_paintNode.pen;
+        CJ_CD.paPen = m_paintNode.pen;
     }
 
     e->ignore();

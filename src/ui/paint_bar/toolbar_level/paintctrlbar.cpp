@@ -74,11 +74,11 @@ void PaintCtrlBar::initUI()
     }
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_colorPicker->setCurrPickedColor(CONF_PBS_DATA.paPen.color().name());
+    m_colorPicker->setCurrPickedColor(CJ_CD.paPen.color().name());
     m_colorPicker->hide();
     m_fontFamily->hide();
 
-    m_fontFamily->setCurrentFont(QFont(CONF_PBS_DATA.fontFamily, CONF_PBS_DATA.fontSize));
+    m_fontFamily->setCurrentFont(QFont(CJ_CD.fontFamily, CJ_CD.fontSize));
     m_fontScale->hide();
     m_mosaicSliderCtrl->hide();
 
@@ -103,23 +103,23 @@ void PaintCtrlBar::initUI()
 void PaintCtrlBar::initBtns()
 {
     QStringList textLists;
-    if (CONF_PBS_DATA.textBold) textLists << "0";
-    if (CONF_PBS_DATA.textItalic) textLists << "1";
-    if (CONF_PBS_DATA.textOutline) textLists << "2";
-    if (CONF_PBS_DATA.textStrikeout) textLists << "3";
-    if (CONF_PBS_DATA.textUnderline) textLists << "4";
+    if (CJ_CD.textBold) textLists << "0";
+    if (CJ_CD.textItalic) textLists << "1";
+    if (CJ_CD.textOutline) textLists << "2";
+    if (CJ_CD.textStrikeout) textLists << "3";
+    if (CJ_CD.textUnderline) textLists << "4";
     const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
 
 
 
-    connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << QString::number(CONF_PBS_DATA.rectintType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() << QString::number(CONF_PBS_DATA.ellipseType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << QString::number(CONF_PBS_DATA.arrowType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill", QStringList() << QString::number(CONF_PBS_DATA.marker_penType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur", QStringList() << QString::number(CONF_PBS_DATA.mosaicType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << QString::number(CJ_CD.rectintType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() << QString::number(CJ_CD.ellipseType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << QString::number(CJ_CD.arrowType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_markerPenCtrl, dir, QStringList() << "ellipse_fill" << "rectangle_fill", QStringList() << QString::number(CJ_CD.marker_penType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_mosaicCtrl, dir, QStringList() << "mosaic" << "blur", QStringList() << QString::number(CJ_CD.mosaicType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onMosaicCtrlIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", textLists, false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
-    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CONF_PBS_DATA.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CONF_PBS_DATA.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CJ_CD.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
+    connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CJ_CD.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     // OcrTranslateCtrl 的对象
     // m_ocrTranslateCtrl = new OcrTranslateCtrl(m_orie, this);
     // connect(m_ocrTranslateCtrl->m_tbTranslate, &XToolButton::toggled, this, &PaintCtrlBar::onOcrTranslateStatusChanged);
@@ -135,7 +135,7 @@ void PaintCtrlBar::initBtns()
     m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
     m_fontScale->addItems(fontSize);
-    m_fontScale->setCurrentText(QString::number(CONF_PBS_DATA.fontSize));
+    m_fontScale->setCurrentText(QString::number(CJ_CD.fontSize));
 
 
 //    addWidget(m_rectCtrl);
@@ -376,29 +376,29 @@ void PaintCtrlBar::onIdReleased(int id)
 
     const auto& paint = sender()->parent();
     if (paint == m_rectCtrl) {
-        CONF_PBS_DATA.rectintType = id;
+        CJ_CD.rectintType = id;
     } else if (paint == m_ellipseCtrl) {
-        CONF_PBS_DATA.ellipseType = id;
+        CJ_CD.ellipseType = id;
     } else if (paint == m_arrowCtrl) {
-        CONF_PBS_DATA.arrowType = id;
+        CJ_CD.arrowType = id;
     } else if (paint == m_markerPenCtrl) {
-        CONF_PBS_DATA.marker_penType = id;
+        CJ_CD.marker_penType = id;
     } else if (paint == m_mosaicCtrl) {
-        CONF_PBS_DATA.mosaicType = id;
+        CJ_CD.mosaicType = id;
     } else if (paint == m_textCtrl) {
         // TBD:
         const bool& checked = qobject_cast<QButtonGroup *>(sender())->button(id)->isChecked();
-        if (id == 0) CONF_PBS_DATA.textBold = checked;
-        else if (id == 1) CONF_PBS_DATA.textItalic = checked;
-        else if (id == 2) CONF_PBS_DATA.textOutline = checked;
-        else if (id == 3) CONF_PBS_DATA.textStrikeout = checked;
-        else if (id == 4) CONF_PBS_DATA.textUnderline = checked;
+        if (id == 0) CJ_CD.textBold = checked;
+        else if (id == 1) CJ_CD.textItalic = checked;
+        else if (id == 2) CJ_CD.textOutline = checked;
+        else if (id == 3) CJ_CD.textStrikeout = checked;
+        else if (id == 4) CJ_CD.textUnderline = checked;
         else qDebug() << "PaintCtrlBar::onIdReleased is m_textCtrl, and id is empty!";
     } else if (paint == m_serialCtrl) {
-        CONF_PBS_DATA.serialType = id;
+        CJ_CD.serialType = id;
     } else if (paint == m_pointCtrl) {
         emit sigPointCtrlReleased(id);
-        CONF_PBS_DATA.pointType = id;
+        CJ_CD.pointType = id;
     } else {
         qDebug() << "sender()->parent(): %1 is empty!";
     }
@@ -421,19 +421,19 @@ void PaintCtrlBar::onTextCtrlToggled(int id, bool checked)
     static TextFlags flags;
     if (id == 0) {
         checked ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
-        CONF_PBS_DATA.textBold = checked;
+        CJ_CD.textBold = checked;
     } else if (id == 1) {
         checked ? flags |= TextFlag::TF_italic : flags &= ~TextFlags(TextFlag::TF_italic);
-        CONF_PBS_DATA.textItalic = checked;
+        CJ_CD.textItalic = checked;
     } else if (id == 2) {
         checked ? flags |= TextFlag::TF_outline : flags &= ~TextFlags(TextFlag::TF_outline);
-        CONF_PBS_DATA.textOutline = checked;
+        CJ_CD.textOutline = checked;
     } else if (id == 3) {
         checked ? flags |= TextFlag::TF_strikeout : flags &= ~TextFlags(TextFlag::TF_strikeout);
-        CONF_PBS_DATA.textStrikeout = checked;
+        CJ_CD.textStrikeout = checked;
     } else if (id == 4) {
         checked ? flags |= TextFlag::TF_underline : flags &= ~TextFlags(TextFlag::TF_underline);
-        CONF_PBS_DATA.textUnderline = checked;
+        CJ_CD.textUnderline = checked;
     } else {
         qDebug() << "id is other!";
     }
@@ -478,7 +478,7 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     } else if (type == PaintType::PT_img_translate) {
         bPointCtrlShow = false;
         bColorPickerShow = false;
-        if (!isChecked) emit COMM.sigOcrTranslateCtrlHide();
+        if (!isChecked) emit COMM.sigImgTranslateCtrlHide();
     } else if (type == PaintType::PT_ocr) {
         bPointCtrlShow = false;
         bColorPickerShow = false;

@@ -57,9 +57,6 @@ int main(int argc, char *argv[])
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);//注冊异常捕获函数
 #endif
 
-//    XOcrTextCtrl ocrTextCtrl(Qt::Horizontal);
-//    ocrTextCtrl.show();
-
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
     QSharedMemory sharedMemory;
     sharedMemory.setKey(uniqueKey);
@@ -78,10 +75,6 @@ int main(int argc, char *argv[])
 //    int* ptr = nullptr; // 尝试访问空指针
 //    *ptr = 42; // 这将导致崩溃
 
-//    QWidget* ptr = nullptr;
-//    ptr->show();
-
-
 
     // 创建系统信号量, 再尝试获取系统信号量，如果已经被其他实例持有，程序就退出, 判断是为了确保在多个进程同时启动时，只有一个进程能够继续执行。QSystemSemaphore用于创建系统信号量，如果系统信号量已经被其他实例持有（比如由于上一次程序异常退出导致信号量未被释放），则acquire函数会返回false，
     QSystemSemaphore systemSemaphore(uniqueKey, 1, QSystemSemaphore::Open);
@@ -94,85 +87,13 @@ int main(int argc, char *argv[])
 //    CJ.writeToFile();
 
 
-
-
-//    QByteArray t = QString("abcd1231").toUtf8();
-//    std::string tt = t.toBase64().toStdString();
-
-//    CJ.setKeyValue("tokens.youdao_app_id", tt);
-//    CJ.writeToFile();
-
-    auto t1 = QString::fromStdString(CJ.getKeyValue("tokens.baidu_api_key").dump());
-    QByteArray byteArray = QByteArray::fromBase64(t1.toLatin1()); // 解码 Base64 字符串
-
-    qDebug() << "---==>" << t1 << QString(byteArray);
-
-
-
-//    auto t1 = CJ.encryptString("u0fpmxS2WSvGb3lEUywiU3VX");
-//    auto t2 = CJ.encryptString("SGb1M45SNTOkQ6MTX4aTY0omEsZirLe6");
-//    auto t3 = CJ.encryptString("5a3aa1167eed698d");
-//    auto t4 = CJ.encryptString("tgjKTMUqEsG5ZysptJMHOk7pIPwFCi9T");
-
-
-//    auto b1 = CJ.decryptString(t1);
-//    auto b2 = CJ.decryptString(t2);
-//    auto b3 = CJ.decryptString(t3);
-//    auto b4 = CJ.decryptString(t4);
-
-//    qDebug() << "---==>" << QString::fromStdString(t1) << b1;
-//    qDebug() << "---==>" << QString::fromStdString(t2) << b2;
-//    qDebug() << "---==>" << QString::fromStdString(t3) << b3;
-//    qDebug() << "---==>" << QString::fromStdString(t4) << b4;
-    CONF_MANAGE; //.writeToFile()b
-//    initPaintBarStatus(CONF_MANAGb.m_paintBarStatus);
+    CONF_MANAGE; //.writeToFile()
+   // initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
 
 
-
-//    NetworkOCR networkOCR;
-//    networkOCR.sendBaiDuOcrRequest("C:/Users/Venn/Desktop/Sunny_20231030_114240.png");
-//    networkOCR.sendYouDaoImgTranslateRequest();
-
-
-
-//    CONF_MANAGE.setProperty("XGeneral_language", "test");
-//    qDebug() << "--->" << CONF_MANAGE.property("XGeneral_language").toString();
-//    ConfigManager::instance().writeToFile();
-//    connect(m_widget, &XTextEdit::textUpdated, this, &TextTool::updateText);
-
-//    QString text = "27";
-//    Tips tips(text, TipsType::TT_point_changed_tips);
-//    tips.show();
-
-//    Tips tips2("1200, 1000, 1600 * 900", TipsType::TT_picked_rect_tips);
-//    tips2.show();
-
-
-//    PaintToolBar paintToolBar(Qt::Vertical); // Horizontal Vertical
-//    paintToolBar.show();
-
-//    PaintCtrlBar paintCtrlBar(Qt::Vertical);
-//    paintCtrlBar.show();
-
-//    PaintBar paintbar(Qt::Horizontal); // Horizontal Vertical
-//    paintbar.show();
-//    paintbar.transposePaintBar(false);
-
-//    PinWidget pinWidget;
-//    pinWidget.show();
-
-//    SideSettingUI w;
-//    w.show();
-//    ColorPicker colorPicker(QSize(100, 100), ColorPickerType::CT_grid_horizontal);
-//    colorPicker.setColorPickerType(ColorPickerType::CT_grid_horizontal);
-//    colorPicker.show();
-//    AbsSettingUI absW;
-//    absW.show();
-//    ResetUI resetUI;
-//    resetUI.show();
 
     // 释放系统信号量
     systemSemaphore.release();
