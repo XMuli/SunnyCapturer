@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
 
     CONF_MANAGE; //.writeToFile()
-   // initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
+//    initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘
