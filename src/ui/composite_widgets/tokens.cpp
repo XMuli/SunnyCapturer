@@ -56,13 +56,16 @@ void Tokens::initUI()
     ui->cbbImgTranslate->setCurrentIndex(imgTranslate.indexOf(iamge_translate_channel));
 }
 
-void Tokens::onBtnResetClicked(bool checked)
+void Tokens::on_cbbOcr_currentIndexChanged(int index)
 {
-    Q_UNUSED(checked)
-    ui->leYDAppID->clear();
-    ui->leYDApiSecret->clear();
-    ui->leBdApiKey->clear();
-    ui->leBdSecretKey->clear();
+    const QString& channel = ui->cbbOcr->currentData().toString();
+    CJ_SET("tokens.ocr_channel", channel.toStdString());
+}
+
+void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
+{
+    const QString& channel = ui->cbbImgTranslate->currentData().toString();
+    CJ_SET("tokens.iamge_translate_channel", channel.toStdString());
 }
 
 void Tokens::on_leYDAppID_textChanged(const QString &arg1)
@@ -86,18 +89,30 @@ void Tokens::on_leBdSecretKey_textChanged(const QString &arg1)
     CJ_SET("tokens.baidu_secret_key", CJ.encryptString(arg1));
 }
 
-void Tokens::on_cbbOcr_currentIndexChanged(int index)
+void Tokens::onBtnResetClicked(bool checked)
 {
-    const QString& channel = ui->cbbOcr->currentData().toString();
-    CJ_SET("tokens.ocr_channel", channel.toStdString());
-}
+    Q_UNUSED(checked)
+    const ordered_json& j = CJ.defaultConfigJson();
+    CJ.setJ("tokens", j["tokens"]);
 
-void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
-{
-    const QString& channel = ui->cbbImgTranslate->currentData().toString();
-    CJ_SET("tokens.iamge_translate_channel", channel.toStdString());
-}
+    const QString& ocr_channel = CJ_GET_QSTR("tokens.ocr_channel");
+    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
+    const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
+    const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
+    const QString& baidu_api_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_api_key"));
+    const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_secret_key"));
 
+    const QStringList list = {"high", "high_location", "standard", "standard_location"};
+    ui->cbbOcr->setCurrentIndex(list.indexOf(ocr_channel));
+
+    const QStringList imgTranslate = {"baidu", "youdao"};  /*"baidu_fanyi",*/
+    ui->cbbImgTranslate->setCurrentIndex(imgTranslate.indexOf(iamge_translate_channel));
+
+    ui->leYDAppID->setText(youdao_app_id);
+    ui->leYDApiSecret->setText(youdao_secret_key);
+    ui->leBdApiKey->setText(baidu_api_key);
+    ui->leBdSecretKey->setText(baidu_secret_key);
+}
 
 
 

@@ -33,8 +33,11 @@ void Pin::on_sbMaxSize_valueChanged(int arg1)
 
 void Pin::onBtnResetClicked(bool checked)
 {
-    ui->sbOpacity->setValue(100);
-    ui->sbMaxSize->setValue(10000);
+    const ordered_json& j = CJ.defaultConfigJson();
+    CJ.setJ("pin", j["pin"]);
+
+    ui->sbOpacity->setValue(CJ_GET("pin.opacity"));
+    ui->sbMaxSize->setValue(CJ_GET("pin.maximum_size"));
 }
 
 void Pin::initUI()

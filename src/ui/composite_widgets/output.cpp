@@ -106,13 +106,17 @@ void Output::onSleletedDir()
 
 void Output::onBtnResetClicked(bool checked)
 {
-    ui->sbImageQuailty->setValue(-1);
-    ui->leFileName->setText(QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME));
-    ui->leConfigPath->setText(qApp->applicationDirPath());
-    ui->cbQuickSaveEnable->setChecked(false);
-    ui->leQuickSavePath->setText(QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
-    ui->cbAutoSaveEnable->setChecked(false);
-    ui->leAutoSavePath->setText(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
+    const ordered_json& j = CJ.defaultConfigJson();
+    CJ.setJ("output", j["output"]);
+    CJ.initOutputDefaulValue();
+
+    ui->sbImageQuailty->setValue(CJ_GET("output.image_quailty"));
+    ui->leFileName->setText(CJ_GET_QSTR("output.flie_name"));
+    ui->leConfigPath->setText(CJ_GET_QSTR("output.config_path"));
+    ui->cbQuickSaveEnable->setChecked(CJ_GET("output.quick_save_enable").get<bool>());
+    ui->leQuickSavePath->setText(CJ_GET_QSTR("output.quick_save_path"));
+    ui->cbAutoSaveEnable->setChecked(CJ_GET("output.auto_save_enable").get<bool>());
+    ui->leAutoSavePath->setText(CJ_GET_QSTR("output.auto_save_path"));
 }
 
 void Output::onLanguageChange(const QString qmName)

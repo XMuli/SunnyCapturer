@@ -77,10 +77,14 @@ void General::setAutoStart(const bool &enable)
 
 void General::onBtnResetClicked(bool checked)
 {
-    ui->cbbLanguage->setCurrentText("English");
-    ui->cbbLogLevel->setCurrentText("Debug");
-    ui->btnFont->setText("Microsoft YaHei,9");
-    ui->cbAutostart->setChecked(false);
+    const ordered_json& j = CJ.defaultConfigJson();
+    CJ.setJ("general", j["general"]);
+
+    ui->cbbLanguage->setCurrentText(CJ_GET_QSTR("general.language"));
+    ui->cbbThemes->setCurrentText(CJ_GET_QSTR("general.themes"));
+    ui->cbbLogLevel->setCurrentText(CJ_GET_QSTR("general.log_level"));
+    ui->btnFont->setText(CJ_GET_QSTR("general.font"));
+    ui->cbAutostart->setChecked(CJ_GET("general.autostart").get<bool>());
 }
 
 void General::onCbbLanguageCurrentTextChanged(const QString &arg1)

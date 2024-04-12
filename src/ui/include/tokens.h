@@ -6,7 +6,6 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
-#include "xwidget_global.h"
 #include <QWidget>
 
 namespace Ui {
@@ -24,18 +23,17 @@ public:
 private:
     void initUI();
 
-public slots:
-    void onBtnResetClicked(bool checked = false);
-
 private slots:
+    void on_cbbOcr_currentIndexChanged(int index);
+    void on_cbbImgTranslate_currentIndexChanged(int index);
+
     void on_leYDAppID_textChanged(const QString &arg1);
     void on_leYDApiSecret_textChanged(const QString &arg1);
     void on_leBdApiKey_textChanged(const QString &arg1);
     void on_leBdSecretKey_textChanged(const QString &arg1);
 
-    void on_cbbOcr_currentIndexChanged(int index);
-    void on_cbbImgTranslate_currentIndexChanged(int index);
-
+public slots:
+    void onBtnResetClicked(bool checked = false);
 
 private:
     Ui::Tokens *ui;

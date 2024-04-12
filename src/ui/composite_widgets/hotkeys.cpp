@@ -53,13 +53,12 @@ void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
 
 void Hotkeys::onBtnResetClicked(bool checked)
 {
-    ui->kseCapture->setKeySequence(QKeySequence("F6"));
-    ui->kseDelayCapture->setKeySequence(QKeySequence("Ctrl+F6"));
-    ui->kseCustomCapture->setKeySequence(QKeySequence("Shift+F6"));
+    const ordered_json& j = CJ.defaultConfigJson();
+    CJ.setJ("hotkeys", j["hotkeys"]);
 
-    CJ_SET("hotkeys.capture", ui->kseCapture->keySequence().toString().toStdString());
-    CJ_SET("hotkeys.delay_capture", ui->kseDelayCapture->keySequence().toString().toStdString());
-    CJ_SET("hotkeys.custom_capture", ui->kseCustomCapture->keySequence().toString().toStdString());
+    ui->kseCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.capture")));
+    ui->kseDelayCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.delay_capture")));
+    ui->kseCustomCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.custom_capture")));
 }
 
 void Hotkeys::initUI()

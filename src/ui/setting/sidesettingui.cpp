@@ -147,7 +147,6 @@ void SideSettingUI::closeEvent(QCloseEvent *e)
 {
     CONF_MANAGE.onSyncToFile();
 
-    qDebug().noquote() << "m_j: " << QString::fromStdString(CJ.m_j.dump());
     CJ.onSyncToFile();
     QWidget::closeEvent(e);
 }

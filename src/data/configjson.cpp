@@ -11,9 +11,9 @@
 #include <QCryptographicHash>
 #include "qaesencryption.h"
 
-void ConfigJson::initJson()
+ordered_json ConfigJson::defaultConfigJson()
 {
-    m_j = {
+    ordered_json j = {
         {"general", {
                         {"language", "English"},
                         {"themes", "default"},
@@ -128,9 +128,15 @@ void ConfigJson::initJson()
                        }}
     };
 
-    QString jsonString = QString::fromStdString(m_j.dump());
-    qDebug().noquote() << "ConfigJson content:" << jsonString;
+    QString jsonString = QString::fromStdString(j.dump());
+    qDebug().noquote() << "ordered_json j:" << jsonString;
+    return j;
 }
+
+// void ConfigJson::initConfigJson()
+// {
+//     m_j = defaultConfigJson();
+// }
 
 void ConfigJson::readFromFile()
 {
@@ -146,7 +152,7 @@ void ConfigJson::readFromFile()
     file.close();
 
     QString jsonString = QString::fromStdString(m_j.dump());
-    qDebug().noquote() << "ConfigJson content:" << jsonString;
+    qDebug().noquote() << "m_j content:" << jsonString;
 }
 
 void ConfigJson::writeToFile()
@@ -161,7 +167,7 @@ void ConfigJson::writeToFile()
     file.close();
 }
 
-void ConfigJson::initAppDefaulValue()
+void ConfigJson::initOutputDefaulValue()
 {
     // fix: 初次读配置文件, Output path 为空; 此时单例还没有构造完成，不能用宏
     // setKeyValue("output.flie_name", QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME).toStdString());
@@ -174,7 +180,6 @@ void ConfigJson::onSyncToFile()
 {
     writeToFile();
 }
-
 
 void ConfigJson::setKeyValue(const QString &key, const ordered_json &val)
 {
@@ -302,36 +307,37 @@ void cdWritToFile(ContextData &cd)
 
 void ContextData::cdReadFromFile()
 {
-#define CJ_GET_CONTEXT(name) name = CJ.getKeyValue(QStringLiteral("painter_context_data.") + #name);
+#define CJ_GET_CONTEXT(name) name = CJ.getKeyValue(QStringLiteral("painter_context_data.") + #name)
 #define CJ_GET_CONTEXT_OBJECT(pre, name) CJ.getKeyValue(QStringLiteral("painter_context_data.")  + pre + "." + name)
 #define CJ_GET_CONTEXT_STR(pre, name) CJ_GET_CONTEXT_OBJECT(pre, name).get<std::string>()
 #define CJ_GET_CONTEXT_QSTR(pre, name) QString::fromStdString(CJ_GET_CONTEXT_OBJECT(pre, name).get<std::string>())
 
     // 一级工具栏的状态
-    CJ_GET_CONTEXT(rect)
-    CJ_GET_CONTEXT(ellipse)
-    CJ_GET_CONTEXT(arrow)
-    CJ_GET_CONTEXT(penciler)
-    CJ_GET_CONTEXT(marker_pen)
-    CJ_GET_CONTEXT(mosaic)
-    CJ_GET_CONTEXT(text)
+    rect = CJ.getKeyValue("painter_context_data.rect").get<bool>();
+    CJ_GET_CONTEXT(rect).get<bool>();
+    CJ_GET_CONTEXT(ellipse).get<bool>();
+    CJ_GET_CONTEXT(arrow).get<bool>();
+    CJ_GET_CONTEXT(penciler).get<bool>();
+    CJ_GET_CONTEXT(marker_pen).get<bool>();
+    CJ_GET_CONTEXT(mosaic).get<bool>();
+    CJ_GET_CONTEXT(text).get<bool>();
 
     // 二级工具栏的状态
-    CJ_GET_CONTEXT(rectintType)
-    CJ_GET_CONTEXT(ellipseType)
-    CJ_GET_CONTEXT(arrowType)
-    CJ_GET_CONTEXT(marker_penType)
-    CJ_GET_CONTEXT(pointType)
+    CJ_GET_CONTEXT(rectintType);
+    CJ_GET_CONTEXT(ellipseType);
+    CJ_GET_CONTEXT(arrowType);
+    CJ_GET_CONTEXT(marker_penType);
+    CJ_GET_CONTEXT(pointType);
 
-    CJ_GET_CONTEXT(mosaicType)
-    CJ_GET_CONTEXT(pixelatedMosaic)
-    CJ_GET_CONTEXT(smoothMosaic)
+    CJ_GET_CONTEXT(mosaicType);
+    CJ_GET_CONTEXT(pixelatedMosaic);
+    CJ_GET_CONTEXT(smoothMosaic);
 
-    CJ_GET_CONTEXT(textBold)
-    CJ_GET_CONTEXT(textItalic)
-    CJ_GET_CONTEXT(textOutline)
-    CJ_GET_CONTEXT(textStrikeout)
-    CJ_GET_CONTEXT(textUnderline)
+    CJ_GET_CONTEXT(textBold).get<bool>();
+    CJ_GET_CONTEXT(textItalic).get<bool>();
+    CJ_GET_CONTEXT(textOutline).get<bool>();
+    CJ_GET_CONTEXT(textStrikeout).get<bool>();
+    CJ_GET_CONTEXT(textUnderline).get<bool>();
 
     // serial_info 三个改写为数组了
     serialType = CJ_GET_CONTEXT_OBJECT("serial_info", "type");
@@ -356,3 +362,12 @@ void ContextData::cdReadFromFile()
     brush.setColor(CJ_GET_CONTEXT_QSTR("brush", "color"));
     brush.setStyle(static_cast<Qt::BrushStyle>(QMetaEnum::fromType<Qt::BrushStyle>().keyToValue(CJ_GET_CONTEXT_STR("brush", "style").c_str())));
 }
+
+void ConfigJson::setJ(const std::string &key, const ordered_json &newJ)
+{
+    m_j[key] = newJ;
+}
+
+
+
+

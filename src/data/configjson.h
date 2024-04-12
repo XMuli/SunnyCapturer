@@ -71,19 +71,21 @@ void cdWritToFile(ContextData& cd);
 
 ***************************************************************************************************************/
 
+
 class ConfigJson : public QObject, public ISingleton<ConfigJson>
 {
     Q_OBJECT
     FRIEND_CREAT_SINGLETION(ConfigJson);
 
-public:
-    // 便于开发测试，才将在这三个设置为 public 的
-    void initJson();
+public:  // 便于开发测试，才将在这三个设置为 public 的
+    ordered_json defaultConfigJson();
+    // void initConfigJson();
     void readFromFile();
     void writeToFile();
-    void initAppDefaulValue();
 
-
+public:
+    void initOutputDefaulValue();
+    void setJ(const std::string& key, const ordered_json &newJ);
 
     void onSyncToFile();
     void setKeyValue(const QString& key, const ordered_json& val); // 设置多层键值对
@@ -95,9 +97,9 @@ public:
 
 public:
    ContextData m_cd;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
-    ordered_json m_j;
 
 private:
+   ordered_json m_j;
     explicit ConfigJson(QObject *parent = nullptr);
     virtual ~ConfigJson() = default;
 
