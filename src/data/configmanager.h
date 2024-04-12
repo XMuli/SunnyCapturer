@@ -52,8 +52,8 @@ struct PaintBarStatus
     QChar serialLetter = ' ';
     int pointType = -1;
 
-    QPen paPen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QBrush paBrush = QBrush(Qt::red, Qt::SolidPattern);
+    QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
 };
 
 void initPaintBarStatus(PaintBarStatus& pbs);

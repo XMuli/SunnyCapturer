@@ -430,22 +430,22 @@ void ScreenShot::onPickedColor(const QColor &color)
     format.setForeground(QBrush(color));
     m_edit->mergeCurrentCharFormat(format);
 
-    CJ_CD.paPen.setColor(color);
-    CJ_CD.paBrush.setColor(color);
+    CJ_CD.pen.setColor(color);
+    CJ_CD.brush.setColor(color);
 }
 
 void ScreenShot::onTextFontFamilyChanged(const QFont &font)
 {
     m_textFont.setFamily(font.family());
     m_edit->setFont(m_textFont);
-    CJ_CD.fontFamily = font.family();
+    CJ_CD.font = font;  // 可能改动
 }
 
 void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
 {
     const int& width = fontSize.toInt();
     setTextFontSize(0, width, false);
-    CJ_CD.fontSize = width;
+    CJ_CD.font.setPointSize(width);   // 可能改动
 }
 
 void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
@@ -633,9 +633,9 @@ void ScreenShot::initUI()
     m_pickedRectTips->raise();
     m_pointTips->raise();
 
-    onPickedColor(CJ_CD.paPen.color());
-    m_paintNode.pen = CJ_CD.paPen;
-    m_paintNode.brush = CJ_CD.paBrush;
+    onPickedColor(CJ_CD.pen.color());
+    m_paintNode.pen = CJ_CD.pen;
+    m_paintNode.brush = CJ_CD.brush;
 
     m_ocrDlg->hide();
     m_imgTranslateDlg->hide();
@@ -645,7 +645,7 @@ void ScreenShot::initUI()
     format.setTextOutline(QPen(format.foreground().color(), 1));
     m_edit->mergeCurrentCharFormat(format);
 
-    setTextFontSize(0, CJ_CD.fontSize, false, false);
+    setTextFontSize(0, CJ_CD.font.pointSize(), false, false);   // 可能改动
     TextFlags flags;
     CJ_CD.textBold ? flags |= TextFlag::TF_blod : flags &= ~TextFlags(TextFlag::TF_blod);
     CJ_CD.textItalic ? flags |= TextFlag::TF_italic : flags &= ~TextFlags(TextFlag::TF_italic);
@@ -1215,7 +1215,7 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     m_node.p1 = e->pos();
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
+//    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
     if (m_actionType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p1);
@@ -1305,7 +1305,7 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
+//    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
@@ -1408,7 +1408,7 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
+//    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
@@ -1632,7 +1632,7 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         m_paintNode.pen.setWidthF(width);
         showPointTips(QString::number(width));
 
-        CJ_CD.paPen = m_paintNode.pen;
+        CJ_CD.pen = m_paintNode.pen;
     }
 
     e->ignore();

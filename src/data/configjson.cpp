@@ -8,7 +8,9 @@
 #include <QString>
 #include <QCryptographicHash>
 #include <QMutex>
+#include <QMetaEnum>
 #include <iostream>
+#include <Qt>
 #include "qaesencryption.h"
 
 
@@ -79,17 +81,19 @@ void ConfigJson::initJson()
                               {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"},
                               {"show_develop_ui_log", false}
                           }},
-        {"paint_bar_status", {
+        {"painter_context_data", {
                                 {"rect", false},
                                 {"ellipse", false},
                                 {"arrow", false},
                                 {"penciler", false},
                                 {"marker_pen", false},
                                 {"mosaic", false},
+                                {"text", false},
                                 {"serial", false},
                                 {"rectintType", 0},
                                 {"ellipseType", 0},
                                 {"arrowType", 0},
+                                {"pointType", 0},
                                 {"marker_penType", 0},
                                 {"mosaicType", 0},
                                 {"pixelatedMosaic", 10},
@@ -99,23 +103,35 @@ void ConfigJson::initJson()
                                 {"textOutline", false},
                                 {"textStrikeout", false},
                                 {"textUnderline", false},
-                                {"fontFamily", "Microsoft YaHei"},
-                                {"fontSize", 16},
-                                {"serialType", 0},
-                                {"serialNumber", 0},
-                                {"serialLetter", "@Variant(\\0\\0\\0\\a\\0\\x61)"},
-                                {"point", 0},
-                                {"paPen", "@Variant(\\0\\0\\0M\\xa1@\\0\\0\\0\\0\\0\\0\\0\\x1\\x1\\xff\\xff\\xff\\xff\\0\\0\\0\\0\\0\\0@\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0)"},
-                                {"paBrush", "@Variant(\\0\\0\\0\\x42\\x1\\x1\\xff\\xff\\xff\\xff\\0\\0\\0\\0\\0\\0)"}
-                            }},
+                                  {"serial_info", {
+                                              {"type", 0},
+                                              {"number", 0},
+                                              {"letter", "a"}}},
+                                  {"font", {
+                                            {"family", "Microsoft YaHei"},
+                                            {"pointSize", 16},
+                                            {"bold", false},
+                                            {"italic", false},
+                                            {"underline", false},
+                                            {"strikeOut", false}}},
+                                  {"pen", {
+                                              {"color", "#ffff0000"},
+                                              {"width", 4},
+                                              {"style", "SolidLine"},
+                                              {"capStyle", "RoundCap"},
+                                              {"joinStyle", "RoundJoin"},}},
+                                  {"brush", {
+                                             {"color", "#ffff0000"},
+                                             {"style", "#SolidPattern"},
+                                             }}
+                                 }},
         {"developer_data", {
-                           {"manual_save_image_dir", ""},              // 测试
-                           {"detection_min_windows_level_depth", true}
+                            {"manual_save_image_dir", ""},              // 测试
+                            {"detection_min_windows_level_depth", true}
                        }}
     };
 
     QString jsonString = QString::fromStdString(m_j.dump());
-    jsonString.replace("\\", ""); // Remove escape characters
     qDebug().noquote() << "ConfigJson content:" << jsonString;
 }
 
@@ -221,4 +237,118 @@ ConfigJson::ConfigJson(QObject *parent)
     m_jsonFile = xconfigDir + "/xconfig.json";
 
     readFromFile();
+}
+
+
+void cdWritToFile(ContextData &cd)
+{
+#define CJ_SET_CD(name) CJ.setKeyValue(QStringLiteral("painter_context_data.") + QStringLiteral(#name).mid(QStringLiteral(#name).lastIndexOf(".") + 1), name);
+#define CJ_SET_QVariant(pre, name, var) CJ.setKeyValue(QStringLiteral("painter_context_data.") + pre + "." + name, var); // QPen QBrush 专属
+//    CJ.setKeyValue("painter_context_data.rect", true);
+
+    // 一级工具栏的状态
+    CJ_SET_CD(cd.rect)
+    CJ_SET_CD(cd.ellipse)
+    CJ_SET_CD(cd.arrow)
+    CJ_SET_CD(cd.penciler)
+    CJ_SET_CD(cd.marker_pen)
+    CJ_SET_CD(cd.mosaic)
+    CJ_SET_CD(cd.text)
+
+    // 二级工具栏的状态
+    CJ_SET_CD(cd.rectintType)
+    CJ_SET_CD(cd.ellipseType)
+    CJ_SET_CD(cd.arrowType)
+    CJ_SET_CD(cd.marker_penType)
+    CJ_SET_CD(cd.pointType)
+
+    CJ_SET_CD(cd.mosaicType)
+    CJ_SET_CD(cd.pixelatedMosaic)
+    CJ_SET_CD(cd.smoothMosaic)
+
+    CJ_SET_CD(cd.textBold)
+    CJ_SET_CD(cd.textItalic)
+    CJ_SET_CD(cd.textOutline)
+    CJ_SET_CD(cd.textStrikeout)
+    CJ_SET_CD(cd.textUnderline)
+
+    // serial_info 三个改写为Json对象了
+    CJ_SET_QVariant("serial_info", "type", cd.serialType);
+    CJ_SET_QVariant("serial_info", "number", cd.serialNumber);
+    CJ_SET_QVariant("serial_info", "letter", QString(cd.serialLetter).toStdString());
+
+    // QFont
+    const QFont& font = cd.font;
+    CJ_SET_QVariant("font", "family", font.family().toStdString())
+    CJ_SET_QVariant("font", "pointSize", font.pointSize())
+    CJ_SET_QVariant("font", "bold", font.bold())
+    CJ_SET_QVariant("font", "italic", font.italic())
+    CJ_SET_QVariant("font", "underline", font.underline())
+    CJ_SET_QVariant("font", "strikeOut", font.strikeOut())
+    // QPen
+    CJ_SET_QVariant("pen", "color", cd.pen.color().name(QColor::HexArgb).toStdString())                           // 颜色
+    CJ_SET_QVariant("pen", "width", cd.pen.width())                                                               // 线宽
+    CJ_SET_QVariant("pen", "style", QMetaEnum::fromType<Qt::PenStyle>().valueToKey(cd.pen.style()))               // 线型
+    CJ_SET_QVariant("pen", "capStyle", QMetaEnum::fromType<Qt::PenCapStyle>().valueToKey(cd.pen.capStyle()))      // 端点样式
+    CJ_SET_QVariant("pen", "joinStyle", QMetaEnum::fromType<Qt::PenJoinStyle>().valueToKey(cd.pen.joinStyle()))   // 接合点样式
+    // QBrush
+    CJ_SET_QVariant("brush", "color", cd.brush.color().name(QColor::HexArgb).toStdString())                       // 颜色
+    CJ_SET_QVariant("brush", "style", QMetaEnum::fromType<Qt::BrushStyle>().valueToKey(cd.brush.style()))         // 样式
+}
+
+void ContextData::cdReadFromFile()
+{
+#define CJ_GET_CONTEXT(name) name = CJ.getKeyValue(QStringLiteral("painter_context_data.") + #name);
+#define CJ_GET_CONTEXT_OBJECT(pre, name) CJ.getKeyValue(QStringLiteral("painter_context_data.")  + pre + "." + name)
+#define CJ_GET_CONTEXT_STR(pre, name) CJ_GET_CONTEXT_OBJECT(pre, name).get<std::string>()
+#define CJ_GET_CONTEXT_QSTR(pre, name) QString::fromStdString(CJ_GET_CONTEXT_OBJECT(pre, name).get<std::string>())
+
+    // 一级工具栏的状态
+    CJ_GET_CONTEXT(rect)
+    CJ_GET_CONTEXT(ellipse)
+    CJ_GET_CONTEXT(arrow)
+    CJ_GET_CONTEXT(penciler)
+    CJ_GET_CONTEXT(marker_pen)
+    CJ_GET_CONTEXT(mosaic)
+    CJ_GET_CONTEXT(text)
+
+    // 二级工具栏的状态
+    CJ_GET_CONTEXT(rectintType)
+    CJ_GET_CONTEXT(ellipseType)
+    CJ_GET_CONTEXT(arrowType)
+    CJ_GET_CONTEXT(marker_penType)
+    CJ_GET_CONTEXT(pointType)
+
+    CJ_GET_CONTEXT(mosaicType)
+    CJ_GET_CONTEXT(pixelatedMosaic)
+    CJ_GET_CONTEXT(smoothMosaic)
+
+    CJ_GET_CONTEXT(textBold)
+    CJ_GET_CONTEXT(textItalic)
+    CJ_GET_CONTEXT(textOutline)
+    CJ_GET_CONTEXT(textStrikeout)
+    CJ_GET_CONTEXT(textUnderline)
+
+    // serial_info 三个改写为数组了
+    serialType = CJ_GET_CONTEXT_OBJECT("serial_info", "type");
+    serialNumber = CJ_GET_CONTEXT_OBJECT("serial_info", "number");
+    serialLetter = QString::fromStdString(CJ_GET_CONTEXT_OBJECT("serial_info", "letter").get<std::string>()).at(0);
+
+    // QFont
+//    auto t1 = QString::fromStdString(CJ_GET_CONTEXT_OBJECT("font", "family").get<std::string>());
+    font.setFamily(CJ_GET_CONTEXT_QSTR("font", "family"));
+    font.setPointSize(CJ_GET_CONTEXT_OBJECT("font", "pointSize"));
+    font.setBold(CJ_GET_CONTEXT_OBJECT("font", "bold").get<bool>());
+    font.setItalic(CJ_GET_CONTEXT_OBJECT("font", "italic").get<bool>());
+    font.setUnderline(CJ_GET_CONTEXT_OBJECT("font", "underline").get<bool>());
+    font.setStrikeOut(CJ_GET_CONTEXT_OBJECT("font", "strikeOut").get<bool>());
+    // QPen
+    pen.setColor(CJ_GET_CONTEXT_QSTR("pen", "color"));            // 颜色
+    pen.setWidth(CJ_GET_CONTEXT_OBJECT("pen", "width"));
+    pen.setStyle(static_cast<Qt::PenStyle>(QMetaEnum::fromType<Qt::PenStyle>().keyToValue(CJ_GET_CONTEXT_STR("pen", "style").c_str())));
+    pen.setCapStyle(static_cast<Qt::PenCapStyle>(QMetaEnum::fromType<Qt::PenCapStyle>().keyToValue(CJ_GET_CONTEXT_STR("pen", "capStyle").c_str())));
+    pen.setJoinStyle(static_cast<Qt::PenJoinStyle>(QMetaEnum::fromType<Qt::PenJoinStyle>().keyToValue(CJ_GET_CONTEXT_STR("pen", "joinStyle").c_str())));
+    // QBrush
+    brush.setColor(CJ_GET_CONTEXT_QSTR("brush", "color"));
+    brush.setStyle(static_cast<Qt::BrushStyle>(QMetaEnum::fromType<Qt::BrushStyle>().keyToValue(CJ_GET_CONTEXT_STR("brush", "style").c_str())));
 }

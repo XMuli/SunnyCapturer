@@ -118,7 +118,7 @@ constexpr const char* XPaintBarStatus_serialType = "serialType";
 constexpr const char* XPaintBarStatus_serialNumber = "serialNumber";
 constexpr const char* XPaintBarStatus_serialLetter = "serialLetter";
 constexpr const char* XPaintBarStatus_pointType = "point";
-constexpr const char* XPaintBarStatus_paPen = "paPen";
-constexpr const char* XPaintBarStatus_paBrush = "paBrush";
+constexpr const char* XPaintBarStatus_paPen = "pen";
+constexpr const char* XPaintBarStatus_paBrush = "brush";
 
 #endif // CONFIG_GLOBAL_H

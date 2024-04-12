@@ -302,7 +302,7 @@ void initPaintBarStatus(PaintBarStatus &pbs)
     pbs.serialLetter = CONF_GET_PROPERTY(XPaintBarStatus_serialLetter).toChar();
     pbs.pointType = CONF_GET_PROPERTY(XPaintBarStatus_pointType).toInt();
 
-    pbs.paPen = CONF_GET_PROPERTY(XPaintBarStatus_paPen).value<QPen>();
-    pbs.paBrush = CONF_GET_PROPERTY(XPaintBarStatus_paBrush).value<QBrush>();
+    pbs.pen = CONF_GET_PROPERTY(XPaintBarStatus_paPen).value<QPen>();
+    pbs.brush = CONF_GET_PROPERTY(XPaintBarStatus_paBrush).value<QBrush>();
 }
 

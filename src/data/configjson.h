@@ -3,14 +3,15 @@
 
 #include <QObject>
 #include <QPen>
+#include <QChar>
 #include <QBrush>
-#include <QString>
 #include <QDebug>
+#include <QString>
 #include <QApplication>
 #include <QStandardPaths>
-#include <QDebug>
 #include "isingleton.h"
 #include "json.hpp"
+#include "qfont.h"
 using ordered_json = nlohmann::ordered_json;
 
 #define CJ ConfigJson::instance()
@@ -34,33 +35,33 @@ struct ContextData
     bool serial = false;
 
     // 二级工具栏的状态
-    int rectintType = -1;
-    int ellipseType = -1;
-    int arrowType = -1;
-    int marker_penType = -1;
+    int rectintType = 0;           // 若是 -1 则开始没有这个数值
+    int ellipseType = 0;
+    int arrowType = 0;
+    int pointType = 0;          // 三个点，对应 penciler 的顺序
+    int marker_penType = 0;
 
-    int mosaicType = -1;
-    int pixelatedMosaic = -1;
-    int smoothMosaic = -1;
-
+    int mosaicType = 0;
+    int pixelatedMosaic = 10;
+    int smoothMosaic = 10;
     bool textBold = false;
     bool textItalic = false;
     bool textOutline = false;
     bool textStrikeout = false;
     bool textUnderline = false;
-    QString fontFamily = "Microsoft YaHei";
-    int fontSize = 16;
 
-    int serialType = -1;
-    int serialNumber = -1;
-    QChar serialLetter = ' ';
-    int pointType = -1;
+    int serialType = 0;
+    int serialNumber = 0;
+    QChar serialLetter = 'a';
+    QFont font = QFont("Microsoft YaHei", 16);
+    QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
 
-    QPen paPen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QBrush paBrush = QBrush(Qt::red, Qt::SolidPattern);
+    void cdReadFromFile();
 };
 
 
+void cdWritToFile(ContextData& cd);
 
 /***************************************************************************************************************
 
@@ -78,6 +79,8 @@ public:
     void initJson();
     void readFromFile();
     void writeToFile();
+
+
 
     void onSyncToFile();
     void setKeyValue(const QString& key, const ordered_json& val); // 设置多层键值对

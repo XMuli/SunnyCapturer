@@ -83,12 +83,14 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    CJ;//.initJson();
+    CJ; //.initJson();
+    CJ.m_cd.cdReadFromFile();  // 恢复上次一二级菜单栏的状态
+//    cdWritToFile(CJ.m_cd);
 //    CJ.writeToFile();
 
 
     CONF_MANAGE; //.writeToFile()
-//    initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
+    initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
     COMM.loadTranslation("");
 
     TRAY; // 启动托盘

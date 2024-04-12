@@ -4,7 +4,7 @@
         "themes": "default",
         "log_level": "Debug",
         "font": "Microsoft YaHei,9",
-        "autostart": false
+        "autostart": true
     },
     "interface": {
         "style": "Sunny",
@@ -63,19 +63,17 @@
         "crosshair_iridescence": "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7",
         "show_develop_ui_log": false
     },
-    "painter_context_data": {
+    "paint_bar_status": {
         "rect": false,
         "ellipse": false,
         "arrow": false,
         "penciler": false,
         "marker_pen": false,
         "mosaic": false,
-        "text": false,
         "serial": false,
         "rectintType": 0,
         "ellipseType": 0,
         "arrowType": 0,
-        "pointType": 0,
         "marker_penType": 0,
         "mosaicType": 0,
         "pixelatedMosaic": 10,
@@ -85,30 +83,14 @@
         "textOutline": false,
         "textStrikeout": false,
         "textUnderline": false,
-        "serial_info": {
-            "type": 0,
-            "number": 0,
-            "letter": "a"
-        },
-        "font": {
-            "family": "Microsoft YaHei",
-            "pointSize": 16,
-            "bold": false,
-            "italic": false,
-            "underline": false,
-            "strikeOut": false
-        },
-        "pen": {
-            "color": "#ffff0000",
-            "width": 4,
-            "style": "SolidLine",
-            "capStyle": "RoundCap",
-            "joinStyle": "RoundJoin"
-        },
-        "brush": {
-            "color": "#ffff0000",
-            "style": "#SolidPattern"
-        }
+        "fontFamily": "Microsoft YaHei",
+        "fontSize": 16,
+        "serialType": 0,
+        "serialNumber": 0,
+        "serialLetter": "",
+        "point": 0,
+        "paPen": "",
+        "paBrush": ""
     },
     "developer_data": {
         "manual_save_image_dir": "",

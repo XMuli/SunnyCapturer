@@ -74,11 +74,11 @@ void PaintCtrlBar::initUI()
     }
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_colorPicker->setCurrPickedColor(CJ_CD.paPen.color().name());
+    m_colorPicker->setCurrPickedColor(CJ_CD.pen.color().name());
     m_colorPicker->hide();
     m_fontFamily->hide();
 
-    m_fontFamily->setCurrentFont(QFont(CJ_CD.fontFamily, CJ_CD.fontSize));
+    m_fontFamily->setCurrentFont(CJ_CD.font);  // 可能改动
     m_fontScale->hide();
     m_mosaicSliderCtrl->hide();
 
@@ -135,7 +135,7 @@ void PaintCtrlBar::initBtns()
     m_fontScale->setEditable(true);
     const QStringList& fontSize = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72", "96", "124"};
     m_fontScale->addItems(fontSize);
-    m_fontScale->setCurrentText(QString::number(CJ_CD.fontSize));
+    m_fontScale->setCurrentText(QString::number(CJ_CD.font.pointSize()));  // 可能改动
 
 
 //    addWidget(m_rectCtrl);
