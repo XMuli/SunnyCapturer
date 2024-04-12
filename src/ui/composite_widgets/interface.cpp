@@ -37,29 +37,30 @@ void Interface::initUI()
                                            , {"MacOS", StyleType::ST_macos}
                                            , {"DDE", StyleType::ST_dde}};
 
-    const auto& currStyle = CONF_MANAGE.property("XInterface_style").toString();
+    const auto& currStyle = CJ_GET_QSTR("interface.style");
     for (const auto& it : styles) ui->cbbStyle->addItem(it.first, QVariant::fromValue(it.second));
     ui->cbbStyle->setCurrentText(currStyle);
     onLanguageChange("");
-    ui->cpHighlight->setCurrPickedColor(CONF_MANAGE.property("XInterface_highlight").toString());
-    ui->cpCrosshair->setCurrPickedColor(CONF_MANAGE.property("XInterface_crosshair").toString());
-    ui->sbBorderWidth->setValue(CONF_MANAGE.property("XInterface_border_width").toInt());
-    ui->sbCrosshairWidth->setValue(CONF_MANAGE.property("XInterface_crosshair_width").toInt());
+    ui->cpHighlight->setCurrPickedColor(CJ_GET_QSTR("interface.highlight"));
+    ui->cpCrosshair->setCurrPickedColor(CJ_GET_QSTR("interface.crosshair"));
+    ui->sbBorderWidth->setValue(CJ_GET("interface.border_width"));
+    ui->sbCrosshairWidth->setValue(CJ_GET("interface.crosshair_width"));
 
-    ui->gbCustomSizeEnable->setChecked(CONF_MANAGE.property("XInterface_custom_size_enable").toBool());
-    ui->cbTopLeft->setChecked(CONF_MANAGE.property("XInterface_topleft_enable").toBool());
-    ui->cbSize->setChecked(CONF_MANAGE.property("XInterface_size_enable").toBool());
-    ui->cbDelay->setChecked(CONF_MANAGE.property("XInterface_delay_enable").toBool());
-    ui->sbLeft->setValue(CONF_MANAGE.property("XInterface_custom_rect_left").toInt());
-    ui->sbTop->setValue(CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
-    ui->sbWidth->setValue(CONF_MANAGE.property("XInterface_custom_rect_width").toInt());
-    ui->sbHeight->setValue(CONF_MANAGE.property("XInterface_custom_rect_height").toInt());
-    ui->dsbDelay->setValue(CONF_MANAGE.property("XInterface_custom_dealy").toDouble());
+    ui->gbCustomSizeEnable->setChecked(CJ_GET("interface.custom_size_enable"));
+    ui->cbTopLeft->setChecked(CJ_GET("interface.topleft_enable"));
+    ui->cbSize->setChecked(CJ_GET("interface.size_enable"));
+    ui->cbDelay->setChecked(CJ_GET("interface.delay_enable"));
+    ui->sbLeft->setValue(CJ_GET("interface.custom_rect_left"));
+    ui->sbTop->setValue(CJ_GET("interface.custom_rect_top"));
+    ui->sbWidth->setValue(CJ_GET("interface.custom_rect_width"));
+    ui->sbHeight->setValue(CJ_GET("interface.custom_rect_height"));
+    ui->dsbDelay->setValue(CJ_GET("interface.custom_dealy").get<double>());
 
-    ui->cbAcrylicEffect->setChecked(CONF_MANAGE.property("XInterface_acrylic_effect").toBool());
-    ui->cbAutoDetectWindows->setChecked(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool());
-    ui->cbAutoCopyToClipboard->setChecked(CONF_MANAGE.property("XInterface_auto_copy_to_clipbaoard").toBool());
-    ui->cbCrosshairShow->setChecked(CONF_MANAGE.property("XInterface_crosshair_show").toBool());
+    ui->cbAcrylicEffect->setChecked(CJ_GET("interface.acrylic_effect"));
+    ui->cbAutoDetectWindows->setChecked(CJ_GET("interface.auto_detect_windows"));
+    ui->cbAutoCopyToClipboard->setChecked(CJ_GET("interface.auto_copy_to_clipbaoard"));
+    ui->cbCrosshairShow->setChecked(CJ_GET("interface.crosshair_show"));
+
 
     connect(ui->cpHighlight, &ColorPicker::sigPickedColor, this, &Interface::onHighlightPickedColor);
     connect(ui->cpCrosshair, &ColorPicker::sigPickedColor, this, &Interface::onCrosshairPickedColor);
@@ -72,52 +73,47 @@ void Interface::initUI()
 void Interface::on_cbbStyle_currentTextChanged(const QString &arg1)
 {
     ui->sbBorderWidth->setEnabled(arg1 != "MacOS");
-    CONF_MANAGE.setProperty("XInterface_style", arg1);
+    CJ_SET("interface.style", arg1.toStdString());
 }
 
 void Interface::onHighlightPickedColor(const QColor &color)
 {
-    CONF_MANAGE.setProperty("XInterface_highlight", color.name());
+    CJ_SET("interface.highlight", color.name(QColor::HexArgb).toStdString());
 }
 
 void Interface::onCrosshairPickedColor(const QColor &color)
 {
-    CONF_MANAGE.setProperty("XInterface_crosshair", color.name());
+    CJ_SET("interface.crosshair", color.name(QColor::HexArgb).toStdString());
 }
-
 
 void Interface::on_sbBorderWidth_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_border_width", arg1);
+    CJ_SET("interface.border_width", arg1);
 }
-
 
 void Interface::on_sbCrosshairWidth_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_crosshair_width", arg1);
+    CJ_SET("interface.crosshair_width", arg1);
 }
 
 void Interface::on_cbAcrylicEffect_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_acrylic_effect", checked);
+    CJ_SET("interface.acrylic_effect", checked);
 }
-
 
 void Interface::on_cbAutoDetectWindows_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_auto_detect_windows", checked);
+    CJ_SET("interface.auto_detect_windows", checked);
 }
-
 
 void Interface::on_cbAutoCopyToClipboard_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_auto_copy_to_clipbaoard", checked);
+    CJ_SET("interface.auto_copy_to_clipbaoard", checked);
 }
-
 
 void Interface::on_cbCrosshairShow_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_crosshair_show", checked);
+    CJ_SET("interface.crosshair_show", checked);
 }
 
 void Interface::onBtnResetClicked(bool checked)
@@ -161,55 +157,55 @@ void Interface::onLanguageChange(const QString qmName)
 
 void Interface::on_gbCustomSizeEnable_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_custom_size_enable", checked);
+    CJ_SET("interface.custom_size_enable", checked);
 }
 
 void Interface::on_cbTopLeft_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_topleft_enable", checked);
+    CJ_SET("interface.topleft_enable", checked);
 }
 
 void Interface::on_cbSize_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_size_enable", checked);
+    CJ_SET("interface.size_enable", checked);
 }
 
 void Interface::on_cbDelay_clicked(bool checked)
 {
-    CONF_MANAGE.setProperty("XInterface_delay_enable", checked);
+    CJ_SET("interface.delay_enable", checked);
 }
 
 void Interface::on_sbLeft_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_custom_rect_left", arg1);
+    CJ_SET("interface.custom_rect_left", arg1);
 }
 
 void Interface::on_sbTop_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_custom_rect_top", arg1);
+    CJ_SET("interface.custom_rect_top", arg1);
 }
 
 void Interface::on_sbWidth_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_custom_rect_width", arg1);
+    CJ_SET("interface.custom_rect_width", arg1);
 }
 
 
 void Interface::on_sbHeight_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_custom_rect_height", arg1);
+    CJ_SET("interface.custom_rect_height", arg1);
 }
 
 void Interface::on_dsbDelay_valueChanged(double arg1)
 {
-    CONF_MANAGE.setProperty("XInterface_custom_dealy", arg1);
+    CJ_SET("interface.custom_dealy", arg1);
 }
 
 void Interface::on_cbbOrientation_currentTextChanged(const QString &arg1)
 {
     for (const auto& it : orientationMaps()) {
         if (it.second == arg1) {
-            CONF_MANAGE.setProperty("XInterface_orientation", it.first);
+            CJ_SET("interface.orientation", it.first.toStdString());
             break;
         }
     }

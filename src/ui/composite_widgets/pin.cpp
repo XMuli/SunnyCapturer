@@ -6,7 +6,6 @@
 #include "pin.h"
 #include "ui_pin.h"
 #include "communication.h"
-#include "../../data/configmanager.h"
 
 Pin::Pin(QWidget *parent) :
     QWidget(parent),
@@ -23,13 +22,13 @@ Pin::~Pin()
 
 void Pin::on_sbOpacity_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XPin_opacity", arg1);
+    CJ_SET("pin.opacity", arg1);
 }
 
 
 void Pin::on_sbMaxSize_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XPin_maximum_size", arg1);
+    CJ_SET("pin.maximum_size", arg1);
 }
 
 void Pin::onBtnResetClicked(bool checked)
@@ -40,7 +39,7 @@ void Pin::onBtnResetClicked(bool checked)
 
 void Pin::initUI()
 {
-    ui->sbOpacity->setValue(CONF_MANAGE.property("XPin_opacity").toInt());
-    ui->sbMaxSize->setValue(CONF_MANAGE.property("XPin_maximum_size").toInt());
+    ui->sbOpacity->setValue(CJ_GET("pin.opacity").get<int>());
+    ui->sbMaxSize->setValue(CJ_GET("pin.maximum_size").get<int>());
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }

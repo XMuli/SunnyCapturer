@@ -16,6 +16,8 @@ using ordered_json = nlohmann::ordered_json;
 
 #define CJ ConfigJson::instance()
 #define CJ_SET(name, val) CJ.setKeyValue(QStringLiteral(name), val)
+
+// GET 多层时候采用 . 句号分割
 #define CJ_GET(name) CJ.getKeyValue(QStringLiteral(name))                                        // #define CJ_GET(name) CJ.getKeyValue(#name)   1.不要用 #name; 2.不要使用 dump() 会造成引号有两次
 #define CJ_GET_STR(name) CJ.getKeyValue(QStringLiteral(name)).get<std::string>()
 #define CJ_GET_QSTR(name) QString::fromStdString(CJ.getKeyValue(QStringLiteral(name)).get<std::string>())    // 直接获取单例里面的键值对
@@ -79,6 +81,7 @@ public:
     void initJson();
     void readFromFile();
     void writeToFile();
+    void initAppDefaulValue();
 
 
 
@@ -92,13 +95,13 @@ public:
 
 public:
    ContextData m_cd;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
+    ordered_json m_j;
 
 private:
     explicit ConfigJson(QObject *parent = nullptr);
     virtual ~ConfigJson() = default;
 
 private:
-    ordered_json m_j;
     QString m_jsonFile;
     QString m_key;
     QString m_iv;

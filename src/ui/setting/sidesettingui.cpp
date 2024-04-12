@@ -15,6 +15,7 @@
 #include "tokens.h"
 #include "communication.h"
 
+
 SideSettingUI::SideSettingUI(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::SideSettingUI)
@@ -145,6 +146,9 @@ void SideSettingUI::onBtnHintClicked(bool checked)
 void SideSettingUI::closeEvent(QCloseEvent *e)
 {
     CONF_MANAGE.onSyncToFile();
+
+    qDebug().noquote() << "m_j: " << QString::fromStdString(CJ.m_j.dump());
+    CJ.onSyncToFile();
     QWidget::closeEvent(e);
 }
 

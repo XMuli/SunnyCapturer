@@ -1,18 +1,15 @@
 #include "configjson.h"
-
-#include <QByteArray>
+#include <Qt>
 #include <QFile>
-#include <QApplication>
 #include <QPen>
 #include <QBrush>
 #include <QString>
-#include <QCryptographicHash>
+#include <QByteArray>
 #include <QMutex>
 #include <QMetaEnum>
-#include <iostream>
-#include <Qt>
+#include <QApplication>
+#include <QCryptographicHash>
 #include "qaesencryption.h"
-
 
 void ConfigJson::initJson()
 {
@@ -149,7 +146,6 @@ void ConfigJson::readFromFile()
     file.close();
 
     QString jsonString = QString::fromStdString(m_j.dump());
-    // jsonString.replace("\\", ""); // Remove escape characters
     qDebug().noquote() << "ConfigJson content:" << jsonString;
 }
 
@@ -163,6 +159,15 @@ void ConfigJson::writeToFile()
 
     file.write(QString::fromStdString(m_j.dump(4)).toUtf8()); // 4 个空格缩进
     file.close();
+}
+
+void ConfigJson::initAppDefaulValue()
+{
+    // fix: 初次读配置文件, Output path 为空; 此时单例还没有构造完成，不能用宏
+    // setKeyValue("output.flie_name", QString("%1_$yyyyMMdd_hhmmss$.png").arg(XPROJECT_NAME).toStdString());
+    setKeyValue("output.config_path", qApp->applicationDirPath().toStdString());
+    setKeyValue("output.quick_save_path", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first().toStdString());
+    setKeyValue("output.auto_save_path", QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first().toStdString());
 }
 
 void ConfigJson::onSyncToFile()
@@ -235,7 +240,6 @@ ConfigJson::ConfigJson(QObject *parent)
 #endif
 
     m_jsonFile = xconfigDir + "/xconfig.json";
-
     readFromFile();
 }
 

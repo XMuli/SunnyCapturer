@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
     }
 
     CJ; //.initJson();
+    CJ.initAppDefaulValue();   // 设置默认缺省的一些路径
     CJ.m_cd.cdReadFromFile();  // 恢复上次一二级菜单栏的状态
 //    cdWritToFile(CJ.m_cd);
 //    CJ.writeToFile();

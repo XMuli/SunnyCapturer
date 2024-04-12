@@ -29,31 +29,12 @@ Output::~Output()
 
 void Output::initUI()
 {
-
-    ui->cbQuickSaveEnable->setChecked(CONF_MANAGE.property("XOutput_quick_save_enable").toBool());
-    ui->cbAutoSaveEnable->setChecked(CONF_MANAGE.property("XOutput_auto_save_enable").toBool());
-
+    ui->cbQuickSaveEnable->setChecked(CJ_GET("output.quick_save_enable").get<bool>());
+    ui->cbAutoSaveEnable->setChecked(CJ_GET("output.auto_save_enable").get<bool>());
     onLanguageChange("");
-//    const auto& fileName = CONF_MANAGE.property("XOutput_flie_name").toString();
-//    const auto& configPath= CONF_MANAGE.property("XOutput_config_path").toString();
-//    const auto& quickSavePath = CONF_MANAGE.property("XOutput_quick_save_path").toString();
-//    const auto& autoSavePath = CONF_MANAGE.property("XOutput_auto_save_path").toString();
 
-//    ui->sbImageQuailty->setValue(CONF_MANAGE.property("XOutput_image_quailty").toInt());
-//    ui->leFileName->setText(fileName);
-//    ui->leConfigPath->setText(configPath);
-//    ui->cbQuickSaveEnable->setChecked(CONF_MANAGE.property("XOutput_quick_save_enable").toBool());
-//    ui->leQuickSavePath->setText(quickSavePath);
-//    ui->cbAutoSaveEnable->setChecked(CONF_MANAGE.property("XOutput_auto_save_enable").toBool());
-//    ui->leAutoSavePath->setText(autoSavePath);
-
-//    const auto& prewview = tr("Preview: ");
-//    ui->leFileName->setToolTip(prewview + formatToFileName(fileName));
-//    ui->leQuickSavePath->setToolTip(prewview + formatToFileName(quickSavePath + "/" + fileName));
-//    ui->leAutoSavePath->setToolTip(prewview + formatToFileName(autoSavePath + "/" + fileName));
-
-    connect(ui->cbQuickSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CONF_MANAGE.setProperty("XOutput_quick_save_enable", checked);});
-    connect(ui->cbAutoSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CONF_MANAGE.setProperty("XOutput_auto_save_enable", checked);});
+    connect(ui->cbQuickSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CJ_SET("output.quick_save_enable", checked);});
+    connect(ui->cbAutoSaveEnable, &QGroupBox::clicked, this, [](bool checked = false){ CJ_SET("output.auto_save_enable", checked);});
     connect(ui->btnConfigOpen, &QPushButton::released, this, &Output::onSleletedDir);
     connect(ui->btnQuickSaveSelect, &QPushButton::released, this, &Output::onSleletedDir);
     connect(ui->btnAutoSaveSelect, &QPushButton::released, this, &Output::onSleletedDir);
@@ -65,32 +46,30 @@ void Output::initUI()
 
 void Output::on_sbImageQuailty_valueChanged(int arg1)
 {
-    CONF_MANAGE.setProperty("XOutput_image_quailty", arg1);
+    CJ_SET("output.image_quailty", arg1);
 }
-
 
 void Output::on_leFileName_textChanged(const QString &arg1)
 {
     const auto& prewview = tr("Preview: ");
     const auto& tFileName = formatToFileName(arg1);
     ui->leFileName->setToolTip(prewview + tFileName);
-    CONF_MANAGE.setProperty("XOutput_flie_name", arg1);
+    CJ_SET("output.flie_name", arg1.toStdString());
 }
-
 
 void Output::on_leConfigPath_textChanged(const QString &arg1)
 {
-    CONF_MANAGE.setProperty("XOutput_config_path", arg1);
+    CJ_SET("output.config_path", arg1.toStdString());
 }
 
 void Output::on_leQuickSavePath_textChanged(const QString &arg1)
 {
-    CONF_MANAGE.setProperty("XOutput_quick_save_path", arg1);
+    CJ_SET("output.quick_save_path", arg1.toStdString());
 }
 
 void Output::on_leAutoSavePath_textChanged(const QString &arg1)
 {
-    CONF_MANAGE.setProperty("XOutput_auto_save_path", arg1);
+    CJ_SET("output.auto_save_path", arg1.toStdString());
 }
 
 void Output::onSleletedDir()
@@ -138,14 +117,12 @@ void Output::onBtnResetClicked(bool checked)
 
 void Output::onLanguageChange(const QString qmName)
 {
-    const auto& fileName = CONF_MANAGE.property("XOutput_flie_name").toString();
-    const auto& configPath= CONF_MANAGE.property("XOutput_config_path").toString();
-    const auto& quickSavePath = CONF_MANAGE.property("XOutput_quick_save_path").toString();
-    const auto& autoSavePath = CONF_MANAGE.property("XOutput_auto_save_path").toString();
+    const auto& fileName = CJ_GET_QSTR("output.flie_name");
+    const auto& configPath= CJ_GET_QSTR("output.config_path");
+    const auto& quickSavePath = CJ_GET_QSTR("output.quick_save_path");
+    const auto& autoSavePath = CJ_GET_QSTR("output.auto_save_path");
 
-    qDebug() << "fileName:" << fileName;
-
-    ui->sbImageQuailty->setValue(CONF_MANAGE.property("XOutput_image_quailty").toInt());
+    ui->sbImageQuailty->setValue(CJ_GET("output.image_quailty").get<int>());
     ui->leFileName->setText(fileName);
     ui->leConfigPath->setText(configPath);
     ui->leQuickSavePath->setText(quickSavePath);
