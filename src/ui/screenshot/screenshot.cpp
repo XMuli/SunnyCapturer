@@ -1215,7 +1215,7 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     m_node.p1 = e->pos();
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-//    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
+    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
     if (m_actionType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p1);
@@ -1305,7 +1305,7 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-//    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
+    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
     } else if (m_actionType == ActionType::AT_picking_custom_rect) {
@@ -1408,7 +1408,7 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
 {
     m_node.p2 = e->pos();
     m_node.p3 = e->pos();
-//    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
+    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
     if (m_actionType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
@@ -1702,7 +1702,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
     // 以下部分都是 printf 一些调试参数的部分
     if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool()) {
-        prinftWindowsRects(pa);
+//        prinftWindowsRects(pa);
         printfDevelopProjectInfo(pa);
     }
 }
