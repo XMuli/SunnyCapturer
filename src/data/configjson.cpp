@@ -152,7 +152,7 @@ void ConfigJson::readFromFile()
     file.close();
 
     QString jsonString = QString::fromStdString(m_j.dump());
-    qDebug().noquote() << "m_j content:" << jsonString;
+    // qDebug().noquote() << "m_j content:" << jsonString;
 }
 
 void ConfigJson::writeToFile()

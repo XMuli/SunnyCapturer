@@ -66,7 +66,8 @@ void XOcrDlg::setRightText(const QString &text)
 
 void XOcrDlg::appendRightText(const QString &text)
 {
-    ui->textEdit->append(text);
+    // ui->textEdit->append(text);
+    ui->textEdit->insertPlainText(text);
 }
 
 

@@ -21,16 +21,22 @@
 #include <QKeySequence>
 #include <QStringList>
 #include <QFont>
+#include <QLabel>
+#include <QTimer>
 #include "../../../data/configmanager.h"
 #include "../paintbarhelper.h"
+#include "../../data/configjson.h"
 
 
 PinWidget::PinWidget(const QPixmap &pixmap, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::PinWidget)
+    , m_zoom(1)  // 起始 100% 比例
     , m_menu(new QMenu(this))
     , m_timer(new QTimer(this))
     , m_pixmap(pixmap)
+    , m_labZoom(new QLabel(nullptr))
+    , m_timerLabZoom(new QTimer(this))
     , m_shadowEffect(new QGraphicsDropShadowEffect(this))
 {
     ui->setupUi(this);
@@ -63,6 +69,20 @@ void PinWidget::initUI()
     initMenu();
 //    m_timer->start(500);
 //    connect(m_timer, SIGNAL(timeout()), this, SLOT(changeShadowColor()));
+
+
+    // 私有布局，控件叠加悬浮显示
+    m_labZoom->setParent(ui->label);
+    m_labZoom->setStyleSheet("QLabel { background-color: white; border: 1px solid black; }");
+    m_labZoom->raise();
+    m_labZoom->hide();
+    m_labZoom->move(5, 5);
+
+    // QVBoxLayout* vLayout = new QVBoxLayout(ui->label);
+    // vLayout->addWidget(m_labZoom);
+    // vLayout->setAlignment(m_labZoom, Qt::AlignTop);
+
+    connect(m_timerLabZoom, &QTimer::timeout, [this]() { m_labZoom->hide();});
 }
 
 void PinWidget::initMenu()
@@ -118,13 +138,11 @@ void PinWidget::initMenu()
     //    connect(aShadow, &QAction::triggered, this, [&, aShadow](bool checked) { aShadow->setChecked(checked); });
 }
 
-void PinWidget::setScaledPixmapToLabel(const QSize &newSize, const qreal scale, const bool expanding)
+void PinWidget::setScaledPixmapToLabel(const QSize &newSize, const qreal dpr)
 {
     QPixmap scaledPixmap;
-    const auto aspectRatio = expanding ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio;
-
-    scaledPixmap = m_pixmap.scaled(newSize * scale, aspectRatio, Qt::SmoothTransformation); // Qt::FastTransformation
-    scaledPixmap.setDevicePixelRatio(scale);
+    scaledPixmap = m_pixmap.scaled(newSize * dpr, Qt::KeepAspectRatio, Qt::SmoothTransformation); // Qt::FastTransformation
+    scaledPixmap.setDevicePixelRatio(dpr);
     ui->label->setPixmap(scaledPixmap);
 }
 
@@ -184,7 +202,16 @@ void PinWidget::changeShadowColor()
     adjustSize();
     update();
 
-//    QTimer::singleShot(50, [this](){ this->setAttribute(Qt::WA_TranslucentBackground, true); update();});
+    //    QTimer::singleShot(50, [this](){ this->setAttribute(Qt::WA_TranslucentBackground, true); update();});
+}
+
+void PinWidget::updateZoomLabel()
+{
+    m_labZoom->setText(QString(tr("Zoom: %1%")).arg(m_zoom * 100));
+    m_labZoom->show();
+    m_labZoom->adjustSize();      // 自动调整大小以适应文本
+    m_timerLabZoom->stop();       // 取消之前的定时器
+    m_timerLabZoom->start(2000);  // 创建一个新的定时器，并在时间到达时隐藏标签
 }
 
 void PinWidget::mousePressEvent(QMouseEvent *e)
@@ -221,22 +248,25 @@ void PinWidget::mouseDoubleClickEvent(QMouseEvent *e)
 
 void PinWidget::wheelEvent(QWheelEvent *e)
 {
+    static QSize origSize = ui->label->size();
+    QSize newSize = origSize;
     const QPoint degrees = e->angleDelta() / 8;
     const int direction = degrees.y() > 0 ? 1 : -1;       // zooming in or out
+    m_zoom += direction * 0.1;
 
-    const int step = degrees.manhattanLength() * direction;
-    const int newWidth = qBound(50, ui->label->width() + step, maximumWidth());
-    const int newHeight = qBound(50, ui->label->height() + step, maximumHeight());
+    newSize *= m_zoom;
+    const int& min = 50;
+    const int& max = CJ_GET("pin.maximum_size").get<int>();
+    newSize.setWidth(qBound(min, newSize.width(), max));
+    newSize.setHeight(qBound(min, newSize.height(), max));
 
-    const QSize newSize(newWidth, newHeight);
-    const qreal scale = qApp->devicePixelRatio();
-    const bool isExpanding = direction > 0;
-    setScaledPixmapToLabel(newSize, scale, isExpanding);
+    setScaledPixmapToLabel(newSize, qApp->devicePixelRatio());
 
-//    changeShadowColor();
-    adjustSize();                                         // Reflect scaling to the label
+    adjustSize();                                              // Reflect scaling to the label
     e->accept();
     QWidget::wheelEvent(e);
+
+    updateZoomLabel();
 }
 
 void PinWidget::contextMenuEvent(QContextMenuEvent *e)

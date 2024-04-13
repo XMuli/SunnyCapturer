@@ -35,7 +35,8 @@ public:
 private:
     void initUI();
     void initMenu();
-    void setScaledPixmapToLabel(const QSize& newSize, const qreal scale, const bool expanding);
+    void setScaledPixmapToLabel(const QSize& newSize, const qreal dpr);
+    void updateZoomLabel();
 
 private slots:
     void onCopy();
@@ -54,10 +55,13 @@ protected:
 
 private:
     Ui::PinWidget*                      ui;
+    double                              m_zoom; // 滑轮的放大缩小比例
     Node                                m_node;
     QMenu*                              m_menu;
     QTimer*                             m_timer;
     QPixmap                             m_pixmap;
+    QLabel*                             m_labZoom;
+    QTimer*                             m_timerLabZoom;
     QPointer<QGraphicsDropShadowEffect> m_shadowEffect;
 };
 

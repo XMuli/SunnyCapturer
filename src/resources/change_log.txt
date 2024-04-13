@@ -1,3 +1,9 @@
+v1.5.(2024.04.13)
+- 自动检测窗口尺寸优化，不包含阴影区域
+- 后端数据存储优化，.ini 改为 .json 格式
+- 钉图功能: 优化缩放方式，支持加缩放提示预览2秒
+- OCR功能: 对于带 _local 的选项，调整了对齐为一行显示的效果；和提供误差范围用以调整准确率
+
 v1.3(2024.02.01)
 - Upgrade to v1.3
 - Support "Image Translation" and "OCR", allow private account.

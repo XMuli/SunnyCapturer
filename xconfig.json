@@ -55,7 +55,8 @@
         "baidu_api_key": "hchdmuPxSnZTcE7FtykjqVPYi44RW+EsBHhXwiyFD1I=",
         "baidu_secret_key": "bQvOX2TltlvdynBre01BKqYSHJ7MEhIviS1mMKgim3U=",
         "ocr_channel": "high",
-        "iamge_translate_channel": "baidu"
+        "iamge_translate_channel": "baidu",
+		"advanced_ocr_baidu_align_rang": 5
     },
     "advanced_control": {
         "blur_effect_adius": 20,

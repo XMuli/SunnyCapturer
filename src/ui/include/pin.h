@@ -6,7 +6,6 @@
 #ifndef PASTE_H
 #define PASTE_H
 
-#include "xwidget_global.h"
 #include <QWidget>
 
 namespace Ui {
@@ -24,6 +23,7 @@ public:
 private slots:
     void on_sbOpacity_valueChanged(int arg1);
     void on_sbMaxSize_valueChanged(int arg1);
+
 public slots:
     void onBtnResetClicked(bool checked = false);
 

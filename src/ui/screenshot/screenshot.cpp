@@ -558,7 +558,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
     }
 
     const QString& text = QString::fromStdString(j.dump());
-//    qDebug().noquote() << "------>j:" << text;
+   // qDebug().noquote() << "------>text:" << text;
     const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
     if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
         m_ocrDlg->setRightText(text);
@@ -575,17 +575,21 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
                     json location = item["location"];
                     int left = location["left"];
                     int top = location["top"];
+                    int right = left + location["width"].get<int>();
+                    int bottom = top + location["height"].get<int>();
+                    static int lastBottom = bottom;
 
-                    // 插入到 QTextEdit 中
-                    QTextCursor cursor(m_ocrTextEdit->textCursor());
-                    cursor.movePosition(QTextCursor::Start);
-                    cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, top);
-                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, left);
+                    const int range = CJ_GET("tokens.advanced_ocr_baidu_align_rang").get<int>();
+                    if (qAbs(bottom - lastBottom) <= range)
+                        m_ocrDlg->appendRightText(text + "    ");
+                    else
+                        m_ocrDlg->appendRightText("\n" + text + "    ");
 
-                    cursor.insertText(text);
-                    cursor.insertText("\n");
+                    lastBottom = bottom;
+                } else {
+                    m_ocrDlg->appendRightText(text + "\n");
                 }
-                m_ocrDlg->appendRightText(text);
+
             }
         }
     }
