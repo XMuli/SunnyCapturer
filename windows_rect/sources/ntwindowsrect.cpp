@@ -1,6 +1,7 @@
 ﻿#include "ntwindowsrect.h"
 #include <psapi.h>
 
+
 static std::vector<RectNode> g_rectNodes;
 
 // 自定义的一些过滤
@@ -21,38 +22,17 @@ BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
 
     if (IsWindowVisible(hwnd)) {
         wchar_t windowText[MAX_PATH] = L"";
-        //        wchar_t procPathDevice[MAX_PATH] = L"";
         GetWindowText(hwnd, windowText, MAX_PATH);
         node.title = windowText;
 
         GetWindowRect(hwnd, &rect);
         GetWindowThreadProcessId(hwnd, &node.ntPocessId);
         node.procPath = windowPathFromProcessID(node.ntPocessId);
-
-        //        DWORD result = QueryDosDevice(node.procPath.c_str(), procPathDevice, MAX_PATH);
-        //        if (result != 0) { // 如果转换成功，targetPath 中将包含目标路径信息
-        //            std::wcout << L"Converted Path: " << procPathDevice << std::endl;
-        //        } else { // 转换失败
-        //            GetModuleFileName(NULL, procPathDevice, MAX_PATH);
-        //            std::wcerr << L"Error converting path. node.procPath.c_str():" << node.procPath.c_str() << L" procPathDevice:" << procPathDevice << L"  GetLastError():" << GetLastError() << std::endl;
-        //        }
-
-        //        node.procPathDevice = std::wstring(procPathDevice);
         node.exeName = windowExeName(node.procPath);
         node.rect = rect2xrect(rect);
 
-        const int x = rect.left;
-        const int y = rect.top;
-        const int width = rect.right - rect.left;
-        const int height = rect.bottom - rect.top;
-
-        int idx = 0;
         if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
             g_rectNodes.push_back(node);
-//            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
-//                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
-//                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
-
             EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
             return FALSE;
         }
@@ -72,32 +52,51 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
     if (IsWindowVisible(hwnd)) {
         wchar_t windowText[MAX_PATH] = L"";
-//        wchar_t procPathDevice[MAX_PATH] = L"";
+
         GetWindowText(hwnd, windowText, MAX_PATH);
         node.title = windowText;
 
-        GetWindowRect(hwnd, &rect);
+        // 调试-卡住断点
+        // std::wstring searchString = L"Notepad++";
+        // size_t found = node.title.find(searchString);
+        // if (found != std::wstring::npos) {
+        //     int a = 1;
+        // }
+
+        // [方法一，推荐]获取真实的边框矩形，不包含阴影
+        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
+
+        // [方法二] 获取窗口矩形尺寸（包括标题栏+四周阴影）
+        // GetWindowRect(hwnd, &rect);
+
+        // [方法二] 获取客户区域坐标（不含标题栏+四周阴影）
+        // RECT clientRect;
+        // GetClientRect(hwnd, &clientRect);
+        // int titleBarHeight = GetSystemMetrics(SM_CYCAPTION); // 获取标题栏的高度
+
+        // // 将客户区域坐标转换为屏幕坐标
+        // POINT clientTopLeft = {clientRect.left, clientRect.top};
+        // POINT clientBottomRight = {clientRect.right, clientRect.bottom};
+        // ClientToScreen(hwnd, &clientTopLeft);
+        // ClientToScreen(hwnd, &clientBottomRight);
+
+        // rect.left = clientTopLeft.x;
+        // rect.top = clientTopLeft.y;
+        // rect.right = clientBottomRight.x;
+        // rect.bottom = clientBottomRight.y;
+
         GetWindowThreadProcessId(hwnd, &node.ntPocessId);
         node.procPath = windowPathFromProcessID(node.ntPocessId);
 
-//        DWORD result = QueryDosDevice(node.procPath.c_str(), procPathDevice, MAX_PATH);
-//        if (result != 0) { // 如果转换成功，targetPath 中将包含目标路径信息
-//            std::wcout << L"Converted Path: " << procPathDevice << std::endl;
-//        } else { // 转换失败
-//            GetModuleFileName(NULL, procPathDevice, MAX_PATH);
-//            std::wcerr << L"Error converting path. node.procPath.c_str():" << node.procPath.c_str() << L" procPathDevice:" << procPathDevice << L"  GetLastError():" << GetLastError() << std::endl;
-//        }
-
-//        node.procPathDevice = std::wstring(procPathDevice);
         node.exeName = windowExeName(node.procPath);
         node.rect = rect2xrect(rect);
 
-        const int x = rect.left;
-        const int y = rect.top;
-        const int width = rect.right - rect.left;
-        const int height = rect.bottom - rect.top;
+        // const int x = rect.left;
+        // const int y = rect.top;
+        // const int width = rect.right - rect.left;
+        // const int height = rect.bottom - rect.top;
 
-        int idx = 0;
+        // int idx = 0;
         if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
             g_rectNodes.push_back(node);
 //            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
@@ -147,11 +146,29 @@ XRECT rect2xrect(const RECT &rt)
 
 std::wstring windowPathFromProcessID(DWORD processId)
 {
-    wchar_t path[MAX_PATH] = L"";
-    HANDLE hProc = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
-    GetProcessImageFileName(hProc, path, MAX_PATH);
-    CloseHandle(hProc);
-    return std::wstring(path);
+#if 0
+    // 获取形式: [\Device\HarddiskVolume3\Qt\Tools\QtCreator\bin\qtcreator.exe]
+    // wchar_t path[MAX_PATH] = L"";
+    // HANDLE hProc = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
+    // GetProcessImageFileName(hProc, path, MAX_PATH);
+    // CloseHandle(hProc);
+    // return std::wstring(path);
+#else
+    // 获取形式: C:\Qt\Tools\QtCreator\bin\qtcreator.exe
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processId);
+    if (hProcess != NULL) {
+        wchar_t exePath[MAX_PATH];
+        DWORD bufferSize = MAX_PATH;
+
+        if (GetModuleFileNameExW(hProcess, NULL, exePath, bufferSize) != 0) {
+            CloseHandle(hProcess);
+            return std::wstring(exePath);
+        }
+        CloseHandle(hProcess);
+    }
+    return L"";
+
+#endif
 }
 
 std::wstring windowExeName(std::wstring path)
@@ -161,4 +178,18 @@ std::wstring windowExeName(std::wstring path)
     if (pos == -1) return L"";
 
     return path.substr(pos + 1);
+}
+
+int GetWindowShadowWidth(HWND hwnd)
+{
+    RECT rcExtendedFrameBounds;
+    HRESULT hr = DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rcExtendedFrameBounds, sizeof(RECT));
+    if (SUCCEEDED(hr)) {
+        // 计算阴影宽度
+        int shadowWidth = rcExtendedFrameBounds.right - rcExtendedFrameBounds.left - (GetSystemMetrics(SM_CXSIZEFRAME) * 2);
+        return shadowWidth;
+    } else {
+        // 获取失败
+        return -1;
+    }
 }

@@ -18,8 +18,6 @@
 #include <iostream>
 #include <string>
 
-
-
 struct XRECT
 {
     long    left;
@@ -36,9 +34,8 @@ struct RectNode
     XRECT rect;                   // 显示器坐标
     XRECT relativelyRect;         // 相对窗口坐标
     std::wstring title;
-    std::wstring procPath;        // [\Device\HarddiskVolume3\Qt\Tools\QtCreator\bin\qtcreator.exe]
-    std::wstring procPathDevice;  // C:\Qt\Tools\QtCreator\bin\qtcreator.exe
     std::wstring exeName;
+    std::wstring procPath;        // C:\Qt\Tools\QtCreator\bin\qtcreator.exe 和另一种形式 [\Device\HarddiskVolume3\Qt\Tools\QtCreator\bin\qtcreator.exe]
     std::wstring notes;           // 备注
 
     void* ntHWnd;               // NT OS: HWND

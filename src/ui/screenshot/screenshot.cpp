@@ -666,7 +666,7 @@ void ScreenShot::initUI()
     monitorsInfo();
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);  // | Qt::WindowStaysOnTopHint
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint /*| Qt::WindowStaysOnTopHint*/);  // | Qt::WindowStaysOnTopHint
 #ifdef HALF_SCRN_DEVELOP
     setWindowFlag(Qt::WindowStaysOnTopHint, false);
     if (m_screens.size() == 1) {
@@ -954,7 +954,7 @@ void ScreenShot::monitorsInfo() const
 void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
 {
     pa.save();
-    pa.setPen(QPen(Qt::green, 2));
+    pa.setPen(QPen(Qt::yellow, 2));
 
     QScreen* scrn = m_primaryScreen;
     for (const auto& it : m_screens) {
@@ -1044,58 +1044,51 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
 void ScreenShot::prinftWindowsRects(QPainter& pa)
 {
     pa.save();
-    pa.setPen(QColor(255, 255, 0, 1 * 255));
+    QPen penBorder(QColor(255, 0, 0, 1 * 255), 2);
+    QPen penText(QColor(0, 255, 0, 1 * 255), 2);
+
+    if (m_rectNodes.size() <= 0) return;
+    // const auto& it = m_rectNodes.at(0);
+    const auto& it = m_rectNodes.at(m_rectNodes.size() > 1 ? m_rectNodes.size() - 1 : 0);
+    const auto& rect = xrectToQRect(it.rect);
+    const auto& relativelyRect = xrectToQRect(it.relativelyRect);
+
+    const int fixLeft = 10;
+    const int fixHeight = 22;
+    int nCount = 1;
+
+    pa.setPen(penBorder);
     pa.setBrush(Qt::NoBrush);
+    pa.fillRect(QRect(relativelyRect.topLeft(), QSize(800, fixHeight * 8)), QColor(0, 0, 0, 0.8 * 255));
+    pa.drawRect(relativelyRect);
 
-#if LOG_CURR_POS_IN_RECTS
-    for (const auto& it : m_rectNodes) {
-        const auto& rect = xrectToQRect(it.rect);
-        const auto& relativelyRect = xrectToQRect(it.relativelyRect);
-#else
-    QRect rect;
-    QRect relativelyRect;
-    if (m_rectNodes.size()) {
-        const RectNode it = m_rectNodes.at( CONF_MANAGE.property("XOtherData_detection_min_windows_level_depth").toBool() ? 0 : m_rectNodes.size() - 1);
-        rect = xrectToQRect(it.rect);
-        relativelyRect = xrectToQRect(it.relativelyRect);
+    pa.setPen(penText);
+    pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("rect(%1, %2, %3 * %4)")
+                                                              .arg(rect.x())
+                                                              .arg(rect.y())
+                                                              .arg(rect.width())
+                                                              .arg(rect.height()));
 
-#endif
-        const int fixLeft = 10;
-        const int fixHeight = 20;
-        int nCount = 1;
+    pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("relativelyRect(%1, %2, %3 * %4)")
+                                                              .arg(relativelyRect.x())
+                                                              .arg(relativelyRect.y())
+                                                              .arg(relativelyRect.width())
+                                                              .arg(relativelyRect.height()));
 
-        pa.fillRect(QRect(relativelyRect.topLeft(), QSize(800, fixHeight * 8)), QColor(0, 0, 0, 0.8 * 255));
+    pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("title: %1").arg(QString::fromStdWString(it.title)));
 
-        pa.drawRect(relativelyRect);
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("rect(%1, %2, %3 * %4)")
-                                                                  .arg(rect.x())
-                                                                  .arg(rect.y())
-                                                                  .arg(rect.width())
-                                                                  .arg(rect.height()));
+    pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("exeName: %1").arg(QString::fromStdWString(it.exeName)));
+    pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("procPath: %1").arg(QString::fromStdWString(it.procPath)));
+    // quintptr decimalValue;
+    QString hexString = QString("0x%1").arg(it.ntPocessId, 0, 16);
+    pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("ntPocessId: %1(Dec)  %2(Hex)").arg(it.ntPocessId).arg(hexString));
 
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("relativelyRect(%1, %2, %3 * %4)")
-                                                                  .arg(relativelyRect.x())
-                                                                  .arg(relativelyRect.y())
-                                                                  .arg(relativelyRect.width())
-                                                                  .arg(relativelyRect.height()));
+    //        HWND hwndDesktop = GetDesktopWindow();
+    //        std::wcout << L"hwndDesktop:" << hwndDesktop << L"  it.ntHWnd:" << it.ntHWnd;
+    // decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
+    // hexString = QString("0x%1").arg(decimalValue, 0, 16);
+    // pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("hWnd: %1(10)  %2(16)").arg(decimalValue).arg(hexString));
 
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("title: %1").arg(QString::fromStdWString(it.title)));
-
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("exeName: %1").arg(QString::fromStdWString(it.exeName)));
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("procPath: %1").arg(QString::fromStdWString(it.procPath)));
-//        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++),  QString("procPathDevice: %1").arg(QString::fromStdWString(it.procPathDevice)));
-        quintptr decimalValue;
-        QString hexString = QString("0x%1").arg(it.ntPocessId, 0, 16);
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("ntPocessId: %1(10)  %2(16)").arg(it.ntPocessId).arg(hexString));
-
-        //        HWND hwndDesktop = GetDesktopWindow();
-        //        std::wcout << L"hwndDesktop:" << hwndDesktop << L"  it.ntHWnd:" << it.ntHWnd;
-        decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
-        hexString = QString("0x%1").arg(decimalValue, 0, 16);
-        pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("hWnd: %1(10)  %2(16)").arg(decimalValue).arg(hexString));
-
-
-    }
     pa.restore();
 }
 
@@ -1702,7 +1695,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
     // 以下部分都是 printf 一些调试参数的部分
     if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool()) {
-//        prinftWindowsRects(pa);
+        prinftWindowsRects(pa);
         printfDevelopProjectInfo(pa);
     }
 }
