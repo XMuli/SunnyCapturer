@@ -15,132 +15,97 @@ bool WindowsRectFilter(HWND hwnd)
 
 BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
 {
-    POINT pos;
-    pos.x = ((int)(short)LOWORD(lParam));
-    pos.y = ((int)(short)HIWORD(lParam));
+    POINT pt;
+    pt.x = ((int)(short)LOWORD(lParam));
+    pt.y = ((int)(short)HIWORD(lParam));
 
     RectNode node;
+    wchar_t title[MAX_PATH] = L"";
+    GetWindowText(hwnd, title, MAX_PATH);
+    node.title = title;
+    node.ntHWnd = hwnd;
+
+    GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+    node.procPath = windowPathFromProcessID(node.ntPocessId);
+    node.exeName = windowExeName(node.procPath);
+
     RECT rect;
+    // DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT)); // [方法一，推荐]获取真实的边框矩形，不包含阴影
+    GetWindowRect(hwnd, &rect);  // 子窗口遍历，改动点
+    node.rect = rect2xrect(rect);
 
-    if (IsWindowVisible(hwnd)) {
-        wchar_t windowText[MAX_PATH] = L"";
-        GetWindowText(hwnd, windowText, MAX_PATH);
-        node.title = windowText;
-
-        GetWindowRect(hwnd, &rect);
-        GetWindowThreadProcessId(hwnd, &node.ntPocessId);
-        node.procPath = windowPathFromProcessID(node.ntPocessId);
-        node.exeName = windowExeName(node.procPath);
-        node.rect = rect2xrect(rect);
-
-        if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
-            g_rectNodes.push_back(node);
-            EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
-            return FALSE;
-        }
+    if (IsWindowVisible(hwnd) // && !isSystemsettingsMinAndTaskbar(hwnd)    // 子窗口遍历，改动点
+        && PtInRect(&rect, pt) && node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
+        g_rectNodes.push_back(node);
+        EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
+        return FALSE;
     }
+
     return TRUE;
 }
 
 // MSDN !!!: EnumWindows continues until the last top-level window is enumerated or the callback function returns FALSE.
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
-    POINT pos;
-    pos.x = ((int)(short)LOWORD(lParam));
-    pos.y = ((int)(short)HIWORD(lParam));
+    POINT pt;
+    pt.x = ((int)(short)LOWORD(lParam));
+    pt.y = ((int)(short)HIWORD(lParam));
 
     RectNode node;
-    RECT rect;
+    wchar_t title[MAX_PATH] = L"";
+    GetWindowText(hwnd, title, MAX_PATH);
+    node.title = title;
+    node.ntHWnd = hwnd;
 
-    wchar_t windowTextt[MAX_PATH] = L"";
-    GetWindowText(hwnd, windowTextt, MAX_PATH);
-    node.title = windowTextt;
+    // 调试-卡住断点
+    // size_t found1 = node.title.find(L"Notepad++");
+    // if (found1 != std::wstring::npos)
+    //     int a = 1;
+
+    // if (hwnd == HWND(0x310e58))
+    //     int b = 2;
+
+    // size_t found2 = node.procPath.find(L"SystemSettings.exe");
+    // if (found2 != std::wstring::npos)
+    //     int a = 2;
 
     GetWindowThreadProcessId(hwnd, &node.ntPocessId);
     node.procPath = windowPathFromProcessID(node.ntPocessId);
+    node.exeName = windowExeName(node.procPath);
 
-    // 调试-卡住断点
-    size_t found1 = node.title.find(L"Setting");
-    if (found1 != std::wstring::npos) {
-        int a = 1;
-    }
+    RECT rect;
+    // [方法一，推荐]获取真实的边框矩形，不包含阴影
+    DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
+    node.rect = rect2xrect(rect);
 
+    // [方法二] 获取窗口矩形尺寸（包括标题栏+四周阴影）
+    // GetWindowRect(hwnd, &rect);
 
-    size_t found2 = node.procPath.find(L"SystemSettings.exe");
-    if (found2 != std::wstring::npos) {
-        int a = 2;
-    }
+    // [方法二] 获取客户区域坐标（不含标题栏+四周阴影）
+    // RECT clientRect;
+    // GetClientRect(hwnd, &clientRect);
+    // int titleBarHeight = GetSystemMetrics(SM_CYCAPTION); // 获取标题栏的高度
 
+    if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)  // 这一行必须保留，和下面组成 且
+        && PtInRect(&rect, pt) && node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
 
-
-    // 检查窗口是否处于最小化状态
-    bool b1 = isWindowMinimized(hwnd);
-    bool b2 = isWindowMaximized(hwnd);
-    bool b3 = isTaskbarWindow(hwnd);
-
-
-
-
-    if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)) {
-        wchar_t windowText[MAX_PATH] = L"";
-
-        GetWindowText(hwnd, windowText, MAX_PATH);
-        node.title = windowText;
-
-        // 调试-卡住断点
-        std::wstring searchString = L"Setting";
-        size_t found = node.title.find(searchString);
-        if (found != std::wstring::npos) {
-            int a = 1;
-        }
-
-        // [方法一，推荐]获取真实的边框矩形，不包含阴影
-        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
-
-        // [方法二] 获取窗口矩形尺寸（包括标题栏+四周阴影）
-        // GetWindowRect(hwnd, &rect);
-
-        // [方法二] 获取客户区域坐标（不含标题栏+四周阴影）
-        // RECT clientRect;
-        // GetClientRect(hwnd, &clientRect);
-        // int titleBarHeight = GetSystemMetrics(SM_CYCAPTION); // 获取标题栏的高度
-
-        // // 将客户区域坐标转换为屏幕坐标
-        // POINT clientTopLeft = {clientRect.left, clientRect.top};
-        // POINT clientBottomRight = {clientRect.right, clientRect.bottom};
-        // ClientToScreen(hwnd, &clientTopLeft);
-        // ClientToScreen(hwnd, &clientBottomRight);
-
-        // rect.left = clientTopLeft.x;
-        // rect.top = clientTopLeft.y;
-        // rect.right = clientBottomRight.x;
-        // rect.bottom = clientBottomRight.y;
-
-        GetWindowThreadProcessId(hwnd, &node.ntPocessId);
-        node.procPath = windowPathFromProcessID(node.ntPocessId);
-
-        node.exeName = windowExeName(node.procPath);
-        node.rect = rect2xrect(rect);
+        g_rectNodes.push_back(node);
 
         // const int x = rect.left;
         // const int y = rect.top;
         // const int width = rect.right - rect.left;
         // const int height = rect.bottom - rect.top;
         // int idx = 0;
-        if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
-            node.ntHWnd = hwnd;
-            g_rectNodes.push_back(node);
-//            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
-//                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
-//                       << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
+        // std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
+        //            << L" hwnd[" << hwnd << L"] title:[" << title << L"]"
+        //            << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
 
-            EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
-            return FALSE; // 只需命中一次
-        }
+        EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
+        return FALSE;    // "找到了指定的篡改口"只需命中一次
     }
-    return TRUE;
-}
 
+    return TRUE;  // 非所寻找的"顶级窗口", 所以继续遍历
+}
 
 
 RECT xrect2rect(const XRECT &rt)
@@ -154,11 +119,112 @@ RECT xrect2rect(const XRECT &rt)
     return rect;
 }
 
+#include <windowsx.h>
+
+
+
+BOOL CALLBACK EnumChildRealTimeProc(HWND hwnd, LPARAM lParam)
+{
+    RectNode node;
+    RECT rect;
+    GetWindowRect(hwnd, &rect);
+
+    POINT pt;
+    pt.x = ((int)(short)LOWORD(lParam));
+    pt.y = ((int)(short)HIWORD(lParam));
+    if(!PtInRect(&rect, pt)) return FALSE;
+    node.rect = rect2xrect(rect);
+
+    wchar_t title[MAX_PATH] = L"";
+    GetWindowText(hwnd, title, MAX_PATH);
+    node.title = title;
+
+    GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+    node.procPath = windowPathFromProcessID(node.ntPocessId);
+
+    if (node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
+        // // 获取光标当前位置
+        POINT relativePt = pt;
+        ScreenToClient(hwnd, &relativePt);  // 转化为相对坐标
+        HWND childHwnd1 = ChildWindowFromPointEx(hwnd, relativePt, CWP_SKIPINVISIBLE|CWP_SKIPTRANSPARENT);  // 获取下一个子窗口
+        HWND childHwnd2 = RealChildWindowFromPoint(hwnd, relativePt);  // 尝试另外一个;
+
+        g_rectNodes.push_back(node);
+        EnumChildWindows(childHwnd1, EnumChildRealTimeProc, lParam);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+BOOL CALLBACK EnumWindowsRealTimeProc(HWND hwnd, LPARAM lParam)
+{
+    RectNode node;
+    RECT rect;
+    POINT pt;
+    pt.x = ((int)(short)LOWORD(lParam));
+    pt.y = ((int)(short)HIWORD(lParam));
+
+    wchar_t title[MAX_PATH] = L"";
+    GetWindowText(hwnd, title, MAX_PATH);
+    node.title = title;
+
+    GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+    node.procPath = windowPathFromProcessID(node.ntPocessId);
+
+    // 调试-卡住断点
+    size_t found1 = node.title.find(L"Notepad++");
+    if (found1 != std::wstring::npos) {
+        int a = 1;
+        int c = a +2;
+    }
+
+    if (hwnd == HWND(0x310e58)) {
+        int b = 2;
+    }
+
+    if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)) {
+        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
+
+        GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+        node.procPath = windowPathFromProcessID(node.ntPocessId);
+
+        node.exeName = windowExeName(node.procPath);
+        node.rect = rect2xrect(rect);
+
+        if (PtInRect(&rect, pt) && node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
+            node.ntHWnd = hwnd;
+
+            g_rectNodes.push_back(node);
+            // // 获取光标当前位置
+            POINT relativePt = pt;
+            ScreenToClient(hwnd, &relativePt);  // 转化为相对坐标
+            HWND childHwnd1 = ChildWindowFromPointEx(hwnd, relativePt, CWP_SKIPINVISIBLE|CWP_SKIPTRANSPARENT);  // 获取下一个子窗口
+            HWND childHwnd2 = RealChildWindowFromPoint(hwnd, relativePt);  // 尝试另外一个;
+
+            EnumChildWindows(childHwnd2, EnumChildRealTimeProc, lParam);
+        }
+    }
+
+    // GetWindowRect(hwnd, &rect);
+    // if(!PtInRect(&rect, pt)) return FALSE;
+    // node.rect = rect2xrect(rect);
+
+
+    return TRUE;
+}
+
 void enumWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos)
 {
-//    std::wcout << L"--->pos(" << pos.x << L", " << pos.y << L")" << std::endl;
     g_rectNodes.clear();
     EnumWindows(EnumWindowsProc, MAKELPARAM(pos.x, pos.y));
+    rectNodes = g_rectNodes;
+}
+
+void getWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos)
+{
+    g_rectNodes.clear();
+    EnumWindows(EnumWindowsRealTimeProc, MAKELPARAM(pos.x, pos.y));
     rectNodes = g_rectNodes;
 }
 
@@ -261,3 +327,5 @@ bool isSystemsettingsMinAndTaskbar(HWND hWnd)
     bool b1 = isTaskbarWindow(hWnd);
     return isTaskbarWindow(hWnd) && bClassName;
 }
+
+

@@ -1089,7 +1089,7 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
 
     // WND hwndDesktop = GetDesktopWindow();
     // std::wcout << L"hwndDesktop:" << hwndDesktop << L"  it.ntHWnd:" << it.ntHWnd;
-    std::wcout  << L"  it.ntHWnd:" << it.ntHWnd;
+    // std::wcout  << L"  it.ntHWnd:" << it.ntHWnd;
     decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
     hexString = QString("0x%1").arg(decimalValue, 0, 16);
     pa.drawText(relativelyRect.topLeft() + QPoint(fixLeft, fixHeight * nCount++), QString("hWnd: %1(10)  %2(16)").arg(decimalValue).arg(hexString));
