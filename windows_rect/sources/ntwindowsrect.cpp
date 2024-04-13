@@ -2,6 +2,8 @@
 #include <psapi.h>
 
 
+
+
 static std::vector<RectNode> g_rectNodes;
 
 // 自定义的一些过滤
@@ -50,18 +52,47 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
     RectNode node;
     RECT rect;
 
-    if (IsWindowVisible(hwnd)) {
+    wchar_t windowTextt[MAX_PATH] = L"";
+    GetWindowText(hwnd, windowTextt, MAX_PATH);
+    node.title = windowTextt;
+
+    GetWindowThreadProcessId(hwnd, &node.ntPocessId);
+    node.procPath = windowPathFromProcessID(node.ntPocessId);
+
+    // 调试-卡住断点
+    size_t found1 = node.title.find(L"Setting");
+    if (found1 != std::wstring::npos) {
+        int a = 1;
+    }
+
+
+    size_t found2 = node.procPath.find(L"SystemSettings.exe");
+    if (found2 != std::wstring::npos) {
+        int a = 2;
+    }
+
+
+
+    // 检查窗口是否处于最小化状态
+    bool b1 = isWindowMinimized(hwnd);
+    bool b2 = isWindowMaximized(hwnd);
+    bool b3 = isTaskbarWindow(hwnd);
+
+
+
+
+    if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)) {
         wchar_t windowText[MAX_PATH] = L"";
 
         GetWindowText(hwnd, windowText, MAX_PATH);
         node.title = windowText;
 
         // 调试-卡住断点
-        // std::wstring searchString = L"Notepad++";
-        // size_t found = node.title.find(searchString);
-        // if (found != std::wstring::npos) {
-        //     int a = 1;
-        // }
+        std::wstring searchString = L"Setting";
+        size_t found = node.title.find(searchString);
+        if (found != std::wstring::npos) {
+            int a = 1;
+        }
 
         // [方法一，推荐]获取真实的边框矩形，不包含阴影
         DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
@@ -95,9 +126,9 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         // const int y = rect.top;
         // const int width = rect.right - rect.left;
         // const int height = rect.bottom - rect.top;
-
         // int idx = 0;
         if (PtInRect(&rect, pos) && node.title != L"Sunny") { // 仅仅选中当前的 pos 的所在窗口
+            node.ntHWnd = hwnd;
             g_rectNodes.push_back(node);
 //            std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
 //                       << L" hwnd[" << hwnd << L"] windowText:[" << windowText << L"]"
@@ -192,4 +223,41 @@ int GetWindowShadowWidth(HWND hwnd)
         // 获取失败
         return -1;
     }
+}
+
+bool isTaskbarWindow(HWND hWnd)
+{
+    LONG_PTR style = GetWindowLongPtr(hWnd, GWL_EXSTYLE);
+    return !(style & WS_EX_APPWINDOW);
+}
+
+bool isWindowMinimized(HWND hWnd)
+{
+    // return IsIconic(hWnd);
+
+    WINDOWPLACEMENT placement;
+    GetWindowPlacement(hWnd, &placement);
+    return placement.showCmd == SW_SHOWMINIMIZED;
+}
+
+bool isWindowMaximized(HWND hWnd) {
+    // return IsZoomed(hWnd);
+
+    WINDOWPLACEMENT placement;
+    GetWindowPlacement(hWnd, &placement);
+    return placement.showCmd == SW_SHOWMAXIMIZED;
+}
+
+
+// [特例]systemsettings.exe 即 Windows 10 22H2 的 "设置"窗口; 其处于最小化时候，遍历窗口函数可以捕捉到这个实际不可见的窗口，在屏幕左上角区域
+// 可以通过 Spy 软件来捕捉和确认， 左上的"显示系统活动窗口 - 任务栏窗口 - 找名字为 `Windows.UI.Core.CoreWindow` 的项", 通过底部的句柄箭头跳转即可查看详情
+bool isSystemsettingsMinAndTaskbar(HWND hWnd)
+{
+    // 获取窗口的类名
+    wchar_t className[MAX_PATH] = L"";
+    GetClassName(hWnd, className, MAX_PATH);
+    std::wstring str = className;
+    bool bClassName = (str == L"Windows.UI.Core.CoreWindow");
+    bool b1 = isTaskbarWindow(hWnd);
+    return isTaskbarWindow(hWnd) && bClassName;
 }
