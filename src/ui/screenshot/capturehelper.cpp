@@ -566,7 +566,10 @@ void drawBorderSunny(QPainter &pa, const QRect &rt)
     QPen pen;
     const int addFixWidth = 6;
     pen.setWidth(borderWidth() + addFixWidth);
-    pen.setColor(QColor(14, 112, 255));
+    QColor color = QColor(CJ_GET_QSTR("interface.highlight"));
+    if (color == QColor("#0081FF"))
+        color = QColor(14, 112, 255); // 采用更深一点的蓝色
+    pen.setColor(color);
     pa.setPen(pen);
     pa.setBrush(Qt::NoBrush);
 
@@ -579,6 +582,7 @@ void drawBorderSunny(QPainter &pa, const QRect &rt)
     const int cornerLength = 100;       // 四角周辅助的 ∟ 的长度
     const int doubleCornerLength = 2 * cornerLength;
 
+#if 0  // 隐藏四个角落的特效
     if (rt.width() >= doubleCornerLength && rt.height() >= doubleCornerLength) {
         // hor 且补齐交叉角落的空缺的那一块
         QLine l1(QPoint(x1 - penWidth / 2, y1), QPoint(x1 + cornerLength, y1));
@@ -601,6 +605,7 @@ void drawBorderSunny(QPainter &pa, const QRect &rt)
         pa.drawLine(l7.translated(QPoint(penWidth / 2, 0)));
         pa.drawLine(l8.translated(QPoint(penWidth / 2, 0)));
     }
+#endif
 
     pen.setWidth(borderWidth());
     pa.setPen(pen);

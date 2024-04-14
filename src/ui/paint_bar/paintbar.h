@@ -46,7 +46,7 @@ signals:
     void sigAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);  // ScreenShot 控制图标置灰
 
 private slots:
-    void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable, const bool &isChecked);
+    void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable, const bool &isChecscked);
 
 protected:
     void resizeEvent(QResizeEvent *e) override;

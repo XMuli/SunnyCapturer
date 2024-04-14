@@ -161,13 +161,18 @@ void PaintBar::paintEvent(QPaintEvent *e)
         pa.drawPixmap(rect().adjusted(margin, margin, -margin, -margin), m_blurPixmap);
     }
 
-    margin = 1;
-    pa.setPen(QPen(QColor(246, 246, 246, 1 * 255), margin));
-    pa.setBrush(QColor(255, 255, 255, 0.4 * 255));
-    pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
+    const bool& arcylicEffect = CJ_GET("interface.acrylic_effect");
+
+    if (arcylicEffect) {
+        margin = 1;
+        pa.setPen(QPen(QColor(246, 246, 246, 1 * 255), margin));
+        pa.setBrush(QColor(255, 255, 255, 0.4 * 255));
+        pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
+    }
 
     margin = 0;
-    pa.setPen(QColor(70, 70, 70, 1 * 255));
+    const QColor& color = arcylicEffect ? QColor(70, 70, 70, 1 * 255) : QColor(CJ_GET_QSTR("interface.highlight"));
+    pa.setPen(color);
     pa.setBrush(Qt::NoBrush);
     pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
 }

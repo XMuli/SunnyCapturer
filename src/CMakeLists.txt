@@ -231,10 +231,8 @@ foreach(it ${folders_to_copy})
     file(COPY ${copy_source_dir} DESTINATION ${traget_root})
 endforeach()
 
-file(COPY "${CMAKE_SOURCE_DIR}/xconfig.ini" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 file(COPY "${source_root}/debian" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-
 
 #if(UNIX)
 #    file(GLOB sh_files "${source_root}/linux/debian/*.sh")

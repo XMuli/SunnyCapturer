@@ -22,7 +22,7 @@
         "custom_rect_width": 640,
         "custom_rect_height": 480,
         "custom_dealy": 6,
-        "acrylic_effect": true,
+        "acrylic_effect": false,
         "auto_detect_windows": true,
         "auto_copy_to_clipbaoard": true,
         "crosshair_show": false

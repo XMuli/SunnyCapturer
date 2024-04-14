@@ -37,7 +37,7 @@ ordered_json ConfigJson::defaultConfigJson()
                           {"custom_rect_width", 640},
                           {"custom_rect_height", 480},
                           {"custom_dealy", 6},
-                          {"acrylic_effect", true},
+                          {"acrylic_effect", false},
                           {"auto_detect_windows", true},
                           {"auto_copy_to_clipbaoard", true},
                           {"crosshair_show", false}
@@ -132,8 +132,8 @@ ordered_json ConfigJson::defaultConfigJson()
         //                          }},
     };
 
-    // QString jsonString = QString::fromStdString(j.dump());
-    // qDebug().noquote() << "ordered_json j:" << jsonString;
+    QString jsonString = QString::fromStdString(j.dump());
+    qDebug().noquote() << "ordered_json j:" << jsonString;
     return j;
 }
 
