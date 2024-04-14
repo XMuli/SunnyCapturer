@@ -155,15 +155,18 @@ void PinWidget::onCopy()
 void PinWidget::onSave()
 {
     if (m_pixmap.isNull()) return;
-
-    QString fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
-    QString fileNmae = QFileDialog::getSaveFileName(this, tr("Save Files"), "Sunny_" + QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss") + ".png", fileter);
+    QString path = "";
+    const auto& formatName = formatToFileName(CJ_GET_QSTR("output.flie_name"));
+    const QString& imageName = QDateTime::currentDateTime().toString(formatName);
+    const QString& dir = CJ_GET_QSTR("advanced.customize_ui_parameters.manual_save_image_dir");
+    const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
+    path = QFileDialog::getSaveFileName(this, tr("Save Files"), dir + "/" + imageName, fileter);
 
     QTime startTime = QTime::currentTime();
-    m_pixmap.save(fileNmae);
+    m_pixmap.save(path);
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
-    qDebug() << "save m_pixmap tim =" << elapsed << "ms" << m_pixmap.size();
+    qDebug() << "pin widget save a image time =" << elapsed << "ms" << m_pixmap.size();
 }
 
 void PinWidget::onShadow(bool checked)

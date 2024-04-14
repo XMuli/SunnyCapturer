@@ -176,12 +176,6 @@ void ScreenShot::btnSave()
 {
     QString path = imageSavePath(ImageSaveType::IST_manual_save);
     imageSave(path);
-
-    if (CJ_GET("output.auto_save_enable").get<bool>()) {
-        QString dir = CJ_GET_QSTR("output.auto_save_path");
-        path = dir + path.right(path.count() - path.lastIndexOf('/'));
-        imageSave(path);
-    }
 }
 
 void ScreenShot::btnCancel()
@@ -204,20 +198,15 @@ void ScreenShot::btnFinish()
 //    tPix2.save("D:/savePix2.png");
 //#endif
 
-
-    if (!pixmap.isNull()) { // 检查QPixmap是否有效
+    if (!pixmap.isNull()) {
         // 将新的QPixmap复制到剪贴板
         QClipboard* clipboard = QApplication::clipboard();
         clipboard->setPixmap(pixmap);  // 由于 Qt 库会在应用程序终止时释放剪贴板对象; 故此处内存增加是必然的，不用额外 delete 处理； 氪！排查这么久结论居然是这个
 
         // 同时自动保存
         if (CJ_GET("output.auto_save_enable").get<bool>()) {
-            QTime startTime = QTime::currentTime();
             const auto& path = imageSavePath(ImageSaveType::IST_auto_save);
             pixmap.save(path, nullptr, CJ_GET("output.image_quailty").get<int>());
-            QTime stopTime = QTime::currentTime();
-            int elapsed = startTime.msecsTo(stopTime);
-            qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
         }
     }
 
@@ -242,7 +231,8 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
             pa.save();
             for (const auto& it : m_redo) drawShape(it, pa, true);
             //    drawShape(m_paintNode, pa, true);
-            if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool())
+
+            if (CJ_GET("advanced.develpe_enginner.save_image_with_detail").get<bool>())
                 prinftWindowsRects(pa);
             pa.restore();
             return m_origPix.copy(rect);
@@ -796,11 +786,8 @@ void ScreenShot::setMosaicPix()
 QString ScreenShot::imageSavePath(const ImageSaveType &types)
 {
     QString path = "";
-    QDateTime dateTime = QDateTime::currentDateTime(); // 获取当前日期和时间
-
-    const auto& fileName = formatToFileName(CJ_GET_QSTR("output.flie_name"));
-    QString dateTimeString = dateTime.toString(fileName);
-    const QString& imageName = QString("%1").arg(dateTimeString);
+    const auto& formatName = formatToFileName(CJ_GET_QSTR("output.flie_name"));
+    const QString& imageName = QDateTime::currentDateTime().toString(formatName);
 
     if (types == ImageSaveType::IST_manual_save) {
         const QString& dir = CJ_GET_QSTR("advanced.customize_ui_parameters.manual_save_image_dir");
@@ -814,11 +801,11 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
 
     } else if (types == ImageSaveType::IST_quick_save) {
         if (CJ_GET("output.quick_save_enable").get<bool>())
-            path = CJ_GET_QSTR("output.quick_save_path") + "/" + imageName + ".png";
+            path = CJ_GET_QSTR("output.quick_save_path") + "/" + imageName;
 
     } else if (types == ImageSaveType::IST_auto_save) {
         if (CJ_GET("output.auto_save_enable").get<bool>())
-            path = CJ_GET_QSTR("output.auto_save_path") + "/" + imageName + ".png";
+            path = CJ_GET_QSTR("output.auto_save_path") + "/" + imageName;
 
     } else {
         qDebug() <<"error: types & ImageSaveType:: other !";
@@ -838,6 +825,18 @@ bool ScreenShot::imageSave(const QString &path, const bool &bClose)
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
+
+
+    if (CJ_GET("interface.auto_copy_to_clipbaoard").get<bool>()) {
+        QClipboard* clipboard = QApplication::clipboard();
+        clipboard->setPixmap(pixmap);  // 由于 Qt 库会在应用程序终止时释放剪贴板对象; 故此处内存增加是必然的，不用额外 delete 处理； 氪！排查这么久结论居然是这个
+    }
+
+    if (CJ_GET("output.auto_save_enable").get<bool>()) {
+        QString dir = CJ_GET_QSTR("output.auto_save_path");
+        const QString& autoSavePath = dir + path.right(path.count() - path.lastIndexOf('/'));
+        pixmap.save(autoSavePath, nullptr, CJ_GET("output.image_quailty").get<int>());
+    }
 
     if (bClose)
         close();
@@ -1591,11 +1590,13 @@ void ScreenShot::showCrosshair(QPainter &pa, const QPoint &pt, const QRect &vdRt
         drawCrosshair(pa, pt, vdRt);
 }
 
-void ScreenShot::showCollimatorCursor(QPainter &pa, const QPoint &pt, const int &width)
+void ScreenShot::showCollimatorCursor(QPainter &pa)
 {
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing);
 
+    const QPoint& pt = QCursor::pos();
+    const int& width = CJ.m_cd.pen.width();
     const QPen pen(CJ.m_cd.pen.color(), 1);
     pa.setPen(pen);
     // 绘制中心点
@@ -1747,7 +1748,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     }
 
     if (CJ.m_cd.isShowCollimatorCursor)
-        showCollimatorCursor(pa, QCursor::pos(), CJ.m_cd.pen.width());
+        showCollimatorCursor(pa);
 }
 
 void ScreenShot::closeEvent(QCloseEvent *e)

@@ -174,6 +174,7 @@ double dpiScale(const QScreen *scrn)
 QString highlightColor(const bool enable)
 {
     const QColor& color = enable ? QColor(CJ_GET_QSTR("interface.highlight")) : Qt::green;
+    qDebug() << "color.name():" << color.name();
     return color.name();
 }
 

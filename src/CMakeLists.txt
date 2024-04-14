@@ -451,8 +451,8 @@ elseif (UNIX)
              DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
              )
     # [/usr/local] -------------------------
-    # install /usr/local/Sunny/xconfig.ini
-    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.ini
+    # install /usr/local/Sunny/xconfig.json
+    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
              DESTINATION "/usr/local/${project_name}"
              )
     # install /usr/local/Sunny/translations/Sunny_*.qm
