@@ -22,6 +22,7 @@
 #include "verspacerline.h"
 #include "xtoolbutton.h"
 #include "../../../data/configmanager.h"
+#include "../../../data/configjson.h"
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
 {
@@ -172,29 +173,29 @@ double dpiScale(const QScreen *scrn)
 
 QString highlightColor(const bool enable)
 {
-    const QColor& color = enable ? QColor(CONF_MANAGE.property("XInterface_highlight").toString()) : Qt::green;
+    const QColor& color = enable ? QColor(CJ_GET_QSTR("interface.highlight")) : Qt::green;
     return color.name();
 }
 
 QString crosshairColor(const bool enable)
 {
-    const QColor& color = enable ? QColor(CONF_MANAGE.property("XInterface_crosshair").toString()) : Qt::green;
+    const QColor& color = enable ? QColor(CJ_GET_QSTR("interface.crosshair")) : Qt::green;
     return color.name();
 }
 
 int borderWidth()
 {
-    return CONF_MANAGE.property("XInterface_border_width").toInt();
+    return CJ_GET("interface.border_width").get<int>();
 }
 
 int crosshairWidth()
 {
-    return CONF_MANAGE.property("XInterface_crosshair_width").toInt();
+    return CJ_GET("interface.crosshair_width").get<int>();
 }
 
 bool acrylicEffectEnable()
 {
-    return CONF_MANAGE.property("XInterface_acrylic_effect").toBool();
+    return CJ_GET("interface.acrylic_effect").get<bool>();
 }
 
 QString formatToFileName(const QString &name)

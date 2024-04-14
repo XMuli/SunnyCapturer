@@ -35,7 +35,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_origPix()
     , m_vdRect()
     , m_bFistPressed(false)
-    , m_bAutoDetectRect(CONF_MANAGE.property("XInterface_auto_detect_windows").toBool())
+    , m_bAutoDetectRect(CJ_GET("interface.auto_detect_windows").get<bool>())
     , m_HotKeyType(type)
     , m_actionType(ActionType::AT_wait)
     , m_paintBar(new PaintBar(orie, this))
@@ -63,10 +63,10 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
         }
     }
 
-    qDebug() << "------#1---->" << hotKeyTypeToString(m_HotKeyType);
-    const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
-    const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
-    const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
+    // qDebug() << "------#1---->" << hotKeyTypeToString(m_HotKeyType);
+    const auto& customSizeEnable = CJ_GET("interface.custom_size_enable").get<bool>();
+    const auto& topleftEnable = CJ_GET("interface.topleft_enable").get<bool>();
+    const auto& sizeEnable = CJ_GET("interface.size_enable").get<bool>();
 
     if (m_HotKeyType == HotKeyType::HKT_capture) {
     } else if (m_HotKeyType == HotKeyType::HKT_delay_capture) {
@@ -76,10 +76,10 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
 
         if (customSizeEnable) {
             if (topleftEnable)
-                m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
+                m_node.p1 = QPoint(CJ_GET("interface.custom_rect_left").get<int>(), CJ_GET("interface.custom_rect_top").get<int>());
 
             if (sizeEnable) {
-                m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
+                m_node.pickedRect = QRect(m_node.p1, QSize(CJ_GET("interface.custom_rect_width").get<int>(), CJ_GET("interface.custom_rect_height").get<int>()));
                 m_node.absoluteRect = m_node.pickedRect;
                 m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
                 m_actionType = ActionType::AT_wait;
@@ -123,8 +123,8 @@ void ScreenShot::btnPin()
     const auto& rect = m_node.absoluteRect;
 
     PinWidget* w = new PinWidget(finishDrewPixmap(rect, true), nullptr);
-    const int opacity = CONF_MANAGE.property("XPin_opacity").toInt();
-    const int max = CONF_MANAGE.property("XPin_maximum_size").toInt();
+    const int opacity = CJ_GET("pin.opacity");
+    const int max = CJ_GET("pin.maximum_size");
     const int& margin = w->layoutMargin();
     w->setWindowOpacity(opacity / 100.0);
     w->setMaximumSize(QSize(max, max));
@@ -177,8 +177,8 @@ void ScreenShot::btnSave()
     QString path = imageSavePath(ImageSaveType::IST_manual_save);
     imageSave(path);
 
-    if (CONF_MANAGE.property("XOutput_auto_save_enable").toBool()) {
-        QString dir = CONF_MANAGE.property("XOutput_auto_save_path").toString();
+    if (CJ_GET("output.auto_save_enable").get<bool>()) {
+        QString dir = CJ_GET_QSTR("output.auto_save_path");
         path = dir + path.right(path.count() - path.lastIndexOf('/'));
         imageSave(path);
     }
@@ -211,10 +211,10 @@ void ScreenShot::btnFinish()
         clipboard->setPixmap(pixmap);  // 由于 Qt 库会在应用程序终止时释放剪贴板对象; 故此处内存增加是必然的，不用额外 delete 处理； 氪！排查这么久结论居然是这个
 
         // 同时自动保存
-        if (CONF_MANAGE.property("XOutput_auto_save_enable").toBool()) {
+        if (CJ_GET("output.auto_save_enable").get<bool>()) {
             QTime startTime = QTime::currentTime();
             const auto& path = imageSavePath(ImageSaveType::IST_auto_save);
-            pixmap.save(path, nullptr, CONF_MANAGE.property("XOutput_image_quailty").toInt());
+            pixmap.save(path, nullptr, CJ_GET("output.image_quailty").get<int>());
             QTime stopTime = QTime::currentTime();
             int elapsed = startTime.msecsTo(stopTime);
             qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
@@ -241,12 +241,9 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
             QPainter pa(&m_origPix);
             pa.save();
             for (const auto& it : m_redo) drawShape(it, pa, true);
-
             //    drawShape(m_paintNode, pa, true);
-
             if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool())
                 prinftWindowsRects(pa);
-
             pa.restore();
             return m_origPix.copy(rect);
 
@@ -786,7 +783,6 @@ void ScreenShot::originalPixmap()
     if (m_origPix.isNull()) {
         m_origPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
 
-
         qDebug() << "originalPixmap()， &m_origPix:" << &m_origPix << "m_origPix:" << m_origPix;
     }
 }
@@ -802,26 +798,28 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
     QString path = "";
     QDateTime dateTime = QDateTime::currentDateTime(); // 获取当前日期和时间
 
-    const auto& fileName = formatToFileName(CONF_MANAGE.property("XOutput_flie_name").toString());
+    const auto& fileName = formatToFileName(CJ_GET_QSTR("output.flie_name"));
     QString dateTimeString = dateTime.toString(fileName);
     const QString& imageName = QString("%1").arg(dateTimeString);
 
     if (types == ImageSaveType::IST_manual_save) {
-        const QString& dir = CONF_MANAGE.property("XOtherData_manual_save_image_dir").toString();
+        const QString& dir = CJ_GET_QSTR("advanced.customize_ui_parameters.manual_save_image_dir");
         const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
         path = QFileDialog::getSaveFileName(this, tr("Save Files"), dir + "/" + imageName, fileter);
 
         if (!path.isEmpty()) {
             const QFileInfo fileInfo(path);
-            CONF_MANAGE.setProperty("XOtherData_manual_save_image_dir", fileInfo.path());
+            CJ_SET("advanced.customize_ui_parameters.manual_save_image_dir", fileInfo.path().toStdString());
         }
 
     } else if (types == ImageSaveType::IST_quick_save) {
-        if (CONF_MANAGE.property("XOutput_quick_save_enable").toBool())
-            path = CONF_MANAGE.property("XOutput_quick_save_path").toString() + "/" + imageName + ".png";
+        if (CJ_GET("output.quick_save_enable").get<bool>())
+            path = CJ_GET_QSTR("output.quick_save_path") + "/" + imageName + ".png";
+
     } else if (types == ImageSaveType::IST_auto_save) {
-        if (CONF_MANAGE.property("XOutput_auto_save_enable").toBool())
-            path = CONF_MANAGE.property("XOutput_auto_save_path").toString() + "/" + imageName + ".png";
+        if (CJ_GET("output.auto_save_enable").get<bool>())
+            path = CJ_GET_QSTR("output.auto_save_path") + "/" + imageName + ".png";
+
     } else {
         qDebug() <<"error: types & ImageSaveType:: other !";
     }
@@ -836,7 +834,7 @@ bool ScreenShot::imageSave(const QString &path, const bool &bClose)
     if (pixmap.isNull()) return false;
 
     QTime startTime = QTime::currentTime();
-    const bool ret = pixmap.save(path, nullptr, CONF_MANAGE.property("XOutput_image_quailty").toInt());  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
+    const bool ret = pixmap.save(path, nullptr, CJ_GET("output.image_quailty").get<int>());  // 绘画在 m_savePix 中，若在 m_savePix 会有 selRect 的左上角的点的偏移
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
@@ -1113,7 +1111,7 @@ void ScreenShot::rectNodesMapFromGlobal()
 void ScreenShot::firstRectNodesAssignmentNode()
 {
     if (m_rectNodes.size() == 0) return;
-    const auto& it = m_rectNodes.at(CONF_MANAGE.property("XOtherData_detection_min_windows_level_depth").toBool() ? 0 : m_rectNodes.size() - 1);
+    const auto& it = m_rectNodes.at(CJ_GET("advanced.customize_ui_parameters.auto_detection_windows_rect_top_level").get<bool>() ? 0 : m_rectNodes.size() - 1);
     const auto& relativelyRect = xrectToQRect(it.relativelyRect);
 
     m_node.p1 = relativelyRect.topLeft();
@@ -1234,17 +1232,17 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
         m_bFistPressed = true;
 
         if (m_HotKeyType == HotKeyType::HKT_custiom_capture) {
-            const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
-            const auto& topleftEnable = CONF_MANAGE.property("XInterface_topleft_enable").toBool();
-            const auto& sizeEnable = CONF_MANAGE.property("XInterface_size_enable").toBool();
+            const bool& customSizeEnable = CJ_GET("interface.custom_size_enable");
+            const bool& topleftEnable = CJ_GET("interface.topleft_enable");
+            const bool& sizeEnable = CJ_GET("interface.size_enable");
+
             if (customSizeEnable) {
 
-                if (topleftEnable) {
-                    m_node.p1 = QPoint(CONF_MANAGE.property("XInterface_custom_rect_left").toInt(), CONF_MANAGE.property("XInterface_custom_rect_top").toInt());
-                }
+                if (topleftEnable)
+                    m_node.p1 = QPoint(CJ_GET("interface.custom_rect_left").get<int>(), CJ_GET("interface.custom_rect_top").get<int>());
 
                 if (sizeEnable) {
-                    m_node.pickedRect = QRect(m_node.p1, QSize(CONF_MANAGE.property("XInterface_custom_rect_width").toInt(), CONF_MANAGE.property("XInterface_custom_rect_height").toInt()));
+                    m_node.pickedRect = QRect(m_node.p1, QSize(CJ_GET("interface.custom_rect_width").get<int>(), CJ_GET("interface.custom_rect_height").get<int>()));
                     m_node.absoluteRect = m_node.pickedRect;
                     m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
                 }
@@ -1565,7 +1563,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         if (isShow) {
             if (acrylicEffectEnable()) {
                 const auto& t = finishDrewPixmap().copy(QRect(pt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
-                const auto& adius = CONF_MANAGE.property("XOtherControl_blur_effect_adius").toInt();
+                const int& adius = CJ_GET("advanced.customize_ui_parameters.blur_effect_adius");
                 m_paintBar->setLowerBlurEffect(t, adius);  // 此函数会照成主线程的绘画，函数卡顿
             } else {
                 m_paintBar->disableBlurEffect();
@@ -1662,11 +1660,11 @@ void ScreenShot::keyReleaseEvent(QKeyEvent *e)
         // hide() 和 close() 区别: https://stackoverflow.com/questions/39407564
         // 销毁再不会有问题,由单例改写为 new 形式了。排查：1. tray 有关，改用 qpushbutton 和 close即可； 2.单例有关，该市建议修改为 new 指针的比较合适
     } else if (e->key() == Qt::Key_QuoteLeft || e->key() == Qt::Key_Agrave) {  // 重音符号键 ` 或者 波浪键 ~
-        const bool& showWindowsInfo = CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool();
-        CONF_MANAGE.setProperty("XOtherControl_show_develop_ui_log", !showWindowsInfo);
+        const bool& detialInfo = CJ_GET("advanced.customize_ui_parameters.show_windows_detial_info");
+        CJ_SET("advanced.customize_ui_parameters.show_windows_detial_info", !detialInfo);
     } else if (e->key() == Qt::Key_Tab) {
-        const bool& bMinLevelDepth = CONF_MANAGE.property("XOtherData_detection_min_windows_level_depth").toBool();
-        CONF_MANAGE.setProperty("XOtherData_detection_min_windows_level_depth", !bMinLevelDepth);
+        const bool& bMinLevelDepth = CJ_GET("advanced.customize_ui_parameters.auto_detection_windows_rect_top_level");
+        CJ_SET("advanced.customize_ui_parameters.auto_detection_windows_rect_top_level", !bMinLevelDepth);
         firstRectNodesAssignmentNode();
     }
 
@@ -1711,7 +1709,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     showCrosshair(pa, mapFromGlobal(QCursor::pos()), rect());
 
     // 以下部分都是 printf 一些调试参数的部分
-    if (CONF_MANAGE.property("XOtherControl_show_develop_ui_log").toBool()) {
+    if (CJ_GET("advanced.customize_ui_parameters.show_windows_detial_info").get<bool>()) {
         prinftWindowsRects(pa);
         printfDevelopProjectInfo(pa);
     }
@@ -1719,7 +1717,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
 void ScreenShot::closeEvent(QCloseEvent *e)
 {
-    CONF_MANAGE.onSyncToFile();
+    CJ.onSyncToFile();
     QWidget::closeEvent(e);
 }
 

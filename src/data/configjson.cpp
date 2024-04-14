@@ -61,71 +61,75 @@ ordered_json ConfigJson::defaultConfigJson()
                         {"custom_capture", "Shift+F6"}
                     }},
         {"tokens", {
-                       {"youdao_app_id", ""},
-                       {"youdao_secret_key", ""},
+                       {"youdao_app_id", "nz5WM7YTCl/G1PvcB1mmhA=="},
+                       {"youdao_secret_key", "/2UctgC3X+91xuLjZF/ktQOtgVzQQuH10QGNdi5jK0A="},
                        {"iamge_translate_from_youdao", "auto"},
                        {"iamge_translate_to_youdao", "zh-CHS"},
                        {"iamge_translate_from_baidu", "auto"},
                        {"iamge_translate_to_baidu", "zh"},
-                       {"baidu_api_key", ""},
-                       {"baidu_secret_key", ""},
+                       {"baidu_api_key", "hchdmuPxSnZTcE7FtykjqVPYi44RW+EsBHhXwiyFD1I="},
+                       {"baidu_secret_key", "bQvOX2TltlvdynBre01BKqYSHJ7MEhIviS1mMKgim3U="},
                        {"ocr_channel", "high"},
                        {"iamge_translate_channel", "baidu"}
                    }},
-        {"advanced_control", {
-                              {"blur_effect_adius", 20},
-                              {"highlight_iridescence", "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D"},
-                              {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"},
-                              {"show_develop_ui_log", false}
-                          }},
-        {"painter_context_data", {
-                                {"rect", false},
-                                {"ellipse", false},
-                                {"arrow", false},
-                                {"penciler", false},
-                                {"marker_pen", false},
-                                {"mosaic", false},
-                                {"text", false},
-                                {"serial", false},
-                                {"rectintType", 0},
-                                {"ellipseType", 0},
-                                {"arrowType", 0},
-                                {"pointType", 0},
-                                {"marker_penType", 0},
-                                {"mosaicType", 0},
-                                {"pixelatedMosaic", 10},
-                                {"smoothMosaic", 10},
-                                {"textBold", false},
-                                {"textItalic", false},
-                                {"textOutline", false},
-                                {"textStrikeout", false},
-                                {"textUnderline", false},
-                                  {"serial_info", {
-                                              {"type", 0},
-                                              {"number", 0},
-                                              {"letter", "a"}}},
-                                  {"font", {
-                                            {"family", "Microsoft YaHei"},
-                                            {"pointSize", 16},
-                                            {"bold", false},
-                                            {"italic", false},
-                                            {"underline", false},
-                                            {"strikeOut", false}}},
-                                  {"pen", {
-                                              {"color", "#ffff0000"},
-                                              {"width", 4},
-                                              {"style", "SolidLine"},
-                                              {"capStyle", "RoundCap"},
-                                              {"joinStyle", "RoundJoin"},}},
-                                  {"brush", {
-                                             {"color", "#ffff0000"},
-                                             {"style", "#SolidPattern"},
-                                             }}
-                                 }},
-        {"developer_data", {
-                            {"manual_save_image_dir", ""},              // 测试
-                            {"detection_min_windows_level_depth", true}
-                       }}
+        {"advanced", {
+                         {"customize_ui_parameters", {
+                                                         {"blur_effect_adius", 20},                             // 一二级工具栏的高斯模糊的半径
+                                                         {"manual_save_image_dir", ""},                         // 手动图片时，默认的打开弹窗的路径
+                                                         {"auto_detection_windows_rect_top_level", true},       // 自动检测窗口是否为顶级篡改窗口
+                                                         {"show_windows_detial_info", true},                    // 显示窗口的详细信息，如 hwnd,path,rect 等
+                                                         {"highlight_iridescence", "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D"},
+                                                         {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"}
+                                                     }},
+                         {"develpe_debug", {
+                                                  {"test", "empty"}
+                                              }
+                         }
+                     }}
+        // {"painter_context_data", {
+        //                         {"rect", false},
+        //                         {"ellipse", false},
+        //                         {"arrow", false},
+        //                         {"penciler", false},
+        //                         {"marker_pen", false},
+        //                         {"mosaic", false},
+        //                         {"text", false},
+        //                         {"serial", false},
+        //                         {"rectintType", 0},
+        //                         {"ellipseType", 0},
+        //                         {"arrowType", 0},
+        //                         {"pointType", 0},
+        //                         {"marker_penType", 0},
+        //                         {"mosaicType", 0},
+        //                         {"pixelatedMosaic", 10},
+        //                         {"smoothMosaic", 10},
+        //                         {"textBold", false},
+        //                         {"textItalic", false},
+        //                         {"textOutline", false},
+        //                         {"textStrikeout", false},
+        //                         {"textUnderline", false},
+        //                           {"serial_info", {
+        //                                       {"type", 0},
+        //                                       {"number", 0},
+        //                                       {"letter", "a"}}},
+        //                           {"font", {
+        //                                     {"family", "Microsoft YaHei"},
+        //                                     {"pointSize", 16},
+        //                                     {"bold", false},
+        //                                     {"italic", false},
+        //                                     {"underline", false},
+        //                                     {"strikeOut", false}}},
+        //                           {"pen", {
+        //                                       {"color", "#ffff0000"},
+        //                                       {"width", 4},
+        //                                       {"style", "SolidLine"},
+        //                                       {"capStyle", "RoundCap"},
+        //                                       {"joinStyle", "RoundJoin"},}},
+        //                           {"brush", {
+        //                                      {"color", "#ffff0000"},
+        //                                      {"style", "#SolidPattern"},
+        //                                      }}
+        //                          }},
     };
 
     QString jsonString = QString::fromStdString(j.dump());
@@ -133,10 +137,6 @@ ordered_json ConfigJson::defaultConfigJson()
     return j;
 }
 
-// void ConfigJson::initConfigJson()
-// {
-//     m_j = defaultConfigJson();
-// }
 
 void ConfigJson::readFromFile()
 {
@@ -174,6 +174,8 @@ void ConfigJson::initOutputDefaulValue()
     setKeyValue("output.config_path", qApp->applicationDirPath().toStdString());
     setKeyValue("output.quick_save_path", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first().toStdString());
     setKeyValue("output.auto_save_path", QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first().toStdString());
+
+    setKeyValue("advanced.customize_ui_parameters.manual_save_image_dir", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first().toStdString());
 }
 
 void ConfigJson::onSyncToFile()
@@ -313,7 +315,6 @@ void ContextData::cdReadFromFile()
 #define CJ_GET_CONTEXT_QSTR(pre, name) QString::fromStdString(CJ_GET_CONTEXT_OBJECT(pre, name).get<std::string>())
 
     // 一级工具栏的状态
-    rect = CJ.getKeyValue("painter_context_data.rect").get<bool>();
     CJ_GET_CONTEXT(rect).get<bool>();
     CJ_GET_CONTEXT(ellipse).get<bool>();
     CJ_GET_CONTEXT(arrow).get<bool>();
@@ -371,3 +372,9 @@ void ConfigJson::setJ(const std::string &key, const ordered_json &newJ)
 
 
 
+
+void ConfigJson::testInitConfigJson()
+{
+    m_j = defaultConfigJson();
+    writeToFile();
+}

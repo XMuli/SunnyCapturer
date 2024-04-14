@@ -87,7 +87,7 @@ void PinWidget::initUI()
 
 void PinWidget::initMenu()
 {
-    QStringList list = CONF_MANAGE.property("XGeneral_font").toString().split(",");
+    QStringList list = CJ_GET_QSTR("general.font").split(",");
     if (list.size() < 2) {
         list .clear();
 

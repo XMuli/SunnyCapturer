@@ -12,8 +12,6 @@
 #include <QNetworkAccessManager>
 #include <QPointer>
 #include <QEventLoop>
-#include "../../data/configmanager.h"
-#include "../../data/configjson.h"
 #include "../paint_bar/toolbar_level/paintbarhelper.h"
 
 // youdao API: https://ai.youdao.com/DOCSIRMA/html/trans/api/tpfy/index.html

@@ -75,7 +75,6 @@ int main(int argc, char *argv[])
 //    int* ptr = nullptr; // 尝试访问空指针
 //    *ptr = 42; // 这将导致崩溃
 
-
     // 创建系统信号量, 再尝试获取系统信号量，如果已经被其他实例持有，程序就退出, 判断是为了确保在多个进程同时启动时，只有一个进程能够继续执行。QSystemSemaphore用于创建系统信号量，如果系统信号量已经被其他实例持有（比如由于上一次程序异常退出导致信号量未被释放），则acquire函数会返回false，
     QSystemSemaphore systemSemaphore(uniqueKey, 1, QSystemSemaphore::Open);
     if (!systemSemaphore.acquire()) {
@@ -83,20 +82,17 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // CJ; //.defaultConfigJson();
-    CJ.initOutputDefaulValue();   // 设置默认缺省的一些路径
-    CJ.m_cd.cdReadFromFile();  // 恢复上次一二级菜单栏的状态
-//    cdWritToFile(CJ.m_cd);
-//    CJ.writeToFile();
+#if 1
+    CJ.initOutputDefaulValue();   // 完整的 m_j = 读取 .josn + 填充为空 path 的一些路径
+    CJ.writeToFile();             // 写入完整的 m_j
+    // CJ.m_cd.cdReadFromFile();  // 恢复上次一二级菜单栏的状态
+    // cdWritToFile(CJ.m_cd);     // 写入配置文件中
+#else
+    CJ.testInitConfigJson();      // 初始化且写入一份默认的 .json 文件
+#endif
 
-
-    CONF_MANAGE; //.writeToFile()
-    initPaintBarStatus(CONF_MANAGE.m_paintBarStatus);
     COMM.loadTranslation("");
-
     TRAY; // 启动托盘
-
-
 
     // 释放系统信号量
     systemSemaphore.release();

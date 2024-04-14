@@ -413,6 +413,10 @@ and specify -1 to let Sunny decide for you.</source>
         <source>Save</source>
         <translation>保存</translation>
     </message>
+    <message>
+        <source>Zoom: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>

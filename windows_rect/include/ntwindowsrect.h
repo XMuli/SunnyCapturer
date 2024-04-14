@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 #include "windowsrect_global.h"
-
 #pragma comment(lib, "dwmapi.lib")
 
 RECT  xrect2rect(const XRECT& rt);

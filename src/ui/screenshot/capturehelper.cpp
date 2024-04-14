@@ -28,6 +28,7 @@
 #include "xtextedit.h"
 #include "../paint_bar/toolbar_level/paintbarhelper.h"
 #include "../../../data/configmanager.h"
+#include "../../../data/configjson.h"
 
 CaptureHelper::CaptureHelper(QObject *parent)
     : QObject{parent}
@@ -693,7 +694,7 @@ void drawBorderDDE(QPainter &pa, const QRect &rt, int num)
 
 void drawBorder(QPainter &pa, const QRect &rt, int num)
 {
-    const auto& style  = CONF_MANAGE.property("XInterface_style").toString();
+    const auto& style  = CJ_GET_QSTR("interface.style");
     if (style == "Sunny") {
         drawBorderSunny(pa, rt);
     } else if (style == "MacOS") {
@@ -708,12 +709,12 @@ void drawBorder(QPainter &pa, const QRect &rt, int num)
 
 void drawCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt)
 {
-    const bool& bDraw = CONF_MANAGE.property("XInterface_crosshair_show").toBool();
+    const bool& bDraw = CJ_GET("interface.crosshair_show");
     if (!bDraw)  return;
 
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing, true);
-    pa.setPen(QPen(QColor(CONF_MANAGE.property("XInterface_crosshair").toString()), CONF_MANAGE.property("XInterface_crosshair_width").toInt()));
+    pa.setPen(QPen(QColor(CJ_GET_QSTR("interface.crosshair")), CJ_GET("interface.crosshair_width").get<int>()));
     pa.setBrush(Qt::NoBrush);
     const QLine l1(vdRt.left(), pt.y(), vdRt.right(), pt.y());
     const QLine l2(pt.x(), vdRt.top(), pt.x(), vdRt.bottom());

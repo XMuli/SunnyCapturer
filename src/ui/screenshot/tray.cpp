@@ -42,9 +42,9 @@ void Tray::init()
                                "Delay Capture: %3\n"
                                "Custom Capture: %4\n")
                            .arg(XPROJECT_NAME)
-                           .arg(CONF_MANAGE.property("XHotkeys_delay_capture").toString())
-                           .arg(CONF_MANAGE.property("XHotkeys_delay_capture").toString())
-                           .arg(CONF_MANAGE.property("custom_capture").toString());
+                           .arg(CJ_GET_QSTR("hotkeys.capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.delay_capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.custom_capture"));
     m_trayIcon->setToolTip(text);
     m_trayIcon->setContextMenu(m_trayMenu);
 
@@ -91,7 +91,7 @@ void Tray::loadCustomQss(const QString &path)
 
 void Tray::setAppFont(const QString &tFont)
 {
-    QStringList list = tFont.isEmpty() ? CONF_MANAGE.property("XGeneral_font").toString().split(",") : tFont.split(",");
+    QStringList list = tFont.isEmpty() ? CJ_GET_QSTR("general.font").split(",") : tFont.split(",");
     if (list.size() < 2) {
         list .clear();
 
@@ -114,22 +114,23 @@ void Tray::capture(const HotKeyType &type)
 
     qDebug() << "capture type:" << hotKeyTypeToString(type);
 
-    const QString szOrie = CONF_MANAGE.property("XInterface_orientation").toString();
+
+    const QString szOrie = CJ_GET_QSTR("interface.orientation");
     Qt::Orientation orie = Qt::Horizontal;
     if (szOrie == "Horizontal") orie = Qt::Horizontal;
     else if (szOrie == "Vertical") orie = Qt::Vertical;
     if (!m_scrnShot) m_scrnShot = new ScreenShot(type, orie);
-    const auto& customSizeEnable = CONF_MANAGE.property("XInterface_custom_size_enable").toBool();
-    const auto& delayEnable = CONF_MANAGE.property("XInterface_delay_enable").toBool();
-    const double& s = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
-    qDebug() << "------------>customSizeEnable:" << customSizeEnable << "delayEnable:" << delayEnable << "s:" << s;
+    const auto& customSizeEnable = CJ_GET("interface.custom_size_enable").get<bool>();
+    const auto& delayEnable = CJ_GET("interface.delay_enable").get<bool>();
+    const double& s = CJ_GET("interface.custom_dealy").get<double>();
+    // qDebug() << "------------>customSizeEnable:" << customSizeEnable << "delayEnable:" << delayEnable << "s:" << s;
 
     auto delayAndCustomFunction = [this, &customSizeEnable, &delayEnable, &s]() {
 
         if (customSizeEnable && delayEnable) {
             QScreen* scrn = qGuiApp->screenAt(QCursor::pos());
             if (!scrn) scrn = qGuiApp->primaryScreen();
-            m_remainingSeconds = CONF_MANAGE.property("XInterface_custom_dealy").toDouble();
+            m_remainingSeconds = CJ_GET("interface.custom_dealy").get<double>();
             m_countdownTips->setText(QString::number(m_remainingSeconds));
             m_countdownTips->move(scrn->geometry().center() - QPoint(m_countdownTips->width() / 2, m_countdownTips->height() / 2));
             m_countdownTips->show();
@@ -230,5 +231,5 @@ Tray::~Tray()
     if (m_setting) m_setting->deleteLater();
     if (m_trayMenu) m_trayMenu->deleteLater();
     if (m_trayIcon) m_trayIcon->deleteLater();
-    CONF_MANAGE.onSyncToFile();
+    CJ.onSyncToFile();
 }

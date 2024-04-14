@@ -14,9 +14,9 @@
 
 Communication::Communication(QObject *parent)
     : QObject(parent)
-    , m_hkCapture(new QHotkey(CONF_MANAGE.property("XHotkeys_capture").toString(), true, qApp))   //The hotkey will be automatically registered
-    , m_hkDelayCapture(new QHotkey(CONF_MANAGE.property("XHotkeys_delay_capture").toString(), true, qApp))
-    , m_hkCustiomCapture(new QHotkey(CONF_MANAGE.property("custom_capture").toString(), true, qApp))
+    , m_hkCapture(new QHotkey(CJ_GET_QSTR("hotkeys.capture"), true, qApp))   //The hotkey will be automatically registered
+    , m_hkDelayCapture(new QHotkey(CJ_GET_QSTR("hotkeys.delay_capture"), true, qApp))
+    , m_hkCustiomCapture(new QHotkey(CJ_GET_QSTR("hotkeys.custom_capture"), true, qApp))
 {
     init();
 }
@@ -89,7 +89,7 @@ void Communication::setAppFont(const QString &font)
 
 void Communication::loadTranslation(const QString &language)
 {
-    QString temp = language.isEmpty() ? CONF_MANAGE.property("XGeneral_language").toString() : language; //language.isEmpty() ? QLocale::system().name() : t;
+    QString temp = language.isEmpty() ? CJ_GET_QSTR("general.language") : language; //language.isEmpty() ? QLocale::system().name() : t;
 
     // 创建 QTranslator 对象
     static QTranslator* translator = nullptr;
@@ -105,8 +105,7 @@ void Communication::loadTranslation(const QString &language)
     if (translator->load(qmPath)) {  // 加载翻译文件
         qApp->installTranslator(translator);
         emit COMM.sigLanguageChange(qmName);
-
-        CONF_MANAGE.setProperty("XGeneral_language", temp);
+        CJ_SET("general.language", temp.toStdString());
     }
 }
 

@@ -145,8 +145,6 @@ void SideSettingUI::onBtnHintClicked(bool checked)
 
 void SideSettingUI::closeEvent(QCloseEvent *e)
 {
-    CONF_MANAGE.onSyncToFile();
-
     CJ.onSyncToFile();
     QWidget::closeEvent(e);
 }

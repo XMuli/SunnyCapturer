@@ -55,64 +55,19 @@
         "baidu_api_key": "hchdmuPxSnZTcE7FtykjqVPYi44RW+EsBHhXwiyFD1I=",
         "baidu_secret_key": "bQvOX2TltlvdynBre01BKqYSHJ7MEhIviS1mMKgim3U=",
         "ocr_channel": "high",
-        "iamge_translate_channel": "baidu",
-		"advanced_ocr_baidu_align_rang": 5
+        "iamge_translate_channel": "baidu"
     },
-    "advanced_control": {
-        "blur_effect_adius": 20,
-        "highlight_iridescence": "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D",
-        "crosshair_iridescence": "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7",
-        "show_develop_ui_log": false
-    },
-    "painter_context_data": {
-        "rect": false,
-        "ellipse": false,
-        "arrow": false,
-        "penciler": false,
-        "marker_pen": false,
-        "mosaic": false,
-        "text": false,
-        "serial": false,
-        "rectintType": 0,
-        "ellipseType": 0,
-        "arrowType": 0,
-        "pointType": 0,
-        "marker_penType": 0,
-        "mosaicType": 0,
-        "pixelatedMosaic": 10,
-        "smoothMosaic": 10,
-        "textBold": false,
-        "textItalic": false,
-        "textOutline": false,
-        "textStrikeout": false,
-        "textUnderline": false,
-        "serial_info": {
-            "type": 0,
-            "number": 0,
-            "letter": "a"
+    "advanced": {
+        "customize_ui_parameters": {
+            "blur_effect_adius": 20,
+            "manual_save_image_dir": "",
+            "auto_detection_windows_rect_top_level": true,
+            "show_windows_detial_info": true,
+            "highlight_iridescence": "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D",
+            "crosshair_iridescence": "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"
         },
-        "font": {
-            "family": "Microsoft YaHei",
-            "pointSize": 16,
-            "bold": false,
-            "italic": false,
-            "underline": false,
-            "strikeOut": false
-        },
-        "pen": {
-            "color": "#ffff0000",
-            "width": 4,
-            "style": "SolidLine",
-            "capStyle": "RoundCap",
-            "joinStyle": "RoundJoin"
-        },
-        "brush": {
-            "color": "#ffff0000",
-            "style": "#SolidPattern"
+        "develpe_debug": {
+            "test": "empty"
         }
-    },
-    "developer_data": {
-        "manual_save_image_dir": "",
-        "detection_min_windows_level_depth": true
     }
 }
