@@ -1,17 +1,8 @@
 ﻿#include "ntwindowsrect.h"
 #include <psapi.h>
 
-
-
-
 static std::vector<RectNode> g_rectNodes;
-
-// 自定义的一些过滤
-bool WindowsRectFilter(HWND hwnd)
-{
-    return false;
-}
-
+static HWND                  g_filterSelfHwnd;   //需要过滤掉自身体的句柄
 
 BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
 {
@@ -35,7 +26,7 @@ BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
     node.rect = rect2xrect(rect);
 
     if (IsWindowVisible(hwnd) // && !isSystemsettingsMinAndTaskbar(hwnd)    // 子窗口遍历，改动点
-        && PtInRect(&rect, pt) && node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
+        && PtInRect(&rect, pt) && g_filterSelfHwnd != hwnd) { // 仅仅选中当前的 pt 的所在窗口
         g_rectNodes.push_back(node);
         EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
         return FALSE;
@@ -74,12 +65,14 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
     node.exeName = windowExeName(node.procPath);
 
     RECT rect;
+    #if defined(_MSC_VER)
     // [方法一，推荐]获取真实的边框矩形，不包含阴影
-    DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
-    node.rect = rect2xrect(rect);
-
+        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
+    #elif defined(__MINGW32__)
     // [方法二] 获取窗口矩形尺寸（包括标题栏+四周阴影）
-    // GetWindowRect(hwnd, &rect);
+        GetWindowRect(hwnd, &rect);
+    #endif
+    node.rect = rect2xrect(rect);
 
     // [方法二] 获取客户区域坐标（不含标题栏+四周阴影）
     // RECT clientRect;
@@ -87,8 +80,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
     // int titleBarHeight = GetSystemMetrics(SM_CYCAPTION); // 获取标题栏的高度
 
     if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)  // 这一行必须保留，和下面组成 且
-        && PtInRect(&rect, pt) && node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
-
+        && PtInRect(&rect, pt) && g_filterSelfHwnd != hwnd) { // 仅仅选中当前的 pt 的所在窗口
         g_rectNodes.push_back(node);
 
         // const int x = rect.left;
@@ -99,6 +91,13 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         // std::wcout << L"--->idx:" << idx++ << L"  rect(" << x << L", " << y << L", " << width << L" * " << height << L")"
         //            << L" hwnd[" << hwnd << L"] title:[" << title << L"]"
         //            << L" node.ntPocessId[" << node.ntPocessId << L" procPath[" << node.procPath << L"] exeName:[" << node.exeName << L"]" << std::endl;
+
+
+        // [另外一个方法，已经尝试失败]获取光标当前位置, https://ningto.com/post/edit/1D18B9EAD804A0EA0E0DAFA392FD8756
+        // POINT relativePt = pt;
+        // ScreenToClient(hwnd, &relativePt);  // 转化为相对坐标
+        // HWND childHwnd1 = ChildWindowFromPointEx(hwnd, relativePt, CWP_SKIPINVISIBLE|CWP_SKIPTRANSPARENT);  // 获取下一个子窗口
+        // HWND childHwnd2 = RealChildWindowFromPoint(hwnd, relativePt);  // 尝试另外一个;
 
         EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
         return FALSE;    // "找到了指定的篡改口"只需命中一次
@@ -119,112 +118,62 @@ RECT xrect2rect(const XRECT &rt)
     return rect;
 }
 
-#include <windowsx.h>
-
-
-
-BOOL CALLBACK EnumChildRealTimeProc(HWND hwnd, LPARAM lParam)
-{
-    RectNode node;
-    RECT rect;
-    GetWindowRect(hwnd, &rect);
-
-    POINT pt;
-    pt.x = ((int)(short)LOWORD(lParam));
-    pt.y = ((int)(short)HIWORD(lParam));
-    if(!PtInRect(&rect, pt)) return FALSE;
-    node.rect = rect2xrect(rect);
-
-    wchar_t title[MAX_PATH] = L"";
-    GetWindowText(hwnd, title, MAX_PATH);
-    node.title = title;
-
-    GetWindowThreadProcessId(hwnd, &node.ntPocessId);
-    node.procPath = windowPathFromProcessID(node.ntPocessId);
-
-    if (node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
-        // // 获取光标当前位置
-        POINT relativePt = pt;
-        ScreenToClient(hwnd, &relativePt);  // 转化为相对坐标
-        HWND childHwnd1 = ChildWindowFromPointEx(hwnd, relativePt, CWP_SKIPINVISIBLE|CWP_SKIPTRANSPARENT);  // 获取下一个子窗口
-        HWND childHwnd2 = RealChildWindowFromPoint(hwnd, relativePt);  // 尝试另外一个;
-
-        g_rectNodes.push_back(node);
-        EnumChildWindows(childHwnd1, EnumChildRealTimeProc, lParam);
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-BOOL CALLBACK EnumWindowsRealTimeProc(HWND hwnd, LPARAM lParam)
-{
-    RectNode node;
-    RECT rect;
-    POINT pt;
-    pt.x = ((int)(short)LOWORD(lParam));
-    pt.y = ((int)(short)HIWORD(lParam));
-
-    wchar_t title[MAX_PATH] = L"";
-    GetWindowText(hwnd, title, MAX_PATH);
-    node.title = title;
-
-    GetWindowThreadProcessId(hwnd, &node.ntPocessId);
-    node.procPath = windowPathFromProcessID(node.ntPocessId);
-
-    // 调试-卡住断点
-    size_t found1 = node.title.find(L"Notepad++");
-    if (found1 != std::wstring::npos) {
-        int a = 1;
-        int c = a +2;
-    }
-
-    if (hwnd == HWND(0x310e58)) {
-        int b = 2;
-    }
-
-    if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)) {
-        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT));
-
-        GetWindowThreadProcessId(hwnd, &node.ntPocessId);
-        node.procPath = windowPathFromProcessID(node.ntPocessId);
-
-        node.exeName = windowExeName(node.procPath);
-        node.rect = rect2xrect(rect);
-
-        if (PtInRect(&rect, pt) && node.title != L"Sunny") { // 仅仅选中当前的 pt 的所在窗口
-            node.ntHWnd = hwnd;
-
-            g_rectNodes.push_back(node);
-            // // 获取光标当前位置
-            POINT relativePt = pt;
-            ScreenToClient(hwnd, &relativePt);  // 转化为相对坐标
-            HWND childHwnd1 = ChildWindowFromPointEx(hwnd, relativePt, CWP_SKIPINVISIBLE|CWP_SKIPTRANSPARENT);  // 获取下一个子窗口
-            HWND childHwnd2 = RealChildWindowFromPoint(hwnd, relativePt);  // 尝试另外一个;
-
-            EnumChildWindows(childHwnd2, EnumChildRealTimeProc, lParam);
-        }
-    }
-
-    // GetWindowRect(hwnd, &rect);
-    // if(!PtInRect(&rect, pt)) return FALSE;
-    // node.rect = rect2xrect(rect);
-
-
-    return TRUE;
-}
-
-void enumWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos)
+void enumWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos, const CrossHwnd &selfHwnd)
 {
     g_rectNodes.clear();
+    g_filterSelfHwnd = HWND(selfHwnd.ntHWnd);
     EnumWindows(EnumWindowsProc, MAKELPARAM(pos.x, pos.y));
     rectNodes = g_rectNodes;
 }
 
-void getWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos)
+// 还有一种更简单的方法，代码很简单，我后来没有用这种方法的原因是，某些区域上面的方法能框选出来而这种方法不行，不知道问题出在哪里？？？
+bool getSmallestWindowFromCursor(const CrossHwnd &selfHwnd)
+{
+    HWND hwnd = NULL;
+    POINT pt;
+
+    while (true) {
+        // 获得当前鼠标位置
+        ::GetCursorPos(&pt);
+        hwnd = ::ChildWindowFromPointEx(::GetDesktopWindow(), pt, CWP_SKIPDISABLED | CWP_SKIPINVISIBLE);  /// while 不能解决当前问题， hwnd 还是下一个窗口
+
+        // 如果找到的窗口是 Sunny 窗口，或者是要过滤的自身窗口，则继续寻找下一个窗口
+        if (hwnd == selfHwnd.ntHWnd || hwnd == reinterpret_cast<HWND>(0x001506FA))
+            continue;
+
+        break;
+    }
+
+    // 如果找到了合适的窗口，则进行后续操作
+    if (hwnd) {
+        HWND temp_hwnd = hwnd;
+        while (true) {
+            ::GetCursorPos(&pt); // 更新鼠标位置
+            ::ScreenToClient(temp_hwnd, &pt);
+            temp_hwnd = ::ChildWindowFromPointEx(temp_hwnd, pt, CWP_SKIPINVISIBLE);
+            if (temp_hwnd == NULL || temp_hwnd == hwnd) {
+                break;
+            }
+            hwnd = temp_hwnd;
+        }
+        RECT r;
+        ::GetWindowRect(hwnd, &r);
+
+        RectNode node;
+        node.rect = rect2xrect(r);
+        node.ntHWnd = hwnd;
+        g_rectNodes.push_back(node);
+
+        return true;
+    }
+    return false;
+}
+
+void getWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT &pos, const CrossHwnd &selfHwnd)
 {
     g_rectNodes.clear();
-    EnumWindows(EnumWindowsRealTimeProc, MAKELPARAM(pos.x, pos.y));
+    // EnumWindows(EnumWindowsRealTimeProc, MAKELPARAM(pos.x, pos.y));
+    getSmallestWindowFromCursor(selfHwnd);
     rectNodes = g_rectNodes;
 }
 
@@ -275,20 +224,6 @@ std::wstring windowExeName(std::wstring path)
     if (pos == -1) return L"";
 
     return path.substr(pos + 1);
-}
-
-int GetWindowShadowWidth(HWND hwnd)
-{
-    RECT rcExtendedFrameBounds;
-    HRESULT hr = DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rcExtendedFrameBounds, sizeof(RECT));
-    if (SUCCEEDED(hr)) {
-        // 计算阴影宽度
-        int shadowWidth = rcExtendedFrameBounds.right - rcExtendedFrameBounds.left - (GetSystemMetrics(SM_CXSIZEFRAME) * 2);
-        return shadowWidth;
-    } else {
-        // 获取失败
-        return -1;
-    }
 }
 
 bool isTaskbarWindow(HWND hWnd)

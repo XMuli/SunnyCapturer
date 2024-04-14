@@ -1426,7 +1426,19 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
                 m_actionType = ActionType::AT_picking_custom_rect;
             }
         } else {
-            enumWindowsRect(m_rectNodes);
+
+            // 获取截图主窗口的自身 hwnd
+            CrossHwnd osHwnd;
+            #if defined(Q_OS_WIN)
+                HWND hWnd = reinterpret_cast<HWND>(winId());
+                osHwnd.ntHWnd = hWnd;
+            #elif defined(Q_OS_LINUX)
+            #elif defined(Q_OS_MAC)
+            #endif
+
+            // 获取主窗口句柄
+
+            enumWindowsRect(m_rectNodes, osHwnd);
             rectNodesMapFromGlobal();
             firstRectNodesAssignmentNode();
         }

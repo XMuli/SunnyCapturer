@@ -29,6 +29,14 @@ struct XRECT
 };
 
 
+// 跨平台的句柄
+struct CrossHwnd
+{
+    void* ntHWnd = NULL;         // NT OS: HWND
+    unsigned long x11HWnd = 0;      // Linux OS; typedef XID Window;
+};
+
+
 struct RectNode
 {
     XRECT rect;                   // 显示器坐标

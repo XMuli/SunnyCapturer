@@ -11,21 +11,21 @@
 
 
 
-bool enumWindowsRect(std::vector<RectNode> &rectNodes)
+bool enumWindowsRect(std::vector<RectNode> &rectNodes, const CrossHwnd &crossHwnd)
 {
     rectNodes.clear();
 
 #ifdef _WIN32
 
     POINT pos;
+#if 1
     GetCursorPos(&pos);
-    enumWindowsRectInfo(rectNodes, pos);
-
-#if 0
+    enumWindowsRectInfo(rectNodes, pos, crossHwnd);
+#else
     // 另外一个思路: WindowFromPoint, ChildWindowFromPoint, ChildWindowFromPointEx(最有可能得函数),RealChildWindowFromPoint
     // 另外，有些截图软件能够识别到比窗口粒度更小的元素，比如Toolbar控件上的每个Item，他们用的应该是MSAA(Microsoft Active Accessibility),标准控件一般都支持该接口。
     // https://www.cnblogs.com/findumars/p/5786055.html
-    // getWindowsRectInfo(rectNodes, pos);
+    getWindowsRectInfo(rectNodes, pos, crossHwnd);
 #endif
 
 #elif __linux__
