@@ -104,7 +104,7 @@
     <name>ImageTranslateDlg</name>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Image Translation</source>
@@ -140,10 +140,6 @@
     <message>
         <source>Highlight:</source>
         <translation>活动色:</translation>
-    </message>
-    <message>
-        <source>Custom size</source>
-        <translation>自定义大小截图</translation>
     </message>
     <message>
         <source>,</source>
@@ -192,6 +188,10 @@
     <message>
         <source>Orientation:</source>
         <translation>工具栏的方位:</translation>
+    </message>
+    <message>
+        <source>Custom capture size</source>
+        <translation>自定义截图的大小</translation>
     </message>
 </context>
 <context>
@@ -415,7 +415,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Zoom: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>缩放: %1%</translation>
     </message>
 </context>
 <context>

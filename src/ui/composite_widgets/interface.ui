@@ -212,7 +212,7 @@
       <item>
        <widget class="QGroupBox" name="gbCustomSizeEnable">
         <property name="title">
-         <string>Custom size</string>
+         <string>Custom capture size</string>
         </property>
         <property name="checkable">
          <bool>true</bool>

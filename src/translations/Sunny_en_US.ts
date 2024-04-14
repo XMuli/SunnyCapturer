@@ -142,10 +142,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Custom size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>,</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,6 +187,10 @@
     </message>
     <message>
         <source>Orientation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom capture size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

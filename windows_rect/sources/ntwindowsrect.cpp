@@ -25,7 +25,7 @@ BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam)
     GetWindowRect(hwnd, &rect);  // 子窗口遍历，改动点
     node.rect = rect2xrect(rect);
 
-    if (IsWindowVisible(hwnd) // && !isSystemsettingsMinAndTaskbar(hwnd)    // 子窗口遍历，改动点
+    if (IsWindowVisible(hwnd) // && !filterSpecialWindows(hwnd, node)    // 子窗口遍历，改动点
         && PtInRect(&rect, pt) && g_filterSelfHwnd != hwnd) { // 仅仅选中当前的 pt 的所在窗口
         g_rectNodes.push_back(node);
         EnumChildWindows(hwnd, EnumChildWindowsProc, lParam);
@@ -79,7 +79,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
     // GetClientRect(hwnd, &clientRect);
     // int titleBarHeight = GetSystemMetrics(SM_CYCAPTION); // 获取标题栏的高度
 
-    if (IsWindowVisible(hwnd) && !isSystemsettingsMinAndTaskbar(hwnd)  // 这一行必须保留，和下面组成 且
+    if (IsWindowVisible(hwnd) && !filterSpecialWindows(hwnd, node)  // 这一行必须保留，和下面组成 且
         && PtInRect(&rect, pt) && g_filterSelfHwnd != hwnd) { // 仅仅选中当前的 pt 的所在窗口
         g_rectNodes.push_back(node);
 
@@ -250,17 +250,21 @@ bool isWindowMaximized(HWND hWnd) {
 }
 
 
-// [特例]systemsettings.exe 即 Windows 10 22H2 的 "设置"窗口; 其处于最小化时候，遍历窗口函数可以捕捉到这个实际不可见的窗口，在屏幕左上角区域
-// 可以通过 Spy 软件来捕捉和确认， 左上的"显示系统活动窗口 - 任务栏窗口 - 找名字为 `Windows.UI.Core.CoreWindow` 的项", 通过底部的句柄箭头跳转即可查看详情
-bool isSystemsettingsMinAndTaskbar(HWND hWnd)
+bool filterSpecialWindows(HWND hWnd, const RectNode& node)
 {
+    // [特例1] systemsettings.exe 即 Windows 10 22H2 的 "设置"窗口; 其处于最小化时候，遍历窗口函数可以捕捉到这个实际不可见的窗口，在屏幕左上角区域
+    // 可以通过 Spy 软件来捕捉和确认， 左上的"显示系统活动窗口 - 任务栏窗口 - 找名字为 `Windows.UI.Core.CoreWindow` 的项", 通过底部的句柄箭头跳转即可查看详情
     // 获取窗口的类名
     wchar_t className[MAX_PATH] = L"";
     GetClassName(hWnd, className, MAX_PATH);
     std::wstring str = className;
     bool bClassName = (str == L"Windows.UI.Core.CoreWindow");
-    bool b1 = isTaskbarWindow(hWnd);
-    return isTaskbarWindow(hWnd) && bClassName;
+    const bool& isSystemsettings = isTaskbarWindow(hWnd) && bClassName;
+
+    // [特例2] ApplicationFrameHost.exe, 会出现在屏幕的左下角
+    const bool& isSystemApplicationFrameHost = node.exeName == std::wstring(L"ApplicationFrameHost.exe");
+
+    return isSystemsettings || isSystemApplicationFrameHost;
 }
 
 

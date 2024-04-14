@@ -121,27 +121,27 @@ void Interface::onBtnResetClicked(bool checked)
     const ordered_json& j = CJ.defaultConfigJson();
     CJ.setJ("interface", j["interface"]);
 
-    // ui->cbbStyle->setCurrentText(CJ_GET_QSTR("interface.style"));
-    // ui->cbbOrientation->setCurrentText(CJ_GET_QSTR("interface.orientation"));
-    // ui->cpHighlight->setCurrPickedColor(CJ_GET_QSTR("interface.highlight"));
-    // ui->cpCrosshair->setCurrPickedColor(CJ_GET_QSTR("interface.crosshair"));
-    // ui->sbBorderWidth->setValue(CJ_GET("interface.border_width"));
-    // ui->sbCrosshairWidth->setValue(CJ_GET("interface.crosshair_width"));
+    ui->cbbStyle->setCurrentText(CJ_GET_QSTR("interface.style"));
+    ui->cbbOrientation->setCurrentText(CJ_GET_QSTR("interface.orientation"));
+    ui->cpHighlight->setCurrPickedColor(CJ_GET_QSTR("interface.highlight"));
+    ui->cpCrosshair->setCurrPickedColor(CJ_GET_QSTR("interface.crosshair"));
+    ui->sbBorderWidth->setValue(CJ_GET("interface.border_width"));
+    ui->sbCrosshairWidth->setValue(CJ_GET("interface.crosshair_width"));
 
-    // ui->gbCustomSizeEnable->setChecked(CJ_GET("interface.custom_size_enable").get<bool>());
-    // ui->cbTopLeft->setChecked(CJ_GET("interface.topleft_enable").get<bool>());
-    // ui->cbSize->setChecked(CJ_GET("interface.size_enable").get<bool>());
-    // ui->cbDelay->setChecked(CJ_GET("interface.delay_enable").get<bool>());
-    // ui->sbLeft->setValue(CJ_GET("interface.custom_rect_left"));
-    // ui->sbTop->setValue(CJ_GET("interface.custom_rect_top"));
-    // ui->sbWidth->setValue(CJ_GET("interface.custom_rect_width"));
-    // ui->sbHeight->setValue(CJ_GET("interface.custom_rect_height"));
-    // ui->dsbDelay->setValue(CJ_GET("interface.custom_dealy").get<double>());
+    ui->gbCustomSizeEnable->setChecked(CJ_GET("interface.custom_size_enable").get<bool>());
+    ui->cbTopLeft->setChecked(CJ_GET("interface.topleft_enable").get<bool>());
+    ui->cbSize->setChecked(CJ_GET("interface.size_enable").get<bool>());
+    ui->cbDelay->setChecked(CJ_GET("interface.delay_enable").get<bool>());
+    ui->sbLeft->setValue(CJ_GET("interface.custom_rect_left"));
+    ui->sbTop->setValue(CJ_GET("interface.custom_rect_top"));
+    ui->sbWidth->setValue(CJ_GET("interface.custom_rect_width"));
+    ui->sbHeight->setValue(CJ_GET("interface.custom_rect_height"));
+    ui->dsbDelay->setValue(CJ_GET("interface.custom_dealy").get<double>());
 
-    // ui->cbAcrylicEffect->setChecked(CJ_GET("interface.acrylic_effect").get<bool>());
-    // ui->cbAutoDetectWindows->setChecked(CJ_GET("interface.auto_detect_windows").get<bool>());
-    // ui->cbAutoCopyToClipboard->setChecked(CJ_GET("interface.auto_copy_to_clipbaoard").get<bool>());
-    // ui->cbCrosshairShow->setChecked(CJ_GET("interface.crosshair_show").get<bool>());
+    ui->cbAcrylicEffect->setChecked(CJ_GET("interface.acrylic_effect").get<bool>());
+    ui->cbAutoDetectWindows->setChecked(CJ_GET("interface.auto_detect_windows").get<bool>());
+    ui->cbAutoCopyToClipboard->setChecked(CJ_GET("interface.auto_copy_to_clipbaoard").get<bool>());
+    ui->cbCrosshairShow->setChecked(CJ_GET("interface.crosshair_show").get<bool>());
 }
 
 void Interface::onLanguageChange(const QString qmName)

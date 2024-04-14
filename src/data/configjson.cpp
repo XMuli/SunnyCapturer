@@ -132,8 +132,8 @@ ordered_json ConfigJson::defaultConfigJson()
         //                          }},
     };
 
-    QString jsonString = QString::fromStdString(j.dump());
-    qDebug().noquote() << "ordered_json j:" << jsonString;
+    // QString jsonString = QString::fromStdString(j.dump());
+    // qDebug().noquote() << "ordered_json j:" << jsonString;
     return j;
 }
 

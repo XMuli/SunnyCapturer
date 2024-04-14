@@ -21,6 +21,6 @@ void getWindowsRectInfo(std::vector<RectNode> &rectNodes, const POINT& pos, cons
 bool isTaskbarWindow(HWND hWnd);
 bool isWindowMinimized(HWND hWnd);
 bool isWindowMaximized(HWND hWnd);
-bool isSystemsettingsMinAndTaskbar(HWND hWnd);  // [特例] 屏蔽 systemsettings.exe 即 Windows 10 22H2 的 "设置"窗口最小化时候
+bool filterSpecialWindows(HWND hWnd, const RectNode &node);  // [特例] 屏蔽 systemsettings.exe 即 Windows 10 22H2 的 "设置"窗口最小化时候
 
 #endif // NTWINDOWSRECT_H
