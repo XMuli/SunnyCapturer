@@ -45,15 +45,14 @@ void PaintToolBar::initUI()
 void PaintToolBar::initBtns()
 {
     m_btns.reserve(13);
-    m_btns.emplace_back(nullptr, PaintType::PT_rectangle, "rectangle", tr("Rectangle"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_ellipse, "ellipse", tr("Ellipse"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_arrow, "arrow", tr("Arrow"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_pencil, "pencil", tr("Pencil"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_marker_pen, "marker_pen", tr("Marker pen"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_mosaic, "mosaic", tr("Mosaic/Blur"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_text, "text", tr("Text"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial"), true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin to screen") + " (Ctrl + P)", false, true);
+    m_btns.emplace_back(nullptr, PaintType::PT_rectangle, "rectangle", tr("Rectangle") + " (Ctrl + 1)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_ellipse, "ellipse", tr("Ellipse") + " (Ctrl + 2)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_arrow, "arrow", tr("Arrow") + " (Ctrl + 3)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_pencil, "pencil", tr("Pencil") + " (Ctrl + 4)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_marker_pen, "marker_pen", tr("Marker pen")  + " (Ctrl + 5)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_mosaic, "mosaic", tr("Mosaic/Blur")  + " (Ctrl + 6)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_text, "text", tr("Text")  + " (Ctrl + 7)", true, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial") + " (Ctrl + 8)", true, true);
 
     m_btns.emplace_back(nullptr, PaintType::PT_img_translate, "translate", tr("translate") + " (Ctrl + T)", true, false);
     m_btns.emplace_back(nullptr, PaintType::PT_ocr, "ocr_text", tr("OCR") + " (Ctrl + O)", true, true);
@@ -62,12 +61,15 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_redo, "redo", tr("Redo") + " (Ctrl + Y)", false, true);
 
     m_btns.emplace_back(nullptr, PaintType::PT_cancel, "cancel", tr("Cancel Capture") + " (Esc)", false, false);
+    m_btns.emplace_back(nullptr, PaintType::PT_pin, "pin", tr("Pin to screen") + " (Ctrl + P)", false, false);
     m_btns.emplace_back(nullptr, PaintType::PT_save, "save", tr("Save to file") + " (Ctrl + S)", false, false);
     m_btns.emplace_back(nullptr, PaintType::PT_finish, "copy", tr("copy to clipboard") + " (Ctrl + C)", false, false);
 
+    // fix: it.btn->setChecked(true) 解决使用快捷键触发不会生效的bug
     #define CREATOR_QSHORTCUT(_type, _keySequence) \
-        if (it.type == _type) { new QShortcut(QKeySequence(_keySequence), this, [&it]() { \
-    it.btn->released(); \
+    if (it.type == _type) { new QShortcut(QKeySequence(_keySequence), this, [&it]() { \
+        it.btn->setChecked(true); \
+        it.btn->released(); \
     }); }
 
     for (int i = 0; i < m_btns.size(); ++i) {
@@ -87,17 +89,15 @@ void PaintToolBar::initBtns()
         tb->setIconSize(size);
         tb->setFixedSize(size);
         tb->setToolTip(it.tooltip);
+        tb->setStyleSheet(QString("QToolTip { background-color: %1; border: 1px solid black; }").arg(tb->palette().color(QPalette::Window).name()));
         tb->setCheckable(it.bCheckable);
-//        tb->show();  // 提前显示的话，添加到 ScreenShot 中，会显示批量 show 的时候被生成捕捉看到阴影，造成 bug
+        // tb->show();  // fix: 提前显示的话，添加到 ScreenShot 中，会显示批量 show 的时候被生成捕捉看到阴影，造成 bug
 
         m_layout->addWidget(tb, Qt::AlignCenter);
         if (it.bAddSpacer) addSpacerLine(m_layout, m_orie);
         if (it.type == PaintType::PT_undo || it.type == PaintType::PT_redo) tb->setDisabled(true);
 
         connect(tb, &QToolButton::released, this, &PaintToolBar::onPaintBtnReleased);
-
-
-#if 0
         CREATOR_QSHORTCUT(PaintType::PT_rectangle, Qt::CTRL + Qt::Key_1)
         CREATOR_QSHORTCUT(PaintType::PT_ellipse, Qt::CTRL + Qt::Key_2)
         CREATOR_QSHORTCUT(PaintType::PT_arrow, Qt::CTRL + Qt::Key_3)
@@ -106,7 +106,7 @@ void PaintToolBar::initBtns()
         CREATOR_QSHORTCUT(PaintType::PT_mosaic, Qt::CTRL + Qt::Key_6)
         CREATOR_QSHORTCUT(PaintType::PT_text, Qt::CTRL + Qt::Key_7)
         CREATOR_QSHORTCUT(PaintType::PT_serial, Qt::CTRL + Qt::Key_8)
-#endif
+
         CREATOR_QSHORTCUT(PaintType::PT_pin, Qt::CTRL + Qt::Key_P)
         CREATOR_QSHORTCUT(PaintType::PT_img_translate, Qt::CTRL + Qt::Key_T)
         CREATOR_QSHORTCUT(PaintType::PT_ocr, Qt::CTRL + Qt::Key_O)

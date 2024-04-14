@@ -56,7 +56,7 @@ private:
     QBoxLayout*                   m_layout;
     Qt::Orientation               m_orie;
     ImgTranslateData              m_imgTransDate;
-    OcrData                   m_ocrTextDate;
+    OcrData                       m_ocrTextDate;
 
     QPointer<AbsBtnsCtrl>         m_rectCtrl;                      // 矩形
     QPointer<AbsBtnsCtrl>         m_ellipseCtrl;                   // 圆形

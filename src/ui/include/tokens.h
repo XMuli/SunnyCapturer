@@ -32,6 +32,10 @@ private slots:
     void on_leBdApiKey_textChanged(const QString &arg1);
     void on_leBdSecretKey_textChanged(const QString &arg1);
 
+    void on_btnNext0_released();
+
+    void on_btnNext1_released();
+
 public slots:
     void onBtnResetClicked(bool checked = false);
 

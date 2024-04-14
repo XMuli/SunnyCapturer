@@ -25,7 +25,6 @@ void Pin::on_sbOpacity_valueChanged(int arg1)
     CJ_SET("pin.opacity", arg1);
 }
 
-
 void Pin::on_sbMaxSize_valueChanged(int arg1)
 {
     CJ_SET("pin.maximum_size", arg1);

@@ -115,4 +115,13 @@ void Tokens::onBtnResetClicked(bool checked)
 }
 
 
+void Tokens::on_btnNext0_released()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void Tokens::on_btnNext1_released()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
 
