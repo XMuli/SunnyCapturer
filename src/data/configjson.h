@@ -59,6 +59,9 @@ struct ContextData
     QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
 
+    // 其它特殊
+    bool isShowCollimatorCursor = false;
+
     void cdReadFromFile();
 };
 

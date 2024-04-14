@@ -875,6 +875,8 @@ void ScreenShot::autoDisableUndoAndRedo()
 void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
 {
     if (m_actionType == ActionType::AT_wait) {
+        CJ.m_cd.isShowCollimatorCursor = false;
+
         if (type == OrientationType::OT_internal) {
             setCursor(Qt::SizeAllCursor);
         } else if (type == OrientationType::OT_left || type == OrientationType::OT_right) {
@@ -890,7 +892,9 @@ void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
             setCursor(Qt::WhatsThisCursor); // 一般都不会触发
         }
     } else if (m_actionType == ActionType::AT_drawing_shap) {
-        setCursor(Qt::CrossCursor);
+        // setCursor(Qt::CrossCursor);
+        setCursor(Qt::BlankCursor);  // 隐藏光标
+        CJ.m_cd.isShowCollimatorCursor = true;
     }
 }
 
@@ -1587,6 +1591,32 @@ void ScreenShot::showCrosshair(QPainter &pa, const QPoint &pt, const QRect &vdRt
         drawCrosshair(pa, pt, vdRt);
 }
 
+void ScreenShot::showCollimatorCursor(QPainter &pa, const QPoint &pt, const int &width)
+{
+    pa.save();
+    pa.setRenderHint(QPainter::Antialiasing);
+
+    const QPen pen(CJ.m_cd.pen.color(), 1);
+    pa.setPen(pen);
+    // 绘制中心点
+    pa.setBrush(CJ.m_cd.pen.color());
+    const int& r = qMax(1, width / 2);
+    pa.drawEllipse(pt, r, r);
+
+    // 绘制十字准星光标
+    const int& margin = 5 + r;
+    const int& length = 10 + margin;
+    QLine l1(QPoint(pt.x() - length, pt.y()), QPoint(pt.x() - margin, pt.y()));
+    QLine l2(QPoint(pt.x() + margin, pt.y()), QPoint(pt.x() + length, pt.y()));
+    QLine l3(QPoint(pt.x(), pt.y() - length), QPoint(pt.x(), pt.y() - margin));
+    QLine l4(QPoint(pt.x(), pt.y() + margin), QPoint(pt.x(), pt.y() + length));
+    QVector<QLine> lines;
+    lines << l1 << l2 << l3 << l4;
+    pa.drawLines(lines);
+
+    pa.restore();
+}
+
 void ScreenShot::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
@@ -1641,6 +1671,8 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         showPointTips(QString::number(width));
 
         CJ_CD.pen = m_paintNode.pen;
+
+        update();
     }
 
     e->ignore();
@@ -1713,6 +1745,9 @@ void ScreenShot::paintEvent(QPaintEvent *e)
         prinftWindowsRects(pa);
         printfDevelopProjectInfo(pa);
     }
+
+    if (CJ.m_cd.isShowCollimatorCursor)
+        showCollimatorCursor(pa, QCursor::pos(), CJ.m_cd.pen.width());
 }
 
 void ScreenShot::closeEvent(QCloseEvent *e)
