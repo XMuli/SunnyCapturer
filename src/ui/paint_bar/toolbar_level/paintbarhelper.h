@@ -150,14 +150,14 @@ struct PaintBtn
 };
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval);
-QIcon changedSVGColor(QString path, QString color, QSize size);
+QIcon changedSVGColor(QString path, QColor color, QSize size);
 void addSpacerLine(QGridLayout *layout, const Qt::Orientation &orie, const int &length = ICON_SIZE - 2 * ICON_PADDING, const int &row = 0, const int &col = 0);
 void addSpacerLine(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = ICON_SIZE - 2 * ICON_PADDING);
 void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &length = 0);    // 添加弹簧
 int countItemsformLayout(const QGridLayout* layout, const Qt::Orientation& orie, const int& idx = 0);
 double dpiScale(const QScreen* scrn = qGuiApp->primaryScreen());
 
-QString highlightColor(const bool enable = false); // 高亮色，活动色，强调色
+QColor highlightColor(const double& alphaf = 1.0); // 高亮色，活动色，强调色
 QString crosshairColor(const bool enable = true);
 int borderWidth();
 int crosshairWidth();

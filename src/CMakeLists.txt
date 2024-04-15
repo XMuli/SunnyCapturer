@@ -8,11 +8,11 @@ cmake_minimum_required(VERSION 3.5)
 set(project_name Sunny)
 set(project_version_major 1)
 set(project_version_minor 5)
-set(project_version_path 1)
+set(project_version_path 0)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2024.04.13")
+add_definitions(-DXBUILD_TIME="2024.04.15")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -151,8 +151,6 @@ set(src_files
     ui/commom/ocr/networkocr.h
     ui/commom/ocr/networkocr.cpp
 
-
-
     resources.qrc
     resources/logo/resources.rc
 )
@@ -231,8 +229,12 @@ foreach(it ${folders_to_copy})
     file(COPY ${copy_source_dir} DESTINATION ${traget_root})
 endforeach()
 
-file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-file(COPY "${source_root}/debian" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+if(APPLE)
+    file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.app/Contents/MacOS")
+else()
+    file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")  # windows and linux
+    file(COPY "${source_root}/debian" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+endif()
 
 #if(UNIX)
 #    file(GLOB sh_files "${source_root}/linux/debian/*.sh")

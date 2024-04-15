@@ -657,7 +657,7 @@ void ScreenShot::initUI()
     monitorsInfo();
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint /*| Qt::WindowStaysOnTopHint*/);  // | Qt::WindowStaysOnTopHint
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);  // | Qt::WindowStaysOnTopHint
 #ifdef HALF_SCRN_DEVELOP
     setWindowFlag(Qt::WindowStaysOnTopHint, false);
     if (m_screens.size() == 1) {
@@ -717,7 +717,7 @@ void ScreenShot::initConnect()
     connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
     connect(m_paintBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
     connect(m_paintBar, &PaintBar::sigOcr, this, &ScreenShot::onOCRTextCtrlIdReleased);
-
+    connect(m_paintBar, &PaintBar::sigScreenshotUpdate, this, [this](){ update(); });
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
     connect(this, &ScreenShot::sigAutoDisableUndoAndRedo, m_paintBar, &PaintBar::sigAutoDisableUndoAndRedo);
@@ -1757,7 +1757,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     // 以下部分都是 printf 一些调试参数的部分
     if (CJ_GET("advanced.customize_ui_parameters.show_windows_detial_info").get<bool>()) {
         prinftWindowsRects(pa);
-        printfDevelopProjectInfo(pa);
+        // printfDevelopProjectInfo(pa);
     }
 
     if (CJ.m_cd.isShowCollimatorCursor)

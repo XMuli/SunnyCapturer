@@ -44,6 +44,7 @@ signals:
     void sigOcr(const OcrData& data);                            // PaintCtrlBar OCR Text
 
     void sigAutoDisableUndoAndRedo(const bool& undoDisable, const bool& redoDisable);  // ScreenShot 控制图标置灰
+    void sigScreenshotUpdate(); // 截图窗口刷新，光标进入和离开时，隐藏准星
 
 private slots:
     void onPaintToolBtnsRelease(const PaintType& type, const bool& isCheckable, const bool &isChecscked);
@@ -51,6 +52,7 @@ private slots:
 protected:
     void resizeEvent(QResizeEvent *e) override;
     void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
 
 private:
@@ -59,6 +61,7 @@ private:
     QPixmap                         m_blurPixmap;    // 模糊透明效果
     QPointer<PaintToolBar>          m_paintToolBar;
     QPointer<PaintCtrlBar>          m_paintCtrlBar;
+protected:
 };
 
 #endif // PAINTBAR_H

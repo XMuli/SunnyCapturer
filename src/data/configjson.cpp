@@ -77,7 +77,7 @@ ordered_json ConfigJson::defaultConfigJson()
                                                          {"blur_effect_adius", 20},                             // 一二级工具栏的高斯模糊的半径
                                                          {"manual_save_image_dir", ""},                         // 手动图片时，默认的打开弹窗的路径
                                                          {"auto_detection_windows_rect_top_level", true},       // 自动检测窗口是否为顶级篡改窗口
-                                                         {"show_windows_detial_info", true},                    // 显示窗口的详细信息，如 hwnd,path,rect 等
+                                                         {"show_windows_detial_info", false},                    // 显示窗口的详细信息，如 hwnd,path,rect 等
                                                          {"highlight_iridescence", "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D"},
                                                          {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"}
                                                      }},

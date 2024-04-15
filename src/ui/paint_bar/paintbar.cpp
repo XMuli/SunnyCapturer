@@ -145,7 +145,16 @@ void PaintBar::resizeEvent(QResizeEvent *e)
 void PaintBar::enterEvent(QEvent *e)
 {
     setCursor(Qt::ArrowCursor);
+    CJ.m_cd.isShowCollimatorCursor = false;
+    emit sigScreenshotUpdate();
     QWidget::enterEvent(e);
+}
+
+void PaintBar::leaveEvent(QEvent *e)
+{
+    CJ.m_cd.isShowCollimatorCursor = true;
+    emit sigScreenshotUpdate();
+    QWidget::leaveEvent(e);
 }
 
 void PaintBar::paintEvent(QPaintEvent *e)

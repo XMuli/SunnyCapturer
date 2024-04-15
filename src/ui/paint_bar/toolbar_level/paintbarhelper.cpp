@@ -4,7 +4,6 @@
 // SPDX-Author: XMuli <xmulitech@gmail.com>
 
 #include "paintbarhelper.h"
-#include <map>
 #include <QFile>
 #include <QIODevice>
 #include <QByteArray>
@@ -36,8 +35,7 @@ void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QStrin
     }
 }
 
-
-QIcon changedSVGColor(QString path, QString color, QSize size)
+QIcon changedSVGColor(QString path, QColor color, QSize size)
 {
     QFile file(path);
     file.open(QIODevice::ReadOnly);
@@ -46,7 +44,7 @@ QIcon changedSVGColor(QString path, QString color, QSize size)
     QDomDocument doc;
     doc.setContent(baData);
     QDomElement elem = doc.documentElement(); // const 和 值传递
-    setAttrRecur(elem, "path", "fill", color);
+    setAttrRecur(elem, "path", "fill", color.name());  // rect
 
     QSvgRenderer svgRenderer(doc.toByteArray());
     // create pixmap target (could be a QImage)
@@ -170,11 +168,11 @@ double dpiScale(const QScreen *scrn)
     return scal;
 }
 
-QString highlightColor(const bool enable)
+QColor highlightColor(const double& alphaf)
 {
-    const QColor& color = enable ? QColor(CJ_GET_QSTR("interface.highlight")) : Qt::green;
-    qDebug() << "color.name():" << color.name();
-    return color.name();
+    QColor color = QColor(CJ_GET_QSTR("interface.highlight")); //Qt::green;
+    color.setAlphaF(alphaf);
+    return color;
 }
 
 QString crosshairColor(const bool enable)

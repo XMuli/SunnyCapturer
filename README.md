@@ -33,6 +33,9 @@ cmake ../
 make -j16
 cpack -G DEB
 
+$ sudo apt install ./Sunny-1.5.0.deb    # 安装
+$ sudo apt remove sunny                 # 卸载
+
 # 注意大小写等
 dpkg -I ./Sunny-1.5.0-Linux-x86_64.deb            # 查看软件包的信息
 dpkg -L sunny                                     # 查看包的文件等拷贝等信息

@@ -60,7 +60,7 @@ void PinWidget::initUI()
 //    setStyleSheet("background: transparent;");
 
     ui->label->setPixmap(m_pixmap);
-    m_shadowEffect->setColor(highlightColor(true));
+    m_shadowEffect->setColor(highlightColor());
     m_shadowEffect->setBlurRadius(ui->layout->margin() * 2);  // 对应半径
     m_shadowEffect->setOffset(0, 0);
     setGraphicsEffect(m_shadowEffect);
@@ -175,7 +175,7 @@ void PinWidget::onShadow(bool checked)
     if (checked) {
         if (!m_shadowEffect) m_shadowEffect = new QGraphicsDropShadowEffect(this);
 
-        m_shadowEffect->setColor(highlightColor(true));
+        m_shadowEffect->setColor(highlightColor());
         m_shadowEffect->setBlurRadius(ui->layout->margin() * 2);  // 对应半径
         m_shadowEffect->setOffset(0, 0);
         setGraphicsEffect(m_shadowEffect);   // TODO 2022.08.03: 重新加载后有点问题。
