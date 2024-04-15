@@ -16,10 +16,10 @@
 #include <QFont>
 #include <QProcess>
 #include "communication.h"
-#include "../../data/configmanager.h"
 
 void Tray::init()
 {
+    qApp->setStyleSheet(QString("QToolTip { background-color: %1; border: 1px solid black; }").arg(QPalette().color(QPalette::Window).name()));
     setAppFont("");
     QAction* capture = new QAction(this);
     QAction* setting = new QAction(this);

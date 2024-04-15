@@ -21,7 +21,6 @@
 #include "horspacerline.h"
 #include "verspacerline.h"
 #include "xtoolbutton.h"
-#include "../../../data/configmanager.h"
 #include "../../../data/configjson.h"
 
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)

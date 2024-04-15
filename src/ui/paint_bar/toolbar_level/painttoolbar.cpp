@@ -17,7 +17,6 @@
 #include "paintbarhelper.h"
 #include "communication.h"
 #include "xtoolbutton.h"
-#include "../../../data/configmanager.h"
 
 PaintToolBar::PaintToolBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
@@ -65,12 +64,18 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_save, "save", tr("Save to file") + " (Ctrl + S)", false, false);
     m_btns.emplace_back(nullptr, PaintType::PT_finish, "copy", tr("copy to clipboard") + " (Ctrl + C)", false, false);
 
-    // fix: it.btn->setChecked(true) 解决使用快捷键触发不会生效的bug
     #define CREATOR_QSHORTCUT(_type, _keySequence) \
+    if (it.type == _type) { new QShortcut(QKeySequence(_keySequence), this, [&it]() { \
+    it.btn->setChecked(!it.btn->isChecked()); \
+        it.btn->released(); \
+    }); }
+
+    // fix: it.btn->setChecked(true) 解决使用快捷键触发不会生效的bug
+    #define CREATOR_QSHORTCUT_CHECKED(_type, _keySequence) \
     if (it.type == _type) { new QShortcut(QKeySequence(_keySequence), this, [&it]() { \
         it.btn->setChecked(true); \
         it.btn->released(); \
-    }); }
+        }); }
 
     for (int i = 0; i < m_btns.size(); ++i) {
         auto& it = m_btns.at(i);
@@ -89,7 +94,6 @@ void PaintToolBar::initBtns()
         tb->setIconSize(size);
         tb->setFixedSize(size);
         tb->setToolTip(it.tooltip);
-        tb->setStyleSheet(QString("QToolTip { background-color: %1; border: 1px solid black; }").arg(tb->palette().color(QPalette::Window).name()));
         tb->setCheckable(it.bCheckable);
         // tb->show();  // fix: 提前显示的话，添加到 ScreenShot 中，会显示批量 show 的时候被生成捕捉看到阴影，造成 bug
 
@@ -107,13 +111,13 @@ void PaintToolBar::initBtns()
         CREATOR_QSHORTCUT(PaintType::PT_text, Qt::CTRL + Qt::Key_7)
         CREATOR_QSHORTCUT(PaintType::PT_serial, Qt::CTRL + Qt::Key_8)
 
-        CREATOR_QSHORTCUT(PaintType::PT_pin, Qt::CTRL + Qt::Key_P)
-        CREATOR_QSHORTCUT(PaintType::PT_img_translate, Qt::CTRL + Qt::Key_T)
-        CREATOR_QSHORTCUT(PaintType::PT_ocr, Qt::CTRL + Qt::Key_O)
-        CREATOR_QSHORTCUT(PaintType::PT_undo, Qt::CTRL + Qt::Key_Z)
-        CREATOR_QSHORTCUT(PaintType::PT_redo, Qt::CTRL + Qt::Key_Y)
-        CREATOR_QSHORTCUT(PaintType::PT_save, Qt::CTRL + Qt::Key_S)
-        CREATOR_QSHORTCUT(PaintType::PT_finish, Qt::CTRL + Qt::Key_C)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_pin, Qt::CTRL + Qt::Key_P)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_img_translate, Qt::CTRL + Qt::Key_T)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_ocr, Qt::CTRL + Qt::Key_O)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_undo, Qt::CTRL + Qt::Key_Z)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_redo, Qt::CTRL + Qt::Key_Y)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_save, Qt::CTRL + Qt::Key_S)
+        CREATOR_QSHORTCUT_CHECKED(PaintType::PT_finish, Qt::CTRL + Qt::Key_C)
     }
 
 

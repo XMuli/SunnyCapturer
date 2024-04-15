@@ -23,7 +23,6 @@
 #include <QFont>
 #include <QLabel>
 #include <QTimer>
-#include "../../../data/configmanager.h"
 #include "../paintbarhelper.h"
 #include "../../data/configjson.h"
 
@@ -128,12 +127,14 @@ void PinWidget::initMenu()
     m_menu->addSeparator();
     m_menu->addAction(tr("Close"), this, &PinWidget::close, QKeySequence(Qt::CTRL + Qt::Key_W));
 
+
+
     connect(aCopy, &QAction::triggered, this, &PinWidget::onCopy);
     connect(aSave, &QAction::triggered, this, &PinWidget::onSave);
     connect(aShadow, &QAction::triggered, this, &PinWidget::onShadow);
 
     new QShortcut(Qt::Key_Escape, this, SLOT(close()));
-//    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close())); // TODO 2022.07.29: 替换为 Qt5 形式
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(close()));
     // 使用单值捕获，不然有问题： https://zhuanlan.zhihu.com/p/346991724
     //    connect(aShadow, &QAction::triggered, this, [&, aShadow](bool checked) { aShadow->setChecked(checked); });
 }

@@ -66,12 +66,14 @@ void PaintBar::initUI()
     if (m_orie == Qt::Horizontal) m_layout =  new QVBoxLayout(this);
     else if (m_orie == Qt::Vertical) m_layout = new QHBoxLayout(this);
 
-    const int& margin = 3;
+    const int& margin = 2;
     m_layout->setMargin(margin);
     m_layout->setSpacing(0);
     setLayout(m_layout);
     m_layout->addWidget(m_paintToolBar);
     m_layout->addWidget(m_paintCtrlBar);
+
+    m_paintCtrlBar->hide();
 }
 
 void PaintBar::initConnect()
@@ -119,7 +121,7 @@ void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheck
 
     int space;
     if (hadDrawBtnsChecked()) {
-        space = 3;
+        space = 2;
         m_paintCtrlBar->show();
     } else {
         space = 0;
@@ -161,8 +163,8 @@ void PaintBar::paintEvent(QPaintEvent *e)
         pa.drawPixmap(rect().adjusted(margin, margin, -margin, -margin), m_blurPixmap);
     }
 
+    // true:  内圈 1px 的白灰色，外圈 1px 的黑色;  false: 内圈 1px 的高亮色，外圈 1px 高亮色;
     const bool& arcylicEffect = CJ_GET("interface.acrylic_effect");
-
     if (arcylicEffect) {
         margin = 1;
         pa.setPen(QPen(QColor(246, 246, 246, 1 * 255), margin));
@@ -172,7 +174,18 @@ void PaintBar::paintEvent(QPaintEvent *e)
 
     margin = 0;
     const QColor& color = arcylicEffect ? QColor(70, 70, 70, 1 * 255) : QColor(CJ_GET_QSTR("interface.highlight"));
-    pa.setPen(color);
+    pa.setPen(QPen(color, arcylicEffect ? 1 : 1));
     pa.setBrush(Qt::NoBrush);
     pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
+
+    if (m_paintCtrlBar->isVisible()) {   // 二级工具栏出现了
+        const QRect& rt = rect();
+        const double& alphaf = 0.1;
+        const int& space = m_layout->spacing();
+        QColor highlight = QColor(CJ_GET_QSTR("interface.highlight"));
+        highlight.setAlphaF(alphaf);
+        const QColor& color = arcylicEffect ? QColor(246, 246, 246, alphaf * 255) : highlight;
+        pa.setPen(QPen(color, 1));
+        pa.drawLine(QPoint(rt.left() + space, rt.center().y()), QPoint(rt.right() - space, rt.center().y()));
+    }
 }

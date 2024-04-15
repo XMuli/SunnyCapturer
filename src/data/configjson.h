@@ -9,9 +9,9 @@
 #include <QString>
 #include <QApplication>
 #include <QStandardPaths>
+#include <QFont>
 #include "isingleton.h"
 #include "json.hpp"
-#include "qfont.h"
 using ordered_json = nlohmann::ordered_json;
 
 #define CJ ConfigJson::instance()
@@ -56,7 +56,7 @@ struct ContextData
     int serialNumber = 0;
     QChar serialLetter = 'a';
     QFont font = QFont("Microsoft YaHei", 16);
-    QPen pen = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen pen = QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
 
     // 其它特殊

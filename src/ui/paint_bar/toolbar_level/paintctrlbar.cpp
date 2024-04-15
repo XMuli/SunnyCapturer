@@ -110,8 +110,6 @@ void PaintCtrlBar::initBtns()
     if (CJ_CD.textUnderline) textLists << "4";
     const QString& dir(":/resources/icons/paint_tool_bar/paint_ctrl_btn/");
 
-
-
     connect(creatorAbsBtnsCtrl(m_orie, m_rectCtrl, dir, QStringList() << "rectangle" << "rectangle_fill", QStringList() << QString::number(CJ_CD.rectintType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_ellipseCtrl, dir, QStringList() << "ellipse" << "ellipse_fill", QStringList() << QString::number(CJ_CD.ellipseType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_arrowCtrl, dir, QStringList() << "arrow" << "line", QStringList() << QString::number(CJ_CD.arrowType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
@@ -360,9 +358,9 @@ void PaintCtrlBar::addWidget(QWidget *w, const bool &bAddSpaceLine, int stretch,
 void PaintCtrlBar::onIdReleased(int id)
 {
     qDebug() << "----sender（）:" << sender() << "parent():" << "   id:" << id ;
-    emit sigPaintCtrlIdReleased(id);
-
     const auto& paint = sender()->parent();
+    if (paint != m_pointCtrl) emit sigPaintCtrlIdReleased(id);   // fix: 二级菜单栏切换点时候，导致 id 切换的 bug
+
     if (paint == m_rectCtrl) {
         CJ_CD.rectintType = id;
     } else if (paint == m_ellipseCtrl) {
