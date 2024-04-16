@@ -195,6 +195,8 @@ void PaintBar::paintEvent(QPaintEvent *e)
         highlight.setAlphaF(alphaf);
         const QColor& color = arcylicEffect ? QColor(246, 246, 246, alphaf * 255) : highlight;
         pa.setPen(QPen(color, 1));
-        pa.drawLine(QPoint(rt.left() + space, rt.center().y()), QPoint(rt.right() - space, rt.center().y()));
+        const QLine& line = (m_orie == Qt::Horizontal) ? QLine(QPoint(rt.left() + space, rt.center().y()), QPoint(rt.right() - space, rt.center().y()))
+                                                       : QLine(QPoint(rt.center().x(), rt.top() + space), QPoint(rt.center().x(), rt.bottom() - space));
+        pa.drawLine(line);
     }
 }

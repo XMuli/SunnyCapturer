@@ -25,6 +25,7 @@ General::~General()
     delete ui;
 }
 
+
 void General::initUI()
 {
     const auto& languages = languageMap();
@@ -51,9 +52,10 @@ void General::initUI()
     ui->cbAutostart->setChecked(CJ_GET("general.autostart").get<bool>());
     ui->btnFont->resize(ui->cbbLanguage->size());
 
-#if defined(Q_OS_WIN)
-#else
+#if defined(Q_OS_MACOS)
     ui->cbAutostart->hide();
+#else
+
 #endif
 
     connect(ui->cbbLanguage, &QComboBox::currentTextChanged, this, &General::onCbbLanguageCurrentTextChanged);
@@ -71,6 +73,13 @@ void General::setAutoStart(const bool &enable)
     } else {
         reg.setValue(XPROJECT_NAME, "");
     }
+#elif defined (Q_OS_LINUX)
+    const QString& desktopDir = "/usr/share/applications/tech.xmuli.sunny.desktop";
+    QString cmd = "";
+    if (enable)  cmd = "pkexec cp " + desktopDir + " /etc/xdg/autostart/tech.xmuli.sunny.desktop";
+    else cmd = "pkexec rm -f  /etc/xdg/autostart/tech.xmuli.sunny.desktop";
+
+    system(cmd.toStdString().c_str()); //使用系统命令将.desktop从源地址复制到autostart目录下实现开机自启动，pkexec是弹窗获取root权限
 #else
 #endif
 }
