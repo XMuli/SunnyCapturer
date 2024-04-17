@@ -40,8 +40,8 @@
 #include <QUrl>
 
 
-#include "easylogging++.h"
-INITIALIZE_EASYLOGGINGPP
+//#include "easylogging++.h"
+//INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[])
 {
@@ -114,14 +114,16 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-#if 1
+#if defined (Q_OS_LINUX)
+    CJ.initJsonToFile();          // fitst time init write to linux "~/.config/Sunny"
+#endif
+
+    CJ.readFromFile();
     CJ.initOutputDefaulValue();   // 完整的 m_j = 读取 .josn + 填充为空 path 的一些路径
     CJ.writeToFile();             // 写入完整的 m_j
     // CJ.m_cd.cdReadFromFile();  // 恢复上次一二级菜单栏的状态
     // cdWritToFile(CJ.m_cd);     // 写入配置文件中
-#else
-    CJ.testInitConfigJson();      // 初始化且写入一份默认的 .json 文件
-#endif
+
 
     COMM.loadTranslation("");
     TRAY; // 启动托盘

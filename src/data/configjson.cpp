@@ -9,6 +9,7 @@
 #include <QMetaEnum>
 #include <QApplication>
 #include <QCryptographicHash>
+#include <QDir>
 #include "qaesencryption.h"
 
 ordered_json ConfigJson::defaultConfigJson()
@@ -140,9 +141,9 @@ ordered_json ConfigJson::defaultConfigJson()
 
 void ConfigJson::readFromFile()
 {
-    QFile file(m_jsonFile);
+    QFile file(m_jFilePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Failed to open file for reading:" << file.errorString();
+        qDebug() << "Failed to open file for reading. m_jFilePath:" << m_jFilePath << "error:" << file.errorString();
         return;
     }
 
@@ -157,9 +158,9 @@ void ConfigJson::readFromFile()
 
 void ConfigJson::writeToFile()
 {
-    QFile file(m_jsonFile);
+    QFile file(m_jFilePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        qDebug() << "Failed to open file for writing:" << file.errorString();
+        qDebug() << "Failed to open file for writing: m_jFilePath:" << m_jFilePath << "error:" << file.errorString();
         return;
     }
 
@@ -237,17 +238,16 @@ QString ConfigJson::decryptString(const std::string&input)
 ConfigJson::ConfigJson(QObject *parent)
     : QObject(parent)
     , m_j()
-    , m_jsonFile("")
+    , m_jFilePath("")
     , m_key("key-s%Prup7BWa6Wn%pB")
     , m_iv("IV-Q#3VZjPbmS!wZfZL")
 {
     QString xconfigDir = qApp->applicationDirPath();
 #if defined(Q_OS_LINUX)
-    xconfigDir = QString("/usr/local/%1").arg(XPROJECT_NAME);
+    xconfigDir = QDir::homePath() + QString("/.config/%1").arg(XPROJECT_NAME);
 #endif
 
-    m_jsonFile = xconfigDir + "/xconfig.json";
-    readFromFile();
+    m_jFilePath = xconfigDir + "/xconfig.json";
 }
 
 
@@ -369,12 +369,16 @@ void ConfigJson::setJ(const std::string &key, const ordered_json &newJ)
     m_j[key] = newJ;
 }
 
-
-
-
-
-void ConfigJson::testInitConfigJson()
+void ConfigJson::initJsonToFile()
 {
-    m_j = defaultConfigJson();
-    writeToFile();
+    const QString& xconfigDir = QFileInfo(m_jFilePath).dir().path();
+
+    // 确保路径存在
+    QDir().mkpath(xconfigDir);
+
+    if (!QFile::exists(m_jFilePath)) {
+        m_j = defaultConfigJson();
+        writeToFile();
+        m_j.clear();
+    }
 }

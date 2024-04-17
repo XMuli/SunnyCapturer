@@ -12,7 +12,7 @@ set(project_version_path 0)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2024.04.15")
+add_definitions(-DXBUILD_TIME="2024.04.18")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -51,8 +51,8 @@ set(commom_files
     data/configjson.cpp
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.h
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.cpp
-    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.h
-    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.cc
+#    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.h
+#    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.cc
 )
 
 set(custom_ui_files
@@ -459,10 +459,19 @@ elseif (UNIX)
              DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
              )
     # [/usr/local] -------------------------
+    # install $ENV{HOME}/.config/Sunny/xconfig.json by exe write
     # install /usr/local/Sunny/xconfig.json
-    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
-             DESTINATION "/usr/local/${project_name}"
-             )
+
+    # 添加安装规则来删除文件
+    install(FILES "$ENV{HOME}/.config/Sunny/xconfig.json"
+            DESTINATION /tmp
+            COMPONENT config
+            EXCLUDE_FROM_ALL
+            )
+
+#    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
+#        DESTINATION "/usr/local/${project_name}"
+#        )
     # install /usr/local/Sunny/translations/Sunny_*.qm
     install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
              DESTINATION "/usr/local/${project_name}"

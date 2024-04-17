@@ -74,12 +74,19 @@ void General::setAutoStart(const bool &enable)
         reg.setValue(XPROJECT_NAME, "");
     }
 #elif defined (Q_OS_LINUX)
-    const QString& desktopDir = "/usr/share/applications/tech.xmuli.sunny.desktop";
-    QString cmd = "";
-    if (enable)  cmd = "pkexec cp " + desktopDir + " /etc/xdg/autostart/tech.xmuli.sunny.desktop";
-    else cmd = "pkexec rm -f  /etc/xdg/autostart/tech.xmuli.sunny.desktop";
+    // *.desktop 复制到 "~/.config/autostart/" 目录下实现开机自启动
+    const QString desktopDir = "/usr/share/applications/tech.xmuli.sunny.desktop";
+    const QString targetDir = QDir::homePath() + "/.config/autostart/";
+    const QString targetFile = targetDir + "tech.xmuli.sunny.desktop";
 
-    system(cmd.toStdString().c_str()); //使用系统命令将.desktop从源地址复制到autostart目录下实现开机自启动，pkexec是弹窗获取root权限
+    if (enable) {
+        QDir().mkpath(targetDir);    // 创建目标目录（如果不存在）
+        if (QFile::copy(desktopDir, targetFile)) qDebug() << "File tech.xmuli.sunny.desktop copied successfully to" << targetFile;
+        else qDebug() << "Failed to copy file";
+    } else {
+        if (QFile::remove(targetFile)) qDebug() << "File removed successfully from" << targetFile;
+        else qDebug() << "Failed tech.xmuli.sunny.desktop to remove file";
+    }
 #else
 #endif
 }
