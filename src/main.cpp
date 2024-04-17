@@ -39,6 +39,10 @@
 #include <QHttpPart>
 #include <QUrl>
 
+
+#include "easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
+
 int main(int argc, char *argv[])
 {
 //    qInstallMessageHandler(XMessageOutput);
@@ -56,6 +60,34 @@ int main(int argc, char *argv[])
 #ifdef _MSC_VER
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);//注冊异常捕获函数
 #endif
+
+
+//     // 从文件加载配置文件
+//     const QString& path = qApp->applicationDirPath() + "/log.conf";
+//     el::Configurations conf(path.toStdString().c_str());
+
+//     el::Loggers::reconfigureLogger("default", conf);    // 为单独一个级别的Logger配置
+//     el::Loggers::reconfigureAllLoggers(conf);           // 为全部的Logger配置
+//     el::Loggers::setDefaultConfigurations(conf);        // Now all the loggers will use configuration from file
+//     // 这样后注册的所有Logger，都是默认配置，而无需重复配置
+
+//     el::Loggers::addFlag(el::LoggingFlag::AutoSpacing);
+//     el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
+//     el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);
+// //    el::Loggers::setLoggingLevel(el::Level::Debug);
+
+//     START_EASYLOGGINGPP(argc, argv);  //
+
+//     QRect rect(0, 1, 2, 3);
+
+//     LOG(INFO) << "My first info log using default logger" << "other";
+// //    std::cout.flush(); // 刷新输出缓冲区
+// //    el::Loggers::flushAll();
+//     LOG(INFO) << uniqueKey;
+//     LOG(INFO) << rect;
+// //    el::Loggers::flushAll();
+//     qDebug() << " qDebug - My first info log using default logger" << rect;
+
 
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
     QSharedMemory sharedMemory;
