@@ -68,8 +68,8 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>64</width>
-             <height>64</height>
+             <width>56</width>
+             <height>56</height>
             </size>
            </property>
            <property name="pixmap">
@@ -142,6 +142,13 @@
        <widget class="QPushButton" name="btnLicenses">
         <property name="text">
          <string>Licenses</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="tbnBuildInfo">
+        <property name="text">
+         <string>Build Info</string>
         </property>
        </widget>
       </item>

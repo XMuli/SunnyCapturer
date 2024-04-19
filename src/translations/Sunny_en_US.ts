@@ -37,6 +37,25 @@
     </message>
 </context>
 <context>
+    <name>AboutInfo</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Detailed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AbsSettingUI</name>
     <message>
         <source>Form</source>
@@ -429,6 +448,10 @@ and specify -1 to let Sunny decide for you.</source>
         <source>CRASH</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ResetUI</name>
@@ -504,6 +527,73 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
 </context>
 <context>
+    <name>SystemInfo</name>
+    <message>
+        <source>Bulid Tits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kernel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Idx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DevicePixelRatio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logical DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Physical DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RefreshRate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Geometry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PhysicalSize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VirtualGeometry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edition: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Tokens</name>
     <message>
         <source>Form</source>
@@ -541,6 +631,10 @@ and specify -1 to let Sunny decide for you.</source>
         <source>Youdao</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Next Page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Tray</name>
@@ -558,6 +652,41 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XMonitorLabel</name>
+    <message>
+        <source>Idx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DevicePixelRatio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logical DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Physical DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RefreshRate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Geometry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PhysicalSize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

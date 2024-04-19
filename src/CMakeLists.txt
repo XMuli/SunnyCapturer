@@ -40,9 +40,11 @@ set(commom_files
     commom/include/xlog.h
     commom/include/isingleton.h
     commom/include/xapphelper.h
+    commom/include/systeminfo.h
 
     commom/sources/xlog.cpp
     commom/sources/xapphelper.cpp
+    commom/sources/systeminfo.cpp
 
     data/config_global.h
     data/configmanager.h
@@ -67,6 +69,7 @@ set(custom_ui_files
     ui/include/xocrtextedit.h
     ui/include/xtoolbutton.h
     ui/include/switchbutton.h
+    ui/include/xmonitorlabel.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -79,6 +82,7 @@ set(custom_ui_files
     ui/include/about.h
     ui/include/licenseui.h
     ui/include/tokens.h
+    ui/include/aboutinfo.h
     #  cpp common_widgets
     ui/composite_widgets/xblureffect.cpp
     ui/composite_widgets/xcolorbutton.cpp
@@ -90,6 +94,7 @@ set(custom_ui_files
     ui/composite_widgets/xocrtextedit.cpp
     ui/composite_widgets/xtoolbutton.cpp
     ui/composite_widgets/switchbutton.cpp
+    ui/composite_widgets/xmonitorlabel.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -110,6 +115,8 @@ set(custom_ui_files
     ui/composite_widgets/licenseui.ui
     ui/composite_widgets/tokens.cpp
     ui/composite_widgets/tokens.ui
+    ui/composite_widgets/aboutinfo.cpp
+    ui/composite_widgets/aboutinfo.ui
 
     ui/paint_bar/toolbar_level/common/absbtnsctrl.h
     ui/paint_bar/toolbar_level/common/absbtnsctrl.cpp

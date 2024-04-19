@@ -39,6 +39,9 @@
 #include <QHttpPart>
 #include <QUrl>
 
+#include "aboutinfo.h"
+#include "xmonitorlabel.h"
+
 
 //#include "easylogging++.h"
 //INITIALIZE_EASYLOGGINGPP
@@ -62,6 +65,14 @@ int main(int argc, char *argv[])
 #endif
 
 
+    // AboutInfo* monitorInfo = new AboutInfo();
+    // monitorInfo->show();
+
+
+    // XMonitorLabel* lab = new XMonitorLabel();
+    // lab->renderMonitorToPixmap();
+    // lab->resize(lab->fixSize());
+    // lab->show();
 //     // 从文件加载配置文件
 //     const QString& path = qApp->applicationDirPath() + "/log.conf";
 //     el::Configurations conf(path.toStdString().c_str());
