@@ -1,3 +1,26 @@
+Sunny (1.5.0) UNRELEASED; urgency=medium
+  It is also in its own use, actively developing and improving its experience; Fix many bugs and optimize some UI styles to improve user experience. (Lots of improvements)
+  Fixes
+  * Shortcut keys for the first level toolbar are not working
+  * Auto Window Detection that mistakenly catches non-displayed system windows
+  * Exception logic of auto-save and quick-save
+  UI enhancement
+  * The first and second level toolbars adopt highlight color; and there are acrylic frosted and common border effects.
+  * The style of ToolTip in the primary toolbar is white background.
+  * Support zoom tip percentage in pinning window, default 2 seconds.
+  * Design Tokens UI with QStackedWidget effect.
+  * Hide the corners of the Sunny border
+  * Highlight color effect for checkboxes
+  Optimization
+  * Optimize auto-detect window size without shadow area
+  * Optimize backend data storage, .ini changed to .json format.
+  * OCR with _local option, the extracted text has a neat layout format.
+  * OCR provides configuration parameters to customize the error data to fine-tune the layout accuracy.
+  * New "Engineer Advanced" switch: save image with window details.
+  Other etc.
+
+ -- XMuli <xmulitech@gmail.com>  Sat, 20 Apr 2024 13:02:31 +0800
+
 Sunny (1.4.0) UNRELEASED; urgency=medium
 
   * Support line switching, "OCR" and "Images Translate".

@@ -490,6 +490,7 @@ elseif (UNIX)
              FILES_MATCHING PATTERN "*.*"
              )
     # [/usr/lib] -------------------------
+    # 在 openKylin 1.0.1 系统下有些不一样，其值是 /usr/lib64，运行失败找不到库，解决方案需要将其替换，一共三处 ${CMAKE_INSTALL_LIBDIR} → "/usr/lib"
     # install /usr/lib/libWindowsRect.so
     install (FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
              DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -507,7 +508,6 @@ elseif (UNIX)
     message("---------->LIBRARY:" ${LIBRARY})
     message("---------->ARCHIVE:" ${ARCHIVE})
     message("---------->CMAKE_INSTALL_BINDIR:" ${CMAKE_INSTALL_BINDIR})
-    message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
     message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
     message("---------->qm:" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations")
 
