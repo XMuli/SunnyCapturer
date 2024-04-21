@@ -81,6 +81,7 @@ class ConfigJson : public QObject, public ISingleton<ConfigJson>
     FRIEND_CREAT_SINGLETION(ConfigJson);
 
 public:  // 便于开发测试，才将在这三个设置为 public 的
+    void initPrepare();             // 准备工作.比如创建文件夹之类
     void initJsonToFile();          // 初始化且写入一份默认的 .json 文件
 
     ordered_json defaultConfigJson();   // 一个原始的 json 初始化字符串

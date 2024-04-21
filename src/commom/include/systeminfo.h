@@ -18,15 +18,12 @@ public:
 
     QString windowsVersionInfo();
 
-    QString versionInfo() const;
     QStringList scrnsInfo() const;
     QString virGeometryInfo() const;
     QPixmap renderMonitorToPixmap();
 
 private:
     double scaling(const QScreen *screen = qGuiApp->primaryScreen()) const;
-
-
 
 #if defined(_MSC_VER)
     QString getRegistryValue(const QString& keyPath, const QString& valueName);
@@ -35,8 +32,6 @@ private:
 #elif defined(__GNUC__)
 #elif defined(__clang__)
 #endif
-
-
 
 private:
     SystemInfo(QObject *parent = nullptr);

@@ -37,7 +37,6 @@ const QStringList SystemInfo::detailedInfo() const
 
     lists += scrnsInfo();
 
-    qDebug().noquote() << versionInfo();
     qDebug().noquote()<< scrnsInfo();
     qDebug().noquote()<< virGeometryInfo();
     return lists;
@@ -65,14 +64,15 @@ QString SystemInfo::windowsVersionInfo()
           << tr("Bulid Tits") << QString("%1 %2").arg(XCOMPILER_ID).arg(XARCH_BIT)
           << tr("Operating System") << QString("%1").arg(QSysInfo::prettyProductName())
           << tr("kernel") << QString("%1").arg(QSysInfo::kernelVersion());
-
     qDebug() << lists;
-    ret += QString(tr("Name: %1 %2\n")).arg(XPROJECT_NAME).arg(XPROJECT_VERSION);
-    ret += QString(tr("Build Time: %1\n")).arg(XBUILD_TIME);
-    ret += QString(tr("Build Kits: %1 %2\n")).arg(XCOMPILER_ID).arg(XCOMPILER);
+
+    const int fieldWidth = 14;
+    const QChar fillChar = ' ';
+    ret += QString(tr("Name: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XPROJECT_NAME).arg(XPROJECT_VERSION);
+    ret += QString(tr("Build Time: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(XBUILD_TIME);
+    ret += QString(tr("Build Kits: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XCOMPILER_ID).arg(XCOMPILER);
 
 #if defined(_MSC_VER)
-
     // QString editionID = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "EditionID");     // Edition ID: "Professional"
     QString edition = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
     QString version = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
@@ -80,34 +80,25 @@ QString SystemInfo::windowsVersionInfo()
     QString cpuInfo = getCPUInfo();          // CPU Info
     QString memoryInfo = getMemoryInfo();    // Memory Info
 
-    ret += QString(tr("Edition: %1\n")).arg(edition);
-    ret += QString(tr("Version: %1\n")).arg(version + " " + currentBuild);
-    ret += QString(tr("Memory: %1\n")).arg(memoryInfo);
-    ret += QString(tr("CPU: %1\n")).arg(cpuInfo);
+    ret += QString(tr("Edition: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(edition);
+    ret += QString(tr("Version: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(version + " " + currentBuild);
+    ret += QString(tr("Memory: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(memoryInfo);
+    ret += QString(tr("CPU: ")).leftJustified(fieldWidth, fillChar)              + QString("%1\n").arg(cpuInfo);
 
-    qDebug().noquote() << "ret:" << ret;
 #else
 
-
-    ret += QString(tr("Operating System: %1\n")).arg(QSysInfo::prettyProductName());
-    ret += QString(tr("kernel: %1\n")).arg(QSysInfo::kernelVersion());
+    ret += QString(tr("Operating System: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QSysInfo::prettyProductName());
+    ret += QString(tr("kernel: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(QSysInfo::kernelVersion());
 
     #if defined(__GNUC__)
-
     #elif defined(__clang__)
     #else
     #endif
+
 #endif
 
-
-
+    qDebug().noquote() << "ret:" << ret;
     return ret;
-}
-
-QString SystemInfo::versionInfo() const
-{
-
-    return "";
 }
 
 QStringList SystemInfo::scrnsInfo() const
@@ -132,8 +123,6 @@ QStringList SystemInfo::scrnsInfo() const
               << tr("Geometry") << geometry
               << tr("PhysicalSize") << physicalSize;
     }
-
-
 
     return lists;
 }
@@ -280,7 +269,6 @@ QString SystemInfo::getRegistryValue(const QString &keyPath, const QString &valu
     }
 
     RegCloseKey(hKey);
-
     return value;
 }
 
@@ -296,16 +284,14 @@ QString SystemInfo::getCPUInfo()
 
     // Connect to the root\cimv2 namespace with the current user and obtain pointer pSvc to make IWbemServices calls.
     hres = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (LPVOID*)&pLoc);
-    if (FAILED(hres))
-    {
+    if (FAILED(hres)) {
         qDebug() << "Failed to create IWbemLocator object. Err code =" << hres;
         CoUninitialize();
         return cpuInfo;
     }
 
     hres = pLoc->ConnectServer(_bstr_t(L"ROOT\\CIMV2"), NULL, NULL, 0, NULL, 0, 0, &pSvc);
-    if (FAILED(hres))
-    {
+    if (FAILED(hres)) {
         qDebug() << "Could not connect. Error code =" << hres;
         pLoc->Release();
         CoUninitialize();
@@ -314,8 +300,7 @@ QString SystemInfo::getCPUInfo()
 
     // Set security levels on the proxy
     hres = CoSetProxyBlanket(pSvc, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
-    if (FAILED(hres))
-    {
+    if (FAILED(hres)) {
         qDebug() << "Could not set proxy blanket. Error code =" << hres;
         pSvc->Release();
         pLoc->Release();
@@ -332,8 +317,7 @@ QString SystemInfo::getCPUInfo()
         NULL,
         &pEnumerator
         );
-    if (FAILED(hres))
-    {
+    if (FAILED(hres)) {
         qDebug() << "Query for Win32_Processor failed. Error code =" << hres;
         pSvc->Release();
         pLoc->Release();
@@ -345,19 +329,15 @@ QString SystemInfo::getCPUInfo()
     IWbemClassObject* pclsObj = NULL;
     ULONG uReturn = 0;
 
-    while (pEnumerator)
-    {
+    while (pEnumerator) {
         HRESULT hr = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
 
         if (0 == uReturn)
-        {
             break;
-        }
 
         VARIANT vtProp;
         hr = pclsObj->Get(L"Name", 0, &vtProp, 0, 0);
-        if (FAILED(hr))
-        {
+        if (FAILED(hr)) {
             qDebug() << "Failed to get CPU name property. Error code =" << hr;
             pclsObj->Release();
             pSvc->Release();
@@ -370,8 +350,7 @@ QString SystemInfo::getCPUInfo()
         VariantClear(&vtProp);
 
         hr = pclsObj->Get(L"NumberOfCores", 0, &vtProp, 0, 0);
-        if (FAILED(hr))
-        {
+        if (FAILED(hr)) {
             qDebug() << "Failed to get CPU core count property. Error code =" << hr;
             pclsObj->Release();
             pSvc->Release();
@@ -383,8 +362,7 @@ QString SystemInfo::getCPUInfo()
         cpuInfo += QString(" (") + QString::number(vtProp.uiVal) + QString(" Cores, ");
 
         hr = pclsObj->Get(L"NumberOfLogicalProcessors", 0, &vtProp, 0, 0);
-        if (FAILED(hr))
-        {
+        if (FAILED(hr)) {
             qDebug() << "Failed to get CPU logical processor count property. Error code =" << hr;
             pclsObj->Release();
             pSvc->Release();
@@ -407,11 +385,9 @@ QString SystemInfo::getCPUInfo()
     return cpuInfo;
 }
 
-
 QString SystemInfo::getMemoryInfo()
-{
+{    
     QString memoryInfo;
-
     // Get total physical memory using Windows API
     MEMORYSTATUSEX memStatus;
     memStatus.dwLength = sizeof(memStatus);

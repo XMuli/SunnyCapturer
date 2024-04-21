@@ -53,8 +53,8 @@ set(commom_files
     data/configjson.cpp
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.h
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.cpp
-#    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.h
-#    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.cc
+   ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.h
+   ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.cc
 )
 
 set(custom_ui_files
@@ -340,7 +340,9 @@ target_include_directories(${project_name} PRIVATE                              
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/commom/communication
     ${CMAKE_CURRENT_SOURCE_DIR}/../windows_rect/include
 )
-target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY UNICODE _UNICODE ELPP_QT_LOGGING #[[ELPP_UNICODE]])                         # 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装; # ELPP_QT_LOGGIN 是 easylogging++ 输出 qt 的宏
+
+# 定义 XWIDGET_LIBRARY 宏( ET 后面没有 S)，表明为导出。后期将导出为 动态库 封装; # ELPP_QT_LOGGING 是 easylogging++ 输出 qt 的宏, ELPP_UNICODE 使用宽字符
+target_compile_definitions(${project_name} PRIVATE XWIDGET_LIBRARY UNICODE _UNICODE ELPP_QT_LOGGING ELPP_UNICODE)
 
 
 set_target_properties(${project_name} PROPERTIES
@@ -348,7 +350,7 @@ set_target_properties(${project_name} PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+    WIN32_EXECUTABLE FALSE  # TRUE FALSE
 )
 
 if(MSVC)
@@ -470,11 +472,11 @@ elseif (UNIX)
     # install /usr/local/Sunny/xconfig.json
 
     # 添加安装规则来删除文件
-    install(FILES "$ENV{HOME}/.config/Sunny/xconfig.json"
-            DESTINATION /tmp
-            COMPONENT config
-            EXCLUDE_FROM_ALL
-            )
+    # install(FILES "$ENV{HOME}/.config/Sunny/xconfig.json"
+    #         DESTINATION /tmp
+    #         COMPONENT config
+    #         EXCLUDE_FROM_ALL
+    #         )
 
 #    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
 #        DESTINATION "/usr/local/${project_name}"

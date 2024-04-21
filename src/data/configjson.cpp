@@ -382,3 +382,18 @@ void ConfigJson::initJsonToFile()
         m_j.clear();
     }
 }
+
+void ConfigJson::initPrepare()
+{
+    const QString& dir = QFileInfo(m_jFilePath).dir().path();
+    QDir().mkpath(dir );            // 确保路径存在，不存在就创建
+    QDir().mkpath(dir + "/logs");
+
+#if defined (Q_OS_LINUX)   // fitst time init  xconfig.json write to linux "~/.config/Sunny"
+    if (!QFile::exists(m_jFilePath)) {
+        m_j = defaultConfigJson();
+        writeToFile();
+        m_j.clear();
+    }
+#endif
+}

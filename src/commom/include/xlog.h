@@ -12,7 +12,8 @@
 #include <QByteArray>
 #include <QMessageLogContext>
 
-void XMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+void easylogingppMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);   // easylogingpp 的
 
+void customQtMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);               // 自定义封装的
 
 #endif // XLOG_H

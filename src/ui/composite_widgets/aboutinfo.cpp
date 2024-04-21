@@ -24,6 +24,8 @@ void AboutInfo::insertLayout(const QStringList& lists)
         for (int i = 0; i < rowCount; i++) {
             QLabel* lab1 = new QLabel(lists.at(j*rowCount*2 + i * 2));
             QLabel* lab2 = new QLabel(lists.at(j*rowCount*2 + i * 2 + 1));
+            // lab1->setFont(m_labFont);
+            // lab2->setFont(m_labFont);
             lab2->setStyleSheet("QLabel { color : gray; }");
 
             QFont font(this->font());
@@ -55,9 +57,10 @@ void AboutInfo::insertLayout(const QStringList& lists)
     // gridLayout->addItem(spacer, gridLayout->rowCount(), 0);
 }
 
-AboutInfo::AboutInfo(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::AboutInfo)
+AboutInfo::AboutInfo(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::AboutInfo)
+    , m_labFont("Courier New")
 {
     ui->setupUi(this);
 
@@ -72,14 +75,21 @@ AboutInfo::~AboutInfo()
 void AboutInfo::init()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
+
+#ifdef Q_OS_WIN
+    m_labFont = QFont("Courier New");
+#elif defined(Q_OS_MAC)
+    m_labFont = QFont("Menlo");
+#else
+    m_labFont = QFont("DejaVu Sans Mono");
+#endif
+
     auto& lab = ui->labMonitor;
     // lab->setMaximumHeight(900);
     QPixmap pix = SYSTEMINFO.renderMonitorToPixmap();
     lab->setFixedSize(pix.size());
     lab->setPixmap(pix);
     // lab->setScaledContents(true);
-
-
 
     auto& gridLayout = ui->gridLayout;
 //    QLayoutItem* item;
@@ -94,8 +104,7 @@ void AboutInfo::init()
     // gridLayout->setColumnStretch(0, 1);
     // gridLayout->setColumnStretch(1, 2);
 
-
-    SYSTEMINFO.versionInfo();
+    ui->labSysteminfo->setFont(m_labFont);
     ui->labSysteminfo->setText(SYSTEMINFO.windowsVersionInfo());
 
     // const auto& virGeomInfo = SYSTEMINFO.virGeometryInfo();

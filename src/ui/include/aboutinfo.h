@@ -3,6 +3,7 @@
 
 #include <QKeyEvent>
 #include <QWidget>
+#include <QFont>
 
 namespace Ui {
 class AboutInfo;
@@ -30,6 +31,7 @@ private:
 
 private:
     Ui::AboutInfo *ui;
+    QFont m_labFont;
 };
 
 #endif // ABOUTINFO_H

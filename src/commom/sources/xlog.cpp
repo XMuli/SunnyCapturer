@@ -12,9 +12,35 @@
 #include <QApplication>
 #include <QMutex>
 #include <QMutexLocker>
+#include "easylogging++.h"
 
-// 自定义的 qDebug、 QWaring 等输出，在 main() 的前面添加 qInstallMessageHandler(XMessageOutput);
-void XMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void easylogingppMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+   //    const char* file = context.file ? context.file : "unknown";
+   //    const char* function = context.function ? context.function : "unknown";
+   switch (type) {
+   case QtDebugMsg: {
+       LOG(DEBUG) << msg;  // DEBUG  INFO TRACE VERBOSE
+       break;
+   } case QtInfoMsg: {
+       LOG(INFO) << msg;
+       break;
+   } case QtWarningMsg: {
+       LOG(WARNING) << msg;
+       break;
+   } case QtCriticalMsg: {
+       LOG(ERROR) << msg;
+       break;
+   } case QtFatalMsg: {
+       LOG(FATAL) << msg;
+       break;
+   } default:
+       break;
+   }
+}
+
+// 自定义的 qDebug、 QWaring 等输出，在 main() 的前面添加 qInstallMessageHandler(customQtMessageHandler);
+void customQtMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     static QMutex mutex;
     QMutexLocker locker(&mutex);
@@ -52,8 +78,6 @@ void XMessageOutput(QtMsgType type, const QMessageLogContext &context, const QSt
                          .arg(time).arg(msgType).arg(msg.toLocal8Bit().constData());
 #endif
 
-
-
     if (logMsg.isEmpty()) return;
     const QString appDir = qApp->applicationDirPath();
 
@@ -70,3 +94,5 @@ void XMessageOutput(QtMsgType type, const QMessageLogContext &context, const QSt
     file.flush();
     file.close();
 }
+
+
