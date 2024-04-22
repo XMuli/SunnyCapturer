@@ -71,6 +71,7 @@ QString SystemInfo::windowsVersionInfo()
     ret += QString(tr("Name: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XPROJECT_NAME).arg(XPROJECT_VERSION);
     ret += QString(tr("Build Time: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(XBUILD_TIME);
     ret += QString(tr("Build Kits: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XCOMPILER_ID).arg(XCOMPILER);
+    ret += QString(tr("Qt Version: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QT_VERSION_STR);
 
 #if defined(_MSC_VER)
     // QString editionID = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "EditionID");     // Edition ID: "Professional"
@@ -141,75 +142,84 @@ QString SystemInfo::virGeometryInfo() const
     return lists;
 }
 
+// 1. 计算所有显示器矩形的边界盒：我们将遍历所有显示器，计算它们的矩形，然后得到一个包含所有这些矩形的最小矩形。
+// 2. 调整此边界盒到maxRt的中心：基于maxRt的中心和边界盒的中心，计算一个偏移量，并将所有显示器矩形按此偏移量进行平移。
+// 3. 绘制调整后的矩形：使用更新后的位置绘制每个显示器的矩形。
 QPixmap SystemInfo::renderMonitorToPixmap()
 {
+    m_scrns = qGuiApp->screens();
+    m_priScrn = qGuiApp->primaryScreen();
+
     qreal scaleFactor = 0.08;
-    const int margin = 10;          // 距离绘画区域左上角的间隔，距离↖各10
-    const int textMargin = 20;      // 显示器矩形的外轮廓填写 文本的预留间隔
-    const QSize virSize = m_priScrn->virtualGeometry().size() * scaleFactor + QSize(textMargin, textMargin) * 2;  // 实际的最大虚拟屏幕的区域 + 文字轮廓
+    const int margin = 10;
+    const int textMargin = 20;
+    const QSize virSize = m_priScrn->virtualGeometry().size() * scaleFactor + QSize(textMargin, textMargin) * 2;
     const QRect maxRt(QPoint(margin, margin), virSize);
-    const QSize& clientSize(virSize + QSize(margin, margin) * 2);   // 实际的最大虚拟屏幕的区域 + 文字轮廓 + 距离绘画区域左上角的间隔
+    const QSize& clientSize = virSize + QSize(margin, margin) * 2;
 
     QPixmap pixmap(clientSize);
-    pixmap.fill(Qt::transparent); // Fill it with transparent background
+    pixmap.fill(Qt::transparent);
     QPainter pa(&pixmap);
 
     pa.setPen(QPen(Qt::blue, 1));
     pa.setBrush(Qt::NoBrush);
     pa.drawRect(maxRt);
 
-    QPoint center(maxRt.topLeft() + QPoint(30, 30));
-    QVector<QPoint> offsets;
-    QVector<QSize> originalSizes;
-    for (int i = 0; i < m_scrns.size(); ++i) {
-        QPoint offset = m_scrns.at(i)->geometry().center() - center;
-        offsets.append(offset);
-        originalSizes.append(m_scrns.at(i)->geometry().size());
-    }
+    QPoint center = maxRt.center();
+    QRect allMonitorsRect; // 初始为空，将根据内容扩展
+    QVector<QRect> monitorRects;
+    QVector<QSize> originalSizes; // 添加原始尺寸的存储
 
-    for (int i = 0; i < m_scrns.size(); ++i) {
-        QRect rt = m_scrns.at(i)->geometry();
+    for (auto& screen : m_scrns) {
+        QSize originalSize = screen->geometry().size();
+        QRect rt = screen->geometry();
         QSize newSize(rt.size() * scaleFactor);
-        QPoint newCenter = center + offsets.at(i) * scaleFactor;
+        QPoint newCenter = center + (rt.center() - m_priScrn->virtualGeometry().center()) * scaleFactor;
         QPoint newTopLeft = newCenter - QPoint(newSize.width() / 2, newSize.height() / 2);
         QRect newRect(newTopLeft, newSize);
 
-        // 绘画显示器矩形
-        pa.setPen(QPen(Qt::black, 1));
-        pa.drawRect(newRect);
+        originalSizes.append(originalSize); // 存储原始尺寸
+        if (allMonitorsRect.isNull())
+            allMonitorsRect = newRect;
+        else
+            allMonitorsRect = allMonitorsRect.united(newRect);
 
-        // 绘画高的文字
+        monitorRects.append(newRect);
+    }
+
+    // 计算所有显示器矩形的中心与maxRt中心的偏移，然后将所有矩形平移到maxRt中心
+    QPoint offset = center - allMonitorsRect.center();
+
+    for (int i = 0; i < m_scrns.size(); ++i) {
+        QRect adjustedRect = monitorRects[i].translated(offset);
+
+        pa.setPen(QPen(Qt::black, 1));
+        pa.drawRect(adjustedRect);
+
+        // 绘制高度和宽度的文字
         pa.setPen(QPen(Qt::red, 1));
-        const int& space = 5;
-        QString heightText = QString::number(originalSizes.at(i).height());
+        QString heightText = QString::number(originalSizes[i].height());
+        QString widthText = QString::number(originalSizes[i].width());
         pa.save();
-        pa.translate(newRect.topLeft() + QPoint(-space, newRect.height() / 2));
+        pa.translate(adjustedRect.topLeft() + QPoint(-5, adjustedRect.height() / 2));
         pa.rotate(-90);
         pa.drawText(QPoint(-10, 0), heightText);
         pa.restore();
+        pa.drawText(QPoint(adjustedRect.center().x() - 10, adjustedRect.top() - 5), widthText);
 
-        // 绘画宽的文字
-        QString widthText = QString::number(originalSizes.at(i).width());
-        pa.drawText(QPoint(newRect.center().x() - 10, newRect.top() - space), widthText);
-
-        // 绘画序号的文字
+        // 绘制序号和主屏标记
         QString text = QString("序号: %1").arg(i);
-        pa.drawText(newRect.bottomLeft() + QPoint(5, -5), text);
-
-        // 绘画标记主屏幕
         if (m_scrns.at(i) == m_priScrn)
-            pa.drawText(newRect.topLeft() + QPoint(5, 15), QObject::tr("Primary"));
+            text += " (Primary)";
+        pa.drawText(adjustedRect.bottomLeft() + QPoint(5, -5), text);
     }
-
-    pa.setPen(QPen(Qt::black, 4));
-    pa.drawPoint(center);
 
     pa.setPen(QPen(Qt::green, 2));
     pa.drawRect(0, 0, clientSize.width(), clientSize.height());
 
-    // QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    // QString filePath = desktopPath + "/monitor_image.png";
-    // pixmap.save(filePath);
+    QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QString filePath = desktopPath + "/monitor_image.png";
+    pixmap.save(filePath);
 
     return pixmap;
 }

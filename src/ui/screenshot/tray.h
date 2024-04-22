@@ -15,6 +15,7 @@
 #include "tips.h"
 #include "../setting/sidesettingui.h"
 
+
 #define TRAY Tray::instance()
 
 class Tray : public QObject
@@ -28,6 +29,7 @@ public:
 public slots:
     void onCapture();
     void onSetting();
+    void onAbout();
     void onRestart();
     void onTrayIcon(QSystemTrayIcon::ActivationReason reason);
     void onCountdownTips();

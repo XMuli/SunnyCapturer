@@ -16,6 +16,7 @@
 #include <QFont>
 #include <QProcess>
 #include "communication.h"
+#include "aboutinfo.h"
 
 void Tray::init()
 {
@@ -23,15 +24,18 @@ void Tray::init()
     setAppFont("");
     QAction* capture = new QAction(this);
     QAction* setting = new QAction(this);
+    QAction* about   = new QAction(this);
     QAction* restart = new QAction(this);
-    QAction* quit = new QAction(this);
+    QAction* quit    = new QAction(this);
     capture->setObjectName("actCapture");
     setting->setObjectName("actSetting");
+    about->setObjectName("actAbout");
     restart->setObjectName("actRestart");
     quit->setObjectName("actQuit");
 
     m_trayMenu->addAction(capture);
     m_trayMenu->addAction(setting);
+    m_trayMenu->addAction(about);
     m_trayMenu->addSeparator();
     m_trayMenu->addAction(restart);
     m_trayMenu->addAction(quit);
@@ -56,6 +60,7 @@ void Tray::init()
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &Tray::onTrayIcon);
     connect(capture, &QAction::triggered, this, &Tray::onCapture);
     connect(setting, &QAction::triggered, this, &Tray::onSetting);
+    connect(about, &QAction::triggered, this, &Tray::onAbout);
     connect(restart, &QAction::triggered, this, &Tray::onRestart);
     connect(quit, &QAction::triggered, [](){ qApp->quit(); });
     connect(m_timerDelay, &QTimer::timeout, this, &Tray::onCountdownTips);
@@ -167,6 +172,15 @@ void Tray::onSetting()
     m_setting->show();
 }
 
+void Tray::onAbout()
+{
+    static QPointer<AboutInfo> info = nullptr;
+    if (!info) {
+        info = new AboutInfo(nullptr);
+        if (!info->isVisible()) info->show();
+    }
+}
+
 void Tray::onRestart()
 {
     const QString& path = qApp->applicationFilePath();
@@ -196,11 +210,13 @@ void Tray::onLanguageChange(const QString qmName)
     Q_UNUSED(qmName)
     QAction * actCapture = findChild<QAction*>("actCapture");
     QAction * actSetting = findChild<QAction*>("actSetting");
+    QAction * actAbout   = findChild<QAction*>("actAbout");
     QAction * actRestart = findChild<QAction*>("actRestart");
     QAction * actQuit = findChild<QAction*>("actQuit");
 
     if (actCapture) actCapture->setText(tr("Capture"));
     if (actSetting) actSetting->setText(tr("Setting"));
+    if (actAbout)   actAbout->setText(tr("About"));
     if (actRestart) actRestart->setText(tr("Restart"));
     if (actQuit) actQuit->setText(tr("Quit"));
 }
