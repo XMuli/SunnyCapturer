@@ -62,20 +62,39 @@ ordered_json ConfigJson::defaultConfigJson()
                         {"custom_capture", "Shift+F6"}
                     }},
         {"tokens", {
-                       {"youdao_app_id", "nz5WM7YTCl/G1PvcB1mmhA=="},
-                       {"youdao_secret_key", "/2UctgC3X+91xuLjZF/ktQOtgVzQQuH10QGNdi5jK0A="},
-                       {"iamge_translate_from_youdao", "auto"},
-                       {"iamge_translate_to_youdao", "zh-CHS"},
-                       {"iamge_translate_from_baidu", "auto"},
-                       {"iamge_translate_to_baidu", "zh"},
-                       {"baidu_api_key", "hchdmuPxSnZTcE7FtykjqVPYi44RW+EsBHhXwiyFD1I="},
-                       {"baidu_secret_key", "bQvOX2TltlvdynBre01BKqYSHJ7MEhIviS1mMKgim3U="},
-                       {"ocr_channel", "high"},
-                       {"iamge_translate_channel", "baidu"}
+                       { "account", { {"youdao", {
+                                                      {"app_id", "nz5WM7YTCl/G1PvcB1mmhA=="},
+                                                      {"secret_key", "/2UctgC3X+91xuLjZF/ktQOtgVzQQuH10QGNdi5jK0A="}
+                                                  }},
+                                       {"baidu", {
+                                                     {"api_key", "hchdmuPxSnZTcE7FtykjqVPYi44RW+EsBHhXwiyFD1I="},
+                                                     {"secret_key", "bQvOX2TltlvdynBre01BKqYSHJ7MEhIviS1mMKgim3U="}
+                                                 }}
+                                   }},
+                       {"ocr", {
+                                      {"channel_auto", true},
+                                      {"channel", 0}
+                                  }
+                       },
+                       {"iamge_translate", {
+                                               {"channel_auto", true},
+                                               {"channel", 0},
+                                               {
+                                                   "youdao", {
+                                                    {"from", "auto"},
+                                                    {"to", "zh-CHS"}}
+                                               },
+                                               {
+                                                   "baidu", {
+                                                    {"from", "auto"},
+                                                    {"to", "zh"}}
+                                               }
+                                           }}
                    }},
         {"advanced", {
                          {"customize_ui_parameters", {
                                                          {"blur_effect_adius", 20},                             // 一二级工具栏的高斯模糊的半径
+                                                         {"ocr_bottom_align_rang", 5},                          // ocr 底部对齐的误差
                                                          {"manual_save_image_dir", ""},                         // 手动图片时，默认的打开弹窗的路径
                                                          {"auto_detection_windows_rect_top_level", true},       // 自动检测窗口是否为顶级篡改窗口
                                                          {"show_windows_detial_info", false},                    // 显示窗口的详细信息，如 hwnd,path,rect 等

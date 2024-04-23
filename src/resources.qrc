@@ -60,5 +60,6 @@
         <file>resources/icons/paint_tool_bar/paint_ctrl_btn/ocr_text_update.svg</file>
         <file>resources/icons/setting/tokens/baidu.svg</file>
         <file>resources/icons/setting/tokens/youdao.svg</file>
+        <file>resources/icons/setting/tokens/auto.svg</file>
     </qresource>
 </RCC>

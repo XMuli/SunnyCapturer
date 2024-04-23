@@ -28,7 +28,6 @@ const QString szIconBtnCSS = QString("border-style:none; padding: %1px").arg(ICO
 //const QString PaintCtrlBarIconBtnCSS = QString("border-style:none; padding-left: %1px; padding-top: %2px; padding-right: %1px; padding-bottom: %1px;")
 //                                           .arg(ICON_PADDING).arg(ICON_PADDING_TOP);
 
-
 enum class PaintType
 {
     PT_rectangle,
@@ -56,7 +55,6 @@ Q_DECLARE_METATYPE(PaintType)                     // 可以被 QVariant 类型�
 Q_DECLARE_FLAGS(PaintTypeFlass, PaintType)        // 枚举 PaintType 生成宏 PaintTypeFlass
 //Q_DECLARE_OPERATORS_FOR_FLAGS(PaintTypeFlass)   // 重载宏 PaintTypeFlass 的 |() 函数
 
-
 enum class TextFlag
 {
     TF_blod = 1 << 0,        // 1     // 粗体
@@ -69,14 +67,35 @@ Q_DECLARE_METATYPE(TextFlag)                     // 可以被 QVariant 类型存
 Q_DECLARE_FLAGS(TextFlags, TextFlag)            // 枚举 TextFlag 生成宏 TextFlags
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 
-// ImgTranslateData 都是调用 YouDao API
+// OcrChannel + OcrData 都是调用
+enum class OcrChannel
+{
+    OCR_auto,                                // 自动循环下面的
+    OCR_baidu_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
+    OCR_baidu_high_precision_location,       // 通用文字识别（高精度含位置版）     500 次/month
+    OCR_baidu_high_precision,                // 通用文字识别（高精度版）         1000 次/month
+    OCR_baidu_standard,                      // 通用文字识别（标准版）           1000 次/month
+};
+Q_DECLARE_METATYPE(OcrChannel)                     // 可以被 QVariant 类型存储
+OcrChannel& operator++(OcrChannel& channel);      // 使枚举支持自增操作(前缀自增运算符 ++channel)
+OcrChannel operator++(OcrChannel& channel, int);  // 支持后缀自增运算符
+
+enum class ImageTranslateChannel
+{
+    ITC_auto,                                // 自动循环下面的
+    ITC_baidu,
+    ITC_youdao
+};
+Q_DECLARE_METATYPE(ImageTranslateChannel)
+ImageTranslateChannel& operator++(ImageTranslateChannel& channel);
+ImageTranslateChannel operator++(ImageTranslateChannel& channel, int);
+
+// ImgTranslateData 都是调用
 struct ImgTranslateData
 {
-    ImgTranslateData() {}
-
     // 自定义
     bool bTranslate = true;
-    QString channel = "baidu";         // image translate channel, 仅 baidu 和 youdao 两个数值
+    ImageTranslateChannel channel = ImageTranslateChannel::ITC_baidu;
 
     // YouDao API Tranlstates 有用接口
     QString from = "auto";
@@ -89,16 +108,6 @@ struct ImgTranslateData
 };
 Q_DECLARE_METATYPE(ImgTranslateData)            // 可以被 QVariant 类型存储
 
-
-// OcrChannel + OcrData 都是调用 BaiDu API
-enum class OcrChannel
-{
-    OCR_high_precision,                // 通用文字识别（高精度版）         1000 次/month
-    OCR_high_precision_location,       // 通用文字识别（高精度含位置版）     500 次/month
-    OCR_standard,                      // 通用文字识别（标准版）           1000 次/month
-    OCR_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
-};
-Q_DECLARE_METATYPE(OcrChannel)                     // 可以被 QVariant 类型存储
 
 
 enum class OcrTextOperate
@@ -113,7 +122,7 @@ struct OcrData
 {
     // 自定义
     OcrTextOperate operate = OcrTextOperate::OTO_empty;                  // 是哪一个按钮被按下
-    OcrChannel pipeline =  OcrChannel::OCR_high_precision;
+    OcrChannel pipeline =  OcrChannel::OCR_baidu_high_precision;
     bool allowWrite = false;
     bool bTranslate = false;
 

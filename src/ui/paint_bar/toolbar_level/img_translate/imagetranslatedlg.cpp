@@ -8,14 +8,14 @@ ImageTranslateDlg::ImageTranslateDlg(QWidget *parent)
 {
     ui->setupUi(this);
 
-    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
+    const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
     QString currLanguageFrom;
     QString currLanguageTo;
-    if (iamge_translate_channel == "baidu") {
+    if (iamge_translate_channel == 0) {  // TBD
         const auto& cbbFrom = languageMapCodeBaiDu();
         const auto& cbbTo = languageMapCodeBaiDu();
-        currLanguageFrom = findKeyByValue(cbbFrom, CJ_GET_QSTR("tokens.iamge_translate_from_baidu"));
-        currLanguageTo = findKeyByValue(cbbTo, CJ_GET_QSTR("tokens.iamge_translate_to_baidu"));
+        currLanguageFrom = findKeyByValue(cbbFrom, CJ_GET_QSTR("tokens.iamge_translate.baidu.from"));
+        currLanguageTo = findKeyByValue(cbbTo, CJ_GET_QSTR("tokens.iamge_translate.baidu.to"));
 
         for (const auto& it : cbbFrom) ui->cbbFrom->addItem(it.first, it.second);
         for (const auto& it : cbbTo) {
@@ -23,11 +23,11 @@ ImageTranslateDlg::ImageTranslateDlg(QWidget *parent)
                 ui->cbbTo->addItem(it.first, it.second);
         }
 
-    } else if (iamge_translate_channel == "youdao") {
+    } else if (iamge_translate_channel == 1) {
         const auto& cbbFrom = languageMapCodeYouDao();
         const auto& cbbTo = languageMapCodeYouDao();
-        currLanguageFrom = findKeyByValue(cbbFrom, CJ_GET_QSTR("tokens.iamge_translate_from_youdao"));
-        currLanguageTo = findKeyByValue(cbbTo, CJ_GET_QSTR("tokens.iamge_translate_to_youdao"));
+        currLanguageFrom = findKeyByValue(cbbFrom, CJ_GET_QSTR("tokens.iamge_translate.youdao.from"));
+        currLanguageTo = findKeyByValue(cbbTo, CJ_GET_QSTR("tokens.iamge_translate.youdao.to"));
 
         for (const auto& it : cbbFrom) ui->cbbFrom->addItem(it.first, it.second);
         for (const auto& it : cbbTo) {
@@ -64,20 +64,20 @@ void ImageTranslateDlg::setRightPixmap(const QSize &size, const QString &path)
 
 void ImageTranslateDlg::on_cbbFrom_currentTextChanged(const QString &text)
 {
-    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
-    const auto& map = (iamge_translate_channel == "baidu") ? languageMapCodeBaiDu() : languageMapCodeYouDao();
+    const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
+    const auto& map = (iamge_translate_channel == 0) ? languageMapCodeBaiDu() : languageMapCodeYouDao();
 
     auto it = map.find(text);
     const auto& from = it != map.cend() ? it->second : "auto";
-    iamge_translate_channel == "baidu" ?  CJ_SET("tokens.iamge_translate_from_baidu", from.toStdString()) : CJ_SET("tokens.iamge_translate_from_youdao", from.toStdString());
+    iamge_translate_channel == 0 ?  CJ_SET("tokens.iamge_translate.baidu.from", from.toStdString()) : CJ_SET("tokens.iamge_translate.youdao.from", from.toStdString());
 
 }
 void ImageTranslateDlg::on_cbbTo_currentTextChanged(const QString &text)
 {
-    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
-    const auto& map = (iamge_translate_channel == "baidu") ? languageMapCodeBaiDu() : languageMapCodeYouDao();
+    const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
+    const auto& map = (iamge_translate_channel == 0) ? languageMapCodeBaiDu() : languageMapCodeYouDao();
 
     auto it = map.find(text);
     const auto& to = it != map.cend() ? it->second : "auto";
-    iamge_translate_channel == "baidu" ?  CJ_SET("tokens.iamge_translate_to_baidu", to.toStdString()) : CJ_SET("tokens.iamge_translate_to_youdao", to.toStdString());
+    iamge_translate_channel == 0 ?  CJ_SET("tokens.iamge_translate.baidu.to", to.toStdString()) : CJ_SET("tokens.iamge_translate.youdao.to", to.toStdString());
 }

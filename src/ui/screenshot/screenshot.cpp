@@ -452,15 +452,11 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 
     const QString& path = dir + QString("OCRTranslate_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
     const bool ok = imageSave(path, false);
-
-
     QFile file(path);
     if (ok && file.exists()) {
 
-        if (data.channel == "youdao")
-            m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
-        else if (data.channel == "baidu")
-            m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
+        if (data.channel == ImageTranslateChannel::ITC_baidu) m_networkOCR->sendBaiDuImgTranslateRequest(data, path);
+        else if (data.channel == ImageTranslateChannel::ITC_youdao) m_networkOCR->sendYouDaoImgTranslateRequest(data, path);
 
     } else {
         // 文件不存在
@@ -498,22 +494,6 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 
 void ScreenShot::onOCRTextCtrlIdReleased(const OcrData &data)
 {
-    // if (data.operate == OcrTextOperate::OTO_is_allow_edit) {
-    //     m_ocrTextEdit->setReadOnly(!data.allowWrite);
-    //     return;
-
-    // } else if (data.operate == OcrTextOperate::OTO_text_copy) {
-
-    //     QClipboard* clipboard = QApplication::clipboard();
-    //     clipboard->setText(m_ocrTextEdit->toPlainText());
-    //     return;
-
-    // } else if (data.operate == OcrTextOperate::OTO_update) {
-    //     // 直接刷新
-    // }  else {
-    //     qDebug() << "ScreenShot::onOCRTextCtrlIdReleased is OcrData is empty!";
-    // }
-
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
     QDir directory(dir);
     if (!directory.exists() && !directory.mkpath(dir)) {
@@ -549,15 +529,27 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
     const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
     if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
         m_ocrDlg->setRightText(text);
+        if (!j.empty() && j.contains("error_code")) {
+            const int& error_code = j["error_code"];
+
+            if (error_code == 17) {   // 17 每天请求量超限额
+                if (CJ.getKeyValue("tokens.ocr.channel_auto").get<bool>()) {
+                    OcrChannel channel = OcrChannel(CJ_GET("advanced.customize_ui_parameters.ocr_bottom_align_rang").get<int>());
+                    CJ_SET("tokens.ocr.channel", ++channel);
+                }
+            }
+        }
+
+
     } else {
-        if (ocrTextData.pipeline == OcrChannel::OCR_standard || ocrTextData.pipeline == OcrChannel::OCR_standard_location
-            ||ocrTextData.pipeline == OcrChannel::OCR_high_precision || ocrTextData.pipeline == OcrChannel::OCR_high_precision_location) {
+        if (ocrTextData.pipeline == OcrChannel::OCR_baidu_standard || ocrTextData.pipeline == OcrChannel::OCR_baidu_standard_location
+            ||ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision || ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision_location) {
             // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
             for (const auto& item : j["words_result"]) {
                 std::string words = item["words"];
                 QString text = QString::fromStdString(words);
 
-                const bool& containLocation = ocrTextData.pipeline == OcrChannel::OCR_standard_location || ocrTextData.pipeline == OcrChannel::OCR_high_precision_location;
+                const bool& containLocation = ocrTextData.pipeline == OcrChannel::OCR_baidu_standard_location || ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision_location;
                 if (containLocation) {
                     json location = item["location"];
                     int left = location["left"];
@@ -566,7 +558,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
                     int bottom = top + location["height"].get<int>();
                     static int lastBottom = bottom;
 
-                    const int range = CJ_GET("tokens.advanced_ocr_baidu_align_rang").get<int>();
+                    const int range = CJ_GET("advanced.customize_ui_parameters.ocr_bottom_align_rang").get<int>();
                     if (qAbs(bottom - lastBottom) <= range)
                         m_ocrDlg->appendRightText(text + "    ");
                     else
@@ -657,7 +649,14 @@ void ScreenShot::initUI()
     monitorsInfo();
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);  // | Qt::WindowStaysOnTopHint
+
+#ifdef QT_DEBUG
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
+#else
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+#endif
+
+
 #ifdef HALF_SCRN_DEVELOP
     setWindowFlag(Qt::WindowStaysOnTopHint, false);
     if (m_screens.size() == 1) {

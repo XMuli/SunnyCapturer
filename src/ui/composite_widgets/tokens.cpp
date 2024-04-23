@@ -7,6 +7,7 @@
 #include "ui_tokens.h"
 #include <QIcon>
 #include "../../data/configjson.h"
+#include "../paint_bar/toolbar_level/paintbarhelper.h"
 
 Tokens::Tokens(QWidget *parent) :
     QWidget(parent),
@@ -23,70 +24,75 @@ Tokens::~Tokens()
 
 void Tokens::initUI()
 {
-    const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
-    const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
-    const QString& baidu_api_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_api_key"));
-    const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_secret_key"));
-    const QString& ocr_channel = CJ_GET_QSTR("tokens.ocr_channel");
-    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
+    const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.account.youdao.app_id"));
+    const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.account.youdao.secret_key"));
+    const QString& baidu_api_key = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.api_key"));
+    const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.secret_key"));
+    const int& ocr_channel = CJ_GET("tokens.ocr.channel");
+    const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
+    const bool& is_ocr_auto = CJ_GET("tokens.ocr.channel_auto");
+    const bool& is_iamge_translate_auto = CJ_GET("tokens.iamge_translate.channel_auto");
 
     ui->leYDAppID->setText(youdao_app_id);
     ui->leYDApiSecret->setText(youdao_secret_key);
     ui->leBdApiKey->setText(baidu_api_key);
     ui->leBdSecretKey->setText(baidu_secret_key);
 
-    const QStringList list = {"high", "high_location", "standard", "standard_location"};
+    const QStringList list = {tr("auto"), tr("standard location"), tr("high location"), tr("high"), tr("standard")}; // 和 OcrChannel 顺序保持一致即可
     for (int i = 0; i < list.count(); ++i) {
         const QString& text = QString("%1 %2").arg(i).arg(list.at(i));
-        ui->cbbOcr->addItem(text, list.at(i));
-        ui->cbbOcr->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/baidu.svg"));
+        ui->cbbOcr->addItem(text, i);
+        ui->cbbOcr->setItemIcon(i, QIcon(QString(":/resources/icons/setting/tokens/%1.svg").arg( i== 0 ? "auto" : "baidu")));
     }
-    ui->cbbOcr->setCurrentIndex(list.indexOf(ocr_channel));
+    ui->cbbOcr->setCurrentIndex(is_ocr_auto ? 0 : ocr_channel);
 
-    const QStringList imgTranslate = {"baidu", "youdao"};  /*"baidu_fanyi",*/
+    const QStringList imgTranslate = {tr("auto"), tr("baidu"), tr("youdao")};
+    // ImageTranslateChannel imageTranslateChannel = ImageTranslateChannel::ITC_baidu;
     for (int i = 0; i < imgTranslate.count(); ++i) {
         const QString& text = QString("%1 %2").arg(i).arg(imgTranslate.at(i));
-        ui->cbbImgTranslate->addItem(text, imgTranslate.at(i));
-
-        QString iconName = "baidu";
-        if (text.contains("baidu")) iconName =  "baidu";
-        else if (text.contains("youdao")) iconName =  "youdao";
-        ui->cbbImgTranslate->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/" + iconName + ".svg"));
+        ui->cbbImgTranslate->addItem(text, i);
+        QString iconName = "";
+        if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_auto) iconName = "auto";
+        else if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_baidu) iconName = "baidu";
+        else if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_youdao) iconName = "youdao";
+        ui->cbbImgTranslate->setItemIcon(i, QIcon(QString(":/resources/icons/setting/tokens/%1.svg").arg(iconName));
     }
-    ui->cbbImgTranslate->setCurrentIndex(imgTranslate.indexOf(iamge_translate_channel));
+    ui->cbbImgTranslate->setCurrentIndex(is_iamge_translate_auto ? 0 : iamge_translate_channel);
 }
 
 void Tokens::on_cbbOcr_currentIndexChanged(int index)
 {
-    const QString& channel = ui->cbbOcr->currentData().toString();
-    CJ_SET("tokens.ocr_channel", channel.toStdString());
+    const int& channel = ui->cbbOcr->currentData().toInt();
+    CJ_SET("tokens.ocr.channel", channel);
+    CJ_SET("tokens.ocr.channel_auto", channel == 0 ? true : false);
 }
 
 void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
 {
-    const QString& channel = ui->cbbImgTranslate->currentData().toString();
-    CJ_SET("tokens.iamge_translate_channel", channel.toStdString());
+    const int& channel = ui->cbbImgTranslate->currentData().toInt();
+    CJ_SET("tokens.iamge_translate.channel", channel);
+    CJ_SET("tokens.iamge_translate.channel_auto", channel == 0 ? true : false);
 }
 
 void Tokens::on_leYDAppID_textChanged(const QString &arg1)
 {
-    CJ_SET("tokens.youdao_app_id", CJ.encryptString(arg1));
+    CJ_SET("tokens.account.youdao.app_id", CJ.encryptString(arg1));
 }
 
 void Tokens::on_leYDApiSecret_textChanged(const QString &arg1)
 {
-    CJ_SET("tokens.youdao_secret_key", CJ.encryptString(arg1));
+    CJ_SET("tokens.account.youdao.secret_key", CJ.encryptString(arg1));
 
 }
 
 void Tokens::on_leBdApiKey_textChanged(const QString &arg1)
 {
-    CJ_SET("tokens.baidu_api_key", CJ.encryptString(arg1));
+    CJ_SET("tokens.account.baidu.api_key", CJ.encryptString(arg1));
 }
 
 void Tokens::on_leBdSecretKey_textChanged(const QString &arg1)
 {
-    CJ_SET("tokens.baidu_secret_key", CJ.encryptString(arg1));
+    CJ_SET("tokens.account.baidu.secret_key", CJ.encryptString(arg1));
 }
 
 void Tokens::onBtnResetClicked(bool checked)
@@ -95,12 +101,12 @@ void Tokens::onBtnResetClicked(bool checked)
     const ordered_json& j = CJ.defaultConfigJson();
     CJ.setJ("tokens", j["tokens"]);
 
-    const QString& ocr_channel = CJ_GET_QSTR("tokens.ocr_channel");
-    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
-    const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
-    const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
-    const QString& baidu_api_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_api_key"));
-    const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.baidu_secret_key"));
+    const QString& ocr_channel = CJ_GET_QSTR("tokens.ocr.channel");
+    const QString& iamge_translate_channel = CJ_GET_QSTR("tokens.iamge_translate.channel");
+    const QString& youdao_app_id = CJ.decryptString(CJ_GET_STR("tokens.account.youdao.app_id"));
+    const QString& youdao_secret_key = CJ.decryptString(CJ_GET_STR("tokens.account.youdao.secret_key"));
+    const QString& baidu_api_key = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.api_key"));
+    const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.secret_key"));
 
     const QStringList list = {"high", "high_location", "standard", "standard_location"};
     ui->cbbOcr->setCurrentIndex(list.indexOf(ocr_channel));

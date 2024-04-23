@@ -33,18 +33,18 @@ NetworkOCR::NetworkOCR(QObject *parent)
 {
    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetworkOCR::onRequestFinished);
 
-   const QString &client_id = CJ.decryptString(CJ_GET_STR("tokens.baidu_api_key"));
-   const QString &client_secret = CJ.decryptString(CJ_GET_STR("tokens.baidu_secret_key"));
+   const QString &client_id = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.api_key"));
+   const QString &client_secret = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.secret_key"));
    sendBaiDuAccessToken(client_id, client_secret);
 }
 
 void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
 {
     QString para1 = "accurate";
-    if (data.pipeline == OcrChannel::OCR_high_precision_location) para1 = "accurate";
-    else if (data.pipeline == OcrChannel::OCR_high_precision) para1 = "accurate_basic";
-    else if (data.pipeline == OcrChannel::OCR_standard_location) para1 = "general";
-    else if (data.pipeline == OcrChannel::OCR_standard) para1 = "general_basic";
+    if (data.pipeline == OcrChannel::OCR_baidu_high_precision_location) para1 = "accurate";
+    else if (data.pipeline == OcrChannel::OCR_baidu_high_precision) para1 = "accurate_basic";
+    else if (data.pipeline == OcrChannel::OCR_baidu_standard_location) para1 = "general";
+    else if (data.pipeline == OcrChannel::OCR_baidu_standard) para1 = "general_basic";
 
     // 从文件中读取图像数据并进行base64编码
     QUrl url("https://aip.baidubce.com/rest/2.0/ocr/v1/" + para1 + "?access_token=" + m_baiDuToken);
@@ -129,8 +129,8 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     postData.addQueryItem("type", "1");
 
     // 您的 YouDao 应用 ID / 应用密钥
-    QString APP_KEY = CJ.decryptString(CJ_GET_STR("tokens.youdao_app_id"));
-    QString APP_SECRET = CJ.decryptString(CJ_GET_STR("tokens.youdao_secret_key"));
+    QString APP_KEY = CJ.decryptString(CJ_GET_STR("tokens.account.youdao.app_id"));
+    QString APP_SECRET = CJ.decryptString(CJ_GET_STR("tokens.account.youdao.secret_key"));
 
     // 创建 QMap 并添加参数
     QMap<QString, QString> params;
@@ -305,7 +305,6 @@ void NetworkOCR::dealBaiDuImgTranslateRequest(QNetworkReply *reply)
     if (dataHead.at(0) == "200") {
         if (j.contains("error_code") && j["error_code"] == "0" && j.contains("data") && j.contains("data") && j["data"].contains("pasteImg")) {
             QString render_image = QString::fromStdString(j["data"]["pasteImg"].dump());
-
             QByteArray byteArray = QByteArray::fromBase64(render_image.toUtf8());
 
             // 将图像数据加载到QImage
@@ -319,8 +318,6 @@ void NetworkOCR::dealBaiDuImgTranslateRequest(QNetworkReply *reply)
 
                 const auto& path = dir + QString("BaiDu_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
                 image.save(path);
-
-
 
                 emit COMM.sigOCRImageGenerateFinsh(image.size(), path);
                 qDebug() << "OCR image size:" << image.size() << "path:" << path;

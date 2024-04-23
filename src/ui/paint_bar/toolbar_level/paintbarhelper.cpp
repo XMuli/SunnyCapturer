@@ -22,6 +22,50 @@
 #include "xtoolbutton.h"
 #include "../../../data/configjson.h"
 
+// 使枚举支持自增操作(前缀自增运算符 ++channel)
+OcrChannel& operator++(OcrChannel& channel)
+{
+    switch (channel)
+    {
+    case OcrChannel::OCR_baidu_standard_location:
+        return channel = OcrChannel::OCR_baidu_high_precision_location;
+    case OcrChannel::OCR_baidu_high_precision_location:
+        return channel = OcrChannel::OCR_baidu_high_precision;
+    case OcrChannel::OCR_baidu_high_precision:
+        return channel = OcrChannel::OCR_baidu_standard;
+    case OcrChannel::OCR_baidu_standard:
+        return channel = OcrChannel::OCR_baidu_standard_location;
+    }
+    return channel; // 默认返回，虽然理论上不会到达这里
+}
+
+// 支持后缀自增运算符
+OcrChannel operator++(OcrChannel& channel, int)
+{
+    OcrChannel old = channel;
+    ++channel;
+    return old;
+}
+
+ImageTranslateChannel& operator++(ImageTranslateChannel& channel)
+{
+    switch (channel)
+    {
+    case ImageTranslateChannel::ITC_baidu:
+        return channel = ImageTranslateChannel::ITC_youdao;
+    case ImageTranslateChannel::ITC_youdao:
+        return channel = ImageTranslateChannel::ITC_baidu;
+    }
+    return channel;
+}
+
+ImageTranslateChannel operator++(ImageTranslateChannel& channel, int)
+{
+    ImageTranslateChannel old = channel;
+    ++channel;
+    return old;
+}
+
 void setAttrRecur(QDomElement &elem, QString strtagname, QString strattr, QString strattrval)
 {
     // if it has the tagname then overwritte desired attribute

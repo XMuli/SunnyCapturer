@@ -226,17 +226,16 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
         } else if (type == PaintType::PT_img_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
 
             // 线路发生改变，需要重新赋值
-            const auto& channel = CJ_GET_QSTR("tokens.iamge_translate_channel");
-            m_imgTransDate.channel = channel;
-            if (channel == "baidu") {
-                m_imgTransDate.from_baidu = CJ_GET_QSTR("tokens.iamge_translate_from_baidu");
-                m_imgTransDate.to_baidu = CJ_GET_QSTR("tokens.iamge_translate_to_baidu");
-
-            } else if (channel == "youdao") {
-                m_imgTransDate.from = CJ_GET_QSTR("tokens.iamge_translate_from_youdao");
-                m_imgTransDate.to = CJ_GET_QSTR("tokens.iamge_translate_to_youdao");
+            const ImageTranslateChannel& channel = ImageTranslateChannel(CJ_GET("tokens.iamge_translate.channel").get<int>());
+            if (channel == ImageTranslateChannel::ITC_baidu) {
+                m_imgTransDate.from_baidu = CJ_GET_QSTR("tokens.iamge_translate.baidu.from");
+                m_imgTransDate.to_baidu = CJ_GET_QSTR("tokens.iamge_translate.baidu.to");
+            } else if (channel == ImageTranslateChannel::ITC_youdao) {
+                m_imgTransDate.from = CJ_GET_QSTR("tokens.iamge_translate.youdao.from");
+                m_imgTransDate.to = CJ_GET_QSTR("tokens.iamge_translate.youdao.to");
             }
 
+            m_imgTransDate.channel = channel;
             m_imgTransDate.bTranslate = true;
             if (isChecked)
                 emit sigImgTranslate(m_imgTransDate);
@@ -244,13 +243,8 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
             m_ocrTextDate.bTranslate = true;
 
             // OCR 线路发生改变，需要重新赋值
-            const auto& text = CJ.getKeyValue("tokens.ocr_channel");
-            OcrChannel ocr;
-            if (text == "high") ocr = OcrChannel::OCR_high_precision;
-            else if (text == "high_location") ocr = OcrChannel::OCR_high_precision_location;
-            else if (text == "standard") ocr = OcrChannel::OCR_standard;
-            else if (text == "standard_location") ocr = OcrChannel::OCR_standard_location;
-            m_ocrTextDate.pipeline = ocr;
+            const int& t = CJ.getKeyValue("tokens.ocr.channel").get<int>();
+            m_ocrTextDate.pipeline = OcrChannel(CJ.getKeyValue("tokens.ocr.channel").get<int>());
 
             if (isChecked) emit sigOcr(m_ocrTextDate);
         }
