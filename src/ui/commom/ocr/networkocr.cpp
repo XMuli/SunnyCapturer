@@ -144,12 +144,11 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     AuthV3Util::addAuthParams(APP_KEY, APP_SECRET, params);
 
     for (const QString &key : params.keys()) {
-        static int i = 1;
-
         if (key != "q")
             postData.addQueryItem(key, params[key]);
 
-        qDebug().noquote() << "i:" << i++ << "key:" << key << params[key];
+        // static int i = 1;
+        // qDebug().noquote() << "i:" << i++ << "key:" << key << params[key];
     }
 
     m_networkManager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
@@ -395,6 +394,7 @@ void NetworkOCR::dealYouDaoImgTranslateRequest(QNetworkReply *reply)
             //            qDebug() << "decodedData:" << decodedData;
 
         } else {
+            qDebug() << "QString::fromStdString(j.dump()):" << QString::fromStdString(j.dump());
             emit COMM.sigOCRImageGenerateFinsh(QSize(), QString::fromStdString(j.dump()));   // 返回具体的错误码
         }
 

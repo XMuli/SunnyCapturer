@@ -38,7 +38,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_bAutoDetectRect(CJ_GET("interface.auto_detect_windows").get<bool>())
     , m_HotKeyType(type)
     , m_actionType(ActionType::AT_wait)
-    , m_paintBar(new PaintBar(orie, this))
+    , m_toolsBar(new PaintBar(orie, this))
     , m_networkOCR(new NetworkOCR(this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
@@ -275,7 +275,7 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
 
     if (isCheckable) {
 
-        if (m_paintBar->hadDrawBtnsChecked()) {
+        if (m_toolsBar->hadDrawBtnsChecked()) {
             m_actionType = ActionType::AT_drawing_shap;
 
             if (paintType == PaintType::PT_img_translate && type != PaintType::PT_img_translate) {
@@ -405,7 +405,7 @@ void ScreenShot::onHidePointTips()
 
 void ScreenShot::onUpdateToolBarBlurPixmap()
 {
-    showCustomWidget(m_paintBar);
+    showCustomWidget(m_toolsBar);
 }
 
 void ScreenShot::onPickedColor(const QColor &color)
@@ -534,7 +534,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
             if (error_code == 17) {   // 17 每天请求量超限额
                 if (CJ.getKeyValue("tokens.ocr.channel_auto").get<bool>()) {
-                    OcrChannel channel = OcrChannel(CJ_GET("advanced.customize_ui_parameters.ocr_bottom_align_rang").get<int>());
+                    OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
                     CJ_SET("tokens.ocr.channel", ++channel);
                 }
             }
@@ -542,33 +542,30 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
 
     } else {
-        if (ocrTextData.pipeline == OcrChannel::OCR_baidu_standard || ocrTextData.pipeline == OcrChannel::OCR_baidu_standard_location
-            ||ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision || ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision_location) {
-            // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
-            for (const auto& item : j["words_result"]) {
-                std::string words = item["words"];
-                QString text = QString::fromStdString(words);
 
-                const bool& containLocation = ocrTextData.pipeline == OcrChannel::OCR_baidu_standard_location || ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision_location;
-                if (containLocation) {
-                    json location = item["location"];
-                    int left = location["left"];
-                    int top = location["top"];
-                    int right = left + location["width"].get<int>();
-                    int bottom = top + location["height"].get<int>();
-                    static int lastBottom = bottom;
+        // 遍历 "words_result" 数组并将 "words" 按照 "location" 字段的坐标插入
+        for (const auto& item : j["words_result"]) {
+            std::string words = item["words"];
+            QString text = QString::fromStdString(words);
 
-                    const int range = CJ_GET("advanced.customize_ui_parameters.ocr_bottom_align_rang").get<int>();
-                    if (qAbs(bottom - lastBottom) <= range)
-                        m_ocrDlg->appendRightText(text + "    ");
-                    else
-                        m_ocrDlg->appendRightText("\n" + text + "    ");
+            const bool& containLocation = ocrTextData.pipeline == OcrChannel::OCR_baidu_standard_location || ocrTextData.pipeline == OcrChannel::OCR_baidu_high_precision_location;
+            if (containLocation) {
+                json location = item["location"];
+                int left = location["left"];
+                int top = location["top"];
+                int right = left + location["width"].get<int>();
+                int bottom = top + location["height"].get<int>();
+                static int lastBottom = bottom;
 
-                    lastBottom = bottom;
-                } else {
-                    m_ocrDlg->appendRightText(text + "\n");
-                }
+                const int range = CJ_GET("advanced.customize_ui_parameters.ocr_bottom_align_rang").get<int>();
+                if (qAbs(bottom - lastBottom) <= range)
+                    m_ocrDlg->appendRightText(text + "    ");
+                else
+                    m_ocrDlg->appendRightText("\n" + text + "    ");
 
+                lastBottom = bottom;
+            } else {
+                m_ocrDlg->appendRightText(text + "\n");
             }
         }
     }
@@ -612,7 +609,7 @@ void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     m_vdRect = m_primaryScreen->virtualGeometry();
-    m_paintBar->raise();
+    m_toolsBar->raise();
     m_pickedRectTips->raise();
     m_pointTips->raise();
 
@@ -640,8 +637,8 @@ void ScreenShot::initUI()
     m_edit->hide();
     m_ocrTextEdit->setReadOnly(true);
     m_ocrTextEdit->hide();
-    m_paintBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
-    m_paintBar->hide();
+    m_toolsBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
+    m_toolsBar->hide();
     m_pointTips->hide();
     m_pickedRectTips->hide();
 
@@ -702,24 +699,24 @@ void ScreenShot::initConnect()
     connect(&COMM, &Communication::sigImgTranslateCtrlHide, this, &ScreenShot::onOcrTranslateCtrlHide);
     connect(&COMM, &Communication::sigOcrTextCtrlHide, this, &ScreenShot::onOcrTextCtrlHide);
 //    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
-//        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_paintBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
+//        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_toolsBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
 //    });
 
-    connect(m_paintBar, &PaintBar::sigPaintToolBtnsRelease, this, &ScreenShot::onPaintBtnRelease);
-    connect(m_paintBar, &PaintBar::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
-    connect(m_paintBar, &PaintBar::sigTextCtrlToggled, this, &ScreenShot::onTextCtrlToggled);
-    connect(m_paintBar, &PaintBar::sigPointCtrlReleased, this, &ScreenShot::onPointCtrlReleased);
-    connect(m_paintBar, &PaintBar::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
-    connect(m_paintBar, &PaintBar::sigUpdatePaintBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
-    connect(m_paintBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
-    connect(m_paintBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
-    connect(m_paintBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
-    connect(m_paintBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
-    connect(m_paintBar, &PaintBar::sigOcr, this, &ScreenShot::onOCRTextCtrlIdReleased);
-    connect(m_paintBar, &PaintBar::sigScreenshotUpdate, this, [this](){ update(); });
+    connect(m_toolsBar, &PaintBar::sigPaintToolBtnsRelease, this, &ScreenShot::onPaintBtnRelease);
+    connect(m_toolsBar, &PaintBar::sigPaintCtrlIdReleased, this, &ScreenShot::onPaintCtrlIdReleased);
+    connect(m_toolsBar, &PaintBar::sigTextCtrlToggled, this, &ScreenShot::onTextCtrlToggled);
+    connect(m_toolsBar, &PaintBar::sigPointCtrlReleased, this, &ScreenShot::onPointCtrlReleased);
+    connect(m_toolsBar, &PaintBar::sigMosaicSliderValueChanged, this, &ScreenShot::onMosaicSliderValueChanged);
+    connect(m_toolsBar, &PaintBar::sigUpdatePaintBarBlurPixmap, this, &ScreenShot::onUpdateToolBarBlurPixmap);
+    connect(m_toolsBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
+    connect(m_toolsBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
+    connect(m_toolsBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
+    connect(m_toolsBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
+    connect(m_toolsBar, &PaintBar::sigOcr, this, &ScreenShot::onOCRTextCtrlIdReleased);
+    connect(m_toolsBar, &PaintBar::sigScreenshotUpdate, this, [this](){ update(); });
 
-    connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_paintBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
-    connect(this, &ScreenShot::sigAutoDisableUndoAndRedo, m_paintBar, &PaintBar::sigAutoDisableUndoAndRedo);
+    connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_toolsBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
+    connect(this, &ScreenShot::sigAutoDisableUndoAndRedo, m_toolsBar, &PaintBar::sigAutoDisableUndoAndRedo);
 }
 
 void ScreenShot::drawShadowOverlay(const QRect &fullRect, const QRect &pickedRect, QPainter& pa) const
@@ -921,7 +918,7 @@ void ScreenShot::preDestruction()
     if (m_screens.size()) m_screens.clear();
     if (!m_origPix.isNull()) m_origPix = QPixmap();
     if (!m_mosaicPix.isNull()) m_mosaicPix = QPixmap();
-    if (m_paintBar) m_paintBar->deleteLater();
+    if (m_toolsBar) m_toolsBar->deleteLater();
     if (m_rectNodes.size()) m_rectNodes.clear();
 }
 
@@ -995,6 +992,10 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
                                                                    .arg(tPt.x()).arg(tPt.y())
                                                                    .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
                                                                    .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
+    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_toolsBar Rect:(%3, %4, %5 * %6) m_pickedRectTips Rect:(%7, %8, %9 * %10)")
+                                                                   .arg(tPt.x()).arg(tPt.y())
+                                                                   .arg(m_toolsBar->rect().x()).arg(m_toolsBar->rect().y()).arg(m_toolsBar->rect().width()).arg(m_toolsBar->rect().height())
+                                                                   .arg(m_pickedRectTips->rect().x()).arg(m_pickedRectTips->rect().y()).arg(m_pickedRectTips->rect().width()).arg(m_pickedRectTips->rect().height()));
 
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//[m_paintNode]----------------------------------------------------"));
     tP1 = m_paintNode.node.p1;
@@ -1020,27 +1021,27 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
                                                                    .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
 
 
-    int idx = 0;
-    for (const auto& it : m_rectNodes) {
-        const auto& rect = xrectToQRect(it.rect);
-        const auto& relativelyRect = xrectToQRect(it.relativelyRect);
-        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//idx:%1-------------------------\n").arg(idx++));
-        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++),  QString("it.rect(%1, %2, %3 * %4) it.relativelyRect(%5, %6, %7 * %8)")
-                                                                       .arg(rect.x())
-                                                                       .arg(rect.y())
-                                                                       .arg(rect.width())
-                                                                       .arg(rect.height())
-                                                                       .arg(relativelyRect.x())
-                                                                       .arg(relativelyRect.y())
-                                                                       .arg(relativelyRect.width())
-                                                                       .arg(relativelyRect.height()));
+    // int idx = 0;
+    // for (const auto& it : m_rectNodes) {
+    //     const auto& rect = xrectToQRect(it.rect);
+    //     const auto& relativelyRect = xrectToQRect(it.relativelyRect);
+    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//idx:%1-------------------------\n").arg(idx++));
+    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++),  QString("it.rect(%1, %2, %3 * %4) it.relativelyRect(%5, %6, %7 * %8)")
+    //                                                                    .arg(rect.x())
+    //                                                                    .arg(rect.y())
+    //                                                                    .arg(rect.width())
+    //                                                                    .arg(rect.height())
+    //                                                                    .arg(relativelyRect.x())
+    //                                                                    .arg(relativelyRect.y())
+    //                                                                    .arg(relativelyRect.width())
+    //                                                                    .arg(relativelyRect.height()));
 
 
-        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString::fromStdWString(it.title));
-        quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
-        QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
-        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
-    }
+    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString::fromStdWString(it.title));
+    //     quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
+    //     QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
+    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
+    // }
     pa.restore();
 }
 
@@ -1137,49 +1138,79 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 
     QPoint pt;
     const int space = 10; // 和 pickedRect 之间的间隔
-    const QSize& size = m_paintBar->size();
+    const QSize& size = m_toolsBar->size();
     static bool prevBTranspose = false;
-    if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
+    const  QRect& absRt = m_node.absoluteRect;
+    if (cwt == CustomWidgetType::CWT_tools_bar) {
 
         bool bTranspose = false;  // 适当时需要翻转对调两个 bar 的位置
         if (m_orie == Qt::Horizontal) {
-            static int paintToolBarWidth = size.width(); // Horizontal 模式使用这个体验更佳
-            if(m_node.absoluteRect.bottom() + m_paintBar->height() + space <= currScrnRect(mapToGlobal(m_node.absoluteRect.bottomRight())).bottom()) {
-                pt = m_node.absoluteRect.bottomRight() + QPoint(-1 * paintToolBarWidth, space);
-            } else if (m_node.absoluteRect.top() - m_paintBar->height() - space >= currScrnRect(mapToGlobal(m_node.absoluteRect.topRight())).top()) {
-                pt = m_node.absoluteRect.topRight() - QPoint(paintToolBarWidth, space + size.height());
+            const int barWidth = size.width(); // Horizontal 模式使用这个体验更佳
+            if(absRt.bottom() + m_toolsBar->height() + space <= currScrnRect(mapToGlobal(absRt.bottomRight())).bottom()) {  // 右底部外侧
+                pt = absRt.bottomRight() + QPoint(-1 * barWidth, space);
+            } else if (absRt.top() - m_toolsBar->height() - space > currScrnRect(mapToGlobal(absRt.topRight())).top()) {   // 右顶部外侧
+                pt = absRt.topRight() - QPoint(barWidth, space + size.height());
                 bTranspose = true;
-            } else {
-                pt = m_node.absoluteRect.topRight() + QPoint(-1 * paintToolBarWidth, space);
+            } else {  // 右顶部内侧
+                pt = absRt.topRight() + QPoint(-barWidth - space, space);
             }
+
+            // fix: 矩形框多窄，且在屏幕左边缘位置
+            if (mapToGlobal(pt).x() <= m_vdRect.left()) pt.setX(mapFromGlobal(m_vdRect.topLeft()).x());
+            else if (mapToGlobal(pt).x() + barWidth >= m_vdRect.right()) pt.setX(mapFromGlobal(m_vdRect.topRight()).x() - barWidth);
 
         } else if (m_orie == Qt::Vertical) {
 
-            if(m_node.absoluteRect.right() + m_paintBar->width() <= currScrnRect(mapToGlobal(m_node.absoluteRect.topRight())).right()) {
-                pt = m_node.absoluteRect.topRight() + QPoint(space, 0);
-            } else if (m_node.absoluteRect.left() - m_paintBar->width() >= currScrnRect(mapToGlobal(m_node.absoluteRect.topLeft())).left()) {
-                pt = m_node.absoluteRect.topLeft() + QPoint(-(space + size.width()), 0);
+            const int barHeight = size.height();
+            if(absRt.right() + m_toolsBar->width() <= currScrnRect(mapToGlobal(absRt.topRight())).right()) {
+                pt = absRt.topRight() + QPoint(space, 0);
+            } else if (absRt.left() - m_toolsBar->width() >= currScrnRect(mapToGlobal(absRt.topLeft())).left()) {
+                pt = absRt.topLeft() + QPoint(-(space + size.width()), 0);
                 bTranspose = true;
             } else {
-                pt = m_node.absoluteRect.topLeft() + QPoint(space, 0);
+                pt = absRt.topLeft() + QPoint(space, space);
             }
+
+            // 同上
+            if (mapToGlobal(pt).y() <= m_vdRect.top()) pt.setY(mapFromGlobal(m_vdRect.topLeft()).y());
+            else if (mapToGlobal(pt).y() + barHeight >= m_vdRect.bottom()) pt.setY(mapFromGlobal(m_vdRect.bottomLeft()).y() - barHeight);
         }
 
         if (prevBTranspose != bTranspose) {
-            m_paintBar->transposePaintBar(bTranspose);
+            m_toolsBar->transposePaintBar(bTranspose);
             prevBTranspose = bTranspose;
         }
 
-    } else if (cwt == CustomWidgetType::CWT_paint_btns_bar) {
     } else if (cwt == CustomWidgetType::CWT_picked_rect_tooptip) {
 
-        if(m_node.absoluteRect.top() - m_pickedRectTips->height() - space >= currScrnRect(mapToGlobal(m_node.absoluteRect.topLeft())).top()) {
-            pt = m_node.absoluteRect.topLeft() - QPoint(0, m_pickedRectTips->height() + space);
-        } else if (m_node.absoluteRect.bottom() + m_pickedRectTips->height() + space <= currScrnRect(mapToGlobal(m_node.absoluteRect.bottomLeft())).bottom()) {
-            pt = m_node.absoluteRect.bottomLeft() + QPoint(0, space);
-        } else {
-            pt = m_node.absoluteRect.topLeft() + QPoint(0, space);
+        if(absRt.top() - m_pickedRectTips->height() - space >= currScrnRect(mapToGlobal(absRt.topLeft())).top()) {                    // 左顶部外侧
+            pt = absRt.topLeft() - QPoint(0, m_pickedRectTips->height() + space);
+
+            const QRect rt(pt, m_pickedRectTips->size());
+            if (rt.intersects(QRect(m_toolsBar->mapToParent(m_toolsBar->rect().topLeft()), m_toolsBar->rect().size()))) {  // 两者相交
+                const int& tipsY = absRt.top() - m_pickedRectTips->height() - space * 2 - m_toolsBar->height();
+                if (tipsY >= currScrnRect(mapToGlobal(absRt.topLeft())).top()) pt.setY(tipsY);   // tips 在 boolbar 上面； 原则是尽量在外面，非里面
+                else pt.setY(absRt.top() + space);                                               // tips 在选中框的顶部的内侧
+            }
+
+        } else if (absRt.bottom() + m_pickedRectTips->height() + space <= currScrnRect(mapToGlobal(absRt.bottomLeft())).bottom()) {  // 左底部外侧
+            pt = absRt.bottomLeft() + QPoint(0, space);
+
+            const QRect rt(pt, m_pickedRectTips->size());
+            if (rt.intersects(QRect(m_toolsBar->mapToParent(m_toolsBar->rect().topLeft()), m_toolsBar->rect().size()))) {
+                const int& tipsY = absRt.bottom() + m_pickedRectTips->height() + space * 2 + m_toolsBar->height();
+                if (tipsY <= currScrnRect(mapToGlobal(absRt.bottomLeft())).bottom()) pt.setY(tipsY - m_pickedRectTips->height());   // tips 在 boolbar 下面
+                else pt.setY(absRt.bottom() - space - m_pickedRectTips->height());                                                                                  // tips 在选中框的底部的内侧
+            }
+
+        } else {   // 左底部内侧
+            pt = absRt.bottomLeft() + QPoint(space, -m_pickedRectTips->height() - space);
+            // 这一层实测不需要判断相交，也不会相交，除非物理屏幕高度过低，也没有意义
         }
+
+        // 同上
+        if (mapToGlobal(pt).x() <= m_vdRect.left()) pt.setX(mapFromGlobal(m_vdRect.topLeft()).x());
+        else if (mapToGlobal(pt).x() + m_pickedRectTips->width() >= m_vdRect.right()) pt.setX(mapFromGlobal(m_vdRect.topRight()).x() - m_pickedRectTips->width());
 
     } else if (cwt == CustomWidgetType::CWT_point_changed_tooptip) {
     } else {
@@ -1199,7 +1230,7 @@ void ScreenShot::showPickedRectTips()
 //    QString tips = QString("tp(%1, %2), br(%3, %4), %5 * %6")
 //                       .arg(rect.left()).arg(rect.top()).arg(rect.right()).arg(rect.bottom()).arg(rect.width()).arg(rect.height());
 
-//    const auto& barRect = m_paintBar->rect();
+//    const auto& barRect = m_toolsBar->rect();
 //    QString tips2 = QString(" -> tp(%1, %2), br(%3, %4), %5 * %6")
 //                       .arg(barRect.left()).arg(barRect.top()).arg(barRect.right()).arg(barRect.bottom()).arg(barRect.width()).arg(barRect.height());
     m_pickedRectTips->setText(tips);
@@ -1529,7 +1560,7 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
 
     if (bUpdate) {
         m_node.pickedRect = m_node.absoluteRect;
-        showCustomWidget(m_paintBar);
+        showCustomWidget(m_toolsBar);
         showPickedRectTips();
         update();
     }
@@ -1554,20 +1585,19 @@ void ScreenShot::showCustomWidget(QWidget *w)
     w->raise(); // fix: 本窗口无 Qt::WindowStaysOnTopHint 属性， paintBtnsBar 出现后，在此点击便会消失不见的 bug；
 
     const QRect& pickedRect(m_node.absoluteRect);
-    const QRect& wRect(w->rect());
     QPoint pt;
 
     const bool& isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
-    if (w == m_paintBar) {
+    if (w == m_toolsBar) {
 
-        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_paint_btns_bar);
+        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_tools_bar);
         if (isShow) {
             if (acrylicEffectEnable()) {
-                const auto& t = finishDrewPixmap().copy(QRect(pt, m_paintBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
+                const auto& t = finishDrewPixmap().copy(QRect(pt, m_toolsBar->rect().size())); // fix: toolbar 覆盖已经绘画的位置，没有被包含进去
                 const int& adius = CJ_GET("advanced.customize_ui_parameters.blur_effect_adius");
-                m_paintBar->setLowerBlurEffect(t, adius);  // 此函数会照成主线程的绘画，函数卡顿
+                m_toolsBar->setLowerBlurEffect(t, adius);  // 此函数会照成主线程的绘画，函数卡顿
             } else {
-                m_paintBar->disableBlurEffect();
+                m_toolsBar->disableBlurEffect();
             }
         }
 
@@ -1634,7 +1664,7 @@ void ScreenShot::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
     dealMousePressEvent(e);
-    showCustomWidget(m_paintBar);
+    showCustomWidget(m_toolsBar);
     showPickedRectTips();
     update();
 }
@@ -1643,7 +1673,7 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
     dealMouseReleaseEvent(e);
-    showCustomWidget(m_paintBar);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
+    showCustomWidget(m_toolsBar);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
     showPickedRectTips();
     update();
 
@@ -1653,7 +1683,7 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
 void ScreenShot::mouseMoveEvent(QMouseEvent *e)
 {
     dealMouseMoveEvent(e);
-    showCustomWidget(m_paintBar);
+    showCustomWidget(m_toolsBar);
     showPickedRectTips();
     update();
 }

@@ -58,11 +58,11 @@
         },
         "ocr": {
             "channel_auto": true,
-            "channel": 1
+            "channel": 0
         },
         "iamge_translate": {
             "channel_auto": true,
-            "channel": 1,
+            "channel": 0,
             "youdao": {
                 "from": "auto",
                 "to": "zh-CHS"

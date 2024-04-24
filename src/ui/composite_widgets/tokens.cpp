@@ -30,48 +30,42 @@ void Tokens::initUI()
     const QString& baidu_secret_key = CJ.decryptString(CJ_GET_STR("tokens.account.baidu.secret_key"));
     const int& ocr_channel = CJ_GET("tokens.ocr.channel");
     const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
-    const bool& is_ocr_auto = CJ_GET("tokens.ocr.channel_auto");
-    const bool& is_iamge_translate_auto = CJ_GET("tokens.iamge_translate.channel_auto");
 
     ui->leYDAppID->setText(youdao_app_id);
     ui->leYDApiSecret->setText(youdao_secret_key);
     ui->leBdApiKey->setText(baidu_api_key);
     ui->leBdSecretKey->setText(baidu_secret_key);
 
-    const QStringList list = {tr("auto"), tr("standard location"), tr("high location"), tr("high"), tr("standard")}; // 和 OcrChannel 顺序保持一致即可
+    const QStringList list = {tr("standard location"), tr("high location"), tr("high"), tr("standard")}; // 和 OcrChannel 顺序保持一致即可
     for (int i = 0; i < list.count(); ++i) {
         const QString& text = QString("%1 %2").arg(i).arg(list.at(i));
         ui->cbbOcr->addItem(text, i);
-        ui->cbbOcr->setItemIcon(i, QIcon(QString(":/resources/icons/setting/tokens/%1.svg").arg( i== 0 ? "auto" : "baidu")));
+        ui->cbbOcr->setItemIcon(i, QIcon(":/resources/icons/setting/tokens/baidu.svg"));
     }
-    ui->cbbOcr->setCurrentIndex(is_ocr_auto ? 0 : ocr_channel);
+    ui->cbbOcr->setCurrentIndex(ocr_channel);
 
-    const QStringList imgTranslate = {tr("auto"), tr("baidu"), tr("youdao")};
-    // ImageTranslateChannel imageTranslateChannel = ImageTranslateChannel::ITC_baidu;
+    const QStringList imgTranslate = {tr("baidu"), tr("youdao")};
     for (int i = 0; i < imgTranslate.count(); ++i) {
         const QString& text = QString("%1 %2").arg(i).arg(imgTranslate.at(i));
         ui->cbbImgTranslate->addItem(text, i);
         QString iconName = "";
-        if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_auto) iconName = "auto";
-        else if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_baidu) iconName = "baidu";
+        if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_baidu) iconName = "baidu";
         else if (ImageTranslateChannel(i) == ImageTranslateChannel::ITC_youdao) iconName = "youdao";
-        ui->cbbImgTranslate->setItemIcon(i, QIcon(QString(":/resources/icons/setting/tokens/%1.svg").arg(iconName));
+        ui->cbbImgTranslate->setItemIcon(i, QIcon(QString(":/resources/icons/setting/tokens/%1.svg").arg(iconName)));
     }
-    ui->cbbImgTranslate->setCurrentIndex(is_iamge_translate_auto ? 0 : iamge_translate_channel);
+    ui->cbbImgTranslate->setCurrentIndex(iamge_translate_channel);
 }
 
 void Tokens::on_cbbOcr_currentIndexChanged(int index)
 {
     const int& channel = ui->cbbOcr->currentData().toInt();
     CJ_SET("tokens.ocr.channel", channel);
-    CJ_SET("tokens.ocr.channel_auto", channel == 0 ? true : false);
 }
 
 void Tokens::on_cbbImgTranslate_currentIndexChanged(int index)
 {
     const int& channel = ui->cbbImgTranslate->currentData().toInt();
     CJ_SET("tokens.iamge_translate.channel", channel);
-    CJ_SET("tokens.iamge_translate.channel_auto", channel == 0 ? true : false);
 }
 
 void Tokens::on_leYDAppID_textChanged(const QString &arg1)

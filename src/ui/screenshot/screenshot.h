@@ -129,7 +129,7 @@ private:
     HotKeyType               m_HotKeyType;         // 初始化进来的状态，采用何用截图方式
     ActionType               m_actionType;         // 当前的操作状态
     Node                     m_node;               // 一次操作的集合
-    QPointer<PaintBar>       m_paintBar;           // PaintBar
+    QPointer<PaintBar>       m_toolsBar;           // PaintBar
     QPointer<NetworkOCR>     m_networkOCR;         // OCR 翻译类
 
     PaintNode                m_paintNode;          // 当前绘画元素
@@ -144,8 +144,6 @@ private:
     QPointer<XOcrTextEdit>        m_ocrTextEdit;
     QPointer<XOcrDlg>             m_ocrDlg;              // OCR 文字提取
     QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
-
-
 
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;

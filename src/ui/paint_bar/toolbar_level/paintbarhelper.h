@@ -70,7 +70,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 // OcrChannel + OcrData 都是调用
 enum class OcrChannel
 {
-    OCR_auto,                                // 自动循环下面的
+    // OCR_auto,                                // 自动循环下面的
     OCR_baidu_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
     OCR_baidu_high_precision_location,       // 通用文字识别（高精度含位置版）     500 次/month
     OCR_baidu_high_precision,                // 通用文字识别（高精度版）         1000 次/month
@@ -82,7 +82,7 @@ OcrChannel operator++(OcrChannel& channel, int);  // 支持后缀自增运算符
 
 enum class ImageTranslateChannel
 {
-    ITC_auto,                                // 自动循环下面的
+    // ITC_auto,                                // 自动循环下面的
     ITC_baidu,
     ITC_youdao
 };
@@ -107,8 +107,6 @@ struct ImgTranslateData
     QString to_baidu = "zh";
 };
 Q_DECLARE_METATYPE(ImgTranslateData)            // 可以被 QVariant 类型存储
-
-
 
 enum class OcrTextOperate
 {

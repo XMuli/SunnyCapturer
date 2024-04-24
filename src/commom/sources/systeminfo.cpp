@@ -208,7 +208,7 @@ QPixmap SystemInfo::renderMonitorToPixmap()
         pa.drawText(QPoint(adjustedRect.center().x() - 10, adjustedRect.top() - 5), widthText);
 
         // 绘制序号和主屏标记
-        QString text = QString("序号: %1").arg(i);
+        QString text = QString("序: %1").arg(i+1);
         if (m_scrns.at(i) == m_priScrn)
             text += " (Primary)";
         pa.drawText(adjustedRect.bottomLeft() + QPoint(5, -5), text);
@@ -396,16 +396,19 @@ QString SystemInfo::getCPUInfo()
 }
 
 QString SystemInfo::getMemoryInfo()
-{    
+{
     QString memoryInfo;
     // Get total physical memory using Windows API
     MEMORYSTATUSEX memStatus;
     memStatus.dwLength = sizeof(memStatus);
     GlobalMemoryStatusEx(&memStatus);
-    memoryInfo = QString::fromLatin1("%1 GB").arg(memStatus.ullTotalPhys / (1024 * 1024 * 1024));
+    double memoryInGB = memStatus.ullTotalPhys / (1024.0 * 1024.0 * 1024.0);  // 先计算以GB为单位的内存大小，使用double保证小数部分被保留
+    double roundedMemory = std::ceil(memoryInGB * 10.0) / 10.0;  // 使用 std::ceil 来向上取整到最近的0.1GB
+    memoryInfo = QString::fromLatin1("%1 GB").arg(roundedMemory, 0, 'f', 1); // 格式化输出
 
     return memoryInfo;
 }
+
 #elif defined(__GNUC__)
 #elif defined(__clang__)
 #endif
