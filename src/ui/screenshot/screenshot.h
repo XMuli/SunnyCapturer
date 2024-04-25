@@ -20,6 +20,7 @@
 #include "xtextedit.h"
 #include "xocrtextedit.h"
 #include "capturehelper.h"
+#include "xmagnifyingglass.h"
 #include "../paint_bar/paintbar.h"
 #include "../commom/ocr/networkocr.h"
 #include "../paint_bar/toolbar_level/ocr_text/xocrdlg.h"
@@ -145,6 +146,7 @@ private:
     QPointer<XOcrDlg>             m_ocrDlg;              // OCR 文字提取
     QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 
+    QPointer<XMagnifyingGlass>   m_magnifyingGlass;         // 取色器+放大镜
     QPointer<Tips>           m_pointTips;
     QPointer<Tips>           m_pickedRectTips;
     QTimer*                  m_timerPoint;

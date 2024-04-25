@@ -23,6 +23,7 @@
 #include <QShortcut>
 #include <QTextCharFormat>
 #include <QKeySequence>
+#include <QCursor>
 #include "xtextedit.h"
 #include "../paint_bar/toolbar_level/pin/pinwidget.h"
 
@@ -46,6 +47,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
     , m_ocrDlg(new XOcrDlg(nullptr))
     , m_imgTranslateDlg(new ImageTranslateDlg(nullptr))
+    , m_magnifyingGlass(new XMagnifyingGlass(this))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -258,6 +260,7 @@ void ScreenShot::showPointTips(const QString &text)
 {
     const QScreen *scrn = currentScreen();
     if (!scrn) scrn = m_primaryScreen;
+
 
     m_pointTips->setText(text);
     m_pointTips->move(mapFromGlobal(scrn->geometry().topLeft()));
@@ -612,6 +615,7 @@ void ScreenShot::initUI()
     m_toolsBar->raise();
     m_pickedRectTips->raise();
     m_pointTips->raise();
+    m_magnifyingGlass->raise();
 
     onPickedColor(CJ_CD.pen.color());
     m_paintNode.pen = CJ_CD.pen;
@@ -641,6 +645,7 @@ void ScreenShot::initUI()
     m_toolsBar->hide();
     m_pointTips->hide();
     m_pickedRectTips->hide();
+    m_magnifyingGlass->show();
 
     m_timerPoint->setInterval(5000);
     monitorsInfo();
@@ -920,6 +925,7 @@ void ScreenShot::preDestruction()
     if (!m_mosaicPix.isNull()) m_mosaicPix = QPixmap();
     if (m_toolsBar) m_toolsBar->deleteLater();
     if (m_rectNodes.size()) m_rectNodes.clear();
+    if (m_magnifyingGlass) m_magnifyingGlass->deleteLater();
 }
 
 void ScreenShot::monitorsInfo() const
@@ -1132,7 +1138,6 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
         const QRect rect = screen ? screen->geometry() : QRect();
 
         QRect rt(mapFromGlobal(rect.topLeft()), rect.size());
-//        qDebug() << "#-->rect:" << rect << "rt:" << rt;
         return rt;
     };
 
@@ -1211,8 +1216,10 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
         // 同上
         if (mapToGlobal(pt).x() <= m_vdRect.left()) pt.setX(mapFromGlobal(m_vdRect.topLeft()).x());
         else if (mapToGlobal(pt).x() + m_pickedRectTips->width() >= m_vdRect.right()) pt.setX(mapFromGlobal(m_vdRect.topRight()).x() - m_pickedRectTips->width());
-
+    } else if (cwt == CustomWidgetType::CWT_ColorPicker) {
+        pt = mapFromGlobal(QCursor::pos() + QPoint(space, space));
     } else if (cwt == CustomWidgetType::CWT_point_changed_tooptip) {
+
     } else {
         qDebug() << "unknow CustomWidgetType!";
     }
@@ -1609,7 +1616,13 @@ void ScreenShot::showCustomWidget(QWidget *w)
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_picked_rect_tooptip);
         w->move(pt);
         pickedRect.isValid() && isShow ? w->show() : w->hide();
+    } else if (w == m_magnifyingGlass) {
+
+        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_ColorPicker);
+        w->move(pt);
+        // pickedRect.isValid() && isShow ? w->show() : w->hide();
     }
+
 }
 
 void ScreenShot::showCrosshair(QPainter &pa, const QPoint &pt, const QRect &vdRt) const
@@ -1684,6 +1697,8 @@ void ScreenShot::mouseMoveEvent(QMouseEvent *e)
 {
     dealMouseMoveEvent(e);
     showCustomWidget(m_toolsBar);
+    showCustomWidget(m_magnifyingGlass);
+    m_magnifyingGlass->setPixmap(QCursor::pos());
     showPickedRectTips();
     update();
 }

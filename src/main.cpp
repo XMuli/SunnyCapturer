@@ -60,6 +60,14 @@ int main(int argc, char* argv[])
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler); //注冊异常捕获函数
 #endif
 
+    // XColorPicker* colorPicker = new XColorPicker();
+    // colorPicker->setWindowOpacity(0.75);
+    // colorPicker->adjustSize();
+    // colorPicker->show();
+    // colorPicker->adjustSize();
+    // colorPicker->update();
+
+
 #if 1
     // QtCrator 左侧 Project-Run-Run in Terminal 选项勾选即可，即可 F5 终端调试出现
     START_EASYLOGGINGPP(argc, argv);

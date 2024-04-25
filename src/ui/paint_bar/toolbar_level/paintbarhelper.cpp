@@ -208,7 +208,7 @@ void addSpacerItem(QBoxLayout *layout, const Qt::Orientation &orie, const int &l
 double dpiScale(const QScreen *scrn)
 {
     double scal = scrn ? scrn->logicalDotsPerInch() / double(96) : 1;
-    qDebug() << "scrn:" << scrn << "DPIScale:" << scal;
+    // qDebug() << "scrn:" << scrn << "DPIScale:" << scal;
     return scal;
 }
 

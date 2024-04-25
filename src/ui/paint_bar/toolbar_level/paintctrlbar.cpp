@@ -36,13 +36,13 @@ PaintCtrlBar::PaintCtrlBar(const int &colorPickerIconSize, const Qt::Orientation
     , m_textCtrl(nullptr)
     , m_serialCtrl(nullptr)
     , m_pointCtrl(nullptr)
-    , m_colorPicker(new ColorPicker(QSize(colorPickerIconSize, colorPickerIconSize) * dpiScale(qGuiApp->screenAt(QCursor::pos())) / 2, orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
+    , m_magnifyingGlass(new ColorPicker(QSize(colorPickerIconSize, colorPickerIconSize) * dpiScale(qGuiApp->screenAt(QCursor::pos())) / 2, orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
     , m_mosaicSliderCtrl(initSliderCtrl())
 {
     initUI();
-    connect(m_colorPicker, &ColorPicker::sigPickedColor, this, &PaintCtrlBar::sigPickedColor);
+    connect(m_magnifyingGlass, &ColorPicker::sigPickedColor, this, &PaintCtrlBar::sigPickedColor);
 }
 
 PaintCtrlBar::~PaintCtrlBar()
@@ -55,7 +55,7 @@ PaintCtrlBar::~PaintCtrlBar()
     m_serialCtrl->deleteLater();
     m_pointCtrl->deleteLater();
     m_markerPenCtrl->deleteLater();
-    m_colorPicker->deleteLater();
+    m_magnifyingGlass->deleteLater();
     // m_ocrTranslateCtrl->deleteLater();
 
     m_fontFamily->deleteLater();
@@ -74,8 +74,8 @@ void PaintCtrlBar::initUI()
     }
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_colorPicker->setCurrPickedColor(CJ_CD.pen.color().name());
-    m_colorPicker->hide();
+    m_magnifyingGlass->setCurrPickedColor(CJ_CD.pen.color().name());
+    m_magnifyingGlass->hide();
     m_fontFamily->hide();
 
     m_fontFamily->setCurrentFont(CJ_CD.font);  // 可能改动
@@ -146,7 +146,7 @@ void PaintCtrlBar::initBtns()
 
 //    addWidget(m_fontFamily);
 //    addWidget(m_fontScale);
-//    addWidget(m_colorPicker);
+//    addWidget(m_magnifyingGlass);
 //    addSpacerItem(m_layout, m_orie);
 }
 
@@ -189,7 +189,7 @@ void PaintCtrlBar::hideAllBtnsCtrl()
     m_textCtrl->hide();
     m_serialCtrl->hide();
     m_markerPenCtrl->hide();
-    m_colorPicker->hide();
+    m_magnifyingGlass->hide();
     m_fontFamily->hide();
     m_fontScale->hide();
     m_mosaicSliderCtrl->hide();
@@ -480,9 +480,9 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     else m_pointCtrl->hide();
 
     if (bColorPickerShow)  {
-        addWidget(m_colorPicker, false);
+        addWidget(m_magnifyingGlass, false);
     } else {
-        m_colorPicker->hide();
+        m_magnifyingGlass->hide();
     }
 
     addSpacerItem(m_layout, m_orie); // 实际是有效果的，被子组合控件的弹簧所影响了
