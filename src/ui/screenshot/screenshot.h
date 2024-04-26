@@ -36,6 +36,10 @@ public:
     virtual ~ScreenShot();
 
     void capture();
+    void startEnumWindowsRect();  // 自动捕捉遍历所有窗口
+    void showMagnifyingGlass();   // 显示放大镜 + 取色器
+    ActionType actionType() const;
+
 private:
     void btnPin();
     void btnUndo();
@@ -146,11 +150,11 @@ private:
     QPointer<XOcrDlg>             m_ocrDlg;              // OCR 文字提取
     QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 
-    QPointer<XMagnifyingGlass>   m_magnifyingGlass;         // 取色器+放大镜
-    QPointer<Tips>           m_pointTips;
-    QPointer<Tips>           m_pickedRectTips;
-    QTimer*                  m_timerPoint;
-    static QFont             m_textFont;            // 绘画字体的时候，显示的
+    QPointer<XMagnifyingGlass>    m_magnifyingGlass;         // 取色器+放大镜
+    QPointer<Tips>                m_pointTips;
+    QPointer<Tips>                m_pickedRectTips;
+    QTimer*                       m_timerPoint;
+    static QFont                  m_textFont;            // 绘画字体的时候，显示的
 };
 
 

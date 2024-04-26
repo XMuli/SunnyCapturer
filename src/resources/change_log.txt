@@ -1,6 +1,15 @@
 v1.5.1
 UI 界面
   - 工具栏竖直模式，添加较浅的刻线
+  - 新增加取色器和放大镜功能
+  - 添加关于显示器布局等信息
+  
+修复
+  - 工具栏和参数信息栏可能会相交覆盖 #13
+  - 工具栏在屏幕边界显示不全
+  
+优化
+  - OCR 支持自动切换线路
 
 
 v1.5.0(2024.04.15)
@@ -23,7 +32,6 @@ v1.3(2024.02.01)
 - Support "Image Translation" and "OCR", allow private account.
 - Adjust the UI detail style, add the alert effect of tray taskbar.
 - Fix the situation that crosshairs may not work under multi-screen.
-
 
 
 v1.2

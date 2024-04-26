@@ -6,6 +6,13 @@
 #include "xcolorbutton.h"
 #include <QDebug>
 
+XColorButton::XColorButton(QWidget *parent)
+    : QToolButton(parent)
+    , m_color(QColor())
+    , m_pickType(ColorPickerType::CT_horizontal)
+{
+}
+
 XColorButton::XColorButton(const QColor &color, const ColorPickerType &type, QWidget *parent)
     : QToolButton(parent)
     , m_color(color)

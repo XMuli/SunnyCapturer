@@ -72,6 +72,7 @@ int main(int argc, char* argv[])
     // QtCrator 左侧 Project-Run-Run in Terminal 选项勾选即可，即可 F5 终端调试出现
     START_EASYLOGGINGPP(argc, argv);
     qInstallMessageHandler(easylogingppMessageHandler);
+    // qInstallMessageHandler(customQtMessageHandler);
     // qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
 
     // https://blog.csdn.net/weixin_44843481/article/details/132025906
@@ -84,7 +85,7 @@ int main(int argc, char* argv[])
     el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);   // 日志文件轮转
     el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);    // 如果终端支持，终端输出将是彩色
     #ifdef QT_DEBUG
-    el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);           // 使用每个日志条目刷新日志（性能敏感）-默认情况下禁用
+        el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);           // 使用每个日志条目刷新日志（性能敏感）-默认情况下禁用
     #endif
 
 #endif

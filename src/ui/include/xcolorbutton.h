@@ -23,7 +23,8 @@ class XColorButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit XColorButton(const QColor& color, const ColorPickerType& type, QWidget *parent = nullptr);
+    XColorButton(QWidget *parent = nullptr);
+    XColorButton(const QColor& color, const ColorPickerType& type, QWidget *parent = nullptr);
     virtual ~XColorButton() = default;
 
     QColor color() const;

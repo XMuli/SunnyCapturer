@@ -159,6 +159,10 @@ void Tray::capture(const HotKeyType &type)
 
     if(!m_scrnShot->isActiveWindow())
         m_scrnShot->activateWindow();
+
+    if (m_scrnShot->actionType() == ActionType::AT_picking_detection_windows_rect)
+        m_scrnShot->startEnumWindowsRect();
+    m_scrnShot->showMagnifyingGlass();
 }
 
 void Tray::onCapture()

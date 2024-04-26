@@ -115,6 +115,32 @@ void ScreenShot::capture()
 #endif
 }
 
+void ScreenShot::startEnumWindowsRect()
+{
+    // 获取截图主窗口的自身 hwnd
+    CrossHwnd osHwnd;
+#if defined(Q_OS_WIN)
+    HWND hWnd = reinterpret_cast<HWND>(winId());
+    osHwnd.ntHWnd = hWnd;
+#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_MAC)
+#endif
+
+    // 获取主窗口句柄
+    enumWindowsRect(m_rectNodes, osHwnd);
+    rectNodesMapFromGlobal();
+    firstRectNodesAssignmentNode();
+
+    update();
+}
+
+void ScreenShot::showMagnifyingGlass()
+{
+    // 同时显示放大镜
+    showCustomWidget(m_magnifyingGlass);
+    m_magnifyingGlass->setPixmap(QCursor::pos());
+}
+
 void ScreenShot::btnPin()
 {
 #ifdef Q_OS_MAC
@@ -999,7 +1025,6 @@ void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
                                                                    .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
                                                                    .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_toolsBar Rect:(%3, %4, %5 * %6) m_pickedRectTips Rect:(%7, %8, %9 * %10)")
-                                                                   .arg(tPt.x()).arg(tPt.y())
                                                                    .arg(m_toolsBar->rect().x()).arg(m_toolsBar->rect().y()).arg(m_toolsBar->rect().width()).arg(m_toolsBar->rect().height())
                                                                    .arg(m_pickedRectTips->rect().x()).arg(m_pickedRectTips->rect().y()).arg(m_pickedRectTips->rect().width()).arg(m_pickedRectTips->rect().height()));
 
@@ -1464,20 +1489,22 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
             }
         } else {
 
-            // 获取截图主窗口的自身 hwnd
-            CrossHwnd osHwnd;
-            #if defined(Q_OS_WIN)
-                HWND hWnd = reinterpret_cast<HWND>(winId());
-                osHwnd.ntHWnd = hWnd;
-            #elif defined(Q_OS_LINUX)
-            #elif defined(Q_OS_MAC)
-            #endif
+            startEnumWindowsRect();
+            // // 获取截图主窗口的自身 hwnd
+            // CrossHwnd osHwnd;
+            // #if defined(Q_OS_WIN)
+            //     HWND hWnd = reinterpret_cast<HWND>(winId());
+            //     osHwnd.ntHWnd = hWnd;
+            // #elif defined(Q_OS_LINUX)
+            // #elif defined(Q_OS_MAC)
+            // #endif
 
-            // 获取主窗口句柄
+            // // 获取主窗口句柄
 
-            enumWindowsRect(m_rectNodes, osHwnd);
-            rectNodesMapFromGlobal();
-            firstRectNodesAssignmentNode();
+            // enumWindowsRect(m_rectNodes, osHwnd);
+            // rectNodesMapFromGlobal();
+            // firstRectNodesAssignmentNode();
+
         }
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
@@ -1522,21 +1549,21 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
     const int rate = 10;
     const bool& ctrl = e->modifiers() == Qt::ControlModifier;
     const bool& shift = e->modifiers() == Qt::ShiftModifier;
-    const bool left(e->key() == Qt::Key_A | e->key() == Qt::Key_Left);
-    const bool top(e->key() == Qt::Key_W | e->key() == Qt::Key_Up);
-    const bool right(e->key() == Qt::Key_D | e->key() == Qt::Key_Right);
-    const bool down(e->key() == Qt::Key_S | e->key() == Qt::Key_Down);
+    const bool left(e->key() == Qt::Key_A || e->key() == Qt::Key_Left);
+    const bool top(e->key() == Qt::Key_W || e->key() == Qt::Key_Up);
+    const bool right(e->key() == Qt::Key_D || e->key() == Qt::Key_Right);
+    const bool down(e->key() == Qt::Key_S || e->key() == Qt::Key_Down);
 
     if (shift | ctrl) totalPos = pos * rate;
 
     QRect& rt = m_node.absoluteRect;
-    if (!rt.isValid()) return;
+    // if (!rt.isValid()) return;
 
     if (m_actionType == ActionType::AT_wait) {
         if (ctrl | shift) m_actionType = ActionType::AT_stretch_picked_rect;
         else m_actionType = ActionType::AT_move_picked_rect;
     } else {
-        return;
+        // return;
     }
 
     bool bUpdate = false;
@@ -1565,11 +1592,27 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         bUpdate = true;
     }
 
+    const bool picking_rect = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
+    if (picking_rect) {
+
+        QPoint currentPos = QCursor::pos();
+        const int moveAmount = 1; // 设置移动像素数
+
+        if (left) QCursor::setPos(currentPos.x() - moveAmount, currentPos.y());
+        if (top) QCursor::setPos(currentPos.x(), currentPos.y() - moveAmount);
+        if (right) QCursor::setPos(currentPos.x() + moveAmount, currentPos.y());
+        if (down) QCursor::setPos(currentPos.x(), currentPos.y() + moveAmount);
+
+        bUpdate = true;
+    }
+
     if (bUpdate) {
         m_node.pickedRect = m_node.absoluteRect;
         showCustomWidget(m_toolsBar);
         showPickedRectTips();
         update();
+
+        if (picking_rect) return;
     }
 
     m_actionType = ActionType::AT_wait;
@@ -1696,8 +1739,7 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
 void ScreenShot::mouseMoveEvent(QMouseEvent *e)
 {
     dealMouseMoveEvent(e);
-    showCustomWidget(m_toolsBar);
-    showCustomWidget(m_magnifyingGlass);
+    showMagnifyingGlass();
     m_magnifyingGlass->setPixmap(QCursor::pos());
     showPickedRectTips();
     update();
@@ -1767,7 +1809,6 @@ void ScreenShot::keyReleaseEvent(QKeyEvent *e)
 void ScreenShot::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
-
     const auto& pickedRect = m_node.pickedRect;
     QPainter pa(this);     // 始终从相对本窗口的坐标 (0, 0) 开始绘画
     pa.setBrush(Qt::NoBrush);
@@ -1801,7 +1842,7 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     // 以下部分都是 printf 一些调试参数的部分
     if (CJ_GET("advanced.customize_ui_parameters.show_windows_detial_info").get<bool>()) {
         prinftWindowsRects(pa);
-        // printfDevelopProjectInfo(pa);
+        printfDevelopProjectInfo(pa);
     }
 
     if (CJ.m_cd.isShowCollimatorCursor)
@@ -1813,6 +1854,11 @@ void ScreenShot::closeEvent(QCloseEvent *e)
     CJ.m_cd.isShowCollimatorCursor = false;
     CJ.onSyncToFile();
     QWidget::closeEvent(e);
+}
+
+ActionType ScreenShot::actionType() const
+{
+    return m_actionType;
 }
 
 const QRect xrectToQRect(const XRECT &rect)
