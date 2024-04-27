@@ -25,13 +25,19 @@ public:
 private:
     double scaling(const QScreen *screen = qGuiApp->primaryScreen()) const;
 
-#if defined(_MSC_VER)
+#if defined(Q_OS_WIN)
     QString getRegistryValue(const QString& keyPath, const QString& valueName);
+#endif
+
     QString getCPUInfo();
     QString getMemoryInfo();
+
+#if defined(_MSC_VER)
 #elif defined(__GNUC__)
 #elif defined(__clang__)
 #endif
+
+
 
 private:
     SystemInfo(QObject *parent = nullptr);

@@ -6,7 +6,10 @@
 #include <Wbemidl.h>
 #pragma comment(lib, "wbemuuid.lib")
 #elif __linux__
-
+    #include <fstream>
+    #include <sstream>
+    #include <iostream>
+    #include <unistd.h>
 #endif
 
 #include <QDebug>
@@ -66,37 +69,35 @@ QString SystemInfo::windowsVersionInfo()
           << tr("kernel") << QString("%1").arg(QSysInfo::kernelVersion());
     qDebug() << lists;
 
-    const int fieldWidth = 14;
+    const int fieldWidth = 20;
     const QChar fillChar = ' ';
     ret += QString(tr("Name: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XPROJECT_NAME).arg(XPROJECT_VERSION);
     ret += QString(tr("Build Time: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(XBUILD_TIME);
     ret += QString(tr("Build Kits: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XCOMPILER_ID).arg(XCOMPILER);
     ret += QString(tr("Qt Version: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QT_VERSION_STR);
 
-#if defined(_MSC_VER)
+#if defined(Q_OS_WIN)
     // QString editionID = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "EditionID");     // Edition ID: "Professional"
     QString edition = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
     QString version = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
     QString currentBuild = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
-    QString cpuInfo = getCPUInfo();          // CPU Info
-    QString memoryInfo = getMemoryInfo();    // Memory Info
 
     ret += QString(tr("Edition: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(edition);
     ret += QString(tr("Version: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(version + " " + currentBuild);
+#else
+    ret += QString(tr("Operating System: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QSysInfo::prettyProductName());
+    ret += QString(tr("kernel: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(QSysInfo::kernelVersion());
+#endif
+
+    QString cpuInfo = getCPUInfo();          // CPU Info
+    QString memoryInfo = getMemoryInfo();    // Memory Info
     ret += QString(tr("Memory: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(memoryInfo);
     ret += QString(tr("CPU: ")).leftJustified(fieldWidth, fillChar)              + QString("%1\n").arg(cpuInfo);
 
-#else
-
-    ret += QString(tr("Operating System: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QSysInfo::prettyProductName());
-    ret += QString(tr("kernel: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(QSysInfo::kernelVersion());
-
-    #if defined(__GNUC__)
-    #elif defined(__clang__)
-    #else
-    #endif
-
-#endif
+    // #if defined(__GNUC__)
+    // #elif defined(__clang__)
+    // #else
+    // #endif
 
     qDebug().noquote() << "ret:" << ret;
     return ret;
@@ -256,7 +257,8 @@ double SystemInfo::scaling(const QScreen *screen) const
 #endif
 }
 
-#if defined(_MSC_VER)
+
+#if defined(Q_OS_WIN)
 QString SystemInfo::getRegistryValue(const QString &keyPath, const QString &valueName)
 {
     QString value;
@@ -280,10 +282,13 @@ QString SystemInfo::getRegistryValue(const QString &keyPath, const QString &valu
 
     RegCloseKey(hKey);
     return value;
+    return QString();
 }
+#endif
 
 QString SystemInfo::getCPUInfo()
 {
+#if defined(_MSC_VER)
     QString cpuInfo;
 
     // Initialize COM
@@ -393,10 +398,44 @@ QString SystemInfo::getCPUInfo()
     CoUninitialize();
 
     return cpuInfo;
+#elif defined(Q_OS_LINUX)
+    QString cpuModel;
+    int cores = 0;
+    long numThreads = sysconf(_SC_NPROCESSORS_CONF); // 获取逻辑数量
+    std::ifstream cpuinfo("/proc/cpuinfo");
+
+    if (cpuinfo.is_open()) {
+        std::string line;
+        while (std::getline(cpuinfo, line)) {
+            std::istringstream iss(line);
+            std::string key, value;
+
+            if (std::getline(iss, key, ':') && std::getline(iss, value)) {
+                if (key.find("model name") != std::string::npos) {
+                    // Trim leading and trailing whitespace
+                    value.erase(0, value.find_first_not_of(" \t"));
+                    value.erase(value.find_last_not_of(" \t") + 1);
+
+                    cpuModel = QString::fromStdString(value);
+                } else if (key.find("cpu cores") != std::string::npos) {
+                    cores = std::stoi(value);
+                }
+            }
+        }
+        cpuinfo.close();
+    }
+
+    cpuModel += QString(" (") + QString::number(cores) + QString(" Cores, ");
+    cpuModel += QString::number(numThreads) + QString(" Threads)");
+
+    return cpuModel;
+#elif defined(__clang__)
+#endif
 }
 
 QString SystemInfo::getMemoryInfo()
 {
+#if defined(_MSC_VER)
     QString memoryInfo;
     // Get total physical memory using Windows API
     MEMORYSTATUSEX memStatus;
@@ -407,8 +446,39 @@ QString SystemInfo::getMemoryInfo()
     memoryInfo = QString::fromLatin1("%1 GB").arg(roundedMemory, 0, 'f', 1); // 格式化输出
 
     return memoryInfo;
+#elif defined(Q_OS_LINUX)
+    QString memoryInfo;
+    std::ifstream meminfo("/proc/meminfo");
+
+    if (meminfo.is_open()) {
+        std::string line;
+        while (std::getline(meminfo, line)) {
+            std::istringstream iss(line);
+            std::string key, value;
+
+            if (std::getline(iss, key, ':') && std::getline(iss, value)) {
+                if (key.find("MemTotal") != std::string::npos) {
+                    std::istringstream valueStream(value);
+                    unsigned long long memSizeKB;
+                    valueStream >> memSizeKB;
+                    double memSizeGB = static_cast<double>(memSizeKB) / (1024 * 1024);
+                    memoryInfo = QString::number(memSizeGB, 'f', 1) + " GB";
+                    break;
+                }
+            }
+        }
+        meminfo.close();
+    }
+
+    return memoryInfo;
+#elif defined(__clang__)
+#endif
+
+
+
 }
 
+#if defined(_MSC_VER)
 #elif defined(__GNUC__)
 #elif defined(__clang__)
 #endif
