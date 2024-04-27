@@ -13,12 +13,14 @@
 #include <QEvent>
 #include <QDebug>
 #include <QPainter>
+#include <QtMath>
 #include "../../ui/paint_bar/toolbar_level/paintbarhelper.h"
 
 
 XMagnifyingGlass::XMagnifyingGlass(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::XMagnifyingGlass)
+    , m_bHex(true)
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_TransparentForMouseEvents, true); // 鼠标穿透，设置窗口忽略所有鼠标事件
@@ -53,9 +55,9 @@ void XMagnifyingGlass::setPixmap(const QPoint &pt)
     QLabel* lab = ui->labPixmap;
 
     const QScreen* screen = QGuiApplication::screenAt(QCursor::pos());
-    const int& scale = 1; //qCeil(dpiScale(screen));  // 如为 150% 缩放像素会异常
-    lab->setFixedSize(QSize(rX, rY) * 12 * scale);  // 默认 14 倍;
-    const double pixScale = (lab->width() / (rX * 1.0)) * scale ;
+    const int& scale = qCeil(dpiScale(screen)) > 1 ? 18 : 14; // 默认 14 倍;
+    lab->setFixedSize(QSize(rX, rY) * 1 * scale);
+    const double pixScale = (lab->width() / (rX * 1.0)) * 1 ;
     lab->clear(); // 清除之前的内容
 
     // 将 pix 绘制到 QLabel 上
@@ -89,13 +91,12 @@ void XMagnifyingGlass::setPixmap(const QPoint &pt)
     ui->labPtAbsolute->setText(QString(tr("(%1, %2)")).arg(p1.x()).arg(p1.y()));
     ui->tbColor->setColor(m_color);
 
-    ui->labColorName->setText(m_color.toHsv().name());
+    QString rgbString = QString("(%1, %2, %3)").arg(m_color.red()).arg(m_color.green()).arg(m_color.blue());
+    ui->labColorName->setText(m_bHex ? m_color.name() : rgbString);
     ui->widget->setFixedWidth(ui->labPixmap->width());
     adjustSize();
     update();
 }
-
-
 
 void XMagnifyingGlass::paintEvent(QPaintEvent *e)
 {
@@ -113,4 +114,20 @@ void XMagnifyingGlass::paintEvent(QPaintEvent *e)
     pa.setPen(QPen(Qt::black, 1));
     pa.drawRect(rect());
     pa.drawRect(rt.adjusted(-margin, -margin, margin-1, margin-1));
+}
+
+bool XMagnifyingGlass::bHex() const
+{
+    return m_bHex;
+}
+void XMagnifyingGlass::setBHex(const bool &newBHex)
+{
+    m_bHex = newBHex;
+    QString rgbString = QString("(%1, %2, %3)").arg(m_color.red()).arg(m_color.green()).arg(m_color.blue());
+    ui->labColorName->setText(m_bHex ? m_color.name() : rgbString);
+}
+
+const QString XMagnifyingGlass::colorString() const
+{
+    return ui->labColorName->text();
 }

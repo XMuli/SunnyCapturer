@@ -137,8 +137,13 @@ void ScreenShot::startEnumWindowsRect()
 void ScreenShot::showMagnifyingGlass()
 {
     // 同时显示放大镜
-    showCustomWidget(m_magnifyingGlass);
-    m_magnifyingGlass->setPixmap(QCursor::pos());
+    const bool b1 = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
+    if (b1) {
+        showCustomWidget(m_magnifyingGlass);
+        m_magnifyingGlass->setPixmap(QCursor::pos());
+    } else {
+        m_magnifyingGlass->hide();
+    }
 }
 
 void ScreenShot::btnPin()
@@ -1241,8 +1246,18 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
         // 同上
         if (mapToGlobal(pt).x() <= m_vdRect.left()) pt.setX(mapFromGlobal(m_vdRect.topLeft()).x());
         else if (mapToGlobal(pt).x() + m_pickedRectTips->width() >= m_vdRect.right()) pt.setX(mapFromGlobal(m_vdRect.topRight()).x() - m_pickedRectTips->width());
-    } else if (cwt == CustomWidgetType::CWT_ColorPicker) {
-        pt = mapFromGlobal(QCursor::pos() + QPoint(space, space));
+    } else if (cwt == CustomWidgetType::CWT_magnifyingGlass) {
+
+        const int margin = space * 3.5;
+        const auto& pos = QCursor::pos();
+        pt = pos + QPoint(margin, margin);
+        const auto& mgSize = m_magnifyingGlass->rect().size();
+
+         // 超过当前的底部 & 超过当前的右侧
+        if(pos.y() + mgSize.height() + margin >= currScrnRect(pos).bottom())  pt.setY(pos.y() - mgSize.height() - space);
+        if (pos.x() + mgSize.width() + margin >= currScrnRect(pos).right()) pt.setX(pos.x() - mgSize.width() - space);
+        pt = mapFromGlobal(pt);
+
     } else if (cwt == CustomWidgetType::CWT_point_changed_tooptip) {
 
     } else {
@@ -1592,17 +1607,22 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         bUpdate = true;
     }
 
-    const bool picking_rect = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
-    if (picking_rect) {
+    const bool& showMagnifyingGlass = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
+    if (showMagnifyingGlass) {
 
         QPoint currentPos = QCursor::pos();
         const int moveAmount = 1; // 设置移动像素数
-
         if (left) QCursor::setPos(currentPos.x() - moveAmount, currentPos.y());
         if (top) QCursor::setPos(currentPos.x(), currentPos.y() - moveAmount);
         if (right) QCursor::setPos(currentPos.x() + moveAmount, currentPos.y());
         if (down) QCursor::setPos(currentPos.x(), currentPos.y() + moveAmount);
 
+        if (e->key() == Qt::Key_C) {
+            qGuiApp->clipboard()->setText(m_magnifyingGlass->colorString());
+            close();
+        } else if (e->key() == Qt::Key_Shift) {
+            m_magnifyingGlass->setBHex(!m_magnifyingGlass->bHex());
+        }
         bUpdate = true;
     }
 
@@ -1612,7 +1632,7 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         showPickedRectTips();
         update();
 
-        if (picking_rect) return;
+        if (showMagnifyingGlass) return;
     }
 
     m_actionType = ActionType::AT_wait;
@@ -1661,7 +1681,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         pickedRect.isValid() && isShow ? w->show() : w->hide();
     } else if (w == m_magnifyingGlass) {
 
-        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_ColorPicker);
+        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_magnifyingGlass);
         w->move(pt);
         // pickedRect.isValid() && isShow ? w->show() : w->hide();
     }
@@ -1739,8 +1759,8 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
 void ScreenShot::mouseMoveEvent(QMouseEvent *e)
 {
     dealMouseMoveEvent(e);
+    showCustomWidget(m_toolsBar);
     showMagnifyingGlass();
-    m_magnifyingGlass->setPixmap(QCursor::pos());
     showPickedRectTips();
     update();
 }

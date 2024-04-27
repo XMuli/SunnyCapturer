@@ -69,7 +69,7 @@ enum class OrientationType {
 // 自定义控件
 enum class CustomWidgetType {
     CWT_tools_bar,                // 一二级的绘画工具栏
-    CWT_ColorPicker,              // 取色器 + 放大镜
+    CWT_magnifyingGlass,          // 放大镜 + 取色器
     CWT_picked_rect_tooptip,      // 选中矩形尺寸预览
     CWT_point_changed_tooptip     // 线宽 px 改变
 };
