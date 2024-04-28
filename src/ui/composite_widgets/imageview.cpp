@@ -107,6 +107,11 @@ void ImageView::mouseReleaseEvent(QMouseEvent *event)
     this->setCursor(Qt::ArrowCursor);
 }
 
+void ImageView::setImage(const QImage &newImage)
+{
+    m_Image = newImage;
+}
+
 void ImageView::onLoadImage(void)
 {
     QString imageFile = QFileDialog::getOpenFileName(this, "Open Image", "./", tr("Images (*.png *.xpm *.jpg)"));

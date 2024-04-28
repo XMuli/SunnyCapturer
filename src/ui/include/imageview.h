@@ -12,6 +12,8 @@ public:
     ImageView(QWidget *parent = nullptr);
     ~ImageView();
 
+    void setImage(const QImage &newImage);
+
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
@@ -20,6 +22,14 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
+
+
+private slots:
+    void onLoadImage(void);
+    void onZoomInImage(void);
+    void onZoomOutImage(void);
+    void onPresetImage(void);
+
 private:
     QImage m_Image;
     qreal m_ZoomValue = 1.0;
@@ -27,12 +37,6 @@ private:
     int m_YPtInterval = 0;
     QPoint m_OldPos;
     bool m_Pressed = false;
-
-private slots:
-    void onLoadImage(void);
-    void onZoomInImage(void);
-    void onZoomOutImage(void);
-    void onPresetImage(void);
 };
 
 #endif // IMAGEVIEW_H

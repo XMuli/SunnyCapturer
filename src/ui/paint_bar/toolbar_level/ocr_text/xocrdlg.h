@@ -27,19 +27,18 @@ public:
     void setRightText(const QString& text);
     void appendRightText(const QString& text);
 
-private slots:
-    void onZoomIn();
-    void onZoomOut();
-    void onNormalSize();
+// private slots:
+//     void onZoomIn();
+//     void onZoomOut();
+//     void onNormalSize();
 
-private:
-    void pixmapMoveCenter();
-    void updateTitleText();
-    void scaleImage(double factor);
-    void adjustScrollBar(QScrollBar *scrollBar, double factor);
+// private:
+//     void pixmapMoveCenter();
+//     void updateTitleText();
+//     void scaleImage(double factor);
 
-protected:
-    void wheelEvent(QWheelEvent *e) override;
+// protected:
+//     void wheelEvent(QWheelEvent *e) override;
 
 private:
     Ui::XOcrDlg *ui;

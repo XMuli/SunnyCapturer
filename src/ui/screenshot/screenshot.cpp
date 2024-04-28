@@ -45,7 +45,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
     , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
-    , m_ocrDlg(new XOcrDlg(nullptr))
+    , m_ocrWidget(new XOcrWidget(nullptr))
     , m_imgTranslateDlg(new ImageTranslateDlg(nullptr))
     , m_magnifyingGlass(new XMagnifyingGlass(this))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
@@ -562,7 +562,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
    // qDebug().noquote() << "------>text:" << text;
     const bool& bValid = !j.empty() && j.contains("words_result") && j["words_result"].size() > 0;
     if (!bValid) { // 文字识别返回错误码以及原因： 如触发限制
-        m_ocrDlg->setRightText(text);
+        m_ocrWidget->setRightText(text);
         if (!j.empty() && j.contains("error_code")) {
             const int& error_code = j["error_code"];
 
@@ -593,13 +593,13 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
                 const int range = CJ_GET("advanced.customize_ui_parameters.ocr_bottom_align_rang").get<int>();
                 if (qAbs(bottom - lastBottom) <= range)
-                    m_ocrDlg->appendRightText(text + "    ");
+                    m_ocrWidget->appendRightText(text + "    ");
                 else
-                    m_ocrDlg->appendRightText("\n" + text + "    ");
+                    m_ocrWidget->appendRightText("\n" + text + "    ");
 
                 lastBottom = bottom;
             } else {
-                m_ocrDlg->appendRightText(text + "\n");
+                m_ocrWidget->appendRightText(text + "\n");
             }
         }
     }
@@ -611,18 +611,18 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
     // 显示 OCR 弹窗
     const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
-    m_ocrDlg->setLeftPixmap(pixmap);
+    m_ocrWidget->setLeftPixmap(pixmap);
     const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
     if (screen) {
         const auto& rect = screen->geometry();
         const QPoint& center = rect.center(); // 获取屏幕的中心坐标
-        m_ocrDlg->resize(rect.width() * 0.64, rect.height() * 0.64);
-        m_ocrDlg->move(center - QPoint(m_ocrDlg->width() / 2, m_ocrDlg->height() / 2));
+        m_ocrWidget->resize(rect.width() * 0.64, rect.height() * 0.64);
+        m_ocrWidget->move(center - QPoint(m_ocrWidget->width() / 2, m_ocrWidget->height() / 2));
     }
 
 
-    if (!m_ocrDlg->isVisible()) m_ocrDlg->show();
-    m_ocrDlg->activateWindow();
+    if (!m_ocrWidget->isVisible()) m_ocrWidget->show();
+    m_ocrWidget->activateWindow();
 
     close();
 }
@@ -652,7 +652,7 @@ void ScreenShot::initUI()
     m_paintNode.pen = CJ_CD.pen;
     m_paintNode.brush = CJ_CD.brush;
 
-    m_ocrDlg->hide();
+    m_ocrWidget->hide();
     m_imgTranslateDlg->hide();
     // 初始化上一次的效果
     QTextCharFormat format = m_edit->currentCharFormat();

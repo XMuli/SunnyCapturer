@@ -295,6 +295,7 @@ add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
     ${qm_files}
+    ui/paint_bar/toolbar_level/ocr_text/xocrwidget.h ui/paint_bar/toolbar_level/ocr_text/xocrwidget.cpp ui/paint_bar/toolbar_level/ocr_text/xocrwidget.ui
 )
 
 # Define some variables that can be used in *.cpp
