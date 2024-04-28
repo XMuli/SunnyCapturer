@@ -131,9 +131,9 @@ set(custom_ui_files
     ui/paint_bar/toolbar_level/paintbarhelper.cpp
     ui/paint_bar/toolbar_level/paintctrlbar.h
     ui/paint_bar/toolbar_level/paintctrlbar.cpp
-    ui/paint_bar/toolbar_level/ocr_text/xocrdlg.h
-    ui/paint_bar/toolbar_level/ocr_text/xocrdlg.cpp
-    ui/paint_bar/toolbar_level/ocr_text/xocrdlg.ui
+    ui/paint_bar/toolbar_level/ocr_text/xocrwidget.h
+    ui/paint_bar/toolbar_level/ocr_text/xocrwidget.cpp
+    ui/paint_bar/toolbar_level/ocr_text/xocrwidget.ui
     ui/paint_bar/toolbar_level/img_translate/imagetranslatedlg.h
     ui/paint_bar/toolbar_level/img_translate/imagetranslatedlg.cpp
     ui/paint_bar/toolbar_level/img_translate/imagetranslatedlg.ui
@@ -295,7 +295,6 @@ add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
     ${qm_files}
-    ui/paint_bar/toolbar_level/ocr_text/xocrwidget.h ui/paint_bar/toolbar_level/ocr_text/xocrwidget.cpp ui/paint_bar/toolbar_level/ocr_text/xocrwidget.ui
 )
 
 # Define some variables that can be used in *.cpp

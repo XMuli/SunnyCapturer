@@ -5,7 +5,6 @@
 XOcrWidget::XOcrWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::XOcrWidget)
-    , m_scale(1.0)
 {
     ui->setupUi(this);
 

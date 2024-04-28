@@ -19,11 +19,6 @@ public:
     void setRightText(const QString& text);
     void appendRightText(const QString& text);
 
-    // private slots:
-    //     void onZoomIn();
-    //     void onZoomOut();
-    //     void onNormalSize();
-
 private:
     Ui::XOcrWidget *ui;
 };
