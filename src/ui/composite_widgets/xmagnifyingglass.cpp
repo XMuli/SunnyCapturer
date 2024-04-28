@@ -55,7 +55,7 @@ void XMagnifyingGlass::setPixmap(const QPoint &pt)
     QLabel* lab = ui->labPixmap;
 
     const QScreen* screen = QGuiApplication::screenAt(QCursor::pos());
-    const int& scale = qCeil(dpiScale(screen)) > 1 ? 18 : 14; // 默认 14 倍;
+    const int& scale = qCeil(dpiScale(screen)) > 1 ? 18 : 12; // 默认 14 倍;
     lab->setFixedSize(QSize(rX, rY) * 1 * scale);
     const double pixScale = (lab->width() / (rX * 1.0)) * 1 ;
     lab->clear(); // 清除之前的内容

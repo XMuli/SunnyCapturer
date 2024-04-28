@@ -21,7 +21,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 各种调试开关
-add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+# add_compile_definitions(HALF_SCRN_DEVELOP)           # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
 # add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 add_compile_definitions(LOG_MORE_INFO_DEVELOP)         # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 add_compile_definitions(QT_MESSAGELOGCONTEXT)          # Release 日志也可以输出 文件名 和 路径
@@ -70,6 +70,7 @@ set(custom_ui_files
     ui/include/xtoolbutton.h
     ui/include/switchbutton.h
     ui/include/xmonitorlabel.h
+    ui/include/imageview.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -96,6 +97,7 @@ set(custom_ui_files
     ui/composite_widgets/xtoolbutton.cpp
     ui/composite_widgets/switchbutton.cpp
     ui/composite_widgets/xmonitorlabel.cpp
+    ui/composite_widgets/imageview.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp

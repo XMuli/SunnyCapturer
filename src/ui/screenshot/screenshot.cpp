@@ -1162,13 +1162,12 @@ void ScreenShot::firstRectNodesAssignmentNode()
 QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 {
     // 根据 input pt 坐标，获取其所在的屏幕的矩形，作为判定条件,返回相对于 Sunny 窗口的相对 rect 坐标
-    auto currScrnRect = [this](const QPoint& pt) -> const QRect {
+    auto currScrnRect = [this](const QPoint& pt, const bool bGlobal = false) -> const QRect {
         const QScreen* screen = QGuiApplication::screenAt(pt);
         if (!screen) qDebug() << "customWidgetShowPositionRule is failed! screen is nullptr";
         const QRect rect = screen ? screen->geometry() : QRect();
-
         QRect rt(mapFromGlobal(rect.topLeft()), rect.size());
-        return rt;
+        return bGlobal ? rect : rt;
     };
 
     QPoint pt;
@@ -1254,8 +1253,8 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
         const auto& mgSize = m_magnifyingGlass->rect().size();
 
          // 超过当前的底部 & 超过当前的右侧
-        if(pos.y() + mgSize.height() + margin >= currScrnRect(pos).bottom())  pt.setY(pos.y() - mgSize.height() - space);
-        if (pos.x() + mgSize.width() + margin >= currScrnRect(pos).right()) pt.setX(pos.x() - mgSize.width() - space);
+        if(pos.y() + mgSize.height() + margin >= currScrnRect(pos, true).bottom()) pt.setY(pos.y() - mgSize.height() - space);
+        if (pos.x() + mgSize.width() + margin >= currScrnRect(pos, true).right()) pt.setX(pos.x() - mgSize.width() - space);
         pt = mapFromGlobal(pt);
 
     } else if (cwt == CustomWidgetType::CWT_point_changed_tooptip) {
@@ -1269,6 +1268,7 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 
 void ScreenShot::showPickedRectTips()
 {
+    if (!m_pickedRectTips->isVisible()) return;
     const auto& rect = m_node.absoluteRect;
     QString tips = QString("%1, %2, %3 * %4")
                        .arg(rect.left()).arg(rect.top()).arg(rect.width()).arg(rect.height());
