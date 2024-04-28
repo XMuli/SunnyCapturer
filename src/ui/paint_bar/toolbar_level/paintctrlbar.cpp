@@ -240,13 +240,13 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
             if (isChecked)
                 emit sigImgTranslate(m_imgTransDate);
         } else if (type == PaintType::PT_ocr) {       //不需要向外传递，模拟切换过来，就直接相应【初次】 OCR 提取文字
-            m_ocrTextDate.bTranslate = true;
+            // m_ocrTextDate.bTranslate = true;
 
-            // OCR 线路发生改变，需要重新赋值
-            const int& t = CJ.getKeyValue("tokens.ocr.channel").get<int>();
-            m_ocrTextDate.pipeline = OcrChannel(CJ.getKeyValue("tokens.ocr.channel").get<int>());
+            // // OCR 线路发生改变，需要重新赋值
+            // const int& t = CJ.getKeyValue("tokens.ocr.channel").get<int>();
+            // m_ocrTextDate.pipeline = OcrChannel(CJ.getKeyValue("tokens.ocr.channel").get<int>());
 
-            if (isChecked) emit sigOcr(m_ocrTextDate);
+            // if (isChecked) emit sigOcr(m_ocrTextDate);
         }
 
         const auto& btns = ctrl->findChildren<XToolButton*>();

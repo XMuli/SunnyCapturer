@@ -24,6 +24,7 @@
 #include <QTextCharFormat>
 #include <QKeySequence>
 #include <QCursor>
+#include <QThread>
 #include "xtextedit.h"
 #include "../paint_bar/toolbar_level/pin/pinwidget.h"
 
@@ -146,26 +147,11 @@ void ScreenShot::showMagnifyingGlass()
     }
 }
 
-void ScreenShot::btnPin()
+void ScreenShot::btnOCR()
 {
-#ifdef Q_OS_MAC
-    setWindowFlags(Qt::Dialog);
-    showNormal();
-#endif
-
-    const auto& rect = m_node.absoluteRect;
-
-    PinWidget* w = new PinWidget(finishDrewPixmap(rect, true), nullptr);
-    const int opacity = CJ_GET("pin.opacity");
-    const int max = CJ_GET("pin.maximum_size");
-    const int& margin = w->layoutMargin();
-    w->setWindowOpacity(opacity / 100.0);
-    w->setMaximumSize(QSize(max, max));
-    w->resize(rect.size());
-    w->move(mapToGlobal(rect.topLeft()) - QPoint(margin, margin)); // fix: 边框偏移给归位
-    w->show();
-
-    close();
+    static OcrData data;
+    data.pipeline = OcrChannel(CJ.getKeyValue("tokens.ocr.channel").get<int>());
+    onOCRTextCtrlIdReleased(data);
 }
 
 void ScreenShot::btnUndo()
@@ -203,6 +189,28 @@ void ScreenShot::btnRedo()
     }
 
     autoDisableUndoAndRedo();
+}
+
+void ScreenShot::btnPin()
+{
+#ifdef Q_OS_MAC
+    setWindowFlags(Qt::Dialog);
+    showNormal();
+#endif
+
+    const auto& rect = m_node.absoluteRect;
+
+    PinWidget* w = new PinWidget(finishDrewPixmap(rect, true), nullptr);
+    const int opacity = CJ_GET("pin.opacity");
+    const int max = CJ_GET("pin.maximum_size");
+    const int& margin = w->layoutMargin();
+    w->setWindowOpacity(opacity / 100.0);
+    w->setMaximumSize(QSize(max, max));
+    w->resize(rect.size());
+    w->move(mapToGlobal(rect.topLeft()) - QPoint(margin, margin)); // fix: 边框偏移给归位
+    w->show();
+
+    close();
 }
 
 void ScreenShot::btnSave()
@@ -347,7 +355,9 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
 
     } else {
 
-        if (type == PaintType::PT_pin) {
+        if (type == PaintType::PT_ocr) {
+            btnOCR();
+        } else if (type == PaintType::PT_pin) {
             btnPin();
         } else if (type == PaintType::PT_undo) {
             btnUndo();
@@ -537,7 +547,6 @@ void ScreenShot::onOCRTextCtrlIdReleased(const OcrData &data)
     const QString& path = dir + QString("OCRText_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
     const bool ok = imageSave(path, false);
 
-
     QFile file(path);
     if (ok && file.exists()) {
         m_networkOCR->sendBaiDuOcrRequest(data, path);
@@ -570,6 +579,12 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
                 if (CJ.getKeyValue("tokens.ocr.channel_auto").get<bool>()) {
                     OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
                     CJ_SET("tokens.ocr.channel", ++channel);
+
+                    // btnOCR();
+                    // QThread::sleep(5);
+                    // btnOCR();   // 但是发射的第二个就没有响应了？ 很奇怪，不知道为什么
+                    // close();
+                    // return;
                 }
             }
         }
@@ -1880,6 +1895,7 @@ ActionType ScreenShot::actionType() const
 {
     return m_actionType;
 }
+
 
 const QRect xrectToQRect(const XRECT &rect)
 {

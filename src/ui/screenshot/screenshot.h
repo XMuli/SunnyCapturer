@@ -41,9 +41,10 @@ public:
     ActionType actionType() const;
 
 private:
-    void btnPin();
+    void btnOCR();
     void btnUndo();
     void btnRedo();
+    void btnPin();
     void btnSave();
     void btnCancel();
     void btnFinish();

@@ -54,7 +54,7 @@ void PaintToolBar::initBtns()
     m_btns.emplace_back(nullptr, PaintType::PT_serial, "serial", tr("Serial") + " (Ctrl + 8)", true, true);
 
     m_btns.emplace_back(nullptr, PaintType::PT_img_translate, "translate", tr("translate") + " (Ctrl + T)", true, false);
-    m_btns.emplace_back(nullptr, PaintType::PT_ocr, "ocr_text", tr("OCR") + " (Ctrl + O)", true, true);
+    m_btns.emplace_back(nullptr, PaintType::PT_ocr, "ocr_text", tr("OCR") + " (Ctrl + O)", false, true);
 
     m_btns.emplace_back(nullptr, PaintType::PT_undo, "undo", tr("Undo") + " (Ctrl + Z)", false, false);
     m_btns.emplace_back(nullptr, PaintType::PT_redo, "redo", tr("Redo") + " (Ctrl + Y)", false, true);
@@ -119,9 +119,6 @@ void PaintToolBar::initBtns()
         CREATOR_QSHORTCUT_CHECKED(PaintType::PT_save, Qt::CTRL + Qt::Key_S)
         CREATOR_QSHORTCUT_CHECKED(PaintType::PT_finish, Qt::CTRL + Qt::Key_C)
     }
-
-
-
 
     // 结尾添加弹簧进行压缩
     if (m_orie == Qt::Horizontal)  {

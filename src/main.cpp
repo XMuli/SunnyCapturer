@@ -70,10 +70,10 @@ int main(int argc, char* argv[])
 
 #if 1
     // QtCrator 左侧 Project-Run-Run in Terminal 选项勾选即可，即可 F5 终端调试出现
-    START_EASYLOGGINGPP(argc, argv);
-    qInstallMessageHandler(easylogingppMessageHandler);
+    // START_EASYLOGGINGPP(argc, argv);
+    // qInstallMessageHandler(easylogingppMessageHandler);
     // qInstallMessageHandler(customQtMessageHandler);
-    // qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
+    qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
 
     // https://blog.csdn.net/weixin_44843481/article/details/132025906
     el::Configurations conf(QString(qApp->applicationDirPath() + "/log.conf").toStdString());
