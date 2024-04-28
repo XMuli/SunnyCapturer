@@ -40,6 +40,9 @@ NetworkOCR::NetworkOCR(QObject *parent)
 
 void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
 {
+    //局部的事件循环,不卡主界面
+    QEventLoop eventLoop;  // 修复，短时间连续请求 ocr，导致第二个无任何响应
+
     QString para1 = "accurate";
     if (data.pipeline == OcrChannel::OCR_baidu_high_precision_location) para1 = "accurate";
     else if (data.pipeline == OcrChannel::OCR_baidu_high_precision) para1 = "accurate_basic";
@@ -55,7 +58,11 @@ void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
     request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_text));
     request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<OcrData>(data));   // 当前 发送的请求线路
 
-    m_networkManager->post(request, postData);
+    QNetworkReply *reply = m_networkManager->post(request, postData);
+    connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
+    eventLoop.exec();
+
+    qDebug() << "发送时候的 [a] sendBaiDuOcrRequest reply:" << reply;
 }
 
 void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, const QString &path)
@@ -97,6 +104,7 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
 
 
     QNetworkReply *reply = m_networkManager->post(request, multiPart);
+    qDebug() << "发送时候的 [b] sendBaiDuImgTranslateRequest reply:" << reply;
 //    QEventLoop loop;
 //    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 //    loop.exec();      // 不阻塞好像会有返回为空的 bug？
@@ -151,7 +159,8 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
         // qDebug().noquote() << "i:" << i++ << "key:" << key << params[key];
     }
 
-    m_networkManager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
+    QNetworkReply *reply = m_networkManager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
+    qDebug() << "发送时候的 [c] sendYouDaoImgTranslateRequest reply:" << reply;
 }
 
 const QStringList NetworkOCR::rawHeader(const QNetworkReply *reply) const
@@ -230,7 +239,9 @@ void NetworkOCR::sendBaiDuAccessToken(const QString &client_id, const QString &c
     params.addQueryItem("client_secret", client_secret);
     params.addQueryItem("grant_type", "client_credentials");
 
-    m_networkManager->post(request, params.query().toUtf8());
+    QNetworkReply *reply = m_networkManager->post(request, params.query().toUtf8());
+    qDebug() << "发送时候的 [A] sendBaiDuOcrRequest reply:" << reply;
+
 //    m_eventLoop->exec();   // 阻塞
 }
 
@@ -432,8 +443,11 @@ void NetworkOCR::onRequestFinished(QNetworkReply *reply)
         list << head.at(0) << reply->errorString();  // reply->errorString() 比 head.at(1) 更详细
     }
 
-    if (reply)
+    if (reply) {
         reply->deleteLater();  // 此处统一释放
+        qDebug() << "reply被释放了:" << reply;
+    }
+
 }
 
 

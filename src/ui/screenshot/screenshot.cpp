@@ -580,11 +580,9 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
                     OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
                     CJ_SET("tokens.ocr.channel", ++channel);
 
-                    // btnOCR();
-                    // QThread::sleep(5);
-                    // btnOCR();   // 但是发射的第二个就没有响应了？ 很奇怪，不知道为什么
-                    // close();
-                    // return;
+                    btnOCR();
+                    close();
+                    return;
                 }
             }
         }
@@ -636,9 +634,9 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
     }
 
 
-    if (!m_ocrWidget->isVisible()) m_ocrWidget->show();
+    if (!m_ocrWidget->isVisible())
+        m_ocrWidget->show();
     m_ocrWidget->activateWindow();
-
     close();
 }
 
