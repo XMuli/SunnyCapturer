@@ -151,7 +151,7 @@ void ScreenShot::btnOCR()
 {
     static OcrData data;
     data.pipeline = OcrChannel(CJ.getKeyValue("tokens.ocr.channel").get<int>());
-    onOCRTextCtrlIdReleased(data);
+    onOCRCtrlIdReleased(data);
 }
 
 void ScreenShot::btnUndo()
@@ -481,7 +481,7 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
 
 void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 {
-    hide();
+    // hide();  TODO: 此处还是要显示出来
     if (!m_networkOCR || !data.bTranslate) {
         m_ocrGeneratePix = QPixmap();
         update();
@@ -511,6 +511,16 @@ void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
 // 将图片粘贴在当前截图的窗口上
 void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 {
+
+#if 1
+    QFile file(path);
+    if (file.exists() && size.isValid()) {
+        m_ocrGeneratePix = QPixmap(size);
+        m_ocrGeneratePix.load(path);
+        update();
+    }
+
+#else
     hide();
     QFile file(path);
     if (file.exists() && size.isValid()) {
@@ -534,9 +544,10 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
     if (!m_imgTranslateDlg->isVisible()) m_imgTranslateDlg->show();
     m_imgTranslateDlg->activateWindow();
     close();
+#endif
 }
 
-void ScreenShot::onOCRTextCtrlIdReleased(const OcrData &data)
+void ScreenShot::onOCRCtrlIdReleased(const OcrData &data)
 {
     const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
     QDir directory(dir);
@@ -617,6 +628,8 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
         }
     }
 
+    OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
+    qDebug() << "int(channel):" << int(channel);
     // m_ocrTextEdit->resize(m_node.absoluteRect.size());
     // m_ocrTextEdit->move(m_node.absoluteRect.topLeft());
     // m_ocrTextEdit->clear();
@@ -632,7 +645,6 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
         m_ocrWidget->resize(rect.width() * 0.64, rect.height() * 0.64);
         m_ocrWidget->move(center - QPoint(m_ocrWidget->width() / 2, m_ocrWidget->height() / 2));
     }
-
 
     if (!m_ocrWidget->isVisible())
         m_ocrWidget->show();
@@ -761,7 +773,6 @@ void ScreenShot::initConnect()
     connect(m_toolsBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
     connect(m_toolsBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
     connect(m_toolsBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
-    connect(m_toolsBar, &PaintBar::sigOcr, this, &ScreenShot::onOCRTextCtrlIdReleased);
     connect(m_toolsBar, &PaintBar::sigScreenshotUpdate, this, [this](){ update(); });
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_toolsBar, &PaintBar::sigSetTextFontSizeComboBoxValue);

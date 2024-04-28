@@ -40,13 +40,10 @@ NetworkOCR::NetworkOCR(QObject *parent)
 
 void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
 {
-    //局部的事件循环,不卡主界面
-    QEventLoop eventLoop;  // 修复，短时间连续请求 ocr，导致第二个无任何响应
-
     QString para1 = "accurate";
     if (data.pipeline == OcrChannel::OCR_baidu_high_precision_location) para1 = "accurate";
-    else if (data.pipeline == OcrChannel::OCR_baidu_high_precision) para1 = "accurate_basic";
     else if (data.pipeline == OcrChannel::OCR_baidu_standard_location) para1 = "general";
+    else if (data.pipeline == OcrChannel::OCR_baidu_high_precision) para1 = "accurate_basic";
     else if (data.pipeline == OcrChannel::OCR_baidu_standard) para1 = "general_basic";
 
     // 从文件中读取图像数据并进行base64编码
@@ -55,14 +52,15 @@ void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
     QByteArray postData = "image=" + QUrl::toPercentEncoding(base64FromFileContent(path)) + "&detect_direction=false&vertexes_location=false&paragraph=false&probability=false";
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     request.setRawHeader("Accept", "application/json");
-    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_text));
+    request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_ocr));
     request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<OcrData>(data));   // 当前 发送的请求线路
 
     QNetworkReply *reply = m_networkManager->post(request, postData);
-    connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
-    eventLoop.exec();
+    QEventLoop loop;  // 局部的事件循环,不卡主界面; 且修复了短时间连续请求 ocr，导致第二个无任何响应
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
 
-    qDebug() << "发送时候的 [a] sendBaiDuOcrRequest reply:" << reply;
+    qDebug() << "【发送时候的 a】 sendBaiDuOcrRequest reply:" << reply << "data.pipeline:" << int(data.pipeline);
 }
 
 void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, const QString &path)
@@ -102,12 +100,12 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
     request.setAttribute(QNetworkRequest::User, int(RESP_TYPE::RT_baidu_img_translate));
     request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<ImgTranslateData>(data));   // 当前 发送的请求线路
 
-
     QNetworkReply *reply = m_networkManager->post(request, multiPart);
-    qDebug() << "发送时候的 [b] sendBaiDuImgTranslateRequest reply:" << reply;
-//    QEventLoop loop;
-//    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-//    loop.exec();      // 不阻塞好像会有返回为空的 bug？
+    QEventLoop loop;
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+
+    qDebug() << "【发送时候的 b】 sendBaiDuImgTranslateRequest reply:" << reply;
 
 
 //    if (reply->error() == QNetworkReply::NoError) {
@@ -116,8 +114,6 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
 //    } else {
 //        qDebug() << "Error: " << reply->errorString();
 //    }
-
-
 }
 
 void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, const QString &path)
@@ -131,9 +127,9 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
 
     QUrlQuery postData;
     postData.addQueryItem("q", QUrl::toPercentEncoding(base64DataUtf8)); // fix 【重要】: 是 Qt 框架中用于将字符串转换为百分号编码（percent encoding）格式的函数。这个编码方式也称为 URL 编码或 URI 编码。它将字符串中的特殊字符以 % 符号后跟两位十六进制数字的形式进行编码，
-    postData.addQueryItem("from", data.from);
-    postData.addQueryItem("to", data.to);
-    postData.addQueryItem("render", data.render);
+    postData.addQueryItem("from", data.from_youdao);
+    postData.addQueryItem("to", data.to_youdao);
+    postData.addQueryItem("render", data.render_youdao);
     postData.addQueryItem("type", "1");
 
     // 您的 YouDao 应用 ID / 应用密钥
@@ -160,7 +156,10 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     }
 
     QNetworkReply *reply = m_networkManager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
-    qDebug() << "发送时候的 [c] sendYouDaoImgTranslateRequest reply:" << reply;
+    QEventLoop loop;
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    qDebug() << "【发送时候的 c】 sendYouDaoImgTranslateRequest reply:" << reply;
 }
 
 const QStringList NetworkOCR::rawHeader(const QNetworkReply *reply) const
@@ -240,7 +239,7 @@ void NetworkOCR::sendBaiDuAccessToken(const QString &client_id, const QString &c
     params.addQueryItem("grant_type", "client_credentials");
 
     QNetworkReply *reply = m_networkManager->post(request, params.query().toUtf8());
-    qDebug() << "发送时候的 [A] sendBaiDuOcrRequest reply:" << reply;
+    qDebug() << "【发送时候的 token】 sendBaiDuOcrRequest reply:" << reply;
 
 //    m_eventLoop->exec();   // 阻塞
 }
@@ -428,7 +427,7 @@ void NetworkOCR::onRequestFinished(QNetworkReply *reply)
 
         if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_access_token) {
             dealBaiDuAccessToken(reply);
-        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_text) {
+        } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_ocr) {
             dealBaiDuOcrRequest(reply);
         } else if (static_cast<RESP_TYPE>(type) == RESP_TYPE::RT_baidu_img_translate) {
             dealBaiDuImgTranslateRequest(reply);

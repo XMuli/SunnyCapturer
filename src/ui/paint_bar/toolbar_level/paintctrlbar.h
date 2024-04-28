@@ -15,6 +15,7 @@
 #include "colorpicker.h"
 #include "common/absbtnsctrl.h"
 #include "paintbarhelper.h"
+#include "img_translate/ximagetranslatewidget.h"
 
 class PaintCtrlBar : public QWidget
 {
@@ -43,7 +44,6 @@ signals:
     void sigTextFontFamilyChanged(const QFont &font);                       // PaintCtrlBar 字体 被发生改变时候
     void sigTextFontSizeChanged(const QString &fontSize);                   // PaintCtrlBar 字体大小 数值被发生改变时候
     void sigImgTranslate(const ImgTranslateData& data);                     // 传递 图片翻译
-    void sigOcr(const OcrData& data);                                       // 传递 文字提取
 
 public slots:
     void onIdReleased(int id);
@@ -52,24 +52,31 @@ public slots:
     void onPaintBtnRelease(const PaintType& type, const bool &isCheckable, const bool &isChecked);
     void onSetTextFontSizeComboBoxValue(const QString &fontSize);     // sync 修改下拉列表的字体的大小
 
-private:
-    QBoxLayout*                   m_layout;
-    Qt::Orientation               m_orie;
-    ImgTranslateData              m_imgTransDate;
-    OcrData                       m_ocrTextDate;
+private slots:
+    // 传递 OCR 翻译具体
+    void onImgTranslateStatusChanged(bool checked);
+    void onImgTranslateCopy(bool checked);
+    void onCbbFromCurrentTextChanged(const QString &text);
+    void onCbbToCurrentTextChanged(const QString &text);
 
-    QPointer<AbsBtnsCtrl>         m_rectCtrl;                      // 矩形
-    QPointer<AbsBtnsCtrl>         m_ellipseCtrl;                   // 圆形
-    QPointer<AbsBtnsCtrl>         m_arrowCtrl;                     // 箭头
-    QPointer<AbsBtnsCtrl>         m_markerPenCtrl;                 // 记号笔
-    QPointer<AbsBtnsCtrl>         m_mosaicCtrl;                    // 马赛克
-    QPointer<AbsBtnsCtrl>         m_textCtrl;                      // 文本
-    QPointer<AbsBtnsCtrl>         m_serialCtrl;                    // 序号图形
-    QPointer<AbsBtnsCtrl>         m_pointCtrl;                     // 线宽
-    QPointer<ColorPicker>         m_magnifyingGlass;                   // 取色板
-    QPointer<QFontComboBox>       m_fontFamily;
-    QPointer<QComboBox>           m_fontScale;
-    QPointer<AbsBtnsCtrl>         m_mosaicSliderCtrl;
+private:
+    QBoxLayout*                        m_layout;
+    Qt::Orientation                    m_orie;
+    ImgTranslateData                   m_imgTransData;
+
+    QPointer<AbsBtnsCtrl>              m_rectCtrl;                      // 矩形
+    QPointer<AbsBtnsCtrl>              m_ellipseCtrl;                   // 圆形
+    QPointer<AbsBtnsCtrl>              m_arrowCtrl;                     // 箭头
+    QPointer<AbsBtnsCtrl>              m_markerPenCtrl;                 // 记号笔
+    QPointer<AbsBtnsCtrl>              m_mosaicCtrl;                    // 马赛克
+    QPointer<AbsBtnsCtrl>              m_textCtrl;                      // 文本
+    QPointer<AbsBtnsCtrl>              m_serialCtrl;                    // 序号图形
+    QPointer<AbsBtnsCtrl>              m_pointCtrl;                     // 线宽
+    QPointer<ColorPicker>              m_magnifyingGlass;               // 取色板
+    QPointer<XImageTranslateWidget>    m_imgTranslateCtrl;              // 图片翻译，二级菜单栏
+    QPointer<QFontComboBox>            m_fontFamily;
+    QPointer<QComboBox>                m_fontScale;
+    QPointer<AbsBtnsCtrl>              m_mosaicSliderCtrl;
 };
 
 #endif // PAINTCTRLBAR_H

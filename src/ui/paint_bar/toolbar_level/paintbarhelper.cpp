@@ -27,14 +27,14 @@ OcrChannel& operator++(OcrChannel& channel)
 {
     switch (channel)
     {
-    case OcrChannel::OCR_baidu_standard_location:
-        return channel = OcrChannel::OCR_baidu_high_precision_location;
     case OcrChannel::OCR_baidu_high_precision_location:
+        return channel = OcrChannel::OCR_baidu_standard_location;
+    case OcrChannel::OCR_baidu_standard_location:
         return channel = OcrChannel::OCR_baidu_high_precision;
     case OcrChannel::OCR_baidu_high_precision:
         return channel = OcrChannel::OCR_baidu_standard;
     case OcrChannel::OCR_baidu_standard:
-        return channel = OcrChannel::OCR_baidu_standard_location;
+        return channel = OcrChannel::OCR_baidu_high_precision_location;
     }
     return channel; // 默认返回，虽然理论上不会到达这里
 }

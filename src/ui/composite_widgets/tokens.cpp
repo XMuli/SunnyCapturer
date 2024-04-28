@@ -36,7 +36,7 @@ void Tokens::initUI()
     ui->leBdApiKey->setText(baidu_api_key);
     ui->leBdSecretKey->setText(baidu_secret_key);
 
-    const QStringList list = {tr("standard location"), tr("high location"), tr("high"), tr("standard")}; // 和 OcrChannel 顺序保持一致即可
+    const QStringList list = {tr("high location"), tr("standard location"), tr("high"), tr("standard")}; // 和 OcrChannel 顺序保持一致即可
     for (int i = 0; i < list.count(); ++i) {
         const QString& text = QString("%1 %2").arg(i).arg(list.at(i));
         ui->cbbOcr->addItem(text, i);

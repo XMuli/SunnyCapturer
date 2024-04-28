@@ -26,9 +26,8 @@ public:
     enum class RESP_TYPE {
         RT_empty,                      // 忘记头文件加此，则解析默认为这个
         RT_baidu_access_token,         // 获取 token
-        RT_baidu_text,                 // 百度 OCR 转换为文本
+        RT_baidu_ocr,                  // 百度 OCR 转换为文本
         RT_baidu_img_translate,        // 百度 OCR 转换为翻译后的图片
-
         RT_youdao_img_translate        // 有道 OCR 识别后转换为翻译的图片
     };
     Q_ENUM(RESP_TYPE)

@@ -41,8 +41,8 @@ enum class PaintType
     PT_pin,
     PT_point,
 
-    PT_img_translate,   // OCR 翻译
-    PT_ocr,        // OCR 生成文本
+    PT_img_translate,   // 图片翻译
+    PT_ocr,             // OCR 提取文本
 
     PT_undo,
     PT_redo,
@@ -71,8 +71,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
 enum class OcrChannel
 {
     // OCR_auto,                                // 自动循环下面的
-    OCR_baidu_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
     OCR_baidu_high_precision_location,       // 通用文字识别（高精度含位置版）     500 次/month
+    OCR_baidu_standard_location,             // 通用文字识别（标准含位置版）      1000 次/month
     OCR_baidu_high_precision,                // 通用文字识别（高精度版）         1000 次/month
     OCR_baidu_standard,                      // 通用文字识别（标准版）           1000 次/month
 };
@@ -98,9 +98,9 @@ struct ImgTranslateData
     ImageTranslateChannel channel = ImageTranslateChannel::ITC_baidu;
 
     // YouDao API Tranlstates 有用接口
-    QString from = "auto";
-    QString to = "zh-CHS";
-    QString render = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
+    QString from_youdao = "auto";
+    QString to_youdao = "zh-CHS";
+    QString render_youdao = "1";   // 是否需要服务端返回渲染的图片，0-否； 1-是
 
     // BaiDu API Tranlstates 有用接口
     QString from_baidu = "auto";
