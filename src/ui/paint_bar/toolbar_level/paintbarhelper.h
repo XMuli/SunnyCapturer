@@ -18,7 +18,7 @@
 
 #define PROPERTY_PAINT_TYPR "PaintType"
 #define ICON_SIZE 28     // 32 48   在 100% 缩放上 32px 比较合适，然后实际大小乘以主屏幕的屏幕缩放比
-#define ICON_PADDING 7        //  4,  ICON_SIZE /4 更好看;  对应 absbtnsctrl.h 里还有一份
+#define ICON_PADDING 4        //  4,  ICON_SIZE /4 更好看;  对应 absbtnsctrl.h 里还有一份
 const QString szIconBtnCSS = QString("border-style:none; padding: %1px").arg(ICON_PADDING);
 //#define ICON_PADDING_TOP 0      //
 //#define ICON_PADDING_BOTTOM 0   //
@@ -38,7 +38,6 @@ enum class PaintType
     PT_mosaic,
     PT_text,
     PT_serial,
-    PT_pin,
     PT_point,
 
     PT_img_translate,   // 图片翻译
@@ -47,8 +46,9 @@ enum class PaintType
     PT_undo,
     PT_redo,
 
-    PT_save,
     PT_cancel,
+    PT_pin,
+    PT_save,
     PT_finish
 };
 Q_DECLARE_METATYPE(PaintType)                     // 可以被 QVariant 类型存储

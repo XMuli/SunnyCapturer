@@ -317,7 +317,9 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
     if (isCheckable) {
 
         if (m_toolsBar->hadDrawBtnsChecked()) {
-            m_actionType = ActionType::AT_drawing_shap;
+
+            if (type != PaintType::PT_ocr && type != PaintType::PT_img_translate)
+                m_actionType = ActionType::AT_drawing_shap;
 
             if (paintType == PaintType::PT_img_translate && type != PaintType::PT_img_translate) {
                 m_imgTransGenPix = QPixmap();
@@ -778,7 +780,7 @@ void ScreenShot::drawShadowOverlay(const QRect &fullRect, const QRect &pickedRec
     path.setFillRule(Qt::OddEvenFill);
     pa.save();
     pa.setPen(Qt::NoPen);
-    pa.setBrush(QColor(0, 0, 0, 0.4 * 255));
+    pa.setBrush(QColor(0, 0, 0, 0.45 * 255));
     pa.drawPath(path);
     pa.restore();
 }
@@ -1282,11 +1284,10 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
 
 void ScreenShot::showPickedRectTips()
 {
-    if (!m_pickedRectTips->isVisible()) return;
+    // if (!m_pickedRectTips->isVisible()) return;
     const auto& rect = m_node.absoluteRect;
     QString tips = QString("%1, %2, %3 * %4")
                        .arg(rect.left()).arg(rect.top()).arg(rect.width()).arg(rect.height());
-
 
 //    QString tips = QString("tp(%1, %2), br(%3, %4), %5 * %6")
 //                       .arg(rect.left()).arg(rect.top()).arg(rect.right()).arg(rect.bottom()).arg(rect.width()).arg(rect.height());
@@ -1715,7 +1716,7 @@ void ScreenShot::showCollimatorCursor(QPainter &pa)
 
     const QPoint& pt = mapFromGlobal(QCursor::pos());
     const int& width = CJ.m_cd.pen.width();
-    const QPen pen(CJ.m_cd.pen.color(), 1);
+    QPen pen(Qt::black, 1);
     pa.setPen(pen);
     // 绘制中心点
     pa.setBrush(CJ.m_cd.pen.color());
@@ -1724,29 +1725,18 @@ void ScreenShot::showCollimatorCursor(QPainter &pa)
 
     // 绘制十字准星光标
     const int& margin = 4 + r;
-    const int& length = 5 + margin;
+    const int& length = 5 * qMax(1, r/5) + margin;
 
-//    // 黑色边框线
-//    QPen blackPen(Qt::black, 2); // 使用更粗的黑色笔
-//    pa.setPen(blackPen);
-//    QVector<QLine> blackLines = {
-//        QLine(QPoint(pt.x() - length - 1, pt.y()), QPoint(pt.x() - margin + 1, pt.y())),
-//        QLine(QPoint(pt.x() + margin - 1, pt.y()), QPoint(pt.x() + length + 1, pt.y())),
-//        QLine(QPoint(pt.x(), pt.y() - length - 1), QPoint(pt.x(), pt.y() - margin + 1)),
-//        QLine(QPoint(pt.x(), pt.y() + margin - 1), QPoint(pt.x(), pt.y() + length + 1))
-//    };
-//    pa.drawLines(blackLines);
-
-    // 彩色线条
+    pen.setWidthF(0.5);
     pa.setPen(pen);
-    QVector<QLine> lines = {
-        QLine(QPoint(pt.x() - length, pt.y()), QPoint(pt.x() - margin, pt.y())),
-        QLine(QPoint(pt.x() + margin, pt.y()), QPoint(pt.x() + length, pt.y())),
-        QLine(QPoint(pt.x(), pt.y() - length), QPoint(pt.x(), pt.y() - margin)),
-        QLine(QPoint(pt.x(), pt.y() + margin), QPoint(pt.x(), pt.y() + length))
+    const double height = 1 + r/10; // 十字线固定的长度
+    QVector<QRectF> rects = {
+        QRectF(QPointF(pt.x() - length, pt.y() - height), QPointF(pt.x() - margin, pt.y() + height)),
+        QRectF(QPointF(pt.x() + margin, pt.y() - height), QPointF(pt.x() + length, pt.y() + height)),
+        QRectF(QPointF(pt.x() - height, pt.y() - length), QPointF(pt.x() + height, pt.y() - margin)),
+        QRectF(QPointF(pt.x() - height, pt.y() + margin), QPointF(pt.x() + height, pt.y() + length))
     };
-    pa.drawLines(lines);
-
+    pa.drawRects(rects);
     pa.restore();
 }
 
@@ -1807,6 +1797,11 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         CJ_CD.pen = m_paintNode.pen;
 
         update();
+    }
+
+    if (m_actionType == ActionType::AT_wait) {
+        setCursor(Qt::BlankCursor);  // 隐藏光标
+        CJ.m_cd.isShowCollimatorCursor = true;
     }
 
     e->ignore();

@@ -11,6 +11,7 @@
 #include <QFontMetrics>
 #include <QString>
 #include <QtGlobal>
+#include "paintbarhelper.h"
 
 Tips::Tips(const QString& text, const TipsType& type, QWidget *parent)
     : QWidget(parent)
@@ -23,7 +24,7 @@ Tips::Tips(const QString& text, const TipsType& type, QWidget *parent)
     if (m_type == TipsType::TT_picked_rect_tips) {
         font.setPointSize(12);
     } else if (m_type == TipsType::TT_point_changed_tips) {
-        font.setPointSize(50);
+        font.setPointSize(76);
     } else if (m_type == TipsType::TT_countdown_tips) {
         font.setPointSize(40);
     } else if (m_type == TipsType::TT_keyboard_operation_tips) {
@@ -39,11 +40,17 @@ void Tips::paintEvent(QPaintEvent *event)
 
     pa.save();
     const int penWidth = 1;
-    pa.setPen(QPen(QColor(255, 255, 255, 0.4 * 255), penWidth));
-    pa.setBrush(QColor(0, 0, 0, 0.4 * 255));
+    pa.setPen(QPen(highlightColor(0.6), penWidth));
+    pa.setBrush(Qt::NoBrush);
+    pa.drawRect(rect());
+    QColor white(255, 255, 255, 0.1 * 255);
+    QColor black(19, 19, 19, 0.6 * 255);
+    pa.setPen(QPen(white, penWidth));
+    pa.setBrush(black);
     pa.drawRect(rect().adjusted(1, 1, -1, -1));
 
-    pa.setPen(QPen(QColor(255, 255, 255, 0.8 * 255), penWidth));
+    white.setAlphaF(0.8);
+    pa.setPen(QPen(white, penWidth));
     if (m_type == TipsType::TT_picked_rect_tips) {
 
         QRect rt1 = textRect("px");
@@ -52,10 +59,12 @@ void Tips::paintEvent(QPaintEvent *event)
         const QPoint& p1 = rect().topRight() - QPoint(rt1.width(), 0);
         const QPoint& p2 = rect().bottomRight() - QPoint(rt1.width(), 0);
 
-        pa.setPen(QPen(QColor(255, 255, 255, 0.4 * 255), penWidth));
+        white.setAlphaF(0.4);
+        pa.setPen(QPen(white, penWidth));
         pa.setBrush(Qt::NoBrush);
         pa.drawLine(p1, p2);
-        pa.setPen(QPen(QColor(255, 255, 255, 0.8 * 255), penWidth));
+        white.setAlphaF(0.8);
+        pa.setPen(QPen(white, penWidth));
         pa.drawText(QRect(p1, rect().bottomRight()), Qt::AlignCenter, "px");
         pa.drawText(QRect(rect().topLeft(), p2), Qt::AlignCenter, m_text);
     } else if (m_type == TipsType::TT_point_changed_tips) {
@@ -72,6 +81,7 @@ void Tips::paintEvent(QPaintEvent *event)
         resize(maxWidth * 4 / 3, maxWidth);
         pa.setBrush(Qt::NoBrush);
         pa.drawText(rect(), Qt::AlignCenter, m_text);
+
     } else if (m_type == TipsType::TT_keyboard_operation_tips) {
         pa.drawText(rect().center(), m_text);
     }
@@ -90,11 +100,11 @@ QRect Tips::textRect(const QString &text)
     QRect textRect = fontMetrics.boundingRect(text);
     textRect.moveCenter(rect().center());
 
-    int margin = 40;
+    int margin = 10;
     if (m_type == TipsType::TT_picked_rect_tips) {
         margin = 6;
     } else if (m_type == TipsType::TT_point_changed_tips) {
-        margin = 40;
+        margin = 10;
     } else if (m_type == TipsType::TT_keyboard_operation_tips) {
         margin = 10;
     }

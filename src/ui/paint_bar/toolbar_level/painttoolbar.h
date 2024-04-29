@@ -6,7 +6,6 @@
 #ifndef PAINTTOOLBAR_H
 #define PAINTTOOLBAR_H
 #include <vector>
-#include <memory>
 #include <QToolButton>
 #include <QWidget>
 #include <QBoxLayout>

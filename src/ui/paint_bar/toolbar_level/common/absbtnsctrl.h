@@ -12,7 +12,7 @@
 
 // 从 paintbarhelper.h 里拷贝一份
 #define ICON_SIZE 28
-#define ICON_PADDING 7
+#define ICON_PADDING 4
 
 class AbsBtnsCtrl : public QWidget
 {
