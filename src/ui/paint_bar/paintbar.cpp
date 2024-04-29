@@ -143,14 +143,14 @@ void PaintBar::resizeEvent(QResizeEvent *e)
 void PaintBar::enterEvent(QEvent *e)
 {
     setCursor(Qt::ArrowCursor);
-    CJ.m_cd.isShowCollimatorCursor = false;
+    // CJ.m_cd.isShowCollimatorCursor = false;
     emit sigScreenshotUpdate();
     QWidget::enterEvent(e);
 }
 
 void PaintBar::leaveEvent(QEvent *e)
 {
-    CJ.m_cd.isShowCollimatorCursor = true;
+    // CJ.m_cd.isShowCollimatorCursor = true;  // TODO: 要去掉某一种情况，从绘画文本时候进来，注释掉就好了
     emit sigScreenshotUpdate();
     QWidget::leaveEvent(e);
 }

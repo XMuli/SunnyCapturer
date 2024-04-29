@@ -36,6 +36,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_screens(qGuiApp->screens())
     , m_origPix()
     , m_vdRect()
+    , m_debugLog(new QLabel(nullptr))
     , m_bFistPressed(false)
     , m_bAutoDetectRect(CJ_GET("interface.auto_detect_windows").get<bool>())
     , m_HotKeyType(type)
@@ -299,7 +300,6 @@ void ScreenShot::showPointTips(const QString &text)
     const QScreen *scrn = currentScreen();
     if (!scrn) scrn = m_primaryScreen;
 
-
     m_pointTips->setText(text);
     m_pointTips->move(mapFromGlobal(scrn->geometry().topLeft()));
     m_pointTips->show();
@@ -318,8 +318,13 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
 
         if (m_toolsBar->hadDrawBtnsChecked()) {
 
-            if (type != PaintType::PT_ocr && type != PaintType::PT_img_translate)
-                m_actionType = ActionType::AT_drawing_shap;
+            setMouseTracking(true);
+
+            if (type != PaintType::PT_ocr && type != PaintType::PT_img_translate) {
+                m_actionType = ActionType::AT_drawing_shap; // 结合能够被按下的，默认假设为此，若是 text 下面单独赋值
+                setCursor(Qt::BlankCursor);  // 隐藏光标
+                CJ.m_cd.isShowCollimatorCursor = true;
+            }
 
             if (paintType == PaintType::PT_img_translate && type != PaintType::PT_img_translate) {
                 m_imgTransGenPix = QPixmap();
@@ -342,15 +347,21 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
                 m_paintNode.pst = PaintShapeType::PST_mosaic;
             } else if (type == PaintType::PT_text) {
                 m_paintNode.pst = PaintShapeType::PST_text;
+                m_actionType = ActionType::AT_drawing_text; // 其它都默认是 ActionType::AT_drawing_shap， 故特殊，需要补一下
+                setCursor(Qt::IBeamCursor);
+                CJ.m_cd.isShowCollimatorCursor = false;
             } else if (type == PaintType::PT_serial) {
                 m_paintNode.pst = PaintShapeType::PST_serial;
             } else {
                 m_paintNode.pst = PaintShapeType::PST_empty;
             }
+
         } else {
             m_actionType = ActionType::AT_wait;
             setMouseTracking(true);
         }
+
+
 
     } else {
 
@@ -690,6 +701,11 @@ void ScreenShot::initUI()
     CJ_CD.textUnderline ? flags |= TextFlag::TF_underline : flags &= ~TextFlags(TextFlag::TF_underline);
     onTextCtrlToggled(flags);
 
+    m_debugLog->resize(900, 1000);
+    const QPoint pt = currentScreen()->geometry().topRight();
+    m_debugLog->move(pt - QPoint(m_debugLog->width(), 0));
+    m_debugLog->setWindowFlags(Qt::WindowStaysOnTopHint);
+
     m_edit->hide();
     m_toolsBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_toolsBar->hide();
@@ -704,8 +720,10 @@ void ScreenShot::initUI()
 
 #ifdef QT_DEBUG
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
+    m_debugLog->show();
 #else
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    m_debugLog->hide();
 #endif
 
 
@@ -738,6 +756,10 @@ void ScreenShot::initUI()
     move(m_vdRect.topLeft());
     qDebug() << "#2-->" << m_vdRect << "   " << this->rect();
 #endif
+
+
+
+
 
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S),  this, [this](){
@@ -938,9 +960,11 @@ void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
             setCursor(Qt::WhatsThisCursor); // 一般都不会触发
         }
     } else if (m_actionType == ActionType::AT_drawing_shap) {
-        // setCursor(Qt::CrossCursor);
         setCursor(Qt::BlankCursor);  // 隐藏光标
         CJ.m_cd.isShowCollimatorCursor = true;
+    } else if (m_actionType == ActionType::AT_drawing_text) {
+        setCursor(Qt::IBeamCursor);
+        CJ.m_cd.isShowCollimatorCursor = false;
     }
 }
 
@@ -973,6 +997,7 @@ void ScreenShot::preDestruction()
     if (m_toolsBar) m_toolsBar->deleteLater();
     if (m_rectNodes.size()) m_rectNodes.clear();
     if (m_magnifyingGlass) m_magnifyingGlass->deleteLater();
+    if (m_debugLog) m_debugLog->deleteLater(); // 仅调试用
 }
 
 void ScreenShot::monitorsInfo() const
@@ -1004,97 +1029,101 @@ void ScreenShot::monitorsInfo() const
     qInfo() << "---------------m_screens[] Info END----------------";
 }
 
-void ScreenShot::printfDevelopProjectInfo(QPainter& pa)
+void ScreenShot::printfDevelopProjectInfo()
 {
-    pa.save();
-    pa.setPen(QPen(Qt::yellow, 2));
+    // 创建一个QPixmap对象，用于绘制
+    QPixmap pixmap(m_debugLog->size());
+    pixmap.fill(Qt::transparent); // 填充透明背景
 
-    QScreen* scrn = m_primaryScreen;
-    for (const auto& it : m_screens) {
-        if (it != m_primaryScreen)
-            scrn = it;
-    }
+    {
+        // 在QPixmap上绘制内容
+        QPainter pa(&pixmap);
+        pa.setPen(QPen(Qt::black, 2));
+        pa.setBrush(Qt::NoBrush);
 
-    QPoint tTextPt(0, 1500);
-    if (scrn) tTextPt = mapFromGlobal(scrn->geometry().topLeft());
+        QPoint tTextPt(0, 0);
+        const int tTextX = tTextPt.x();
+        const int tTextY = tTextPt.y() + 50;
+        const int tAddHight = 30;
+        int tCount = 1;
 
-    const int tTextX = tTextPt.x();
-    const int tTextY = tTextPt.y() + 50;
-    const int tAddHight = 20;
-    int tCount = 1;
+        const auto& currentScreenGeom = currentScreen()->geometry();
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) m_vdRect:(%3, %4, %5 * %6) currentScreenGeom:(%7, %8, %9 * %10)")
+                                                                       .arg(QCursor::pos().x()).arg(QCursor::pos().y())
+                                                                       .arg(m_vdRect.x()).arg(m_vdRect.y()).arg(m_vdRect.width()).arg(m_vdRect.height())
+                                                                       .arg(currentScreenGeom.x()).arg(currentScreenGeom.y()).arg(currentScreenGeom.width()).arg(currentScreenGeom.height()));
 
-    const auto& currentScreenGeom = currentScreen()->geometry();
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) m_vdRect:(%3, %4, %5 * %6) currentScreenGeom:(%7, %8, %9 * %10)")
-                                                                   .arg(QCursor::pos().x()).arg(QCursor::pos().y())
-                                                                   .arg(m_vdRect.x()).arg(m_vdRect.y()).arg(m_vdRect.width()).arg(m_vdRect.height())
-                                                                   .arg(currentScreenGeom.x()).arg(currentScreenGeom.y()).arg(currentScreenGeom.width()).arg(currentScreenGeom.height()));
+        pa.drawText(QPoint(tTextX, tTextY), QString("//[m_node]----------------------------------------------------"));
+        QPoint tP1 = m_node.p1;
+        QPoint tP2 = m_node.p2;
+        QPoint tP3 = m_node.p3;
+        QPoint tPt = m_node.pt;
+        QRect tPickedRect = m_node.pickedRect;
+        QRect absoluteRect = m_node.absoluteRect;
 
-    pa.drawText(QPoint(tTextX, tTextY), QString("//[m_node]----------------------------------------------------"));
-    QPoint tP1 = m_node.p1;
-    QPoint tP2 = m_node.p2;
-    QPoint tP3 = m_node.p3;
-    QPoint tPt = m_node.pt;
-    QRect tPickedRect = m_node.pickedRect;
-    QRect absoluteRect = m_node.absoluteRect;
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
+                                                                       .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
+                                                                       .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
+                                                                       .arg(tPt.x()).arg(tPt.y())
+                                                                       .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
+                                                                       .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_toolsBar Rect:(%3, %4, %5 * %6) m_pickedRectTips Rect:(%7, %8, %9 * %10)")
+                                                                       .arg(m_toolsBar->rect().x()).arg(m_toolsBar->rect().y()).arg(m_toolsBar->rect().width()).arg(m_toolsBar->rect().height())
+                                                                       .arg(m_pickedRectTips->rect().x()).arg(m_pickedRectTips->rect().y()).arg(m_pickedRectTips->rect().width()).arg(m_pickedRectTips->rect().height()));
 
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
-                                                                   .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
-                                                                   .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
-                                                                   .arg(tPt.x()).arg(tPt.y())
-                                                                   .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
-                                                                   .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_toolsBar Rect:(%3, %4, %5 * %6) m_pickedRectTips Rect:(%7, %8, %9 * %10)")
-                                                                   .arg(m_toolsBar->rect().x()).arg(m_toolsBar->rect().y()).arg(m_toolsBar->rect().width()).arg(m_toolsBar->rect().height())
-                                                                   .arg(m_pickedRectTips->rect().x()).arg(m_pickedRectTips->rect().y()).arg(m_pickedRectTips->rect().width()).arg(m_pickedRectTips->rect().height()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//[m_paintNode]----------------------------------------------------"));
+        tP1 = m_paintNode.node.p1;
+        tP2 = m_paintNode.node.p2;
+        tP3 = m_paintNode.node.p3;
+        tPt = m_paintNode.node.pt;
+        tPickedRect = m_paintNode.node.pickedRect;
+        absoluteRect = m_node.absoluteRect;
 
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//[m_paintNode]----------------------------------------------------"));
-    tP1 = m_paintNode.node.p1;
-    tP2 = m_paintNode.node.p2;
-    tP3 = m_paintNode.node.p3;
-    tPt = m_paintNode.node.pt;
-    tPickedRect = m_paintNode.node.pickedRect;
-    absoluteRect = m_node.absoluteRect;
-
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
-                                                                   .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
-                                                                   .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
-                                                                   .arg(tPt.x()).arg(tPt.y())
-                                                                   .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
-                                                                   .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 pixelatedFuzzy:%4 smoothFuzzy:%5 pen.width():%6")
-                                                                   .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id)
-                                                                   .arg(m_paintNode.pixelatedFuzzy).arg(m_paintNode.smoothFuzzy).arg(m_paintNode.pen.width()));
-    pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("SerialNode-number:[%1] SerialNode-letter:%2 background:%3 pen:%4 brush:%5")
-                                                                   .arg(m_paintNode.serialNode.number).arg(m_paintNode.serialNode.letter).arg(m_paintNode.serialNode.background.name())
-                                                                   .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
-
-
-    // int idx = 0;
-    // for (const auto& it : m_rectNodes) {
-    //     const auto& rect = xrectToQRect(it.rect);
-    //     const auto& relativelyRect = xrectToQRect(it.relativelyRect);
-    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//idx:%1-------------------------\n").arg(idx++));
-    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++),  QString("it.rect(%1, %2, %3 * %4) it.relativelyRect(%5, %6, %7 * %8)")
-    //                                                                    .arg(rect.x())
-    //                                                                    .arg(rect.y())
-    //                                                                    .arg(rect.width())
-    //                                                                    .arg(rect.height())
-    //                                                                    .arg(relativelyRect.x())
-    //                                                                    .arg(relativelyRect.y())
-    //                                                                    .arg(relativelyRect.width())
-    //                                                                    .arg(relativelyRect.height()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
+                                                                       .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
+                                                                       .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
+                                                                       .arg(tPt.x()).arg(tPt.y())
+                                                                       .arg(tPickedRect.x()).arg(tPickedRect.y()).arg(tPickedRect.width()).arg(tPickedRect.height())
+                                                                       .arg(absoluteRect.x()).arg(absoluteRect.y()).arg(absoluteRect.width()).arg(absoluteRect.height()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pst:%1 bShow:%2 id:%3 pixelatedFuzzy:%4 smoothFuzzy:%5 pen.width():%6")
+                                                                       .arg(paintShapeTypeToString(m_paintNode.pst)).arg(m_paintNode.bShow ? "true" : "false").arg(m_paintNode.id)
+                                                                       .arg(m_paintNode.pixelatedFuzzy).arg(m_paintNode.smoothFuzzy).arg(m_paintNode.pen.width()));
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("SerialNode-number:[%1] SerialNode-letter:%2 background:%3 pen:%4 brush:%5")
+                                                                       .arg(m_paintNode.serialNode.number).arg(m_paintNode.serialNode.letter).arg(m_paintNode.serialNode.background.name())
+                                                                       .arg(m_paintNode.pen.color().name()).arg(m_paintNode.brush.color().name()));
 
 
-    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString::fromStdWString(it.title));
-    //     quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
-    //     QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
-    //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
-    // }
-    pa.restore();
+        // int idx = 0;
+        // for (const auto& it : m_rectNodes) {
+        //     const auto& rect = xrectToQRect(it.rect);
+        //     const auto& relativelyRect = xrectToQRect(it.relativelyRect);
+        //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//idx:%1-------------------------\n").arg(idx++));
+        //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++),  QString("it.rect(%1, %2, %3 * %4) it.relativelyRect(%5, %6, %7 * %8)")
+        //                                                                    .arg(rect.x())
+        //                                                                    .arg(rect.y())
+        //                                                                    .arg(rect.width())
+        //                                                                    .arg(rect.height())
+        //                                                                    .arg(relativelyRect.x())
+        //                                                                    .arg(relativelyRect.y())
+        //                                                                    .arg(relativelyRect.width())
+        //                                                                    .arg(relativelyRect.height()));
+
+
+        //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString::fromStdWString(it.title));
+        //     quintptr decimalValue = reinterpret_cast<quintptr>(it.ntHWnd);
+        //     QString hexString = QString("0x%1").arg(decimalValue, 0, 16);
+        //     pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hWnd:%1(10)  %2(16)").arg(decimalValue).arg(hexString));
+        // }
+        pa.end();
+
+        // 在此处继续使用pa绘制其他文本内容...
+    } // QPainter对象在这里结束生命周期，自动释放资源
+
+    m_debugLog->setPixmap(pixmap);
 }
 
 void ScreenShot::prinftWindowsRects(QPainter& pa)
@@ -1349,7 +1378,7 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
         m_bFistPressed = true;
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_drawing_shap) {
+    } else if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) {
         setMouseTracking(false);
         m_node.trackPos.clear();
         m_node.trackPos.emplace_back(m_node.p3);
@@ -1413,7 +1442,7 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         m_actionType = ActionType::AT_wait;
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_drawing_shap) {
+    } else if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) {
         m_node.trackPos.emplace_back(m_node.p3);
         // 点位确定了之后，再来 push_bach
         m_paintNode.node = m_node;
@@ -1470,8 +1499,6 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) m_paintNode.xTextEditType = XTextEditType::XTET_nullptr;
         m_paintNode.pixmap = QPixmap();    // fix: push_back 时候永远是最新的一个
         qDebug() << "m_redo:" << m_redo.size();
-
-
 
         setMouseTracking(m_paintNode.pst == PaintShapeType::PST_text ? false : true);
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
@@ -1538,10 +1565,12 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
         }
     } else if (m_actionType == ActionType::AT_select_picked_rect) {
     } else if (m_actionType == ActionType::AT_select_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_drawing_shap) {
+    } else if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) {
         if (m_paintNode.bShow)
             m_node.trackPos.emplace_back(m_node.p3);
-        const auto& orieType = containsForRect(m_vdRect, m_node.p3);
+
+        const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
+        // const auto& orieType = containsForRect(m_vdRect, m_node.p3);
         setCursorShape(orieType, m_node.p3);
         m_paintNode.node = m_node;
 
@@ -1650,6 +1679,7 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         if (showMagnifyingGlass) return;
     }
 
+    if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) return;
     m_actionType = ActionType::AT_wait;
 }
 
@@ -1725,7 +1755,7 @@ void ScreenShot::showCollimatorCursor(QPainter &pa)
 
     // 绘制十字准星光标
     const int& margin = 4 + r;
-    const int& length = 5 * qMax(1, r/5) + margin;
+    const int& length = 8 * qMax(1, r/5) + margin;
 
     pen.setWidthF(0.5);
     pa.setPen(pen);
@@ -1871,7 +1901,10 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     // 以下部分都是 printf 一些调试参数的部分
     if (CJ_GET("advanced.customize_ui_parameters.show_windows_detial_info").get<bool>()) {
         prinftWindowsRects(pa);
-        printfDevelopProjectInfo(pa);
+        printfDevelopProjectInfo();
+        if (!m_debugLog->isVisible()) m_debugLog->show();
+    } else {
+        m_debugLog->hide();
     }
 
     if (CJ.m_cd.isShowCollimatorCursor)

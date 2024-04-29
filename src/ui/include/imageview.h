@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QImage>
+#include <QTimer>
+#include <QLabel>
 
 class ImageView : public QWidget
 {
@@ -11,8 +13,11 @@ class ImageView : public QWidget
 public:
     ImageView(QWidget *parent = nullptr);
     ~ImageView();
-
     void setImage(const QImage &newImage);
+
+private:
+    void initUI();
+    void updateZoomLabel();
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
@@ -22,8 +27,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-
-
 private slots:
     void onLoadImage(void);
     void onZoomInImage(void);
@@ -31,12 +34,14 @@ private slots:
     void onPresetImage(void);
 
 private:
-    QImage m_Image;
-    qreal m_ZoomValue = 1.0;
-    int m_XPtInterval = 0;
-    int m_YPtInterval = 0;
-    QPoint m_OldPos;
-    bool m_Pressed = false;
+    QImage         m_Image;
+    qreal          m_ZoomValue = 1.0;
+    int            m_XPtInterval = 0;
+    int            m_YPtInterval = 0;
+    QPoint         m_OldPos;
+    bool           m_Pressed = false;
+    QLabel*        m_labZoom;
+    QTimer*        m_timerLabZoom;
 };
 
 #endif // IMAGEVIEW_H

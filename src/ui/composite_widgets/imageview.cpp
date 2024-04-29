@@ -6,7 +6,16 @@
 #include <QFileDialog>
 
 ImageView::ImageView(QWidget *parent)
+    : QWidget(parent)
+    , m_ZoomValue(1.0)
+    , m_XPtInterval(0)
+    , m_YPtInterval(0)
+    , m_OldPos(QPoint())
+    , m_Pressed(false)
+    , m_labZoom(new QLabel(this))
+    , m_timerLabZoom(new QTimer(this))
 {
+    initUI();
 }
 
 ImageView::~ImageView()
@@ -112,6 +121,26 @@ void ImageView::setImage(const QImage &newImage)
     m_Image = newImage;
 }
 
+void ImageView::initUI()
+{
+    m_labZoom->setParent(this);
+    m_labZoom->setStyleSheet("QLabel { background-color: white; border: 1px solid black; }");
+    m_labZoom->raise();
+    m_labZoom->hide();
+    m_labZoom->move(10, 10);
+
+    connect(m_timerLabZoom, &QTimer::timeout, [this]() { m_labZoom->hide();});
+}
+
+void ImageView::updateZoomLabel()
+{
+    m_labZoom->setText(QString(tr("Zoom: %1%")).arg(m_ZoomValue * 100));
+    m_labZoom->show();
+    m_labZoom->adjustSize();      // 自动调整大小以适应文本
+    m_timerLabZoom->stop();       // 取消之前的定时器
+    m_timerLabZoom->start(2000);  // 创建一个新的定时器，并在时间到达时隐藏标签
+}
+
 void ImageView::onLoadImage(void)
 {
     QString imageFile = QFileDialog::getOpenFileName(this, "Open Image", "./", tr("Images (*.png *.xpm *.jpg)"));
@@ -125,19 +154,16 @@ void ImageView::onLoadImage(void)
 
 void ImageView::onZoomInImage(void)
 {
-    m_ZoomValue += 0.2;
+    m_ZoomValue += 0.1;
+    updateZoomLabel();
     this->update();
 }
 
 void ImageView::onZoomOutImage(void)
 {
-    m_ZoomValue -= 0.2;
-    if (m_ZoomValue <= 0)
-    {
-        m_ZoomValue += 0.2;
-        return;
-    }
-
+    m_ZoomValue -= 0.1;
+    m_ZoomValue = qMax(0.1, m_ZoomValue);
+    updateZoomLabel();
     this->update();
 }
 
@@ -146,5 +172,6 @@ void ImageView::onPresetImage(void)
     m_ZoomValue = 1.0;
     m_XPtInterval = 0;
     m_YPtInterval = 0;
+    updateZoomLabel();
     this->update();
 }

@@ -24,7 +24,8 @@ enum class ActionType {
     AT_picking_custom_rect,              // 采摘自定义的矩形
     AT_select_picked_rect,               // 选中当前 框选的边框 矩形
     AT_select_drawn_shape,               // 选择已绘画的图形(不算当前正在绘画中的)
-    AT_drawing_shap,
+    AT_drawing_shap,                     // 绘画各种图形，除了文字编辑
+    AT_drawing_text,                     // 仅仅文字编辑，因为涉及到图标的改变，需要修改
     AT_move_drawn_shape,
     AT_move_picked_rect,                 // 移动采摘的矩形
     AT_stretch_drawn_shape,
@@ -132,9 +133,9 @@ struct PaintNode
     bool bShow = false;                                         // true-在 paintEvent 中绘画;反之则不绘画
 
     int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
-    int     pixelatedFuzzy;                                // PST_mosaic: mosaic、 blur    模糊值
+    int     pixelatedFuzzy;                                     // PST_mosaic: mosaic、 blur    模糊值
     int     smoothFuzzy;
-    int     markerPenWidth;                                // 记号笔的宽度
+    int     markerPenWidth;                                     // 记号笔的宽度
 
     QPixmap pixmap;
                                                                 // PST_text is TBD: 后面单独设计为一个富文本编辑框所需要的元素  ???
@@ -143,8 +144,8 @@ struct PaintNode
     XTextEdit *xTextEdit = nullptr;                             // true-显示； false-（如被撤销）就隐藏了
     XTextEditType xTextEditType = XTextEditType::XTET_nullptr;
 
-    QPen pen; // = QPen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QBrush brush; // = QBrush(Qt::red, Qt::SolidPattern);
+    QPen pen;
+    QBrush brush;
 
     void printf() const;
     // 默认构造函数

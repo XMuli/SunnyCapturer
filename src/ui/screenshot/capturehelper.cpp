@@ -65,6 +65,8 @@ QString actionTypeToString(ActionType actionType)
         return "AT_select_drawn_shape";
     case ActionType::AT_drawing_shap:
         return "AT_drawing_shap";
+    case ActionType::AT_drawing_text:
+        return "AT_drawing_text";
     case ActionType::AT_move_drawn_shape:
         return "AT_move_drawn_shape";
     case ActionType::AT_move_picked_rect:
