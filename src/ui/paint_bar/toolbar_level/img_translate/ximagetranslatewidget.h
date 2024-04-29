@@ -24,8 +24,7 @@ private:
     void initUI();
 
 public:
-    XToolButton*  m_tbTranslate;
-    XToolButton*  m_tbCopy;
+    XToolButton*  m_tbTrans;
 
     QComboBox*    m_cbbFrom;
     QComboBox*    m_cbbTo;

@@ -54,8 +54,7 @@ public slots:
 
 private slots:
     // 传递 OCR 翻译具体
-    void onImgTranslateStatusChanged(bool checked);
-    void onImgTranslateCopy(bool checked);
+    void onImgTransStatusChanged(bool checked);
     void onCbbFromCurrentTextChanged(const QString &text);
     void onCbbToCurrentTextChanged(const QString &text);
 
@@ -73,7 +72,7 @@ private:
     QPointer<AbsBtnsCtrl>              m_serialCtrl;                    // 序号图形
     QPointer<AbsBtnsCtrl>              m_pointCtrl;                     // 线宽
     QPointer<ColorPicker>              m_magnifyingGlass;               // 取色板
-    QPointer<XImageTranslateWidget>    m_imgTranslateCtrl;              // 图片翻译，二级菜单栏
+    QPointer<XImageTranslateWidget>    m_imgTransCtrl;              // 图片翻译，二级菜单栏
     QPointer<QFontComboBox>            m_fontFamily;
     QPointer<QComboBox>                m_fontScale;
     QPointer<AbsBtnsCtrl>              m_mosaicSliderCtrl;

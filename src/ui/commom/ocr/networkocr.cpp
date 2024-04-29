@@ -101,19 +101,11 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
     request.setAttribute(static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1), QVariant::fromValue<ImgTranslateData>(data));   // 当前 发送的请求线路
 
     QNetworkReply *reply = m_networkManager->post(request, multiPart);
-    QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-    loop.exec();
+    // QEventLoop loop;   // 会照成切换目标语言时候，阻塞几秒钟后才显示二级图片翻译的工具栏
+    // connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    // loop.exec();
 
     qDebug() << "【发送时候的 b】 sendBaiDuImgTranslateRequest reply:" << reply;
-
-
-//    if (reply->error() == QNetworkReply::NoError) {
-//        QByteArray responseData = reply->readAll();
-//        qDebug().quote() << "---#1>responseData:" << responseData;
-//    } else {
-//        qDebug() << "Error: " << reply->errorString();
-//    }
 }
 
 void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, const QString &path)
@@ -156,9 +148,9 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     }
 
     QNetworkReply *reply = m_networkManager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
-    QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-    loop.exec();
+    // QEventLoop loop;
+    // connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    // loop.exec();
     qDebug() << "【发送时候的 c】 sendYouDaoImgTranslateRequest reply:" << reply;
 }
 

@@ -125,7 +125,6 @@ void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheck
     } else {
         space = 0;
         m_paintCtrlBar->hide();
-
     }
 
     m_layout->setSpacing(space);

@@ -8,8 +8,7 @@
 
 XImageTranslateWidget::XImageTranslateWidget(const Qt::Orientations &orien, QWidget *parent)
     : AbsBtnsCtrl(orien, parent)
-    , m_tbTranslate(nullptr)
-    , m_tbCopy(nullptr)
+    , m_tbTrans(nullptr)
     , m_cbbFrom(new QComboBox(this))
     , m_cbbTo(new QComboBox(this))
     , m_lab(new QLabel("→", this))
@@ -60,17 +59,13 @@ void XImageTranslateWidget::initUI()
     m_cbbTo->setCurrentText(currLanguageTo);
 
     const QString& dir = ":/resources/icons/paint_tool_bar/paint_ctrl_btn/";
-    m_tbTranslate = creatorXToolButton(dir, "ocr_text_translate", true);
-    m_tbCopy = creatorXToolButton(dir, "ocr_text_copy", false);
-    m_tbCopy->setCheckable(false);
-    m_tbCopy->hide();  // 临时屏蔽
+    m_tbTrans = creatorXToolButton(dir, "ocr_text_translate", true);
     m_cbbFrom->hide();
     m_lab->hide();
 
     // 布局插入
     const int space = 10;
-    addWidget(m_tbTranslate, true);
-    // addWidget(m_tbCopy, true);
+    addWidget(m_tbTrans, true);
 
     // addSpacerItem(2 * space);
     // addWidget(m_cbbFrom, false);

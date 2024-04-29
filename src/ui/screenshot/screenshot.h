@@ -76,7 +76,7 @@ public slots:
     void onPickedColor(const QColor& color);
     void onTextFontFamilyChanged(const QFont &font);
     void onTextFontSizeChanged(const QString &fontSize);
-    void onOcrTranslateCtrlIdReleased(const ImgTranslateData& data);                              // 开始 OCR Translate
+    void onImgTranslateCtrlIdReleased(const ImgTranslateData& data);                              // 开始 OCR Translate
     void onOCRImageGenerateFinsh(const QSize& size, const QString& path);                         // OCR 图片翻译 后的图片已保存成功
     void onOCRCtrlIdReleased(const OcrData &data);                                                // 开始 OCR
     void onOCRTextGenerateFinsh(const QByteArray& response, const OcrData& ocrTextData);      // OCR 提取文字 后的文本已解析成功
@@ -123,35 +123,35 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 private:
-    QScreen*                 m_primaryScreen;
-    QList<QScreen *>         m_screens;
-    QPixmap                  m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
-    QPixmap                  m_mosaicPix;          // 准备使用马赛克/完成截图相关功能时候
-    QPixmap                  m_ocrGeneratePix;     // OCR 翻译后的图片
-    QRect                    m_vdRect;             // virtual Desktop Rect;
+    QScreen*                      m_primaryScreen;
+    QList<QScreen *>              m_screens;
+    QPixmap                       m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
+    QPixmap                       m_mosaicPix;          // 准备使用马赛克/完成截图相关功能时候
+    QPixmap                       m_imgTransGenPix;     // m_ImageTranslateGeneratePixmap 图片翻译后的产物图片
+    QRect                         m_vdRect;             // virtual Desktop Rect;
 
-    bool                     m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
-    bool                     m_bAutoDetectRect;    // 是否自动监测矩形
-    HotKeyType               m_HotKeyType;         // 初始化进来的状态，采用何用截图方式
-    ActionType               m_actionType;         // 当前的操作状态
-    Node                     m_node;               // 一次操作的集合
-    QPointer<PaintBar>       m_toolsBar;           // Paint Tools Bar
-    QPointer<NetworkOCR>     m_networkOCR;         // OCR 翻译类
+    bool                          m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
+    bool                          m_bAutoDetectRect;    // 是否自动监测矩形
+    HotKeyType                    m_HotKeyType;         // 初始化进来的状态，采用何用截图方式
+    ActionType                    m_actionType;         // 当前的操作状态
+    Node                          m_node;               // 一次操作的集合
+    QPointer<PaintBar>            m_toolsBar;           // Paint Tools Bar
+    QPointer<NetworkOCR>          m_networkOCR;         // OCR 翻译类
 
-    PaintNode                m_paintNode;          // 当前绘画元素
-    std::vector<PaintNode>   m_undo;               // 撤销-图案元素
-    std::vector<PaintNode>   m_redo;               // 重做-图案元素
+    PaintNode                     m_paintNode;          // 当前绘画元素
+    std::vector<PaintNode>        m_undo;               // 撤销-图案元素
+    std::vector<PaintNode>        m_redo;               // 重做-图案元素
 
-    OrientationType          m_stretchPickedRectOrieType;
-    Qt::Orientation          m_orie;
-    std::vector<RectNode>    m_rectNodes;
+    OrientationType               m_stretchPickedRectOrieType;
+    Qt::Orientation               m_orie;
+    std::vector<RectNode>         m_rectNodes;
 
     QPointer<XTextEdit>           m_edit;
     QPointer<XOcrTextEdit>        m_ocrTextEdit;
-    QPointer<XOcrWidget>          m_ocrWidget;              // OCR 文字提取
-    QPointer<ImageTranslateDlg>   m_imgTranslateDlg;        // 图片翻译
+    QPointer<XOcrWidget>          m_ocrWidget;           // OCR 文字提取
+    QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 
-    QPointer<XMagnifyingGlass>    m_magnifyingGlass;         // 取色器+放大镜
+    QPointer<XMagnifyingGlass>    m_magnifyingGlass;     // 取色器+放大镜
     QPointer<Tips>                m_pointTips;
     QPointer<Tips>                m_pickedRectTips;
     QTimer*                       m_timerPoint;

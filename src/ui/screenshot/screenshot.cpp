@@ -267,7 +267,7 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
 {
     if (isDrawOnOrigPix) {
 
-        if (m_ocrGeneratePix.isNull()) {
+        if (m_imgTransGenPix.isNull()) {
             QPainter pa(&m_origPix);
             pa.save();
             for (const auto& it : m_redo) drawShape(it, pa, true);
@@ -279,7 +279,7 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
             return m_origPix.copy(rect);
 
         } else {
-            return m_ocrGeneratePix.copy();
+            return m_imgTransGenPix.copy();
         }
 
     } else {
@@ -321,7 +321,7 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
             m_actionType = ActionType::AT_drawing_shap;
 
             if (paintType == PaintType::PT_img_translate && type != PaintType::PT_img_translate) {
-                m_ocrGeneratePix = QPixmap();
+                m_imgTransGenPix = QPixmap();
                 update();
             } else if (paintType == PaintType::PT_ocr && type != PaintType::PT_ocr) {
                 m_ocrTextEdit->clear();
@@ -479,23 +479,23 @@ void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
     CJ_CD.font.setPointSize(width);   // 可能改动
 }
 
-void ScreenShot::onOcrTranslateCtrlIdReleased(const ImgTranslateData &data)
+void ScreenShot::onImgTranslateCtrlIdReleased(const ImgTranslateData &data)
 {
     // hide();  TODO: 此处还是要显示出来
     if (!m_networkOCR || !data.bTranslate) {
-        m_ocrGeneratePix = QPixmap();
+        m_imgTransGenPix = QPixmap();
         update();
         return;
     }
 
-    const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
+    const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/origin/image_translate/";
     QDir directory(dir);
     if (!directory.exists() && !directory.mkpath(dir)) {
         qDebug() << "Failed to create directory: " << dir;
     }
 
-    const QString& path = dir + QString("OCRTranslate_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
-    const bool ok = imageSave(path, false);
+    const QString& path = dir + QString("image_translate_%1_%2.png").arg(XPROJECT_NAME).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+    const bool ok = imageSave(path, false);   // 会照成剪切到画面版
     QFile file(path);
     if (ok && file.exists()) {
 
@@ -515,8 +515,8 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 #if 1
     QFile file(path);
     if (file.exists() && size.isValid()) {
-        m_ocrGeneratePix = QPixmap(size);
-        m_ocrGeneratePix.load(path);
+        m_imgTransGenPix = QPixmap(size);
+        m_imgTransGenPix.load(path);
         update();
     }
 
@@ -524,8 +524,8 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
     hide();
     QFile file(path);
     if (file.exists() && size.isValid()) {
-        m_ocrGeneratePix = QPixmap(size);
-        m_ocrGeneratePix.load(path);
+        m_imgTransGenPix = QPixmap(size);
+        m_imgTransGenPix.load(path);
         update();
     }
 
@@ -549,7 +549,7 @@ void ScreenShot::onOCRImageGenerateFinsh(const QSize &size, const QString &path)
 
 void ScreenShot::onOCRCtrlIdReleased(const OcrData &data)
 {
-    const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/ocr_origin/";
+    const QString dir = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first() + "/origin/ocr/";
     QDir directory(dir);
     if (!directory.exists() && !directory.mkpath(dir)) {
         qDebug() << "Failed to create directory: " << dir;
@@ -588,12 +588,19 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
             if (error_code == 17) {   // 17 每天请求量超限额
                 if (CJ.getKeyValue("tokens.ocr.channel_auto").get<bool>()) {
-                    OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
-                    CJ_SET("tokens.ocr.channel", ++channel);
 
-                    btnOCR();
-                    close();
-                    return;
+                    static int nCount = 0;
+                    if (nCount < 4) {  // 所有的线路全部失效的时候结束，不再尝试
+                        OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
+                        CJ_SET("tokens.ocr.channel", ++channel);
+
+                        btnOCR();
+                        nCount++;
+                        close();
+                        return;
+                    } else {
+                        qDebug() << "tokens.ocr.channel_auto all try connect is failed!";
+                    }
                 }
             }
         }
@@ -654,7 +661,7 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
 void ScreenShot::onOcrTranslateCtrlHide()
 {
-    m_ocrGeneratePix = QPixmap();
+    m_imgTransGenPix = QPixmap();
     update();
 }
 
@@ -772,7 +779,7 @@ void ScreenShot::initConnect()
     connect(m_toolsBar, &PaintBar::sigPickedColor, this, &ScreenShot::onPickedColor);
     connect(m_toolsBar, &PaintBar::sigTextFontFamilyChanged, this, &ScreenShot::onTextFontFamilyChanged);
     connect(m_toolsBar, &PaintBar::sigTextFontSizeChanged, this, &ScreenShot::onTextFontSizeChanged);
-    connect(m_toolsBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onOcrTranslateCtrlIdReleased);
+    connect(m_toolsBar, &PaintBar::sigImgTranslate, this, &ScreenShot::onImgTranslateCtrlIdReleased);
     connect(m_toolsBar, &PaintBar::sigScreenshotUpdate, this, [this](){ update(); });
 
     connect(this, &ScreenShot::sigSetTextFontSizeComboBoxValue, m_toolsBar, &PaintBar::sigSetTextFontSizeComboBoxValue);
@@ -881,7 +888,6 @@ bool ScreenShot::imageSave(const QString &path, const bool &bClose)
     QTime stopTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(stopTime);
     qInfo() << "btnSave() pixmap save time: " << elapsed << "ms" << pixmap.size() << "image path:" << path;
-
 
     if (CJ_GET("interface.auto_copy_to_clipbaoard").get<bool>()) {
         QClipboard* clipboard = QApplication::clipboard();
@@ -1563,7 +1569,7 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
                 m_edit->move(m_node.p3);
         }
 
-        qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
+        // qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
@@ -1871,8 +1877,8 @@ void ScreenShot::paintEvent(QPaintEvent *e)
         drawShape(m_paintNode, pa);
 
 
-    if (!m_ocrGeneratePix.isNull())
-        pa.drawPixmap(pickedRect, m_ocrGeneratePix);
+    if (!m_imgTransGenPix.isNull())
+        pa.drawPixmap(pickedRect, m_imgTransGenPix);
 
 //    pa.setPen(Qt::red);
 //    pa.drawRect(m_paintNode.node.absoluteRect);

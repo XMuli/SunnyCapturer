@@ -37,7 +37,7 @@ PaintCtrlBar::PaintCtrlBar(const int &colorPickerIconSize, const Qt::Orientation
     , m_serialCtrl(nullptr)
     , m_pointCtrl(nullptr)
     , m_magnifyingGlass(new ColorPicker(QSize(colorPickerIconSize, colorPickerIconSize) * dpiScale(qGuiApp->screenAt(QCursor::pos())) / 2, orie == Qt::Horizontal ? ColorPickerType::CT_grid_horizontal : ColorPickerType::CT_grid_vertical, this))
-    , m_imgTranslateCtrl(new XImageTranslateWidget(orie, this))
+    , m_imgTransCtrl(new XImageTranslateWidget(orie, this))
     , m_fontFamily(new QFontComboBox(this))
     , m_fontScale(new QComboBox(this))
     , m_mosaicSliderCtrl(initSliderCtrl())
@@ -57,7 +57,7 @@ PaintCtrlBar::~PaintCtrlBar()
     m_pointCtrl->deleteLater();
     m_markerPenCtrl->deleteLater();
     m_magnifyingGlass->deleteLater();
-    m_imgTranslateCtrl->deleteLater();
+    m_imgTransCtrl->deleteLater();
 
     m_fontFamily->deleteLater();
     m_fontScale->deleteLater();
@@ -119,11 +119,10 @@ void PaintCtrlBar::initBtns()
     connect(creatorAbsBtnsCtrl(m_orie, m_textCtrl, dir, QStringList() << "bold" << "italic" << "outline" << "strikeout" << "underline", textLists, false, false), &QButtonGroup::idToggled, this, &PaintCtrlBar::onTextCtrlToggled);
     connect(creatorAbsBtnsCtrl(m_orie, m_serialCtrl, dir, QStringList() << "serial_number" << "serial_letter", QStringList() << QString::number(CJ_CD.serialType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
     connect(creatorAbsBtnsCtrl(m_orie, m_pointCtrl, dir, QStringList() << "point_small" << "point_medium" << "point_large", QStringList() << QString::number(CJ_CD.pointType)), &QButtonGroup::idReleased, this, &PaintCtrlBar::onIdReleased);
-    // m_imgTranslateCtrl 的对象
-    connect(m_imgTranslateCtrl->m_tbTranslate, &XToolButton::toggled, this, &PaintCtrlBar::onImgTranslateStatusChanged);
-    connect(m_imgTranslateCtrl->m_tbCopy, &XToolButton::toggled, this, &PaintCtrlBar::onImgTranslateCopy);
-    connect(m_imgTranslateCtrl->m_cbbFrom, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbFromCurrentTextChanged);
-    connect(m_imgTranslateCtrl->m_cbbTo, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbToCurrentTextChanged);
+    // m_imgTransCtrl 的对象
+    connect(m_imgTransCtrl->m_tbTrans, &XToolButton::toggled, this, &PaintCtrlBar::onImgTransStatusChanged);
+    connect(m_imgTransCtrl->m_cbbFrom, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbFromCurrentTextChanged);
+    connect(m_imgTransCtrl->m_cbbTo, &QComboBox::currentTextChanged, this, &PaintCtrlBar::onCbbToCurrentTextChanged);
 
     connect(m_fontFamily, &QFontComboBox::currentFontChanged, this, &PaintCtrlBar::sigTextFontFamilyChanged);
     connect(m_fontScale, &QComboBox::currentTextChanged, this, &PaintCtrlBar::sigTextFontSizeChanged);
@@ -136,7 +135,7 @@ void PaintCtrlBar::initBtns()
     m_fontScale->setCurrentText(QString::number(CJ_CD.font.pointSize()));  // 可能改动
 
 
-    m_imgTranslateCtrl->hide();
+    m_imgTransCtrl->hide();
 //    addWidget(m_rectCtrl);
 //    addWidget(m_ellipseCtrl);
 //    addWidget(m_arrowCtrl);
@@ -226,20 +225,6 @@ int PaintCtrlBar::btnIdIschecked(const PaintType& type, const bool &isCheckable,
             ctrl = m_serialCtrl;
         } else if (type == PaintType::PT_img_translate) {  //不需要向外传递，模拟切换过来，就直接相应【初次】翻译
 
-            // 线路发生改变，需要重新赋值
-            const ImageTranslateChannel& channel = ImageTranslateChannel(CJ_GET("tokens.iamge_translate.channel").get<int>());
-            if (channel == ImageTranslateChannel::ITC_baidu) {
-                m_imgTransData.from_baidu = CJ_GET_QSTR("tokens.iamge_translate.baidu.from");
-                m_imgTransData.to_baidu = CJ_GET_QSTR("tokens.iamge_translate.baidu.to");
-            } else if (channel == ImageTranslateChannel::ITC_youdao) {
-                m_imgTransData.from_youdao = CJ_GET_QSTR("tokens.iamge_translate.youdao.from");
-                m_imgTransData.to_youdao = CJ_GET_QSTR("tokens.iamge_translate.youdao.to");
-            }
-
-            m_imgTransData.channel = channel;
-            m_imgTransData.bTranslate = true;
-            if (isChecked)
-                emit sigImgTranslate(m_imgTransData);
         } else if (type == PaintType::PT_ocr) {       //不需要向外传递，模拟切换过来，就直接相应【初次】 OCR 提取文字
         }
 
@@ -425,7 +410,7 @@ void PaintCtrlBar::onMosaicCtrlIdReleased(int id)
 void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isCheckable, const bool& isChecked)
 {
     bool bPointCtrlShow = true;
-    bool bColorPickerShow = true;
+    bool bMagnifyingGlassrShow = true;
     if (isCheckable) hideAllBtnsCtrl();
 
     if (type == PaintType::PT_rectangle) {
@@ -441,7 +426,7 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
         addWidget(m_mosaicCtrl);
         addWidget(m_mosaicSliderCtrl, false);
         bPointCtrlShow = false;
-        bColorPickerShow = false;
+        bMagnifyingGlassrShow = false;
     } else if (type == PaintType::PT_text) {
         addWidget(m_textCtrl);
         addWidget(m_fontFamily, false);
@@ -450,14 +435,29 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     } else if (type == PaintType::PT_serial) {
         addWidget(m_serialCtrl);
     } else if (type == PaintType::PT_img_translate) {
-        addWidget(m_imgTranslateCtrl, false);  // 显示二级菜单栏目
-
+        addWidget(m_imgTransCtrl, false);  // 显示二级菜单栏目
         bPointCtrlShow = false;
-        bColorPickerShow = false;
+        bMagnifyingGlassrShow = false;
         if (!isChecked) emit COMM.sigImgTranslateCtrlHide();
+
+        // 线路发生改变，需要重新赋值
+        const ImageTranslateChannel& channel = ImageTranslateChannel(CJ_GET("tokens.iamge_translate.channel").get<int>());
+        if (channel == ImageTranslateChannel::ITC_baidu) {
+            m_imgTransData.from_baidu = CJ_GET_QSTR("tokens.iamge_translate.baidu.from");
+            m_imgTransData.to_baidu = CJ_GET_QSTR("tokens.iamge_translate.baidu.to");
+        } else if (channel == ImageTranslateChannel::ITC_youdao) {
+            m_imgTransData.from_youdao = CJ_GET_QSTR("tokens.iamge_translate.youdao.from");
+            m_imgTransData.to_youdao = CJ_GET_QSTR("tokens.iamge_translate.youdao.to");
+        }
+
+        m_imgTransData.channel = channel;
+        m_imgTransData.bTranslate = true;
+        if (isChecked)
+            emit sigImgTranslate(m_imgTransData);
+
     } else if (type == PaintType::PT_ocr) {
         bPointCtrlShow = false;
-        bColorPickerShow = false;
+        bMagnifyingGlassrShow = false;
         if (!isChecked) emit COMM.sigOcrTextCtrlHide();
     } else {
         return;
@@ -475,7 +475,7 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     if (bPointCtrlShow) addWidget(m_pointCtrl);
     else m_pointCtrl->hide();
 
-    if (bColorPickerShow)  {
+    if (bMagnifyingGlassrShow)  {
         addWidget(m_magnifyingGlass, false);
     } else {
         m_magnifyingGlass->hide();
@@ -496,21 +496,15 @@ void PaintCtrlBar::onSetTextFontSizeComboBoxValue(const QString &fontSize)
     m_fontScale->setCurrentText(fontSize);
 }
 
-void PaintCtrlBar::onImgTranslateStatusChanged(bool checked)
+void PaintCtrlBar::onImgTransStatusChanged(bool checked)
 {
     m_imgTransData.bTranslate = checked;
     emit sigImgTranslate(m_imgTransData);
 }
 
-void PaintCtrlBar::onImgTranslateCopy(bool checked)
-{
-    // TODO 2023.11.09:直接拷贝这张图片还是？拷贝解析后的文本？
-    //    emit sigOcrTranslateCtrlIdReleased(m_ocrTranslateDate);
-}
-
 void PaintCtrlBar::onCbbFromCurrentTextChanged(const QString &text)
 {
-    m_imgTranslateCtrl->m_cbbFrom->setCurrentText(text);
+    m_imgTransCtrl->m_cbbFrom->setCurrentText(text);
 
     const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
     QString from;
@@ -528,7 +522,7 @@ void PaintCtrlBar::onCbbFromCurrentTextChanged(const QString &text)
 
 void PaintCtrlBar::onCbbToCurrentTextChanged(const QString &text)
 {
-    m_imgTranslateCtrl->m_cbbTo->setCurrentText(text);
+    m_imgTransCtrl->m_cbbTo->setCurrentText(text);
 
     const int& iamge_translate_channel = CJ_GET("tokens.iamge_translate.channel");
     QString to;

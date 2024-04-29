@@ -30,23 +30,19 @@ void AbsBtnsCtrl::addWidget(QWidget *w, const bool& bAddSpacer)
     if (w) {
         m_layout->addWidget(w, Qt::AlignCenter);
 
-        if (bAddSpacer) {
-            addSpacerLine(); // 实际没有使用到
-//            addSpacerItem(100);   // 都解开可以看效果
-//            addSpacerLine(10); // 实际没有使用到
-        }
+        if (bAddSpacer)
+            addSpacerLine(); // 使用了默认参数
     }
 }
 
-// 实际没有使用到
 void AbsBtnsCtrl::addSpacerLine(const int& length)
 {
     if (!m_layout) return;
-    if (m_orien == Qt::Horizontal) m_layout->addWidget(new VerSpacerLine(length, this), Qt::AlignCenter);
-    else if (m_orien == Qt::Vertical) m_layout->addWidget(new HorSpacerLine(length + 5, this), Qt::AlignCenter);
+    if (m_orien == Qt::Horizontal) m_layout->addWidget(new VerSpacerLine(length, this), 0, Qt::AlignCenter);
+    else if (m_orien == Qt::Vertical) m_layout->addWidget(new HorSpacerLine(length + 5, this), 0, Qt::AlignCenter);
+
 }
 
-// 实际没有使用到
 void AbsBtnsCtrl::addSpacerItem(const int &length)
 {
     // 子控件里面有弹簧拉伸，所以最父亲层的弹簧就也就不能尽情的压缩子控件， 虽然不影响效果，以后再回头【直接用】 design 来看看这个点
