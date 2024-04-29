@@ -48,7 +48,6 @@ signals:
 
 
     void sigImgTranslateCtrlHide();                                                     // OCR 翻译 隐藏
-    void sigOcrTextCtrlHide();                                                          // OCR 文本 隐藏
 
 private:
     QString toLocaleName(const QString& language);

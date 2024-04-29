@@ -18,7 +18,6 @@
 
 #include "tips.h"
 #include "xtextedit.h"
-#include "xocrtextedit.h"
 #include "capturehelper.h"
 #include "xmagnifyingglass.h"
 #include "../paint_bar/paintbar.h"
@@ -81,7 +80,6 @@ public slots:
     void onOCRCtrlIdReleased(const OcrData &data);                                                // 开始 OCR
     void onOCRTextGenerateFinsh(const QByteArray& response, const OcrData& ocrTextData);      // OCR 提取文字 后的文本已解析成功
     void onOcrTranslateCtrlHide();
-    void onOcrTextCtrlHide();
 
 private:
     void initUI();
@@ -147,7 +145,6 @@ private:
     std::vector<RectNode>         m_rectNodes;
 
     QPointer<XTextEdit>           m_edit;
-    QPointer<XOcrTextEdit>        m_ocrTextEdit;
     QPointer<XOcrWidget>          m_ocrWidget;           // OCR 文字提取
     QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 

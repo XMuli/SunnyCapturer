@@ -458,7 +458,6 @@ void PaintCtrlBar::onPaintBtnRelease(const PaintType &type, const bool& isChecka
     } else if (type == PaintType::PT_ocr) {
         bPointCtrlShow = false;
         bMagnifyingGlassrShow = false;
-        if (!isChecked) emit COMM.sigOcrTextCtrlHide();
     } else {
         return;
     }

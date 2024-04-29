@@ -45,7 +45,6 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
     , m_orie(orie)
     , m_edit(new XTextEdit(this))
-    , m_ocrTextEdit(new XOcrTextEdit(this))  // [不理解为什么添加 this 之后，按下快捷键 ctrl+c，会导致其父对象会被析构；已找到一个原因是设置为只读就会这样，但是可编辑则不会]
     , m_ocrWidget(new XOcrWidget(nullptr))
     , m_imgTranslateDlg(new ImageTranslateDlg(nullptr))
     , m_magnifyingGlass(new XMagnifyingGlass(this))
@@ -323,11 +322,9 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
             if (paintType == PaintType::PT_img_translate && type != PaintType::PT_img_translate) {
                 m_imgTransGenPix = QPixmap();
                 update();
-            } else if (paintType == PaintType::PT_ocr && type != PaintType::PT_ocr) {
-                m_ocrTextEdit->clear();
-                m_ocrTextEdit->hide();
+            } /*else if (paintType == PaintType::PT_ocr && type != PaintType::PT_ocr) {
                 update();
-            }
+            }*/
 
             if (type == PaintType::PT_rectangle) {
                 m_paintNode.pst = PaintShapeType::PST_rect;
@@ -637,10 +634,6 @@ void ScreenShot::onOCRTextGenerateFinsh(const QByteArray &response, const OcrDat
 
     OcrChannel channel = OcrChannel(CJ_GET("tokens.ocr.channel").get<int>());
     qDebug() << "int(channel):" << int(channel);
-    // m_ocrTextEdit->resize(m_node.absoluteRect.size());
-    // m_ocrTextEdit->move(m_node.absoluteRect.topLeft());
-    // m_ocrTextEdit->clear();
-    // if (!m_ocrTextEdit->isVisible()) m_ocrTextEdit->show();
 
     // 显示 OCR 弹窗
     const QPixmap& pixmap = finishDrewPixmap(m_node.absoluteRect, true);
@@ -663,12 +656,6 @@ void ScreenShot::onOcrTranslateCtrlHide()
 {
     m_imgTransGenPix = QPixmap();
     update();
-}
-
-void ScreenShot::onOcrTextCtrlHide()
-{
-    m_ocrTextEdit->clear();
-    m_ocrTextEdit->hide();
 }
 
 void ScreenShot::initUI()
@@ -702,8 +689,6 @@ void ScreenShot::initUI()
     onTextCtrlToggled(flags);
 
     m_edit->hide();
-    m_ocrTextEdit->setReadOnly(true);
-    m_ocrTextEdit->hide();
     m_toolsBar->show(); // fix: 初次 MouseRelease 时，通过宽度（此时为默认的）计算其位置是不正确（需要先 show 一下才会刷新真实的尺寸）
     m_toolsBar->hide();
     m_pointTips->hide();
@@ -765,7 +750,6 @@ void ScreenShot::initConnect()
     connect(&COMM, &Communication::sigOCRImageGenerateFinsh, this, &ScreenShot::onOCRImageGenerateFinsh);
     connect(&COMM, &Communication::sigOCRTextGenerateFinsh, this, &ScreenShot::onOCRTextGenerateFinsh);
     connect(&COMM, &Communication::sigImgTranslateCtrlHide, this, &ScreenShot::onOcrTranslateCtrlHide);
-    connect(&COMM, &Communication::sigOcrTextCtrlHide, this, &ScreenShot::onOcrTextCtrlHide);
 //    connect(&COMM, &Communication::sigWidgetResized, this, [this](){
 //        QTimer::singleShot(50, this, [this](){ showCustomWidget(m_toolsBar); }); // fix: 当 paintBtnsBar 快贴底部时候，此时点击绘画按钮，通过 sendEvent() 传递过来，再次进入此函数，需要等待 rect 刷新后，再次重新计算
 //    });

@@ -66,7 +66,6 @@ set(custom_ui_files
     ui/include/verspacerline.h
     ui/include/tips.h
     ui/include/xtextedit.h
-    ui/include/xocrtextedit.h
     ui/include/xtoolbutton.h
     ui/include/switchbutton.h
     ui/include/xmonitorlabel.h
@@ -93,7 +92,6 @@ set(custom_ui_files
     ui/composite_widgets/verspacerline.cpp
     ui/composite_widgets/tips.cpp
     ui/composite_widgets/xtextedit.cpp
-    ui/composite_widgets/xocrtextedit.cpp
     ui/composite_widgets/xtoolbutton.cpp
     ui/composite_widgets/switchbutton.cpp
     ui/composite_widgets/xmonitorlabel.cpp
