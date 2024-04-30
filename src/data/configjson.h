@@ -55,7 +55,7 @@ struct ContextData
     int serialType = 0;
     int serialNumber = 0;
     QChar serialLetter = 'a';
-    QFont font = QFont("Microsoft YaHei", 16);
+    QFont font = QFont("Microsoft YaHei", 10);
     QPen pen = QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush brush = QBrush(Qt::red, Qt::SolidPattern);
 

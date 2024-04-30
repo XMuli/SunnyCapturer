@@ -350,13 +350,33 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
                 m_actionType = ActionType::AT_drawing_text; // 其它都默认是 ActionType::AT_drawing_shap， 故特殊，需要补一下
                 setCursor(Qt::IBeamCursor);
                 CJ.m_cd.isShowCollimatorCursor = false;
+
+
             } else if (type == PaintType::PT_serial) {
                 m_paintNode.pst = PaintShapeType::PST_serial;
             } else {
                 m_paintNode.pst = PaintShapeType::PST_empty;
             }
 
-        } else {
+        } else {  // 工具绘画的全部都没有选中了
+
+            // fix: 文本编辑框有内容，但点击了取消绘画文本
+            if (type == PaintType::PT_text && m_edit->isVisible()) {
+                    m_paintNode.xTextEditType = XTextEditType::XTET_finish;
+                    m_edit->clearFocus();
+                    if (!m_edit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
+
+                        m_paintNode.node.absoluteRect = QRect(m_node.pt, m_edit->rect().size());
+                        m_paintNode.xTextEdit = showCreatorRichText(m_edit->document(), m_paintNode.node.absoluteRect, this);
+                        qDebug() << "------$4--->m_edit->rect():" << m_edit->rect() << "m_paintNode.node.absoluteRect:" << m_paintNode.node.absoluteRect << "m_paintNode.xTextEdit:" << m_paintNode.xTextEdit;
+                        m_edit->hide();
+                        m_redo.push_back(m_paintNode);
+                        autoDisableUndoAndRedo();
+                    }
+                    m_edit->setText("");
+                    m_edit->hide();
+            }
+
             m_actionType = ActionType::AT_wait;
             setMouseTracking(true);
         }
@@ -484,7 +504,10 @@ void ScreenShot::onTextFontFamilyChanged(const QFont &font)
 
 void ScreenShot::onTextFontSizeChanged(const QString &fontSize)
 {
-    const int& width = fontSize.toInt();
+    bool ok = false;
+    const int& width = fontSize.toInt(&ok);
+    if (!ok) return;  // 避免输入非数值
+
     setTextFontSize(0, width, false);
     CJ_CD.font.setPointSize(width);   // 可能改动
 }
@@ -715,17 +738,15 @@ void ScreenShot::initUI()
 
     m_timerPoint->setInterval(5000);
     monitorsInfo();
+    m_debugLog->hide();
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)
 
 #ifdef QT_DEBUG
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);  // | Qt::WindowStaysOnTopHint
-    m_debugLog->show();
 #else
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-    m_debugLog->hide();
 #endif
-
 
 #ifdef HALF_SCRN_DEVELOP
     setWindowFlag(Qt::WindowStaysOnTopHint, false);
@@ -921,15 +942,32 @@ void ScreenShot::imageQuickSave()
     COMM.sigShowSystemMessagebox(ok ? tr("Success") : tr("Failed"), ok ? tr("Image save to ") + path : tr("Quick save feature is not enabled, please check."), 10000);
 }
 
+
+
 // bMouse true-鼠标滑轮， false-绘画工具栏下拉列表实现
+// width 是下拉列表里面显示的数值，而实际储存的大小为 font.pointSize = qBound(1, yCount, 72) * zoom + baseSize;
 void ScreenShot::setTextFontSize(const int& stepY, const int& width, const bool &bMouse, const bool &bShowPointTips)
 {
-    m_textFont.setPointSize(bMouse ? m_textFont.pointSize() + stepY : width);
+    const double zoom = 1.6;
+    const int baseSize = 0;
+    const int min = 1;
+    const int max = 600;
+
+    if (bMouse) {  // 滑轮方式调节，最后也是通过发射信号，走下面 else 分支
+        static int val = CJ_CD.font.pointSize();
+        if (stepY > 0) val++;
+        else if (stepY < 0) val--;
+        val = qBound(min, val, max);
+        emit sigSetTextFontSizeComboBoxValue(QString::number(val));
+    } else {
+        m_textFont.setPointSize(qBound(min, width, max) * zoom + baseSize);   // 唯一，都是通过它来设置字体的大小
+    }
+
     m_edit->setFont(m_textFont);
-    const int& tWidth = m_textFont.pointSize();
+    const int& tWidth = (m_textFont.pointSize() - baseSize) / zoom;
     const QString& szWidth = QString::number(tWidth);
+    // qDebug() << "tWidth:" << tWidth << "bMouse:" << bMouse;
     if (bShowPointTips) showPointTips(szWidth + "pt");
-    if (bMouse) emit sigSetTextFontSizeComboBoxValue(szWidth);  // 同步修改下拉列表的字体大小
 }
 
 void ScreenShot::autoDisableUndoAndRedo()
@@ -1901,10 +1939,16 @@ void ScreenShot::paintEvent(QPaintEvent *e)
     // 以下部分都是 printf 一些调试参数的部分
     if (CJ_GET("advanced.customize_ui_parameters.show_windows_detial_info").get<bool>()) {
         prinftWindowsRects(pa);
+
+#ifdef QT_DEBUG
         printfDevelopProjectInfo();
         if (!m_debugLog->isVisible()) m_debugLog->show();
+#endif
+
     } else {
+#ifdef QT_DEBUG
         m_debugLog->hide();
+#endif
     }
 
     if (CJ.m_cd.isShowCollimatorCursor)

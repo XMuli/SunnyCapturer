@@ -127,7 +127,7 @@ private:
     QPixmap                       m_mosaicPix;          // 准备使用马赛克/完成截图相关功能时候
     QPixmap                       m_imgTransGenPix;     // m_ImageTranslateGeneratePixmap 图片翻译后的产物图片
     QRect                         m_vdRect;             // virtual Desktop Rect;
-    QPointer<QLabel>              m_debugLog;     // 调试时候显示部分日志使用
+    QPointer<QLabel>              m_debugLog;           // 调试时候显示部分日志使用
 
     bool                          m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
     bool                          m_bAutoDetectRect;    // 是否自动监测矩形

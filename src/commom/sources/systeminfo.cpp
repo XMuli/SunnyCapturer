@@ -162,9 +162,11 @@ QPixmap SystemInfo::renderMonitorToPixmap()
     pixmap.fill(Qt::transparent);
     QPainter pa(&pixmap);
 
+#ifdef QT_DEBUG
     pa.setPen(QPen(Qt::blue, 1));
     pa.setBrush(Qt::NoBrush);
     pa.drawRect(maxRt);
+#endif
 
     QPoint center = maxRt.center();
     QRect allMonitorsRect; // 初始为空，将根据内容扩展
@@ -215,12 +217,13 @@ QPixmap SystemInfo::renderMonitorToPixmap()
         pa.drawText(adjustedRect.bottomLeft() + QPoint(5, -5), text);
     }
 
+#ifdef QT_DEBUG
     pa.setPen(QPen(Qt::green, 2));
     pa.drawRect(0, 0, clientSize.width(), clientSize.height());
-
-    QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    QString filePath = desktopPath + "/monitor_image.png";
-    pixmap.save(filePath);
+#endif
+    // QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    // QString filePath = desktopPath + "/monitor_image.png";
+    // pixmap.save(filePath);
 
     return pixmap;
 }

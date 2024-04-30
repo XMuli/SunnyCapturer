@@ -4,7 +4,6 @@
 // SPDX-Author: XMuli <xmulitech@gmail.com>
 
 #include "paintbar.h"
-#include "communication.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDebug>
@@ -13,6 +12,7 @@
 #include <QPainter>
 #include <QScreen>
 #include <QPaintEvent>
+#include "../screenshot/screenshot.h"
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -143,14 +143,26 @@ void PaintBar::resizeEvent(QResizeEvent *e)
 void PaintBar::enterEvent(QEvent *e)
 {
     setCursor(Qt::ArrowCursor);
-    // CJ.m_cd.isShowCollimatorCursor = false;
+    ScreenShot* widget = qobject_cast<ScreenShot*>(parent());
+    if (widget) {
+        if (widget->actionType() == ActionType::AT_drawing_shap || widget->actionType() == ActionType::AT_drawing_text) {
+            CJ.m_cd.isShowCollimatorCursor = false;
+        }
+    }
     emit sigScreenshotUpdate();
     QWidget::enterEvent(e);
 }
 
 void PaintBar::leaveEvent(QEvent *e)
 {
-    // CJ.m_cd.isShowCollimatorCursor = true;  // TODO: 要去掉某一种情况，从绘画文本时候进来，注释掉就好了
+    ScreenShot* widget = qobject_cast<ScreenShot*>(parent());
+    if (widget) {
+        if (widget->actionType() == ActionType::AT_drawing_shap) {
+            CJ.m_cd.isShowCollimatorCursor = true;
+        } else if (widget->actionType() == ActionType::AT_drawing_text) {
+            CJ.m_cd.isShowCollimatorCursor = false;
+        }
+    }
     emit sigScreenshotUpdate();
     QWidget::leaveEvent(e);
 }
