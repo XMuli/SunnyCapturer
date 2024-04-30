@@ -4,6 +4,7 @@
 // SPDX-Author: XMuli <xmulitech@gmail.com>
 
 #include "xtextedit.h"
+#include <QDebug>
 
 XTextEdit::XTextEdit(QWidget* parent)
     : QTextEdit(parent)
@@ -11,7 +12,6 @@ XTextEdit::XTextEdit(QWidget* parent)
 {
     setStyleSheet(QStringLiteral("XTextEdit { background: transparent; }"));
     connect(this, &XTextEdit::textChanged, this, &XTextEdit::adjustSize);
-    connect(this, &XTextEdit::textChanged, this, &XTextEdit::emitTextUpdated);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setContextMenuPolicy(Qt::NoContextMenu);
@@ -114,21 +114,22 @@ void XTextEdit::setFont(const QFont& f)
     adjustSize();
 }
 
-void XTextEdit::setAlignment(Qt::AlignmentFlag alignment)
+void XTextEdit::applyAllCharFormat(const QTextCharFormat& format)
 {
-    QTextEdit::setAlignment(alignment);
-    adjustSize();
-}
-void XTextEdit::setTextColor(const QColor& c)
-{
-    QString s(
-        QStringLiteral("XTextEdit { background: transparent; color: %1; }"));
-    setStyleSheet(s.arg(c.name()));
+    // 将新的格式应用于整个文本框中的所有文字
+    QTextCursor cursor = textCursor();
+    cursor.select(QTextCursor::Document);
+    m_lastFormat = currentCharFormat();
+    cursor.mergeCharFormat(m_lastFormat);
 }
 
 void XTextEdit::adjustSize()
 {
     QString&& text = this->toPlainText();
+
+    if (text.isEmpty()) {
+        mergeCurrentCharFormat(m_lastFormat);
+    }
 
     QFontMetrics fm(font());
     QRect bounds = fm.boundingRect(QRect(), 0, text);
@@ -142,11 +143,6 @@ void XTextEdit::adjustSize()
     }
 
     this->setFixedSize(pixelsWide, pixelsHigh);
-}
-
-void XTextEdit::emitTextUpdated()
-{
-    emit textUpdated(this->toPlainText());
 }
 
 bool XTextEdit::focusAble() const

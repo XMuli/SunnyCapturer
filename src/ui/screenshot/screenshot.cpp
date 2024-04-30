@@ -433,10 +433,11 @@ void ScreenShot::onTextCtrlToggled(const TextFlags& flages)
     const QColor foreground = format.foreground().color();
     format.setFontWeight(blod ? QFont::Bold : QFont::Normal);
     format.setFontItalic(italic);
-    format.setTextOutline(QPen(outline ? Qt::white : foreground, 1));
+    format.setTextOutline(outline ? QPen(Qt::white, CJ.m_cd.font.pointSizeF() / 10.0) : Qt::NoPen);
     format.setFontStrikeOut(strikeout);
     format.setFontUnderline(underline);
     m_edit->mergeCurrentCharFormat(format);
+    m_edit->applyAllCharFormat(m_edit->currentCharFormat());
 
 //    if (flages & TextFlag::TF_blod) {
 //    } else if (flages & TextFlag::TF_italic) {
@@ -490,6 +491,8 @@ void ScreenShot::onPickedColor(const QColor &color)
     QTextCharFormat format = m_edit->currentCharFormat();
     format.setForeground(QBrush(color));
     m_edit->mergeCurrentCharFormat(format);
+    // m_edit->setTextColor(color);
+    m_edit->applyAllCharFormat(m_edit->currentCharFormat());
 
     CJ_CD.pen.setColor(color);
     CJ_CD.brush.setColor(color);
@@ -961,6 +964,13 @@ void ScreenShot::setTextFontSize(const int& stepY, const int& width, const bool 
         emit sigSetTextFontSizeComboBoxValue(QString::number(val));
     } else {
         m_textFont.setPointSize(qBound(min, width, max) * zoom + baseSize);   // 唯一，都是通过它来设置字体的大小
+
+        QTextCharFormat format = m_edit->currentCharFormat();
+        const QColor foreground = format.foreground().color();
+        const bool& bOutline = format.textOutline() != Qt::NoPen;
+        format.setTextOutline(bOutline ? QPen(Qt::white, CJ.m_cd.font.pointSizeF() / 10.0) : Qt::NoPen);
+        m_edit->mergeCurrentCharFormat(format);
+        m_edit->applyAllCharFormat(m_edit->currentCharFormat());
     }
 
     m_edit->setFont(m_textFont);

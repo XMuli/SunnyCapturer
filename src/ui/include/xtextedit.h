@@ -9,6 +9,15 @@
 #include <QFocusEvent>
 #include <QTextEdit>
 
+// struct TextData
+// {
+//     TextData() {}
+
+//     QColor          m_colorBackground;     // 前景色
+//     QColor          m_colorForeground;     // 背景色
+//     QTextCharFormat m_format;              // 当前选中的状态
+// };
+
 class XTextEdit : public QTextEdit
 {
     Q_OBJECT
@@ -17,6 +26,7 @@ public:
 
     void adjustSize();
     void setFont(const QFont& f);
+    void applyAllCharFormat(const QTextCharFormat& format);
 
     bool focusAble() const;
     void setFocusAble(bool focusAble);
@@ -36,17 +46,11 @@ protected:
 signals:
     void textUpdated(const QString& s);
 
-public slots:
-    void setTextColor(const QColor& c);
-    void setAlignment(Qt::AlignmentFlag alignment);
-
-private slots:
-    void emitTextUpdated();
-
 private:
-    bool  m_focusAble;  // true-支持获取焦点， false-不接受焦点获取
-    QSize m_baseSize;
-    QSize m_minSize;
+    QSize           m_baseSize;
+    QSize           m_minSize;
+    bool            m_focusAble;    // true-支持获取焦点， false-不接受焦点获取
+    QTextCharFormat m_lastFormat;   // fix: 删除了所有时刻，再次写保留之前的格式
 };
 
 #endif // XTEXTEDIT_H
