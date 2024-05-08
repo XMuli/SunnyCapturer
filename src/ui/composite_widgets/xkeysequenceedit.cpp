@@ -26,6 +26,7 @@ XKeySequenceEdit::XKeySequenceEdit(const QKeySequence &keySequence, QWidget *par
 
 void XKeySequenceEdit::initUI()
 {
+    // setStyleSheet("QKeySequenceEdit { qproperty-alignment: AlignCenter; }"); // 设置水平居中对齐
     //setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);
 }
 

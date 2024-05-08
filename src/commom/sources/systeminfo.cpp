@@ -19,8 +19,6 @@
 #include <QPainter>
 #include <QStandardPaths>
 
-
-
 #define FIX_FORMAT(str) \
     const QString& t(std); \
     t.leftJustified(20, ' ')
@@ -93,11 +91,6 @@ QString SystemInfo::windowsVersionInfo()
     QString memoryInfo = getMemoryInfo();    // Memory Info
     ret += QString(tr("Memory: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(memoryInfo);
     ret += QString(tr("CPU: ")).leftJustified(fieldWidth, fillChar)              + QString("%1\n").arg(cpuInfo);
-
-    // #if defined(__GNUC__)
-    // #elif defined(__clang__)
-    // #else
-    // #endif
 
     qDebug().noquote() << "ret:" << ret;
     return ret;

@@ -177,13 +177,20 @@ bool PaintToolBar::hadDrawBtnsChecked() const
     return false;
 }
 
+void PaintToolBar::runImgTranslate()
+{
+    PaintBtn *paintBtn = findPaintBtn(PaintType::PT_img_translate);
+    if (!paintBtn) return;
+    QToolButton* btn = paintBtn->btn;
+    btn->setChecked(true);
+    emit sigPaintToolBtnsRelease(PaintType::PT_img_translate, btn->isCheckable(), btn->isChecked());
+}
+
 void PaintToolBar::onPaintBtnReleased()
 {
     QToolButton* btn = qobject_cast<QToolButton*>(sender());
     if (!btn) return;
     const PaintType& type = btn->property(PROPERTY_PAINT_TYPR).value<PaintType>();
-
-
     emit sigPaintToolBtnsRelease(type, btn->isCheckable(), btn->isChecked());
 
     if (btn->isCheckable()) {

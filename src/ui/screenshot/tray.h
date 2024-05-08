@@ -15,7 +15,6 @@
 #include "tips.h"
 #include "../setting/sidesettingui.h"
 
-
 #define TRAY Tray::instance()
 
 class Tray : public QObject

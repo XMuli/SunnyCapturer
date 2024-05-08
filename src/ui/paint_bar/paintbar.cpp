@@ -22,8 +22,8 @@ PaintBar::PaintBar(const Qt::Orientation &orie, QWidget *parent)
     : QWidget{parent}
     , m_layout(nullptr)
     , m_orie(orie)
-    , m_paintToolBar(new PaintToolBar(orie, this))
-    , m_paintCtrlBar(new PaintCtrlBar(ICON_SIZE, orie, this))
+    , m_toolBar(new PaintToolBar(orie, this))
+    , m_ctrlBar(new PaintCtrlBar(ICON_SIZE, orie, this))
 
 {
     initUI();
@@ -33,29 +33,29 @@ PaintBar::PaintBar(const Qt::Orientation &orie, QWidget *parent)
 PaintBar::~PaintBar()
 {
     if (m_blurPixmap.isNull()) m_blurPixmap = QPixmap();
-    if (m_paintToolBar) m_paintToolBar->deleteLater();
-    if (m_paintCtrlBar) m_paintCtrlBar->deleteLater();
+    if (m_toolBar) m_toolBar->deleteLater();
+    if (m_ctrlBar) m_ctrlBar->deleteLater();
 }
 
 void PaintBar::transposePaintBar(const bool &bTranspose)
 {
     if (!m_layout) return;
 
-    m_layout->removeWidget(m_paintToolBar);
-    m_layout->removeWidget(m_paintCtrlBar);
+    m_layout->removeWidget(m_toolBar);
+    m_layout->removeWidget(m_ctrlBar);
 
     if (bTranspose) {
-        m_layout->addWidget(m_paintCtrlBar);
-        m_layout->addWidget(m_paintToolBar);
+        m_layout->addWidget(m_ctrlBar);
+        m_layout->addWidget(m_toolBar);
     } else {
-        m_layout->addWidget(m_paintToolBar);
-        m_layout->addWidget(m_paintCtrlBar);
+        m_layout->addWidget(m_toolBar);
+        m_layout->addWidget(m_ctrlBar);
     }
 }
 
 bool PaintBar::hadDrawBtnsChecked() const
 {
-    return m_paintToolBar->hadDrawBtnsChecked();
+    return m_toolBar->hadDrawBtnsChecked();
 }
 
 void PaintBar::initUI()
@@ -70,27 +70,27 @@ void PaintBar::initUI()
     m_layout->setMargin(margin);
     m_layout->setSpacing(0);
     setLayout(m_layout);
-    m_layout->addWidget(m_paintToolBar);
-    m_layout->addWidget(m_paintCtrlBar);
+    m_layout->addWidget(m_toolBar);
+    m_layout->addWidget(m_ctrlBar);
 
-    m_paintCtrlBar->hide();
+    m_ctrlBar->hide();
 }
 
 void PaintBar::initConnect()
 {
-    connect(m_paintToolBar, &PaintToolBar::sigPaintToolBtnsRelease, this, &PaintBar::onPaintToolBtnsRelease);
+    connect(m_toolBar, &PaintToolBar::sigPaintToolBtnsRelease, this, &PaintBar::onPaintToolBtnsRelease);
 
     // 统一接口，由 PaintBar 转发出去
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigPaintCtrlIdReleased, this, &PaintBar::sigPaintCtrlIdReleased);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigTextFontFamilyChanged, this, &PaintBar::sigTextFontFamilyChanged);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigTextFontSizeChanged, this, &PaintBar::sigTextFontSizeChanged);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigMosaicSliderValueChanged, this, &PaintBar::sigMosaicSliderValueChanged);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigTextCtrlToggled, this, &PaintBar::sigTextCtrlToggled);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
-    connect(m_paintCtrlBar, &PaintCtrlBar::sigImgTranslate, this, &PaintBar::sigImgTranslate);
-    connect(this, &PaintBar::sigSetTextFontSizeComboBoxValue, m_paintCtrlBar, &PaintCtrlBar::onSetTextFontSizeComboBoxValue);
-    connect(this, &PaintBar::sigAutoDisableUndoAndRedo, m_paintToolBar, &PaintToolBar::onAutoDisableUndoAndRedo);
+    connect(m_ctrlBar, &PaintCtrlBar::sigPaintCtrlIdReleased, this, &PaintBar::sigPaintCtrlIdReleased);
+    connect(m_ctrlBar, &PaintCtrlBar::sigTextFontFamilyChanged, this, &PaintBar::sigTextFontFamilyChanged);
+    connect(m_ctrlBar, &PaintCtrlBar::sigTextFontSizeChanged, this, &PaintBar::sigTextFontSizeChanged);
+    connect(m_ctrlBar, &PaintCtrlBar::sigMosaicSliderValueChanged, this, &PaintBar::sigMosaicSliderValueChanged);
+    connect(m_ctrlBar, &PaintCtrlBar::sigTextCtrlToggled, this, &PaintBar::sigTextCtrlToggled);
+    connect(m_ctrlBar, &PaintCtrlBar::sigPointCtrlReleased, this, &PaintBar::sigPointCtrlReleased);
+    connect(m_ctrlBar, &PaintCtrlBar::sigPickedColor, this, &PaintBar::sigPickedColor);
+    connect(m_ctrlBar, &PaintCtrlBar::sigImgTranslate, this, &PaintBar::sigImgTranslate);
+    connect(this, &PaintBar::sigSetTextFontSizeComboBoxValue, m_ctrlBar, &PaintCtrlBar::onSetTextFontSizeComboBoxValue);
+    connect(this, &PaintBar::sigAutoDisableUndoAndRedo, m_toolBar, &PaintToolBar::onAutoDisableUndoAndRedo);
 }
 
 void PaintBar::setLowerBlurEffect(const QPixmap &pix, int radius)
@@ -114,17 +114,22 @@ void PaintBar::disableBlurEffect()
     m_blurPixmap = QPixmap();
 }
 
+void PaintBar::runImgTranslate()
+{
+    m_toolBar->runImgTranslate();
+}
+
 void PaintBar::onPaintToolBtnsRelease(const PaintType &type, const bool &isCheckable, const bool& isChecked)
 {
-    m_paintCtrlBar->onPaintBtnRelease(type, isCheckable, isChecked);
+    m_ctrlBar->onPaintBtnRelease(type, isCheckable, isChecked);
 
     int space;
     if (hadDrawBtnsChecked()) {
         space = 2;
-        m_paintCtrlBar->show();
+        m_ctrlBar->show();
     } else {
         space = 0;
-        m_paintCtrlBar->hide();
+        m_ctrlBar->hide();
     }
 
     m_layout->setSpacing(space);
@@ -197,7 +202,7 @@ void PaintBar::paintEvent(QPaintEvent *e)
     pa.setBrush(Qt::NoBrush);
     pa.drawRect(contentsRect().adjusted(margin, margin, -margin, -margin));
 
-    if (m_paintCtrlBar->isVisible()) {   // 二级工具栏出现了
+    if (m_ctrlBar->isVisible()) {   // 二级工具栏出现了
         const QRect& rt = rect();
         const double& alphaf = 0.1;
         const int& space = m_layout->spacing();

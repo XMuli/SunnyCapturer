@@ -44,11 +44,16 @@ void Tray::init()
     const auto& text = QString("%1 Screenshot\n"
                                "Capture: %2\n"
                                "Delay Capture: %3\n"
-                               "Custom Capture: %4\n")
+                               "Custom Capture: %4\n"
+                               "OCR Capture: %5\n"
+                               "Image Translage Capture: %6\n")
                            .arg(XPROJECT_NAME)
                            .arg(CJ_GET_QSTR("hotkeys.capture"))
                            .arg(CJ_GET_QSTR("hotkeys.delay_capture"))
-                           .arg(CJ_GET_QSTR("hotkeys.custom_capture"));
+                           .arg(CJ_GET_QSTR("hotkeys.custom_capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.ocr_capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.image_transltae_capture"));
+
     m_trayIcon->setToolTip(text);
     m_trayIcon->setContextMenu(m_trayMenu);
 
@@ -149,9 +154,10 @@ void Tray::capture(const HotKeyType &type)
         }
     };
 
-    if (type == HotKeyType::HKT_capture) {
+    // 进入的类型
+    if (type == HotKeyType::HKT_capture  || type == HotKeyType::HKT_ocr_capture  || type == HotKeyType::HKT_image_transltae_capture) {
         m_scrnShot->capture();
-    } else if (type == HotKeyType::HKT_delay_capture || type == HotKeyType::HKT_custiom_capture) {
+    } else if (type == HotKeyType::HKT_delay_capture || type == HotKeyType::HKT_custom_capture) {
         delayAndCustomFunction();
     } else {
         qDebug() << "type is empty!";
@@ -178,11 +184,7 @@ void Tray::onSetting()
 
 void Tray::onAbout()
 {
-    static QPointer<AboutInfo> info = nullptr;
-    if (!info) {
-        info = new AboutInfo(nullptr);
-        if (!info->isVisible()) info->show();
-    }
+    COMM.showBuildInfoWidget();
 }
 
 void Tray::onRestart()

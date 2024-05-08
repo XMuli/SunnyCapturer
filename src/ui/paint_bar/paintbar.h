@@ -23,6 +23,7 @@ public:
     bool hadDrawBtnsChecked() const;
     void setLowerBlurEffect(const QPixmap &pix, int radius);
     void disableBlurEffect();
+    void runImgTranslate();
 
 private:
     void initUI();
@@ -58,8 +59,8 @@ private:
     QBoxLayout*                     m_layout;
     Qt::Orientation                 m_orie;
     QPixmap                         m_blurPixmap;    // 模糊透明效果
-    QPointer<PaintToolBar>          m_paintToolBar;
-    QPointer<PaintCtrlBar>          m_paintCtrlBar;
+    QPointer<PaintToolBar>          m_toolBar;
+    QPointer<PaintCtrlBar>          m_ctrlBar;
 protected:
 };
 

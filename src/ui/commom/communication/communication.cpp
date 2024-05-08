@@ -9,6 +9,7 @@
 #include <QLocale>
 #include <QDebug>
 #include <QTranslator>
+#include "aboutinfo.h"
 #include "../../data/configmanager.h"
 #include "../../ui/screenshot/tray.h"
 
@@ -17,6 +18,8 @@ Communication::Communication(QObject *parent)
     , m_hkCapture(new QHotkey(CJ_GET_QSTR("hotkeys.capture"), true, qApp))   //The hotkey will be automatically registered
     , m_hkDelayCapture(new QHotkey(CJ_GET_QSTR("hotkeys.delay_capture"), true, qApp))
     , m_hkCustiomCapture(new QHotkey(CJ_GET_QSTR("hotkeys.custom_capture"), true, qApp))
+    , m_hkOcrCapture(new QHotkey(CJ_GET_QSTR("hotkeys.ocr_capture"), true, qApp))
+    , m_hkImgTransCapture(new QHotkey(CJ_GET_QSTR("hotkeys.image_transltae_capture"), true, qApp))
 {
     init();
 }
@@ -31,13 +34,15 @@ void Communication::init()
 {
     qDebug() << "m_hkCapture Is segistered:" << m_hkCapture->isRegistered()
              << "m_hkDelayCapture Is segistered:" << m_hkDelayCapture->isRegistered()
-             << "m_hkCustiomCapture Is segistered:" << m_hkCustiomCapture->isRegistered();
-
-
+             << "m_hkCustiomCapture Is segistered:" << m_hkCustiomCapture->isRegistered()
+             << "m_hkOcrCapture Is segistered:" << m_hkOcrCapture->isRegistered()
+             << "m_hkImgTransCapture Is segistered:" << m_hkImgTransCapture->isRegistered();
 
     connect(m_hkCapture, &QHotkey::activated, this, [](){ TRAY.capture(HotKeyType::HKT_capture); });
     connect(m_hkDelayCapture, &QHotkey::activated, this, [](){ TRAY.capture(HotKeyType::HKT_delay_capture); });
-    connect(m_hkCustiomCapture, &QHotkey::activated, this, [](){ TRAY.capture(HotKeyType::HKT_custiom_capture); });
+    connect(m_hkCustiomCapture, &QHotkey::activated, this, [](){ TRAY.capture(HotKeyType::HKT_custom_capture); });
+    connect(m_hkOcrCapture, &QHotkey::activated, this, [](){ TRAY.capture(HotKeyType::HKT_ocr_capture); });
+    connect(m_hkImgTransCapture, &QHotkey::activated, this, [](){ TRAY.capture(HotKeyType::HKT_image_transltae_capture); });
 }
 
 bool Communication::resetShortcut(const QKeySequence &keySequence, const HotKeyType &type)
@@ -48,8 +53,12 @@ bool Communication::resetShortcut(const QKeySequence &keySequence, const HotKeyT
         hk = m_hkCapture;
     } else if (type == HotKeyType::HKT_delay_capture) {
         hk = m_hkDelayCapture;
-    } else if (type == HotKeyType::HKT_custiom_capture) {
+    } else if (type == HotKeyType::HKT_custom_capture) {
         hk = m_hkCustiomCapture;
+    } else if (type == HotKeyType::HKT_ocr_capture) {
+        hk = m_hkOcrCapture;
+    } else if (type == HotKeyType::HKT_image_transltae_capture) {
+        hk = m_hkImgTransCapture;
     } else {
         qDebug() << QString("type %1 resetShortcut is empty!").arg(hotKeyTypeToString(type));
         return ret;
@@ -72,8 +81,12 @@ bool Communication::shortcutStatus(const HotKeyType &type) const
         hk = m_hkCapture;
     } else if (type == HotKeyType::HKT_delay_capture) {
         hk = m_hkDelayCapture;
-    } else if (type == HotKeyType::HKT_custiom_capture) {
+    } else if (type == HotKeyType::HKT_custom_capture) {
         hk = m_hkCustiomCapture;
+    } else if (type == HotKeyType::HKT_ocr_capture) {
+        hk = m_hkOcrCapture;
+    } else if (type == HotKeyType::HKT_image_transltae_capture) {
+        hk = m_hkImgTransCapture;
     } else {
         qDebug() << QString("type %1 find shortcutStatus is empty!").arg(hotKeyTypeToString(type));
         return ret;
@@ -114,6 +127,15 @@ void Communication::loadCustomQss(const QString &path)
     TRAY.loadCustomQss(path);
 }
 
+void Communication::showBuildInfoWidget()
+{
+    static QPointer<AboutInfo> info = nullptr;
+    if (!info) {
+        info = new AboutInfo(nullptr);
+        if (!info->isVisible()) info->show();
+    }
+}
+
 QString Communication::toLocaleName(const QString &language)
 {
     const auto& map = languageMap();
@@ -128,8 +150,12 @@ QString hotKeyTypeToString(const HotKeyType &hotKeyType)
         return "HKT_capture";
     case HotKeyType::HKT_delay_capture:
         return "HKT_delay_capture";
-    case HotKeyType::HKT_custiom_capture:
-        return "HKT_custiom_capture";
+    case HotKeyType::HKT_custom_capture:
+        return "HKT_custom_capture";
+    case HotKeyType::HKT_ocr_capture:
+        return "HKT_ocr_capture";
+    case HotKeyType::HKT_image_transltae_capture:
+        return "HKT_image_transltae_capture";
     default:
         return "Unknown";
     }

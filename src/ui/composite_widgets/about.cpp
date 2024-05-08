@@ -8,7 +8,7 @@
 #include <QPointer>
 #include "licenseui.h"
 #include "communication.h"
-#include "aboutinfo.h"
+
 
 About::About(QWidget *parent) :
     QWidget(parent),
@@ -56,10 +56,6 @@ void About::onLanguageChange(const QString qmName)
 
 void About::on_tbnBuildInfo_released()
 {
-    static QPointer<AboutInfo> info = nullptr;
-    if (!info) {
-        info = new AboutInfo(nullptr);
-        if (!info->isVisible()) info->show();
-    }
+    COMM.showBuildInfoWidget();
 }
 

@@ -32,13 +32,6 @@ private:
     QString getCPUInfo();
     QString getMemoryInfo();
 
-#if defined(_MSC_VER)
-#elif defined(__GNUC__)
-#elif defined(__clang__)
-#endif
-
-
-
 private:
     SystemInfo(QObject *parent = nullptr);
     virtual ~SystemInfo() = default;

@@ -38,9 +38,17 @@ void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
         name = "hotkeys.delay_capture";
         lab = ui->labDelayCaptureStatus;
     } else if (keyEdit == ui->kseCustomCapture) {
-        type = HotKeyType::HKT_custiom_capture;
+        type = HotKeyType::HKT_custom_capture;
         name = "hotkeys.custom_capture";
         lab = ui->labCustomCaptureStatus;
+    } else if (keyEdit == ui->kseOCRCapture) {
+        type = HotKeyType::HKT_ocr_capture;
+        name = "hotkeys.ocr_capture";
+        lab = ui->labOCRCaptureStatus;
+    } else if (keyEdit == ui->kseImgTransCapture) {
+        type = HotKeyType::HKT_image_transltae_capture;
+        name = "hotkeys.image_transltae_capture";
+        lab = ui->labImgTransCaptureStatus;
     } else {
         qDebug() << "keyEdit does not any know XKeySequenceEdit object!";
     }
@@ -59,6 +67,8 @@ void Hotkeys::onBtnResetClicked(bool checked)
     ui->kseCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.capture")));
     ui->kseDelayCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.delay_capture")));
     ui->kseCustomCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.custom_capture")));
+    ui->kseOCRCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.ocr_capture")));
+    ui->kseImgTransCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.image_transltae_capture")));
 }
 
 void Hotkeys::initUI()
@@ -66,13 +76,19 @@ void Hotkeys::initUI()
     ui->kseCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.capture")));
     ui->kseDelayCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.delay_capture")));
     ui->kseCustomCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.custom_capture")));
+    ui->kseOCRCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.ocr_capture")));
+    ui->kseImgTransCapture->setKeySequence(QKeySequence(CJ_GET_QSTR("hotkeys.image_transltae_capture")));
     setHotkeyIconStatus(ui->labCaptureStatus, HotKeyType::HKT_capture);
     setHotkeyIconStatus(ui->labDelayCaptureStatus, HotKeyType::HKT_delay_capture);
-    setHotkeyIconStatus(ui->labCustomCaptureStatus, HotKeyType::HKT_custiom_capture);
+    setHotkeyIconStatus(ui->labCustomCaptureStatus, HotKeyType::HKT_custom_capture);
+    setHotkeyIconStatus(ui->labOCRCaptureStatus, HotKeyType::HKT_ocr_capture);
+    setHotkeyIconStatus(ui->labImgTransCaptureStatus, HotKeyType::HKT_image_transltae_capture);
 
     connect(ui->kseCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
     connect(ui->kseDelayCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
     connect(ui->kseCustomCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
+    connect(ui->kseOCRCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
+    connect(ui->kseImgTransCapture, &XKeySequenceEdit::sigKeySeqChanged, this, &Hotkeys::onKeySeqChanged);
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { ui->retranslateUi(this);});
 }
 

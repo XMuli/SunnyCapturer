@@ -59,7 +59,9 @@ ordered_json ConfigJson::defaultConfigJson()
         {"hotkeys", {
                         {"capture", "F6"},
                         {"delay_capture", "Ctrl+F6"},
-                        {"custom_capture", "Shift+F6"}
+                        {"custom_capture", "Shift+F6"},
+                        {"custom_capture", "F1"},
+                        {"image_transltae_capture", "Alt+F1"}
                     }},
         {"tokens", {
                        { "account", { {"youdao", {

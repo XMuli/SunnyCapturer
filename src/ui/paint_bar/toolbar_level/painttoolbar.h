@@ -20,6 +20,7 @@ public:
     explicit PaintToolBar(const Qt::Orientation& orie = Qt::Horizontal, QWidget *parent = nullptr);
     virtual ~PaintToolBar() = default;
     bool hadDrawBtnsChecked() const;
+    void runImgTranslate();
 
 private:
     void initUI();

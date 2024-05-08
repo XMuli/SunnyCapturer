@@ -19,9 +19,11 @@ using json = nlohmann::json;
 #define COMM Communication::instance()
 
 enum class HotKeyType{
-    HKT_capture,           // 正常的立刻截图，不会有任何预设
-    HKT_delay_capture,     // 延迟截图: 计时器 + HKT_capture 截图效果   （会受 custom_size_enable & custom_dealy 影响， [会无视] topleft_enable size_enable 的状态）
-    HKT_custiom_capture    // 自定义截图: 计时器 + 预设的窗口等大小 截图  （会受 custom_size_enable & custom_dealy & topleft_enable & size_enable 的影响）
+    HKT_capture,                    // 正常的立刻截图，不会有任何预设
+    HKT_delay_capture,              // 延迟    截图: 计时器 + HKT_capture 截图效果   （会受 custom_size_enable & custom_dealy 影响， [会无视] topleft_enable size_enable 的状态）
+    HKT_custom_capture,             // 自定义  截图: 计时器 + 预设的窗口等大小 截图  （会受 custom_size_enable & custom_dealy & topleft_enable & size_enable 的影响）
+    HKT_ocr_capture,                // OCR    截图:
+    HKT_image_transltae_capture     // 图片翻译截图:
 };
 
 
@@ -39,6 +41,7 @@ public:
     void setAppFont(const QString& font);
     void loadTranslation(const QString& language);
     void loadCustomQss(const QString &path);
+    void showBuildInfoWidget();            // 显示提供信息窗口
 
 signals:
     void sigLanguageChange(const QString qmFile);
@@ -63,6 +66,8 @@ private:
     QHotkey* m_hkCapture;
     QHotkey* m_hkDelayCapture;
     QHotkey* m_hkCustiomCapture;
+    QHotkey* m_hkOcrCapture;
+    QHotkey* m_hkImgTransCapture;
 };
 
 std::map<QString, QString> languageMap();
