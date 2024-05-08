@@ -55,15 +55,18 @@ void ImageView::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter painter(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+    // 设置渲染质量
+    painter.setRenderHint(QPainter::Antialiasing , true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    if (m_Image.isNull())
+    if (m_pix.isNull())
         return QWidget::paintEvent(event);
 
     // 根据窗口计算应该显示的图片的大小
-    int width = qMin(m_Image.width(), this->width());
-    int height = width * 1.0 / (m_Image.width() * 1.0 / m_Image.height());
+    int width = qMin(m_pix.width(), this->width());
+    int height = width * 1.0 / (m_pix.width() * 1.0 / m_pix.height());
     height = qMin(height, this->height());
-    width = height * 1.0 * (m_Image.width() * 1.0 / m_Image.height());
+    width = height * 1.0 * (m_pix.width() * 1.0 / m_pix.height());
 
     // 平移
     painter.translate(this->width() / 2 + m_XPtInterval, this->height() / 2 + m_YPtInterval);
@@ -73,7 +76,7 @@ void ImageView::paintEvent(QPaintEvent *event)
 
     // 绘制图像
     QRect picRect(-width / 2, -height / 2, width, height);
-    painter.drawImage(picRect, m_Image);
+    painter.drawPixmap(picRect, m_pix);
 }
 
 void ImageView::wheelEvent(QWheelEvent *event)
@@ -116,9 +119,9 @@ void ImageView::mouseReleaseEvent(QMouseEvent *event)
     this->setCursor(Qt::ArrowCursor);
 }
 
-void ImageView::setImage(const QImage &newImage)
+void ImageView::setPixmap(const QPixmap &newPix)
 {
-    m_Image = newImage;
+    m_pix = newPix;
 }
 
 void ImageView::initUI()
@@ -149,7 +152,7 @@ void ImageView::onLoadImage(void)
     if (!file.exists())
         return;
 
-    m_Image.load(imageFile);
+    m_pix.load(imageFile);
 }
 
 void ImageView::onZoomInImage(void)

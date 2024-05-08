@@ -50,15 +50,15 @@ ImageTranslateDlg::~ImageTranslateDlg()
 void ImageTranslateDlg::setLeftPixmap(const QPixmap &pix)
 {
     if (!pix.isNull())
-        ui->leftImage->setImage(pix.toImage());
+        ui->leftImage->setPixmap(pix);
 }
 
 void ImageTranslateDlg::setRightPixmap(const QSize &size, const QString &path)
 {
     if (size.isEmpty())
-        ui->rightImage->setImage(QImage(""));
+        ui->rightImage->setPixmap(QPixmap(""));
     else
-        ui->rightImage->setImage(QImage(path));
+        ui->rightImage->setPixmap(QPixmap(path));
 
 }
 

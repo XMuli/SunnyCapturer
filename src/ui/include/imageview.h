@@ -13,7 +13,7 @@ class ImageView : public QWidget
 public:
     ImageView(QWidget *parent = nullptr);
     ~ImageView();
-    void setImage(const QImage &newImage);
+    void setPixmap(const QPixmap &newPix);
 
 private:
     void initUI();
@@ -34,7 +34,7 @@ private slots:
     void onPresetImage(void);
 
 private:
-    QImage         m_Image;
+    QPixmap        m_pix;
     qreal          m_ZoomValue = 1.0;
     int            m_XPtInterval = 0;
     int            m_YPtInterval = 0;

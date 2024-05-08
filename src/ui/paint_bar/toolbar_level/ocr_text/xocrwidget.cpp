@@ -30,7 +30,7 @@ XOcrWidget::~XOcrWidget()
 void XOcrWidget::setLeftPixmap(const QPixmap &pix)
 {
     if (pix.isNull()) return;
-    ui->Image->setImage(pix.toImage());
+    ui->Image->setPixmap(pix);
 }
 
 void XOcrWidget::setRightText(const QString &text)

@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.5)
 set(project_name Sunny)
 set(project_version_major 1)
 set(project_version_minor 6)
-set(project_version_path 0)
+set(project_version_path 2)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
@@ -21,8 +21,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 各种调试开关
-add_compile_definitions(HALF_SCRN_DEVELOP)             # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
-# add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(HALF_SCRN_DEVELOP)             # 便于调试，多屏幕-仅一个副屏幕显示; 单屏-版屏幕效果，版屏幕效果(开启)
+    # add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
+endif()
+
 add_compile_definitions(LOG_MORE_INFO_DEVELOP)         # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 add_compile_definitions(QT_MESSAGELOGCONTEXT)          # Release 日志也可以输出 文件名 和 路径
 
