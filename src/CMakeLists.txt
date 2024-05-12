@@ -39,15 +39,15 @@ endforeach()
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${qt_moduls} LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qt_moduls} LinguistTools) # LinguistTools No link
 
-set(commom_files
-    commom/include/xlog.h
-    commom/include/isingleton.h
-    commom/include/xapphelper.h
-    commom/include/systeminfo.h
+set(common_files
+    common/include/xlog.h
+    common/include/isingleton.h
+    common/include/xapphelper.h
+    common/include/systeminfo.h
 
-    commom/sources/xlog.cpp
-    commom/sources/xapphelper.cpp
-    commom/sources/systeminfo.cpp
+    common/sources/xlog.cpp
+    common/sources/xapphelper.cpp
+    common/sources/systeminfo.cpp
 
     data/config_global.h
     data/configmanager.h
@@ -294,7 +294,7 @@ link_directories(${trage_runtime_output_dir})                                   
 #***************************************************************************************************************************
 
 add_executable(${project_name}
-    ${commom_files}
+    ${common_files}
     ${src_files}
     ${custom_ui_files}
     ${qm_files}
@@ -344,7 +344,7 @@ add_dependencies(${project_name} ${dependent_dll_name})                         
 target_link_directories(${project_name} PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 target_link_libraries(${project_name} PRIVATE ${qt_version_moduls} ${dependent_dll_real_name} QHotkey::QHotkey)  # ④链接 dll 库； 同时需要 .lib 和 .dll 在同一个路径
 target_include_directories(${project_name} PRIVATE                                              # .cpp 文件可以直接使用 include "文件名.h"，去掉相对路径
-    ${CMAKE_CURRENT_SOURCE_DIR}/commom/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/include
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/include
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/commom/communication
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/paint_bar/toolbar_level
