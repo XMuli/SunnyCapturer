@@ -49,6 +49,17 @@ set(common_files
     common/sources/xapphelper.cpp
     common/sources/systeminfo.cpp
 
+    # google_analytics4
+    common/google_analytics4/ganalytics4.h
+    common/google_analytics4/ganalytics4.cpp
+    common/google_analytics4/ganalytics/ganalytics.h
+    common/google_analytics4/ganalytics/ganalytics.cpp
+    common/google_analytics4/ganalytics/ganalytics_worker.h
+    common/google_analytics4/ganalytics/ganalytics_worker.cpp
+    # google Geolocation API
+    common/google_analytics4/google_geographic/googlegeo.h
+    common/google_analytics4/google_geographic/googlegeo.cpp
+
     data/config_global.h
     data/configmanager.h
     data/configmanager.cpp
