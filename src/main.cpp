@@ -138,9 +138,9 @@ int main(int argc, char* argv[])
     TRAY; // 启动托盘
 
     // 用法
-       GoogleGeo m_googleGeo;
-       GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo.geoInfo().toJson()));
-    //    GA4.sendEvent(GAnalytics4::E_os_info, GAnalytics4::mapToJParams({{"t1", "t1"}, {"t1", "t1"}}));
+       // GoogleGeo m_googleGeo;
+       // GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo.geoInfo().toJson()));
+       // GA4.sendEvent(GAnalytics4::E_os_info, GAnalytics4::mapToJParams({{"windows 10", "x64 "}, {"t1", "t1"}}));
     //    GA4.sendEvent(GAnalytics4::E_os_info, std::map<std::string, std::string>({{"t11", "t1"}, {"t12", "t1"}}));
 
 

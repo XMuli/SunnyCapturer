@@ -9,23 +9,17 @@
 #include "ganalytics/ganalytics.h"
 #include "qmetaobject.h"
 
-#define GA_MEASUREMENT_ID "G-KRWGN5P6R2"            // "YOUR_MEASUREMENT_ID"
-#define GA_API_SECRET     "xyHF9QotR3m_mgm50PRKnA"  // "YOUR_API_SECRET"
+#define GA_MEASUREMENT_ID "G-BL5RYLQZNZ"            // "YOUR_MEASUREMENT_ID"
+#define GA_API_SECRET     "Pm1nlV8QQwWfQPNqLqTzXw"  // "YOUR_API_SECRET"
 
 void GAnalytics4::sendEvent(const GAEvent &tEventName, const json &jParams)
 {
-#if GOOGLE_ANALYTICS_4
+// #if GOOGLE_ANALYTICS_4
     json params;
     if (jParams == "") {
         // 不填写的默认所获取的数值
-        if (tEventName == GAEvent::E_tray_launch) {
-        } else if (tEventName == GAEvent::E_tray_close) {
-        } else if (tEventName == GAEvent::E_tray_launch) {
-        } else if (tEventName == GAEvent::E_chatui_launch) {
-        } else if (tEventName == GAEvent::E_chatui_close) {
-        } else if (tEventName == GAEvent::E_settingui_launch) {
-        } else if (tEventName == GAEvent::E_tray_menu_launch) {
-        } else if (tEventName == GAEvent::E_send_chat) {
+        if (tEventName == GAEvent::E_launch) {
+        } else if (tEventName == GAEvent::E_launch_capture) {
         } else if (tEventName == GAEvent::E_os_info) {
             params = setOSInfoJParams();
         } else if (tEventName == GAEvent::E_geographic_info) {
@@ -48,7 +42,7 @@ void GAnalytics4::sendEvent(const GAEvent &tEventName, const json &jParams)
 
     ga->sendEvent(eventName, jToQJsonObject(data));
 
-#endif
+// #endif
 }
 
 void GAnalytics4::sendEvent(const GAEvent &gaEvent, const std::map<std::string, std::string> &map)

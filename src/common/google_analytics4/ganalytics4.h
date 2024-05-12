@@ -17,15 +17,13 @@ class GAnalytics4 : public QObject, public ISingleton<GAnalytics4>
 
 public:
     enum GAEvent {
-        E_tray_launch,
+        E_launch,
+        E_launch_capture,
         E_tray_close,
-        E_chatui_launch,
-        E_chatui_close,
-        E_settingui_launch,
-        E_tray_menu_launch,
-        E_send_chat,
-        E_send_tts,
-        E_send_stt,
+        E_setting_launch,
+        E_setting_close,
+        E_send_ocr,
+        E_send_image_translate,
 
         E_os_info,
         E_geographic_info,

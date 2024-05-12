@@ -44,8 +44,10 @@ GoogleGeo::GoogleGeo(QObject *parent)
 
 void GoogleGeo::getGeographic()
 {
-    if (!m_geoInfo.ok_google_api) sendGeolocation();
-    if (!m_geoInfo.ok_ip_api) sendGeographyByIpApi();
+    if (!m_geoInfo.ok_google_api)
+        sendGeolocation();
+    if (!m_geoInfo.ok_ip_api)
+        sendGeographyByIpApi();
 }
 
 void GoogleGeo::sendGeolocation()
@@ -90,12 +92,12 @@ const QStringList GoogleGeo::rawHeader(const QNetworkReply *reply) const
     list << QString::number(statusCode)  // Status Code
          << reasonPhrase;                // Reason Phrase
 
-#if 0
-    qDebug() << "Raw Header****:\n" << reply->rawHeaderList() << "\n";
+#if 1
+    // qDebug() << "Raw Header****:\n" << reply->rawHeaderList() << "\n";
 
-    QList<QByteArray> headerList = reply->rawHeaderList();
-    for (const QByteArray& header : headerList)
-        qDebug() << header << ": " << reply->rawHeader(header);
+    // QList<QByteArray> headerList = reply->rawHeaderList();
+    // for (const QByteArray& header : headerList)
+        // qDebug() << header << ": " << reply->rawHeader(header);
 
 #endif
 
@@ -128,7 +130,7 @@ void GoogleGeo::dealGeolocationRequest(QNetworkReply *reply)
 void GoogleGeo::dealGeocodingRequest(QNetworkReply *reply)
 {
     const std::string& data = reply->readAll().toStdString();
-//    qDebug().noquote() << "dealGeocodingRequest data:" << QString::fromStdString(data);
+   // qDebug().noquote() << "dealGeocodingRequest data:" << QString::fromStdString(data);
     json j = json::parse(data);
 
     if (!j.empty() && j.contains("plus_code") && j["plus_code"].contains("compound_code")) {
@@ -153,7 +155,7 @@ void GoogleGeo::dealGeocodingRequest(QNetworkReply *reply)
 void GoogleGeo::dealGeographyByIpApi(QNetworkReply *reply)
 {
     const std::string& data = reply->readAll().toStdString();
-//    qDebug().noquote() << "dealGeographyByIpApi data:" << QString::fromStdString(data);
+   qDebug()/*.noquote()*/ << "dealGeographyByIpApi data:" << QString::fromStdString(data);
     json j = json::parse(data);
 
     if (!j.empty() && j.contains("status") && j["status"] == "success") {
