@@ -7,7 +7,7 @@
 #include <QList>
 #include "isingleton.h"
 
-#define SYSTEMINFO SystemInfo::instance()
+#define SYSINFO SystemInfo::instance()
 
 class SystemInfo : public QObject, public ISingleton<SystemInfo>
 {
@@ -22,7 +22,7 @@ public:
     QString virGeometryInfo() const;
     QPixmap renderMonitorToPixmap();
 
-private:
+// private:
     double scaling(const QScreen *screen = qGuiApp->primaryScreen()) const;
 
 #if defined(Q_OS_WIN)
@@ -31,6 +31,9 @@ private:
 
     QString getCPUInfo();
     QString getMemoryInfo();
+    QString getMacInfo();
+    QString getOperatingSystem();
+    QString getUsername();
 
 private:
     SystemInfo(QObject *parent = nullptr);

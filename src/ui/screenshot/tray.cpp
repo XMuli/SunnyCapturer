@@ -232,11 +232,11 @@ void Tray::onShowSystemMessagebox(const QString &title, const QString &msg, cons
     m_trayIcon->showMessage(title, msg, QIcon(":/resources/logo/logo.svg"), msecs);
 }
 
-void Tray::onRecvGeoInfo(const GeoInfo &geoInfo)
-{
-    qDebug() << "----------------Tray::onRecvGeoInfo->" << bool(geoInfo.ok_ip_api) << bool(geoInfo.ok_google_api) << geoInfo.g_compound_code.size();
-    GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo->geoInfo().toJson()));
-}
+// void Tray::onRecvGeoInfo(const GeoInfo &geoInfo)
+// {
+    // qDebug() << "----------------Tray::onRecvGeoInfo->" << bool(geoInfo.ok_ip_api) << bool(geoInfo.ok_google_api) << geoInfo.g_compound_code.size();
+    // GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo->geoInfo().toJson()));
+// }
 
 Tray::Tray(QObject *parent)
     : QObject(parent)
@@ -247,14 +247,14 @@ Tray::Tray(QObject *parent)
     , m_countdownTips(new Tips("", TipsType::TT_countdown_tips, qobject_cast<QWidget*>(this)))
     , m_timerDelay(new QTimer(this))
     , m_remainingSeconds(0)
-    , m_googleGeo(new GoogleGeo(this))
+    // , m_googleGeo(new GoogleGeo(this))
 {
     m_countdownTips->hide();
     m_countdownTips->setWindowFlag(Qt::WindowStaysOnTopHint, true);
     init();
 
-    GA4.sendEvent(GAnalytics4::E_os_info);
-    connect(m_googleGeo, &GoogleGeo::sigRecvGeoInfo, this, &Tray::onRecvGeoInfo);
+    // GA4.sendEvent(GAnalytics4::E_os_info);
+    // connect(m_googleGeo, &GoogleGeo::sigRecvGeoInfo, this, &Tray::onRecvGeoInfo);
 }
 
 Tray::~Tray()

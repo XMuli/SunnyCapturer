@@ -18,6 +18,8 @@
 #include <QPen>
 #include <QPainter>
 #include <QStandardPaths>
+#include <QNetworkInterface>
+#include <QDir>
 
 #define FIX_FORMAT(str) \
     const QString& t(std); \
@@ -469,9 +471,65 @@ QString SystemInfo::getMemoryInfo()
     return memoryInfo;
 #elif defined(__clang__)
 #endif
+}
 
+QString SystemInfo::getMacInfo()
+{
+    QString ret;
+    for (const auto&  it: QNetworkInterface::allInterfaces()) {
+        const auto& flags = it.flags();
+        if ((flags & QNetworkInterface::IsUp)
+            && (flags & QNetworkInterface::IsRunning)) {
+            // qDebug() << "Interface:" << it.name() << it.flags();
+            // qDebug() << "Hardware Address (MAC):" << it.hardwareAddress();
+            // qDebug() << "----------------------------------";
+            ret = it.hardwareAddress();
+            if (ret.isEmpty()) continue;
+            else return ret;
+        }
+    }
+    return "";
+}
 
+QString SystemInfo::getOperatingSystem()
+{
+#if defined(Q_OS_WIN)
+    return "Windows";
+#elif defined(Q_OS_MAC)
+    return "MacOS";
+#elif defined(Q_OS_LINUX)
+    return "Linux";
+#else
+    return "Unknown OS";
+#endif
+}
 
+QString SystemInfo::getUsername()
+{
+    QString username;
+
+#ifdef Q_OS_WIN
+    username = qEnvironmentVariable("USERNAME");
+#elif defined(Q_OS_UNIX)
+    username = qEnvironmentVariable("USER");
+#else
+    username = "Unknown User";
+#endif
+
+    if (username.isEmpty()) {
+        // 如果环境变量没有值，尝试从用户目录路径获取用户名
+        QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        username = QDir(homePath).dirName();
+    }
+
+    // 脱敏处理
+    int len = username.length();
+    if (len > 4) {
+        QString maskedUsername = username.left(2) + QString(len - 4, '*') + username.right(2);
+        return maskedUsername;
+    } else {
+        return username;
+    }
 }
 
 #if defined(_MSC_VER)

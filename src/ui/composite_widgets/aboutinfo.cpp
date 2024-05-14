@@ -91,7 +91,7 @@ void AboutInfo::init()
 
     auto& lab = ui->labMonitor;
     // lab->setMaximumHeight(900);
-    QPixmap pix = SYSTEMINFO.renderMonitorToPixmap();
+    QPixmap pix = SYSINFO.renderMonitorToPixmap();
     lab->setFixedSize(pix.size());
     lab->setPixmap(pix);
     // lab->setScaledContents(true);
@@ -110,12 +110,12 @@ void AboutInfo::init()
     // gridLayout->setColumnStretch(1, 2);
 
     ui->labSysteminfo->setFont(m_labFont);
-    ui->labSysteminfo->setText(SYSTEMINFO.windowsVersionInfo());
+    ui->labSysteminfo->setText(SYSINFO.windowsVersionInfo());
 
-    // const auto& virGeomInfo = SYSTEMINFO.virGeometryInfo();
+    // const auto& virGeomInfo = SYSINFO.virGeometryInfo();
     // if (!virGeomInfo.isEmpty()) ui->labSysteminfo->setText(virGeomInfo.at(0));
 
-    insertLayout(SYSTEMINFO.scrnsInfo());
+    insertLayout(SYSINFO.scrnsInfo());
 
     // connect(&DATAMAID, &DataMaid::sigLanguageChange, this, &AboutInfo::onLanguageChange);
     adjustSize();

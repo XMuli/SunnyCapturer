@@ -46,6 +46,8 @@
 #include "easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
+#include "common/data_analytics/dbanalytics.h"
+
 int main(int argc, char* argv[])
 {
 #if(QT_VERSION > QT_VERSION_CHECK(5, 6, 0))
@@ -136,6 +138,10 @@ int main(int argc, char* argv[])
 
     COMM.loadTranslation("");
     TRAY; // 启动托盘
+
+    DbAnalytics dbAnalytics;
+    dbAnalytics.sendData();
+
 
     // 用法
        // GoogleGeo m_googleGeo;

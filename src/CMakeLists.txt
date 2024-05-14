@@ -49,6 +49,9 @@ set(common_files
     common/sources/xapphelper.cpp
     common/sources/systeminfo.cpp
 
+    common/data_analytics/dbanalytics.h
+    common/data_analytics/dbanalytics.cpp
+
     # google_analytics4
     common/google_analytics4/ganalytics4.h
     common/google_analytics4/ganalytics4.cpp
@@ -309,7 +312,6 @@ add_executable(${project_name}
     ${src_files}
     ${custom_ui_files}
     ${qm_files}
-
 )
 
 # Define some variables that can be used in *.cpp
