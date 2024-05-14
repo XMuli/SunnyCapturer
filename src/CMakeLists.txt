@@ -29,6 +29,7 @@ endif()
 add_compile_definitions(LOG_MORE_INFO_DEVELOP)         # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 add_compile_definitions(QT_MESSAGELOGCONTEXT)          # Release 日志也可以输出 文件名 和 路径
 
+
 set(qt_moduls Widgets Xml Svg Network)                 # Network Multimedia WebSockets
 set(qt_version_moduls)
 foreach(it ${qt_moduls})
@@ -70,8 +71,8 @@ set(common_files
     data/configjson.cpp
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.h
     ${CMAKE_SOURCE_DIR}/tripartite/include/qt_aes/qaesencryption.cpp
-   ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.h
-   ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.cc
+    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.h
+    ${CMAKE_SOURCE_DIR}/tripartite/include/easyloggingpp/easylogging++.cc
 )
 
 set(custom_ui_files
@@ -379,6 +380,23 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     set_target_properties(${project_name} PROPERTIES WIN32_EXECUTABLE TRUE)
 endif()
+
+# 获取 CPU 核心数量，开启 IDE 多核编译
+include(ProcessorCount)
+ProcessorCount(N)
+message("-->Number of available processor cores: ${N}")
+
+if(WIN32)
+    if(MSVC)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+    elseif(MINGW)
+        set(CMAKE_MAKE_PROGRAM "${CMAKE_MAKE_PROGRAM} -j${N}")
+    endif()
+elseif(UNIX)
+    add_compile_options(-j${N})
+endif()
+
 
 if(MSVC)
     # 设置默认启动 project

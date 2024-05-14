@@ -12,8 +12,8 @@ DbAnalytics::DbAnalytics(QObject *parent) : QObject(parent) {
 }
 
 void DbAnalytics::sendData() {
-    // QString urlString = "https://47.110.40.198:5000/add_data";
-    QString urlString = "https://127.0.0.1:5000/add_data";
+    QString urlString = "https://47.110.40.198:5000/add_data";
+    // QString urlString = "https://127.0.0.1:5000/add_data";
     QNetworkRequest request;
     request.setUrl(QUrl(urlString));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -44,7 +44,7 @@ const json DbAnalytics::creatorData()
 
     json data;
     data["os_type"] = SYSINFO.getOperatingSystem().toStdString().data();
-#if defined(Q_OS_WIN) && defined(_MSC_VER)
+#if defined(Q_OS_WIN)/* && defined(_MSC_VER)*/
     QString edition = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
     QString version = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
     QString currentBuild = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
@@ -55,12 +55,16 @@ const json DbAnalytics::creatorData()
     data["os_editon"] = QSysInfo::prettyProductName().toStdString().data();
     data["os_version"] = QSysInfo::kernelVersion().toStdString().data();
 #endif
+
+    data["os_editon"] = QSysInfo::prettyProductName().toStdString().data();
+    data["os_version"] = QSysInfo::kernelVersion().toStdString().data();
+
     data["os_language"] = language.toStdString().data();
     data["qt_version"] = QString(QT_VERSION_STR).toStdString().data();
     data["sunny_version"] = QString(XPROJECT_VERSION).toStdString().data();
     data["sunny_language"] = CJ_GET_QSTR("general.language").toStdString().data(); // 得在初始化
     data["sunny_path"] = qGuiApp->applicationDirPath().toStdString().data();
-    data["arch_bit"] = QString(XARCH_BIT).toStdString().data();
+    data["arch_bit"] = XARCH_BIT;
     data["compiler"] = QString(XCOMPILER).toStdString().data();
     data["compiler_id"] = QString(XCOMPILER_ID).toStdString().data();
     data["memory"] = SYSINFO.getMemoryInfo().toStdString();

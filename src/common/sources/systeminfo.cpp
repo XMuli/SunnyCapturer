@@ -429,6 +429,8 @@ QString SystemInfo::getCPUInfo()
     return cpuModel;
 #elif defined(__clang__)
 #endif
+
+    return "";
 }
 
 QString SystemInfo::getMemoryInfo()
@@ -471,6 +473,8 @@ QString SystemInfo::getMemoryInfo()
     return memoryInfo;
 #elif defined(__clang__)
 #endif
+
+    return "";
 }
 
 QString SystemInfo::getMacInfo()
