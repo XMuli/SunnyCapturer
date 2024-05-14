@@ -60,7 +60,7 @@ ordered_json ConfigJson::defaultConfigJson()
                         {"capture", "F6"},
                         {"delay_capture", "Ctrl+F6"},
                         {"custom_capture", "Shift+F6"},
-                        {"custom_capture", "F1"},
+                        {"ocr_capture", "F1"},
                         {"image_transltae_capture", "Alt+F1"}
                     }},
         {"tokens", {

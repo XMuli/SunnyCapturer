@@ -1,4 +1,4 @@
-#include "DbAnalytics.h"
+#include "dbanalytics.h"
 #include <QDateTime>
 #include <QNetworkRequest>
 #include <QGuiApplication>
@@ -44,7 +44,7 @@ const json DbAnalytics::creatorData()
 
     json data;
     data["os_type"] = SYSINFO.getOperatingSystem().toStdString().data();
-#if defined(Q_OS_WIN)/* && defined(_MSC_VER)*/
+#if defined(Q_OS_WIN)
     QString edition = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
     QString version = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
     QString currentBuild = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");

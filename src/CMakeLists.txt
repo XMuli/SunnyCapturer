@@ -515,17 +515,23 @@ elseif (UNIX)
     # [/usr/local] -------------------------
     # install $ENV{HOME}/.config/Sunny/xconfig.json by exe write
     # install /usr/local/Sunny/xconfig.json
+    # ~/.config/Sunny 文件夹删除 → postinst-安装时删除;  postrm-卸载时删除
 
-    # 添加安装规则来删除文件
-    # install(FILES "$ENV{HOME}/.config/Sunny/xconfig.json"
-    #         DESTINATION /tmp
-    #         COMPONENT config
-    #         EXCLUDE_FROM_ALL
-    #         )
+    install(
+        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postinst
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/DEBIAN
+        RENAME postinst
+        PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    )
 
-#    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
-#        DESTINATION "/usr/local/${project_name}"
-#        )
+    install(
+        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/DEBIAN
+        RENAME postrm
+        PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    )
+
+
     # install /usr/local/Sunny/translations/Sunny_*.qm
     install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
              DESTINATION "/usr/local/${project_name}"
@@ -561,13 +567,16 @@ elseif (UNIX)
     feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
     # CPACK: General Settings
-    set (CPACK_GENERATOR "TBZ2")
+    set (CPACK_GENERATOR "DEB")                           # 设置CPack生成DEB包
+    set (CPACK_DEBIAN_PACKAGE_MAINTAINER "XMuli")         # 设置维护者信息
+    # set (CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/postinst")  # 安装时，删除 ~/.config/Sunny 文件夹
     set (CPACK_PACKAGE_NAME "${project_name}")
     set (CPACK_PACKAGE_VERSION "${project_version}")
     set (CPACK_PACKAGE_VENDOR "https://github.com/XMuli")
+    set (CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
     set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple and beautiful screenshot software tool for Windows, MacOS and Linux")
     set (CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
-    set (CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
+
     # 设置Debian软件包的依赖关系
     set (CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5x11extras5, libqt5svg5")
     set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")

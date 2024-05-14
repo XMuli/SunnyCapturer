@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+TARGET_PATH="$HOME/.config/Sunny"
+
+if [ -e "$TARGET_PATH" ]; then
+    echo "Deleting $TARGET_PATH..."
+    rm -rf "$TARGET_PATH"
+else
+    echo "$TARGET_PATH does not exist."
+fi
