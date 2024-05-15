@@ -498,6 +498,19 @@ elseif (UNIX)
     endif ()
 
     set(CMAKE_INSTALL_PREFIX /usr)
+    # Copying additional files into the .deb package
+#    install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/
+#            DESTINATION "/DEBIAN"
+#            FILES_MATCHING PATTERN "*"
+#            )
+
+#    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
+#            DESTINATION "$ENV{HOME}/.config/Sunny/"
+#            )
+#    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf
+#            DESTINATION "$ENV{HOME}/.config/Sunny/"
+#            )
+
     # [/usr/share] -------------------------
     # install /usr/share/applications/tech.xmuli.sunny.desktop
     install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/cpack/tech.xmuli.sunny.desktop
@@ -508,29 +521,29 @@ elseif (UNIX)
              DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps"
              RENAME tech.xmuli.sunny.svg
              )
-    # install /usr/share/metainfo/tech.xmuli.sunny.metainfo.xml
-    install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/cpack/appstream/tech.xmuli.sunny.metainfo.xml
-             DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
-             )
+
+     # install /usr/share/metainfo/tech.xmuli.sunny.metainfo.xml
+     install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/cpack/appstream/tech.xmuli.sunny.metainfo.xml
+              DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
+              )
+
     # [/usr/local] -------------------------
     # install $ENV{HOME}/.config/Sunny/xconfig.json by exe write
     # install /usr/local/Sunny/xconfig.json
     # ~/.config/Sunny 文件夹删除 → postinst-安装时删除;  postrm-卸载时删除
 
+    # 设置 postinst 和 postrm 文件
     install(
-        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postinst
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/DEBIAN
-        RENAME postinst
+        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/sunny.postinst
+        DESTINATION "/DEBIAN"
         PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
     )
 
     install(
-        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/DEBIAN
-        RENAME postrm
+        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/sunny.postrm
+        DESTINATION "/DEBIAN"
         PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
     )
-
 
     # install /usr/local/Sunny/translations/Sunny_*.qm
     install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
@@ -543,7 +556,7 @@ elseif (UNIX)
              FILES_MATCHING PATTERN "*.*"
              )
     # [/usr/lib] -------------------------
-    # 在 openKylin 1.0.1 系统下有些不一样，其值是 /usr/lib64，运行失败找不到库，解决方案需要将其替换，一共三处 ${CMAKE_INSTALL_LIBDIR} → "/usr/lib"
+    # 在 openKylin 1.0.1 1.0.2 系统下有些不一样，其值是 /usr/lib64，运行失败找不到库，解决方案需要将其替换，一共三处 ${CMAKE_INSTALL_LIBDIR} → "/usr/lib"
     # install /usr/lib/libWindowsRect.so
     install (FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
              DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -567,9 +580,8 @@ elseif (UNIX)
     feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
     # CPACK: General Settings
-    set (CPACK_GENERATOR "DEB")                           # 设置CPack生成DEB包
-    set (CPACK_DEBIAN_PACKAGE_MAINTAINER "XMuli")         # 设置维护者信息
-    # set (CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/postinst")  # 安装时，删除 ~/.config/Sunny 文件夹
+    set (CPACK_GENERATOR "DEB")                                                 # 设置CPack生成DEB包
+    set (CPACK_DEBIAN_PACKAGE_MAINTAINER "XMuli <xmulitech@gmail.com>")         # 设置维护者信息
     set (CPACK_PACKAGE_NAME "${project_name}")
     set (CPACK_PACKAGE_VERSION "${project_version}")
     set (CPACK_PACKAGE_VENDOR "https://github.com/XMuli")

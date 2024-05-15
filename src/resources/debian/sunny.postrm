@@ -10,3 +10,5 @@ if [ -e "$TARGET_PATH" ]; then
 else
     echo "$TARGET_PATH does not exist."
 fi
+
+echo "[sunny.postrm] script is running..."
