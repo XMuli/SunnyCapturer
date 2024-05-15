@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt_PT">
+<TS version="2.1">
 <context>
     <name>About</name>
     <message>
@@ -8,19 +8,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Licenses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -32,7 +20,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Licenses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -43,15 +47,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source> Detailed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -107,26 +111,61 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delay capture:</source>
+        <source>Capture:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Capture:</source>
+        <source>Delay capture:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Custom capture:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>OCR:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image translate:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageTranslateDlg</name>
     <message>
-        <source>To</source>
+        <source>Image Translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Image Translation</source>
+        <source>To</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImageView</name>
+    <message>
+        <source>Load Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images (*.png *.xpm *.jpg)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -162,6 +201,10 @@
     </message>
     <message>
         <source>Orientation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom capture size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -206,10 +249,6 @@
     </message>
     <message>
         <source>Crosshair show</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom capture size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -344,10 +383,6 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pin to screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>translate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -365,6 +400,10 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Cancel Capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pin to screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -494,6 +533,10 @@ and specify -1 to let Sunny decide for you.</source>
 <context>
     <name>SideSettingUI</name>
     <message>
+        <source>Settings [Free]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
@@ -521,10 +564,6 @@ and specify -1 to let Sunny decide for you.</source>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Settings [Free]</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SystemInfo</name>
@@ -538,6 +577,46 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>kernel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Time: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Kits: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt Version: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edition: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operating System: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kernel: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -572,43 +651,11 @@ and specify -1 to let Sunny decide for you.</source>
         <source>VirtualGeometry</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Edition: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CPU: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Memory: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Tokens</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>APP ID:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Secret Key:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>API Key:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -624,7 +671,19 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Next Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>BaiDu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>API Key:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secret Key:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -632,7 +691,31 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Next Page</source>
+        <source>APP ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>standard location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>baidu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>youdao</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -647,11 +730,38 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XMagnifyingGlass</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; to copy color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; to Switch betten RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(%1, %2)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -691,13 +801,9 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
 </context>
 <context>
-    <name>XOcrDlg</name>
+    <name>XOcrWidget</name>
     <message>
-        <source>OCR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>original [%1 * %2]   current [%3 * %4]   zoom: %5%</source>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

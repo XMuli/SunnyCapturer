@@ -112,7 +112,7 @@ void Communication::loadTranslation(const QString &language)
         qmDir = QString("/usr/local/%1/translations/").arg(XPROJECT_NAME);
     #endif
 
-    const QString& qmName = QString("%1_%2.qm").arg(XPROJECT_NAME).arg(toLocaleName(temp));
+    const QString& qmName = QString("%1.qm").arg(toLocaleName(temp));
     const QString& qmPath = qmDir + qmName;
     qDebug() << "loadTranslation qmPath:" << qmPath;
     if (translator->load(qmPath)) {  // 加载翻译文件
@@ -163,10 +163,10 @@ QString hotKeyTypeToString(const HotKeyType &hotKeyType)
 
 std::map<QString, QString> languageMap()
 {
-    static  std::map<QString, QString> map = {  {"English", "en_US"}
-                                              , {"简体中文", "zh_CN"}
-                                              , {"繁体中文", "zh_TW"}
-                                              , {"Português Brasil", "pt_BR"}     // Portuguese-Brazil 葡萄牙语-巴西
+    static  std::map<QString, QString> map = {  {"English", "en_us"}
+                                              , {"简体中文", "zh_cn"}
+                                              , {"繁体中文", "zh_tw"}
+                                              , {"Português Brasil", "pt_br"}     // Portuguese-Brazil 葡萄牙语-巴西
     };
     return map;
 }

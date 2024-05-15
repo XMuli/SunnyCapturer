@@ -8,10 +8,6 @@
         <translation>Sobre</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
         <translation>Versão 1.0.0-msvc (yyyy.MM.dd)</translation>
     </message>
@@ -38,6 +34,10 @@
     <message>
         <source>Build Info</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; {12p?} {12p?} {400;?} {64-?}</translation>
     </message>
 </context>
 <context>
@@ -121,6 +121,14 @@
     <message>
         <source>Custom capture:</source>
         <translation>Captura personalizada:</translation>
+    </message>
+    <message>
+        <source>OCR:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image translate:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

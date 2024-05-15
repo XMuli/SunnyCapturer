@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_TW">
+<TS version="2.1" language="zh_CN">
 <context>
     <name>About</name>
     <message>
@@ -8,12 +8,8 @@
         <translation></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Licenses</source>
-        <translation>開源許可</translation>
+        <translation>开源许可</translation>
     </message>
     <message>
         <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
@@ -29,11 +25,19 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Feedback&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;反饋&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;反馈&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;版權所有 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;版权所有 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Info</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -44,7 +48,7 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">複製</translation>
+        <translation type="unfinished">复制</translation>
     </message>
     <message>
         <source> Detailed</source>
@@ -66,7 +70,7 @@
     <name>ColorPicker</name>
     <message>
         <source>select color</source>
-        <translation>選擇顏色</translation>
+        <translation>选择颜色</translation>
     </message>
 </context>
 <context>
@@ -77,27 +81,27 @@
     </message>
     <message>
         <source>Font:</source>
-        <translation>界面字體:</translation>
+        <translation>界面字体:</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation>語言:</translation>
+        <translation>语言:</translation>
     </message>
     <message>
         <source>Autostart</source>
-        <translation>開機自啟</translation>
+        <translation>开机自启</translation>
     </message>
     <message>
         <source>Log Level:</source>
-        <translation>日誌級別:</translation>
+        <translation>日志级别:</translation>
     </message>
     <message>
         <source>Select Font</source>
-        <translation>選擇字體</translation>
+        <translation>选择字体</translation>
     </message>
     <message>
         <source>Themes:</source>
-        <translation>主題:</translation>
+        <translation>主题:</translation>
     </message>
 </context>
 <context>
@@ -108,15 +112,23 @@
     </message>
     <message>
         <source>Delay capture:</source>
-        <translation>自定義截圖:</translation>
+        <translation>自定义截图:</translation>
     </message>
     <message>
         <source>Capture:</source>
-        <translation>截圖:</translation>
+        <translation>截图:</translation>
     </message>
     <message>
         <source>Custom capture:</source>
-        <translation>延時截圖:</translation>
+        <translation>延时截图:</translation>
+    </message>
+    <message>
+        <source>OCR:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image translate:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,7 +139,34 @@
     </message>
     <message>
         <source>Image Translation</source>
-        <translation>圖片翻譯</translation>
+        <translation>图片翻译</translation>
+    </message>
+</context>
+<context>
+    <name>ImageView</name>
+    <message>
+        <source>Load Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom: %1%</source>
+        <translation type="unfinished">缩放: %1%</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.xpm *.jpg)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -138,27 +177,27 @@
     </message>
     <message>
         <source>Personalization</source>
-        <translation>個性化</translation>
+        <translation>个性化</translation>
     </message>
     <message>
         <source>Border Width:</source>
-        <translation>邊框寬度:</translation>
+        <translation>边框宽度:</translation>
     </message>
     <message>
         <source>Crosshair:</source>
-        <translation>十字線顏色:</translation>
+        <translation>十字线颜色:</translation>
     </message>
     <message>
         <source>Crosshair Width:</source>
-        <translation>十字線寬度:</translation>
+        <translation>十字线宽度:</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation>風格:</translation>
+        <translation>风格:</translation>
     </message>
     <message>
         <source>Highlight:</source>
-        <translation>活動色:</translation>
+        <translation>活动色:</translation>
     </message>
     <message>
         <source>,</source>
@@ -174,7 +213,7 @@
     </message>
     <message>
         <source>Delay:</source>
-        <translation>延時:</translation>
+        <translation>延时:</translation>
     </message>
     <message>
         <source>x</source>
@@ -190,55 +229,55 @@
     </message>
     <message>
         <source>Acrylic effect</source>
-        <translation>亞克力效果</translation>
+        <translation>亚克力效果</translation>
     </message>
     <message>
         <source>Auto detect windows</source>
-        <translation>自動檢測窗口</translation>
+        <translation>自动检测窗口</translation>
     </message>
     <message>
         <source>Auto copy to clipboard</source>
-        <translation>自動複製到剪切板</translation>
+        <translation>自动复制到剪切板</translation>
     </message>
     <message>
         <source>Crosshair show</source>
-        <translation>顯示全屏十字線</translation>
+        <translation>显示全屏十字线</translation>
     </message>
     <message>
         <source>Orientation:</source>
-        <translation>工具欄的方位:</translation>
+        <translation>工具栏的方位:</translation>
     </message>
     <message>
         <source>Custom capture size</source>
-        <translation>自定義截圖的大小</translation>
+        <translation>自定义截图的大小</translation>
     </message>
 </context>
 <context>
     <name>LicenseUI</name>
     <message>
         <source>Open source licenses</source>
-        <translation>開源協議</translation>
+        <translation>开源协议</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>關於 Qt</translation>
+        <translation>关于 Qt</translation>
     </message>
     <message>
         <source>Copyright (C) 2023~2024 %1. All rights reserved.&lt;br&gt;The birth of this project is inseparable from these open source software</source>
-        <translation>版權所有 2023~2024 %1. 保留所有權利。&lt;br&gt;本項目的誕生離不開如下開源項目</translation>
+        <translation>版权所有 2023~2024 %1. 保留所有权利。&lt;br&gt;本项目的诞生离不开如下开源项目</translation>
     </message>
 </context>
 <context>
     <name>NetworkOCR</name>
     <message>
         <source>Status Code: </source>
-        <translation>狀態碼: </translation>
+        <translation>状态码: </translation>
     </message>
     <message>
         <source>
 Reason Phrase: </source>
         <translation>
-原因短語: </translation>
+原因短语: </translation>
     </message>
     <message>
         <source>Warning</source>
@@ -257,19 +296,19 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Image quailty:</source>
-        <translation>圖像質量:</translation>
+        <translation>图像质量:</translation>
     </message>
     <message>
         <source>Range: [0,100] or -1.
 Specify 0 to obtain small compressed files, 100 for large uncompressed files,
 and specify -1 to let Sunny decide for you.</source>
-        <translation>範圍：[0,100] 或 -1.
-設為 0 可最大壓縮圖像，100 為完全不壓縮,
-設為 -1 讓 Sunny 為您決定。</translation>
+        <translation>范围：[0,100] 或 -1.
+设为 0 可最大压缩图像，100 为完全不压缩,
+设为 -1 让 Sunny 为您决定。</translation>
     </message>
     <message>
         <source>Path</source>
-        <translation>路徑</translation>
+        <translation>路径</translation>
     </message>
     <message>
         <source>File Name：</source>
@@ -277,11 +316,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Config Path：</source>
-        <translation>配置路徑:</translation>
+        <translation>配置路径:</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>打開</translation>
+        <translation>打开</translation>
     </message>
     <message>
         <source>Quick save</source>
@@ -289,7 +328,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Path：</source>
-        <translation>路徑:</translation>
+        <translation>路径:</translation>
     </message>
     <message>
         <source>Select</source>
@@ -297,19 +336,19 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Auto save</source>
-        <translation>自動保存</translation>
+        <translation>自动保存</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation>路徑:</translation>
+        <translation>路径:</translation>
     </message>
     <message>
         <source>Preview: </source>
-        <translation>預覽: </translation>
+        <translation>预览: </translation>
     </message>
     <message>
         <source>Select a path</source>
-        <translation>選擇新路徑</translation>
+        <translation>选择新路径</translation>
     </message>
 </context>
 <context>
@@ -320,35 +359,35 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Ellipse</source>
-        <translation>橢圓</translation>
+        <translation>椭圆</translation>
     </message>
     <message>
         <source>Pencil</source>
-        <translation>畫筆</translation>
+        <translation>画笔</translation>
     </message>
     <message>
         <source>Marker pen</source>
-        <translation>記號筆</translation>
+        <translation>记号笔</translation>
     </message>
     <message>
         <source>Mosaic/Blur</source>
-        <translation>馬賽克/模糊</translation>
+        <translation>马赛克/模糊</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation>Text</translation>
+        <translation>文本</translation>
     </message>
     <message>
         <source>Serial</source>
-        <translation>序號</translation>
+        <translation>序号</translation>
     </message>
     <message>
         <source>Pin to screen</source>
-        <translation>釘到屏幕上</translation>
+        <translation>钉到屏幕上</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>撤銷</translation>
+        <translation>撤销</translation>
     </message>
     <message>
         <source>Redo</source>
@@ -364,19 +403,19 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>copy to clipboard</source>
-        <translation>複製到剪切板</translation>
+        <translation>复制到剪切板</translation>
     </message>
     <message>
         <source>Arrow</source>
-        <translation>箭頭</translation>
+        <translation>箭头</translation>
     </message>
     <message>
         <source>translate</source>
-        <translation>翻譯</translation>
+        <translation>翻译</translation>
     </message>
     <message>
         <source>OCR</source>
-        <translation>屏幕識圖</translation>
+        <translation>屏幕识图</translation>
     </message>
 </context>
 <context>
@@ -387,11 +426,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Maximum size:</source>
-        <translation>默認最大窗口尺寸:</translation>
+        <translation>默认最大窗口尺寸:</translation>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation>默認不透明度:</translation>
+        <translation>默认不透明度:</translation>
     </message>
 </context>
 <context>
@@ -406,15 +445,15 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Close</source>
-        <translation>關閉</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <source>Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)</source>
-        <translation>圖片文件(*.png);;圖片文件(*.jpg);;所有格式(*.*)</translation>
+        <translation>图片文件(*.png);;图片文件(*.jpg);;所有格式(*.*)</translation>
     </message>
     <message>
         <source>Save Files</source>
-        <translation>保存圖片</translation>
+        <translation>保存图片</translation>
     </message>
     <message>
         <source>Form</source>
@@ -422,11 +461,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Shadow</source>
-        <translation>陰影</translation>
+        <translation>阴影</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>複製</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source>Save</source>
@@ -434,7 +473,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Zoom: %1%</source>
-        <translation>縮放: %1%</translation>
+        <translation>缩放: %1%</translation>
     </message>
 </context>
 <context>
@@ -445,11 +484,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Vertical</source>
-        <translation>豎直</translation>
+        <translation>竖直</translation>
     </message>
     <message>
         <source>CRASH</source>
-        <translation>程式崩潰</translation>
+        <translation>程式崩溃</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -471,11 +510,11 @@ and specify -1 to let Sunny decide for you.</source>
     <name>ScreenShot</name>
     <message>
         <source>Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)</source>
-        <translation>圖片文件(*.png);;圖片文件(*.jpg);;所有格式(*.*)</translation>
+        <translation>图片文件(*.png);;图片文件(*.jpg);;所有格式(*.*)</translation>
     </message>
     <message>
         <source>Save Files</source>
-        <translation>保存圖片</translation>
+        <translation>保存图片</translation>
     </message>
     <message>
         <source>Success</source>
@@ -483,22 +522,22 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Failed</source>
-        <translation>失敗</translation>
+        <translation>失败</translation>
     </message>
     <message>
         <source>Image save to </source>
-        <translation>圖片保存到 </translation>
+        <translation>图片保存到 </translation>
     </message>
     <message>
         <source>Quick save feature is not enabled, please check.</source>
-        <translation>快速保存功能未啟用，請檢查。</translation>
+        <translation>快速保存功能未启用，请检查。</translation>
     </message>
 </context>
 <context>
     <name>SideSettingUI</name>
     <message>
         <source>General</source>
-        <translation>常規</translation>
+        <translation>常规</translation>
     </message>
     <message>
         <source>Interface</source>
@@ -506,15 +545,15 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Output</source>
-        <translation>輸出</translation>
+        <translation>输出</translation>
     </message>
     <message>
         <source>Pin</source>
-        <translation>釘圖</translation>
+        <translation>钉图</translation>
     </message>
     <message>
         <source>Hotkeys</source>
-        <translation>熱鍵</translation>
+        <translation>热键</translation>
     </message>
     <message>
         <source>Tokens</source>
@@ -522,11 +561,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>About</source>
-        <translation>關於</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <source>Settings [Free]</source>
-        <translation>設置 [免費]</translation>
+        <translation>设置 [免费]</translation>
     </message>
 </context>
 <context>
@@ -576,23 +615,43 @@ and specify -1 to let Sunny decide for you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Edition: %1
-</source>
+        <source>Name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Version: %1
-</source>
+        <source>Build Time: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CPU: %1
-</source>
+        <source>Build Kits: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Memory: %1
-</source>
+        <source>Qt Version: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edition: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operating System: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kernel: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -616,7 +675,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Channel</source>
-        <translation>線路</translation>
+        <translation>线路</translation>
     </message>
     <message>
         <source>OCR：</source>
@@ -624,7 +683,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Image Translate：</source>
-        <translation>圖片翻譯：</translation>
+        <translation>图片翻译：</translation>
     </message>
     <message>
         <source>BaiDu</source>
@@ -636,6 +695,30 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Next Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>standard location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>baidu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>youdao</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -651,11 +734,38 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Restart</source>
-        <translation>重新啟動</translation>
+        <translation>重新启动</translation>
     </message>
     <message>
         <source>Quit</source>
         <translation>退出</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation type="unfinished">关于</translation>
+    </message>
+</context>
+<context>
+    <name>XMagnifyingGlass</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; to copy color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; to Switch betten RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(%1, %2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -694,14 +804,10 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
 </context>
 <context>
-    <name>XOcrDlg</name>
+    <name>XOcrWidget</name>
     <message>
-        <source>OCR</source>
-        <translation>提取文字</translation>
-    </message>
-    <message>
-        <source>original [%1 * %2]   current [%3 * %4]   zoom: %5%</source>
-        <translation>原始 [%1 * %2]   當前 [%3 * %4]   縮放: %5%</translation>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
