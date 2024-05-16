@@ -11,9 +11,13 @@ TARGET_DIR="$TARGET_HOME/.config/Sunny"
 CONFIG_FILES=("/usr/local/Sunny/config/xconfig.json" "/usr/local/Sunny/config/log.conf")
 TMP_DIR="/tmp/sunny_install"
 
-# 确保目标目录存在
-if [ ! -d "$TARGET_DIR" ]; then
-    sudo -u $TARGET_USER mkdir -p "$TARGET_DIR"
+# 删除目标目录
+if [ -d "$TARGET_DIR" ]; then
+    if rm -rf "$TARGET_DIR"; then
+        echo "Successfully deleted $TARGET_DIR"
+    else
+        echo "Failed to delete $TARGET_DIR"
+    fi
 fi
 
 # 创建临时目录
@@ -38,5 +42,4 @@ for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
 done
 
 # 清理临时目录
-rmdir "$TMP_DIR"
-
+rmdir "$TMP_DIR" >/dev/null 2>&1  # 使用重定向以防止出现 rmdir: failed to remove '/tmp/sunny_install': Directory not empty 的警告信息
