@@ -455,47 +455,6 @@ message("CMAKE_INSTALL_DATADIR: ${CMAKE_INSTALL_DATADIR}")
 if (WIN32)
 elseif (APPLE)
 elseif (UNIX)
-    # Helper macros for parsing and setting project version from `git describe --long` result
-    macro (ppic_set_version_via_describe _describe_long)
-        string (
-            REGEX REPLACE
-            "^([0-9a-z.]*)-[0-9]+-g[0-9a-f]*$"
-            "\\1"
-            _tag_parts
-            "${_describe_long}"
-        )
-        list (GET _tag_parts 0 _matched_tag_version)
-        if ("${_matched_tag_version}" MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
-            string (
-                REGEX REPLACE
-                "^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$"
-                "\\1;\\2;\\3"
-                _ver_parts
-                "${_matched_tag_version}"
-            )
-            list (GET _ver_parts 0 CPACK_PACKAGE_VERSION_MAJOR)
-            list (GET _ver_parts 1 CPACK_PACKAGE_VERSION_MINOR)
-            list (GET _ver_parts 2 CPACK_PACKAGE_VERSION_PATCH)
-        endif ()
-    endmacro ()
-
-    # Version setup
-    if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
-        find_package(Git)
-        set_package_properties(Git PROPERTIES TYPE OPTIONAL PURPOSE "Determine exact build version.")
-        if (GIT_FOUND)
-            execute_process (
-                COMMAND ${GIT_EXECUTABLE} describe --tags --always --long
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                OUTPUT_VARIABLE _git_describe_long
-            )
-            string (REGEX REPLACE "\n" "" _git_describe_long "${_git_describe_long}")
-            ppic_set_version_via_describe(${_git_describe_long})
-            target_compile_definitions(${project_name} PRIVATE
-                GIT_DESCRIBE_VERSION_STRING="${_git_describe_long}"
-            )
-        endif ()
-    endif ()
 
     set(CMAKE_INSTALL_PREFIX /usr)
     # Copying additional files into the .deb package
@@ -504,12 +463,12 @@ elseif (UNIX)
 #            FILES_MATCHING PATTERN "*"
 #            )
 
-#    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
-#            DESTINATION "$ENV{HOME}/.config/Sunny/"
-#            )
-#    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf
-#            DESTINATION "$ENV{HOME}/.config/Sunny/"
-#            )
+    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
+            DESTINATION "$ENV{HOME}/.config/Sunny/"
+            )
+    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf
+            DESTINATION "$ENV{HOME}/.config/Sunny/"
+            )
 
     # [/usr/share] -------------------------
     # install /usr/share/applications/tech.xmuli.sunny.desktop
@@ -528,22 +487,9 @@ elseif (UNIX)
               )
 
     # [/usr/local] -------------------------
-    # install $ENV{HOME}/.config/Sunny/xconfig.json by exe write
-    # install /usr/local/Sunny/xconfig.json
-    # ~/.config/Sunny 文件夹删除 → postinst-安装时删除;  postrm-卸载时删除
-
-    # 设置 postinst 和 postrm 文件
-    install(
-        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/sunny.postinst
-        DESTINATION "/DEBIAN"
-        PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    )
-
-    install(
-        FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/sunny.postrm
-        DESTINATION "/DEBIAN"
-        PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    )
+    # xconfig.json log.conf, 再通过 postinst 脚本来修拷贝变更其位置
+    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json DESTINATION "/usr/local/${project_name}/config/")
+    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf DESTINATION "/usr/local/${project_name}/config/")
 
     # install /usr/local/Sunny/translations/Sunny_*.qm
     install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations
@@ -577,22 +523,25 @@ elseif (UNIX)
     message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
     message("---------->qm:" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations")
 
-    feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+#    feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
     # CPACK: General Settings
-    set (CPACK_GENERATOR "DEB")                                                 # 设置CPack生成DEB包
-    set (CPACK_DEBIAN_PACKAGE_MAINTAINER "XMuli <xmulitech@gmail.com>")         # 设置维护者信息
-    set (CPACK_PACKAGE_NAME "${project_name}")
-    set (CPACK_PACKAGE_VERSION "${project_version}")
-    set (CPACK_PACKAGE_VENDOR "https://github.com/XMuli")
-    set (CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
-    set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple and beautiful screenshot software tool for Windows, MacOS and Linux")
-    set (CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+    set(CPACK_GENERATOR "DEB")                                                 # 设置CPack生成DEB包
+    set(CPACK_PACKAGE_NAME "${project_name}")
+    set(CPACK_PACKAGE_VERSION "${project_version}")
+    set(CPACK_PACKAGE_VENDOR "https://github.com/XMuli")
+    set(CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "XMuli <xmulitech@gmail.com>")         # 设置维护者信息
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple and beautiful screenshot software tool for Windows, MacOS and Linux")
+    set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}")
+
+    # 指定 post-install 脚本文件;  ~/.config/Sunny 文件夹删除 → postinst-安装时删除;  postrm-卸载时删除
+    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postinst;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm")
 
     # 设置Debian软件包的依赖关系
-    set (CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5x11extras5, libqt5svg5")
-    set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
-    set (CPACK_DEBIAN_PACKAGE_SHILIBDEPS ON)
+    set(CPACK_DEBIAN_PACKAGE_SHILIBDEPS ON)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5x11extras5, libqt5svg5")
+#    set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 
     include(CPack)
 endif()
