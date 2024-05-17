@@ -67,6 +67,15 @@ void SideSettingUI::initUI()
     m_tokens->insertWidget(0, tokens);
 //    m_about->insertWidget(0, about);
 
+    const int height = 32;
+    ui->tbGeneral->setMinimumHeight(height);
+    ui->tbInterface->setMinimumHeight(height);
+    ui->tbOutput->setMinimumHeight(height);
+    ui->tbPin->setMinimumHeight(height);
+    ui->tbHotkeys->setMinimumHeight(height);
+    ui->tbTokens->setMinimumHeight(height);
+    ui->tbAbout->setMinimumHeight(height);
+
     ui->stackedWidget->insertWidget(0, m_general);
     ui->stackedWidget->insertWidget(1, m_interface);
     ui->stackedWidget->insertWidget(2, m_output);
@@ -74,6 +83,14 @@ void SideSettingUI::initUI()
     ui->stackedWidget->insertWidget(4, m_hotkeys);
     ui->stackedWidget->insertWidget(5, m_tokens);
     ui->stackedWidget->insertWidget(6, m_about);
+
+    // m_general->hide();
+    // m_interface->hide();
+    // m_output->hide();
+    // m_pin->hide();
+    // m_hotkeys->hide();
+    // m_tokens->hide();
+    // m_about->hide();
 
     // 设置默认选中的页面
     ui->stackedWidget->setCurrentIndex(0);
@@ -83,13 +100,12 @@ void SideSettingUI::initUI()
         if (n <= btns.count() && btns.at(n)) btns.at(n)->setChecked(true);
     });
 //    connect(m_sideGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &SideSettingUI::onSideGroupChanged);
-
-    connect(m_general, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
-    connect(m_interface, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
-    connect(m_output, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
-    connect(m_pin, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
-    connect(m_hotkeys, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
-    connect(m_tokens, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    // connect(m_general, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    // connect(m_interface, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    // connect(m_output, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    // connect(m_pin, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    // connect(m_hotkeys, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
+    // connect(m_tokens, &AbsSettingUI::sigBtnHintClicked, this, &SideSettingUI::onBtnHintClicked);
 
     connect(m_general, &AbsSettingUI::sigBtnResetClicked, general, &General::onBtnResetClicked);
     connect(m_interface, &AbsSettingUI::sigBtnResetClicked, interface, &Interface::onBtnResetClicked);
@@ -103,31 +119,7 @@ void SideSettingUI::initUI()
 
 void SideSettingUI::onSideGroupChanged(int idx)
 {
-
 //    auto& stackedWidget = ui->stackedWidget;
-
-//    qDebug() << "----1-->stackedWidget->count():" << stackedWidget->count();
-
-//    const int& count = stackedWidget->count();
-//    for (int i = 0; i < count; ++i) {
-//        QWidget *widget = stackedWidget->widget(i);
-//        stackedWidget->removeWidget(widget); // 从QStackedWidget中移除
-////        widget->deleteLater(); // 销毁QWidget
-//        widget->hide();
-//    }
-
-//    qDebug() << "----1.1-->stackedWidget->count():" << stackedWidget->count();
-
-//    QPointer<AbsSettingUI> newWidget = new AbsSettingUI(this);
-//    if (idx == 0){
-//        newWidget->insertWidget(0, new General());
-//    } else if (idx == 1) {
-//        newWidget->insertWidget(0, new Interface());
-//    }
-
-//    stackedWidget->insertWidget(idx, newWidget);
-
-    //    qDebug() << "----2-->stackedWidget->count():" << stackedWidget->count();
 }
 
 void SideSettingUI::onBtnHintClicked(bool checked)

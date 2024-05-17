@@ -179,6 +179,7 @@ void Tray::onCapture()
 void Tray::onSetting()
 {
     if (!m_setting) m_setting = new SideSettingUI();
+    // m_setting->adjustSize();
     m_setting->show();
 }
 
