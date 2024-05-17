@@ -65,11 +65,13 @@ bool Communication::resetShortcut(const QKeySequence &keySequence, const HotKeyT
     }
 
     hk->resetShortcut();
+    if (keySequence.isEmpty())  // delete 按键，会将之前也热键取消掉
+        return true;
+
     hk->setShortcut(keySequence, true);
     ret = hk->isRegistered();
 
     qDebug() << "type:" << hotKeyTypeToString(type) << "keySequence:" << keySequence.toString() << "hk->isRegistered():" << ret;
-
     return ret;
 }
 

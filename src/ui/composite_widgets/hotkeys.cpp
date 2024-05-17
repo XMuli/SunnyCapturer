@@ -24,7 +24,7 @@ Hotkeys::~Hotkeys()
 void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
 {
     XKeySequenceEdit* keyEdit = qobject_cast<XKeySequenceEdit *>(sender());
-    if (keySequence.isEmpty() || !keyEdit) return;
+    if (!keyEdit) return;
 
     HotKeyType type;
     QLabel *lab = nullptr;
@@ -54,6 +54,8 @@ void Hotkeys::onKeySeqChanged(const QKeySequence &keySequence)
     }
 
     const bool& resetOK = COMM.resetShortcut(keySequence, type);
+
+    if (keySequence.isEmpty()) return;  // delete 按键，会将之前也热键取消掉
     if (resetOK) CJ.setKeyValue(name, keySequence.toString().toStdString());
     keyEdit->setStyleSheet(QString("background-color: %1;").arg(resetOK ? "" : "#FFCDD2"));
     setHotkeyIconStatus(lab, type);

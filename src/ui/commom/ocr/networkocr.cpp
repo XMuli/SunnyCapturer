@@ -60,7 +60,7 @@ void NetworkOCR::sendBaiDuOcrRequest(const OcrData &data, const QString &path)
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
-    qDebug() << "【发送时候的 a】 sendBaiDuOcrRequest reply:" << reply << "data.pipeline:" << int(data.pipeline);
+    // qDebug() << "【发送时候的 a】 sendBaiDuOcrRequest reply:" << reply << "data.pipeline:" << int(data.pipeline);
 }
 
 void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, const QString &path)
@@ -105,7 +105,7 @@ void NetworkOCR::sendBaiDuImgTranslateRequest(const ImgTranslateData &data, cons
     // connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     // loop.exec();
 
-    qDebug() << "【发送时候的 b】 sendBaiDuImgTranslateRequest reply:" << reply;
+    // qDebug() << "【发送时候的 b】 sendBaiDuImgTranslateRequest reply:" << reply;
 }
 
 void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, const QString &path)
@@ -151,7 +151,7 @@ void NetworkOCR::sendYouDaoImgTranslateRequest(const ImgTranslateData &data, con
     // QEventLoop loop;
     // connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     // loop.exec();
-    qDebug() << "【发送时候的 c】 sendYouDaoImgTranslateRequest reply:" << reply;
+    // qDebug() << "【发送时候的 c】 sendYouDaoImgTranslateRequest reply:" << reply;
 }
 
 const QStringList NetworkOCR::rawHeader(const QNetworkReply *reply) const
@@ -231,7 +231,7 @@ void NetworkOCR::sendBaiDuAccessToken(const QString &client_id, const QString &c
     params.addQueryItem("grant_type", "client_credentials");
 
     QNetworkReply *reply = m_networkManager->post(request, params.query().toUtf8());
-    qDebug() << "【发送时候的 token】 sendBaiDuOcrRequest reply:" << reply;
+    // qDebug() << "【发送时候的 token】 sendBaiDuOcrRequest reply:" << reply;
 
 //    m_eventLoop->exec();   // 阻塞
 }
@@ -436,7 +436,7 @@ void NetworkOCR::onRequestFinished(QNetworkReply *reply)
 
     if (reply) {
         reply->deleteLater();  // 此处统一释放
-        qDebug() << "reply被释放了:" << reply;
+        // qDebug() << "reply被释放了:" << reply;
     }
 
 }

@@ -19,6 +19,9 @@ public:
     void setRightText(const QString& text);
     void appendRightText(const QString& text);
 
+private slots:
+    void on_splitter_splitterMoved(int pos, int index);
+
 private:
     Ui::XOcrWidget *ui;
 };

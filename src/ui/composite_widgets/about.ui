@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>584</width>
-    <height>280</height>
+    <width>420</width>
+    <height>208</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -189,7 +189,7 @@
          <item>
           <widget class="QLabel" name="labMail_2">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Website&lt;/span&gt;&lt;/a&gt;   &amp;nbsp;&amp;nbsp;   &lt;a href=&quot;https://github.com/XMuli/SunnyPages/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Download&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; &lt;a href=&quot;https://github.com/XMuli/SunnyPages/tree/master/translations&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Translations&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Author&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; &lt;a href=&quot;https://sunny.xmuli.tech/acknowledgement.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Acknowledgement&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;→  Feedback:&amp;nbsp; &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; &lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussion &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Website&lt;/span&gt;&lt;/a&gt;   &amp;nbsp;&amp;nbsp;  &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Author&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; &lt;a href=&quot;https://sunny.xmuli.tech/acknowledgement.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Acknowledgement&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; →&amp;nbsp; &lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp; &lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussion &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="openExternalLinks">
             <bool>true</bool>

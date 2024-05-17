@@ -230,7 +230,12 @@ void Tray::onLanguageChange(const QString qmName)
 
 void Tray::onShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs)
 {
-    m_trayIcon->showMessage(title, msg, QIcon(":/resources/logo/logo.svg"), msecs);
+    QString suffix = ".svg";
+#if Q_OS_LINUX
+    suffix = ".png";
+#endif
+
+    m_trayIcon->showMessage(title, msg, QIcon(":/resources/logo/logo" + suffix), msecs);
 }
 
 // void Tray::onRecvGeoInfo(const GeoInfo &geoInfo)

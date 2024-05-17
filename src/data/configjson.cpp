@@ -45,7 +45,8 @@ ordered_json ConfigJson::defaultConfigJson()
                       }},
         {"output", {
                        {"image_quailty", -1},
-                       {"flie_name", "Sunny_$yyyyMMdd_hhmmss$.png"},
+                       {"flie_name", "Sunny_$yyyyMMdd_hhmmss$"},
+                       {"flie_suffix", "png"},          // 最新一次保存图片时，默认的保存格式
                        {"quick_save_enable", true},
                        {"auto_save_enable", false},
                        {"config_path", ""},
@@ -103,6 +104,11 @@ ordered_json ConfigJson::defaultConfigJson()
                                                          {"highlight_iridescence", "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D"},
                                                          {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"}
                                                      }},
+                         { "non_ui_user_experience", {                                                            // 用户体验，不需要用户设置的
+                                                           {"ocr_splitter_left", 3},                              // ocr 左侧图片比例
+                                                           {"ocr_splitter_right", 1}                              // ocr 右侧提取文字的比例
+                                                       }
+                         },
                          {"develpe_enginner", {
                                                   {"save_image_with_detail", false}                             // 工程师系类： true- 截图时候将窗口详细信息也保存上去
                                               }
@@ -410,11 +416,11 @@ void ConfigJson::initPrepare()
     QDir().mkpath(dir );            // 确保路径存在，不存在就创建
     QDir().mkpath(dir + "/logs");
 
-#if defined (Q_OS_LINUX)   // fitst time init  xconfig.json write to linux "~/.config/Sunny"
+// #if defined (Q_OS_LINUX)   // fitst time init  xconfig.json write to linux "~/.config/Sunny"
     if (!QFile::exists(m_jFilePath)) {
         m_j = defaultConfigJson();
         writeToFile();
         m_j.clear();
     }
-#endif
+// #endif
 }

@@ -160,7 +160,7 @@ void PinWidget::onSave()
     const auto& formatName = formatToFileName(CJ_GET_QSTR("output.flie_name"));
     const QString& imageName = QDateTime::currentDateTime().toString(formatName);
     const QString& dir = CJ_GET_QSTR("advanced.customize_ui_parameters.manual_save_image_dir");
-    const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)"));
+    const QString& fileter(tr("Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)"));
     path = QFileDialog::getSaveFileName(this, tr("Save Files"), dir + "/" + imageName, fileter);
 
     QTime startTime = QTime::currentTime();
