@@ -17,6 +17,7 @@ public:
 
 private slots:
     const json creatorData();
+    QString getMotherboardUUID();
     void onReplyFinished(QNetworkReply *reply);
     void onErrorOccurred(QNetworkReply::NetworkError code);
 

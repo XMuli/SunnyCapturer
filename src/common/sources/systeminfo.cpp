@@ -206,7 +206,7 @@ QPixmap SystemInfo::renderMonitorToPixmap()
         pa.drawText(QPoint(adjustedRect.center().x() - 10, adjustedRect.top() - 5), widthText);
 
         // 绘制序号和主屏标记
-        QString text = QString("序: %1").arg(i+1);
+        QString text = QString("[%1]").arg(i+1);
         if (m_scrns.at(i) == m_priScrn)
             text += " (Primary)";
         pa.drawText(adjustedRect.bottomLeft() + QPoint(5, -5), text);

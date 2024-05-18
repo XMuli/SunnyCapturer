@@ -3,6 +3,7 @@
 #include <QNetworkRequest>
 #include <QGuiApplication>
 #include <QDebug>
+#include <QProcess>
 #include "systeminfo.h"
 #include "../../data/configjson.h"
 
@@ -32,15 +33,23 @@ void DbAnalytics::sendData() {
 
 const json DbAnalytics::creatorData()
 {
+    auto rectToString = [](const QRect &rect) -> QString { return QString("(%1, %2 %3x%4)").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());};
+
     QLocale locale = QLocale::system();
     QString language = QLocale::languageToString(locale.language());
     QLocale::Country countryEnum = locale.country();
     QString country = QLocale::countryToString(countryEnum);
     const auto priScren = qGuiApp->primaryScreen();
     QRect rect = priScren != nullptr ? priScren->geometry() : QRect();
-    QString geometry = QString("(%1, %2 %3x%4)").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
+    QString geometry = rectToString(rect);
     QSizeF physicalSizeF = priScren != nullptr ? priScren->physicalSize() : QSizeF();
     QString physical_size = QString("%1x%2").arg(physicalSizeF.width()).arg(physicalSizeF.height());
+
+    const auto& scrns = qGuiApp->screens();
+    QString szScrns;
+    for (const auto& it : scrns) {
+        szScrns += rectToString(it->geometry());
+    }
 
     json data;
     data["os_type"] = SYSINFO.getOperatingSystem().toStdString().data();
@@ -48,16 +57,12 @@ const json DbAnalytics::creatorData()
     QString edition = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
     QString version = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
     QString currentBuild = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
-
     data["os_editon"] = edition.toStdString();
     data["os_version"] = QString(version + " " + currentBuild).toStdString();
 #else
     data["os_editon"] = QSysInfo::prettyProductName().toStdString().data();
     data["os_version"] = QSysInfo::kernelVersion().toStdString().data();
 #endif
-
-    data["os_editon"] = QSysInfo::prettyProductName().toStdString().data();
-    data["os_version"] = QSysInfo::kernelVersion().toStdString().data();
 
     data["os_language"] = language.toStdString().data();
     data["qt_version"] = QString(QT_VERSION_STR).toStdString().data();
@@ -70,18 +75,63 @@ const json DbAnalytics::creatorData()
     data["memory"] = SYSINFO.getMemoryInfo().toStdString();
     data["cpu"] = SYSINFO.getCPUInfo().toStdString();
     data["user_name"] = SYSINFO.getUsername().toStdString();
+    data["uuid"] = getMotherboardUUID().toStdString();
     data["mac"] = SYSINFO.getMacInfo().toStdString();
     data["time"] = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString();  // 上报时间
-    data["region"] = country.toStdString().data();
+    data["local_region"] = country.toStdString().data();
+    data["region"] = "";
     data["city"] = "";
     data["monitor_count"] = qGuiApp->screens().count();
+    data["screens"] = szScrns.toStdString().data();
     data["geometry"] = rect.isValid() ? geometry.toStdString().data() : "";;
     data["scaling"] = SYSINFO.scaling(priScren);
     data["logical_dpi"] = priScren ? int(priScren->logicalDotsPerInch()) : 0;
     data["physical_dpi"] = priScren ? int(priScren->physicalDotsPerInch()) : 0;
     data["refresh_rate"] = priScren ? int(priScren->refreshRate()) : 0;
     data["physical_size"] = physicalSizeF.isValid() ?  physical_size.toStdString().data() : "";
+    data["mark"] = "";
     return data;
+}
+
+QString DbAnalytics::getMotherboardUUID()
+{
+    QString uuid;
+    QProcess process;
+    QTextStream stream(&uuid);
+
+#ifdef Q_OS_WIN
+    process.start("wmic baseboard get serialnumber");
+    process.waitForFinished();
+    QString output = process.readAllStandardOutput();
+    QStringList lines = output.split("\n");
+    if (lines.size() > 1) {
+        uuid = lines.at(1).trimmed();
+    }
+#elif defined(Q_OS_LINUX)
+    QFile file("/sys/class/dmi/id/board_serial");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        uuid = in.readLine().trimmed();
+        file.close();
+    }
+#elif defined(Q_OS_MAC)
+    process.start("ioreg -rd1 -c IOPlatformExpertDevice");
+    process.waitForFinished();
+    QString output = process.readAllStandardOutput();
+    QStringList lines = output.split("\n");
+    foreach (QString line, lines) {
+        if (line.contains("\"IOPlatformUUID\"")) {
+            QStringList parts = line.split("=");
+            if (parts.size() == 2) {
+                uuid = parts.at(1).trimmed();
+                uuid = uuid.remove("\"");
+            }
+            break;
+        }
+    }
+#endif
+
+    return uuid;
 }
 
 void DbAnalytics::onReplyFinished(QNetworkReply *reply) {

@@ -40,19 +40,31 @@ void Tray::init()
     m_trayMenu->addAction(restart);
     m_trayMenu->addAction(quit);
 
-    m_trayIcon->setIcon(QIcon(":/resources/logo/logo.svg"));
-    const auto& text = QString("%1 Screenshot\n"
-                               "Capture: %2\n"
-                               "Delay Capture: %3\n"
-                               "Custom Capture: %4\n"
-                               "OCR Capture: %5\n"
-                               "Image Translage Capture: %6\n")
+    QString suffix = ".svg";
+#if Q_OS_LINUX
+    suffix = ".png";
+#endif
+
+    m_trayIcon->setIcon(QIcon(":/resources/logo/logo" + suffix));
+    const auto& text = QString("%1 %2\n"
+                               "%3: %4\n"
+                               "%5: %6\n"
+                               "%7: %8\n"
+                               "%9: %10\n"
+                               "%11: %12\n")
                            .arg(XPROJECT_NAME)
+                           .arg(tr("Screenshot"))
+                           .arg(tr("Capture"))
                            .arg(CJ_GET_QSTR("hotkeys.capture"))
+                           .arg(tr("Delay Capture"))
                            .arg(CJ_GET_QSTR("hotkeys.delay_capture"))
+                           .arg(tr("Custom Capture"))
                            .arg(CJ_GET_QSTR("hotkeys.custom_capture"))
+                           .arg(tr("OCR Capture"))
                            .arg(CJ_GET_QSTR("hotkeys.ocr_capture"))
+                           .arg(tr("Image Translate Capture"))
                            .arg(CJ_GET_QSTR("hotkeys.image_transltae_capture"));
+
 
     m_trayIcon->setToolTip(text);
     m_trayIcon->setContextMenu(m_trayMenu);
@@ -230,12 +242,7 @@ void Tray::onLanguageChange(const QString qmName)
 
 void Tray::onShowSystemMessagebox(const QString &title, const QString &msg, const int& msecs)
 {
-    QString suffix = ".svg";
-#if Q_OS_LINUX
-    suffix = ".png";
-#endif
-
-    m_trayIcon->showMessage(title, msg, QIcon(":/resources/logo/logo" + suffix), msecs);
+    m_trayIcon->showMessage(title, msg, QIcon(":/resources/logo/logo.svg"), msecs);
 }
 
 // void Tray::onRecvGeoInfo(const GeoInfo &geoInfo)

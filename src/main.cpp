@@ -64,21 +64,15 @@ int main(int argc, char* argv[])
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler); //注冊异常捕获函数
 #endif
 
-    // XColorPicker* colorPicker = new XColorPicker();
-    // colorPicker->setWindowOpacity(0.75);
-    // colorPicker->adjustSize();
-    // colorPicker->show();
-    // colorPicker->adjustSize();
-    // colorPicker->update();
-
-
-#if 1
-    // QtCrator 左侧 Project-Run-Run in Terminal 选项勾选即可，即可 F5 终端调试出现
-    // START_EASYLOGGINGPP(argc, argv);
-    // qInstallMessageHandler(easylogingppMessageHandler);
+#if Q_DEBUG
     // qInstallMessageHandler(customQtMessageHandler);
     qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
+#else
+    // QtCrator 左侧 Project-Run-Run in Terminal 选项勾选即可，即可 F5 终端调试出现
+    START_EASYLOGGINGPP(argc, argv);
+    qInstallMessageHandler(easylogingppMessageHandler);
 
+    // qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
     // https://blog.csdn.net/weixin_44843481/article/details/132025906
     el::Configurations conf(QString(qApp->applicationDirPath() + "/log.conf").toStdString());
     el::Loggers::reconfigureLogger("default", conf);                 // 为单独一个级别的Logger配置
@@ -89,23 +83,13 @@ int main(int argc, char* argv[])
     el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);   // 日志文件轮转
     el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);    // 如果终端支持，终端输出将是彩色
     #ifdef QT_DEBUG
-        el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);           // 使用每个日志条目刷新日志（性能敏感）-默认情况下禁用
+    el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);           // 使用每个日志条目刷新日志（性能敏感）-默认情况下禁用
     #endif
-
 #endif
-
-    // AboutInfo* monitorInfo = new AboutInfo();
-    // monitorInfo->show();
-
-    // XMonitorLabel* lab = new XMonitorLabel();
-    // lab->renderMonitorToPixmap();
-    // lab->resize(lab->fixSize());
-    // lab->show();
 
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
     QSharedMemory sharedMemory;
     sharedMemory.setKey(uniqueKey);
-
 
     // 尝试附加到现有的共享内存并分离
     if (sharedMemory.attach())
@@ -143,12 +127,26 @@ int main(int argc, char* argv[])
     dbAnalytics.sendData();
 
 
-    // 用法
-       // GoogleGeo m_googleGeo;
-       // GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo.geoInfo().toJson()));
-       // GA4.sendEvent(GAnalytics4::E_os_info, GAnalytics4::mapToJParams({{"windows 10", "x64 "}, {"t1", "t1"}}));
-    //    GA4.sendEvent(GAnalytics4::E_os_info, std::map<std::string, std::string>({{"t11", "t1"}, {"t12", "t1"}}));
+    // XColorPicker* colorPicker = new XColorPicker();
+    // colorPicker->setWindowOpacity(0.75);
+    // colorPicker->adjustSize();
+    // colorPicker->show();
+    // colorPicker->adjustSize();
+    // colorPicker->update();
 
+    // AboutInfo* monitorInfo = new AboutInfo();
+    // monitorInfo->show();
+
+    // XMonitorLabel* lab = new XMonitorLabel();
+    // lab->renderMonitorToPixmap();
+    // lab->resize(lab->fixSize());
+    // lab->show();
+
+    // 用法
+    // GoogleGeo m_googleGeo;
+    // GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo.geoInfo().toJson()));
+    // GA4.sendEvent(GAnalytics4::E_os_info, GAnalytics4::mapToJParams({{"windows 10", "x64 "}, {"t1", "t1"}}));
+    // GA4.sendEvent(GAnalytics4::E_os_info, std::map<std::string, std::string>({{"t11", "t1"}, {"t12", "t1"}}));
 
     // 释放系统信号量
     systemSemaphore.release();
