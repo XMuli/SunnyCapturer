@@ -3,6 +3,7 @@
 #include <QNetworkRequest>
 #include <QGuiApplication>
 #include <QDebug>
+#include <QFile>
 #include <QProcess>
 #include "systeminfo.h"
 #include "../../data/configjson.h"

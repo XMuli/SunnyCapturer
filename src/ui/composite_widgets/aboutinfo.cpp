@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2023-2024 XMuli
 // SPDX-GitHub: https://github.com/XMuli/Sunny
 // SPDX-Author: XMuli <xmulitech@gmail.com>
@@ -97,7 +97,7 @@ void AboutInfo::init()
     szEdition = edition;
     szVersion = version + " " + currentBuild;
 #else
-    szEdition = QSysInfo::prettyProductName()
+    szEdition = QSysInfo::prettyProductName();
     szVersion = QSysInfo::kernelVersion();
 #endif
 

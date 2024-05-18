@@ -35,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string/>
+      <string notr="true">pixmap</string>
      </property>
     </widget>
    </item>

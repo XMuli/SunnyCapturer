@@ -487,7 +487,7 @@ QString SystemInfo::getMacInfo()
             // qDebug() << "Hardware Address (MAC):" << it.hardwareAddress();
             // qDebug() << "----------------------------------";
             ret = it.hardwareAddress();
-            if (ret.isEmpty()) continue;
+            if (ret.isEmpty() || ret == "00:00:00:00:00:00") continue;
             else return ret;
         }
     }

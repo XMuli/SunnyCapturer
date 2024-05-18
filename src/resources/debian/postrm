@@ -6,10 +6,14 @@ TARGET_USER=$(logname)
 # Get the home directory of the target user
 TARGET_DIR=$(getent passwd $TARGET_USER | cut -d: -f6)/.config/Sunny
 
-# Run the deletion command and print appropriate messages
-if sudo -u $TARGET_USER rm -rf "$TARGET_DIR"; then
-    echo "Successfully deleted $TARGET_DIR"
+# Check if the directory exists
+if [ -d "$TARGET_DIR" ]; then
+    # Run the deletion command and print appropriate messages
+    if sudo -u $TARGET_USER rm -rf "$TARGET_DIR"; then
+        echo "Successfully deleted $TARGET_DIR"
+    else
+        echo "Failed to delete $TARGET_DIR"
+    fi
 else
-    echo "Failed to delete $TARGET_DIR"
+    echo "Directory $TARGET_DIR does not exist, skipping deletion."
 fi
-

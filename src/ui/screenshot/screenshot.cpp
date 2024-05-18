@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2023-2024 XMuli
 // SPDX-GitHub: https://github.com/XMuli/Sunny
 // SPDX-Author: XMuli <xmulitech@gmail.com>
@@ -275,7 +275,13 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
             if (CJ_GET("advanced.develpe_enginner.save_image_with_detail").get<bool>())
                 prinftWindowsRects(pa);
             pa.restore();
-            return m_origPix.copy(rect);
+
+            // fix: Debian KDE, 125%-->  qt show:dpr=1.25 & 100%
+            // QPixmap(QSize(3840, 2160),depth=32,devicePixelRatio=1.25,cacheKey=0x2200000002)
+            const double& dpr = qGuiApp->primaryScreen()->devicePixelRatio();
+            QRect rt = QRect(rect.topLeft() * dpr, rect.size() * dpr);
+
+            return m_origPix.copy(rt);
 
         } else {
             return m_imgTransGenPix.copy();

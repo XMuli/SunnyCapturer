@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2023-2024 XMuli
 // SPDX-GitHub: https://github.com/XMuli/Sunny
 // SPDX-Author: XMuli <xmulitech@gmail.com>
@@ -41,7 +41,7 @@ void Tray::init()
     m_trayMenu->addAction(quit);
 
     QString suffix = ".svg";
-#if Q_OS_LINUX
+#ifdef Q_OS_LINUX
     suffix = ".png";
 #endif
 

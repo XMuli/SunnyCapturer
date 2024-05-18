@@ -49,9 +49,12 @@ XMagnifyingGlass::~XMagnifyingGlass()
 
 void XMagnifyingGlass::setPixmap(const QPoint &pt)
 {
+    const double& dpr = qGuiApp->primaryScreen()->devicePixelRatio();
+//    QRect rt = QRect(rect.topLeft() * dpr, rect.size() * dpr);
+
     const int rX = 12;  // 宽、高的一半
     const int rY = 9;   // 太大则会将其放大镜部分左上角也截图上来
-    const QPixmap& pix = qGuiApp->primaryScreen()->grabWindow(qApp->desktop()->winId(), pt.x() - rX, pt.y() - rY, 2 * rX, 2 * rY);
+    QPixmap pix = qGuiApp->primaryScreen()->grabWindow(qApp->desktop()->winId(), pt.x() - rX, pt.y() - rY, 2 * rX, 2 * rY);
     QLabel* lab = ui->labPixmap;
 
     const QScreen* screen = QGuiApplication::screenAt(QCursor::pos());
@@ -61,7 +64,7 @@ void XMagnifyingGlass::setPixmap(const QPoint &pt)
     lab->clear(); // 清除之前的内容
 
     // 将 pix 绘制到 QLabel 上
-    QPixmap pixmap = pix.scaled(lab->size());
+    QPixmap pixmap = pix.scaled(lab->size() * dpr);
     QPainter pa(&pixmap);
 
     // 绘制红色十字线
@@ -106,6 +109,7 @@ void XMagnifyingGlass::paintEvent(QPaintEvent *e)
     pa.fillRect(rect(), QColor(0, 0, 0, 255 * 0.65));
 
     const QRect& pixRt = ui->labPixmap->rect();
+    qDebug() << "---->" << rect() << pixRt << qGuiApp->devicePixelRatio();
     const QRect& rt = QRect(ui->labPixmap->mapToParent(pixRt.topLeft()), pixRt.size());
     int margin = 1;
     pa.setPen(QPen(Qt::white, 1));
