@@ -264,10 +264,10 @@ endforeach()
 
 if(APPLE)
     file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.app/Contents/MacOS")
-    file(COPY "${CMAKE_SOURCE_DIR}/log.conf" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.app/Contents/MacOS")
+    # file(COPY "${CMAKE_SOURCE_DIR}/log.conf" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${project_name}.app/Contents/MacOS")
 else()
     file(COPY "${CMAKE_SOURCE_DIR}/xconfig.json" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")  # windows and linux
-    file(COPY "${CMAKE_SOURCE_DIR}/log.conf" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+    # file(COPY "${CMAKE_SOURCE_DIR}/log.conf" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
     file(COPY "${source_root}/debian" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 endif()
 
@@ -466,9 +466,9 @@ elseif (UNIX)
     install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json
             DESTINATION "$ENV{HOME}/.config/Sunny/"
             )
-    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf
-            DESTINATION "$ENV{HOME}/.config/Sunny/"
-            )
+    # install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf
+    #         DESTINATION "$ENV{HOME}/.config/Sunny/"
+    #         )
 
     # [/usr/share] -------------------------
     # install /usr/share/applications/tech.xmuli.sunny.desktop
@@ -489,7 +489,7 @@ elseif (UNIX)
     # [/usr/local] -------------------------
     # xconfig.json log.conf, 再通过 postinst 脚本来修拷贝变更其位置
     install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xconfig.json DESTINATION "/usr/local/${project_name}/config/")
-    install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf DESTINATION "/usr/local/${project_name}/config/")
+    # install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/log.conf DESTINATION "/usr/local/${project_name}/config/")
 
     # install /usr/local/Sunny/translations/Sunny_*.qm
     install (DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations

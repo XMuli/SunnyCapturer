@@ -914,7 +914,7 @@ QString ScreenShot::imageSavePath(const ImageSaveType &types)
     suffix = fileInfo.suffix();
 
     CJ_SET("output.flie_suffix", suffix.toStdString());
-    qDebug() <<"----------> fileNmae path:" << path << suffix;
+    // qDebug() <<"----------> fileNmae path:" << path << suffix;
     return path;
 }
 
@@ -1012,7 +1012,7 @@ void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
         } else if (type == OrientationType::OT_topRight || type == OrientationType::OT_bottomLeft) {
             setCursor(Qt::SizeBDiagCursor);
         } else {
-            qDebug() << "---->" << int(m_actionType);
+            // qDebug() << "---->" << int(m_actionType);
             setCursor(Qt::WhatsThisCursor); // 一般都不会触发
         }
     } else if (m_actionType == ActionType::AT_drawing_shap) {

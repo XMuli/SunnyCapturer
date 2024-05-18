@@ -43,10 +43,14 @@
 
 #include "common/google_analytics4/google_geographic/googlegeo.h"
 #include "common/google_analytics4/ganalytics4.h"
+
+
+#include "common/data_analytics/dbanalytics.h"
 #include "easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
-#include "common/data_analytics/dbanalytics.h"
+
+void setEasyloggingppConfig();   // 配置 easylogging++ 日志，使用代码方式
 
 int main(int argc, char* argv[])
 {
@@ -64,27 +68,14 @@ int main(int argc, char* argv[])
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler); //注冊异常捕获函数
 #endif
 
-#if Q_DEBUG
+#ifdef QT_DEBUG
     // qInstallMessageHandler(customQtMessageHandler);
     qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
 #else
     // QtCrator 左侧 Project-Run-Run in Terminal 选项勾选即可，即可 F5 终端调试出现
     START_EASYLOGGINGPP(argc, argv);
     qInstallMessageHandler(easylogingppMessageHandler);
-
-    // qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
-    // https://blog.csdn.net/weixin_44843481/article/details/132025906
-    el::Configurations conf(QString(qApp->applicationDirPath() + "/log.conf").toStdString());
-    el::Loggers::reconfigureLogger("default", conf);                 // 为单独一个级别的Logger配置
-    el::Loggers::reconfigureAllLoggers(conf);                        // 为全部的Logger配置
-
-    // el::Loggers::setLoggingLevel(el::Level::Debug);
-    el::Loggers::addFlag(el::LoggingFlag::AutoSpacing);              // 自动添加空格
-    el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);   // 日志文件轮转
-    el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);    // 如果终端支持，终端输出将是彩色
-    #ifdef QT_DEBUG
-    el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);           // 使用每个日志条目刷新日志（性能敏感）-默认情况下禁用
-    #endif
+    setEasyloggingppConfig();
 #endif
 
     QString uniqueKey = "SunnyUniqueKey"; // 使用唯一的标识符来创建共享内存和系统信号量
@@ -151,4 +142,86 @@ int main(int argc, char* argv[])
     // 释放系统信号量
     systemSemaphore.release();
     return a.exec();
+}
+
+
+
+void setEasyloggingppConfig()
+{
+    // qSetMessagePattern("[%{type}] [%{file} %{line}] %{message} ");
+    // https://blog.csdn.net/weixin_44843481/article/details/132025906
+
+    // el::Configurations conf(QString(qApp->applicationDirPath() + "/log.conf").toStdString());
+    // el::Loggers::reconfigureLogger("default", conf);                 // 为单独一个级别的Logger配置
+    // el::Loggers::reconfigureAllLoggers(conf);                        // 为全部的Logger配置
+
+    // 获取系统推荐的日志生成路径
+    // Windows：C:\Users\<Username>\AppData\Roaming\<Organization>\<AppName>
+    // macOS：/Users/<Username>/Library/Application Support/<AppName>
+    // Linux：/home/<Username>/.local/share/<AppName>
+
+    // 设置Easylogging++的配置
+    QString logDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    // 如果目录不存在，则创建目录
+    QDir dir(logDir);
+    if (!dir.exists()) {
+        dir.mkpath(logDir);
+    }
+
+    // 设置Easylogging++的配置
+    el::Configurations conf;
+
+    // 设置全局配置
+    conf.set(el::Level::Global, el::ConfigurationType::Format, "%datetime %msg");
+    conf.set(el::Level::Global, el::ConfigurationType::Filename, logDir.toStdString() + "/%datetime.log");
+    conf.set(el::Level::Global, el::ConfigurationType::Enabled, "true");
+    conf.set(el::Level::Global, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Global, el::ConfigurationType::ToStandardOutput, "true");
+    conf.set(el::Level::Global, el::ConfigurationType::SubsecondPrecision, "4");
+    conf.set(el::Level::Global, el::ConfigurationType::PerformanceTracking, "true");
+    conf.set(el::Level::Global, el::ConfigurationType::MaxLogFileSize, "2097152");
+    conf.set(el::Level::Global, el::ConfigurationType::LogFlushThreshold, "100");
+
+    // 设置每个级别的格式和输出目标
+    conf.set(el::Level::Trace, el::ConfigurationType::Format, "[%datetime %level %fbase %line] %msg");
+    conf.set(el::Level::Trace, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Trace, el::ConfigurationType::ToStandardOutput, "true");
+
+    conf.set(el::Level::Debug, el::ConfigurationType::Format, "[%datetime %level] %msg");
+    conf.set(el::Level::Debug, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Debug, el::ConfigurationType::ToStandardOutput, "true");
+
+    conf.set(el::Level::Info, el::ConfigurationType::Format, "[%datetime %level] %msg");
+    conf.set(el::Level::Info, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Info, el::ConfigurationType::ToStandardOutput, "true");
+
+    conf.set(el::Level::Error, el::ConfigurationType::Format, "[%datetime %level] %msg");
+    conf.set(el::Level::Error, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Error, el::ConfigurationType::ToStandardOutput, "true");
+
+    conf.set(el::Level::Warning, el::ConfigurationType::Format, "[%datetime %level] %msg");
+    conf.set(el::Level::Warning, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Warning, el::ConfigurationType::ToStandardOutput, "true");
+
+    conf.set(el::Level::Fatal, el::ConfigurationType::Format, "[%datetime %level] %msg");
+    conf.set(el::Level::Fatal, el::ConfigurationType::ToFile, "true");
+    conf.set(el::Level::Fatal, el::ConfigurationType::ToStandardOutput, "true");
+
+    // 将配置应用于默认Logger
+    el::Loggers::setDefaultConfigurations(conf, true);
+
+    // 将配置应用于所有Logger
+    el::Loggers::reconfigureAllLoggers(conf);
+
+    // 添加其他配置标志
+    el::Loggers::addFlag(el::LoggingFlag::AutoSpacing);              // 自动添加空格
+    el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);   // 日志文件轮转
+    el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);    // 如果终端支持，终端输出将是彩色
+
+#ifdef QT_DEBUG
+    el::Loggers::addFlag(el::LoggingFlag::ImmediateFlush);           // 使用每个日志条目刷新日志（性能敏感）-默认情况下禁用
+#endif
+
+    qDebug() << "easylogging++ log dir:" << logDir;
 }

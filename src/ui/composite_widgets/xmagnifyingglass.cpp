@@ -109,7 +109,6 @@ void XMagnifyingGlass::paintEvent(QPaintEvent *e)
     pa.fillRect(rect(), QColor(0, 0, 0, 255 * 0.65));
 
     const QRect& pixRt = ui->labPixmap->rect();
-    qDebug() << "---->" << rect() << pixRt << qGuiApp->devicePixelRatio();
     const QRect& rt = QRect(ui->labPixmap->mapToParent(pixRt.topLeft()), pixRt.size());
     int margin = 1;
     pa.setPen(QPen(Qt::white, 1));
