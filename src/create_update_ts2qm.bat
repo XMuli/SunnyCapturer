@@ -6,7 +6,8 @@ set "OUTPUT_TS_DIR=./translations"
 set "OUTPUT_QM_DIR=../bin/translations"
 
 rem 设置想要的语言列表 https://www.afforange.com/556.html
-set "LANGUAGES=en_us en_gb zh_cn zh_tw zh_sg es ar fr ru pt pt_br de ja it ko pl nl tr id uk th sv fi cs hi el he no da hu vi ro sr bg"
+rem set "LANGUAGES=en_us en_gb zh_cn zh_tw zh_sg es ar fr ru pt pt_br de ja it ko pl nl tr id uk th sv fi cs hi el he no da hu vi ro sr bg"
+set "LANGUAGES=en_us zh_cn zh_tw pt_br"
 
 if not exist "%OUTPUT_QM_DIR%" (
     mkdir "%OUTPUT_QM_DIR%"

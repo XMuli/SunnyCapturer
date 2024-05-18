@@ -25,10 +25,6 @@ About::~About()
 
 void About::initUI()
 {
-    // const QString& project = QString("<html><head/><body><p><span style=\" font-size:20pt;\">%1</span><span style=\" font-size:9pt; font-weight:400;\">(%2-bit)</span></p></body></html>")
-                          // .arg(XPROJECT_NAME).arg(XARCH_BIT);
-
-    // ui->labProject->setText(project);
     onLanguageChange("");
 
 

@@ -31,6 +31,7 @@ protected:
 
 private:
     void init();
+    const QString getSystemInfo();
     const QString detailedInfo() const;
     void insertLayout(const QStringList &lists);
 

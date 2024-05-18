@@ -80,15 +80,6 @@ AboutInfo::~AboutInfo()
 void AboutInfo::init()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
-
-#ifdef Q_OS_WIN
-    m_labFont = QFont("Courier New");
-#elif defined(Q_OS_MAC)
-    m_labFont = QFont("Menlo");
-#else
-    m_labFont = QFont("DejaVu Sans Mono");
-#endif
-
     auto& lab = ui->labMonitor;
     // lab->setMaximumHeight(900);
     QPixmap pix = SYSINFO.renderMonitorToPixmap();
@@ -96,30 +87,76 @@ void AboutInfo::init()
     lab->setPixmap(pix);
     // lab->setScaledContents(true);
 
-    auto& gridLayout = ui->gridLayout;
-//    QLayoutItem* item;
-//    while ((item = gridLayout->takeAt(0)) != nullptr) {
-//        QWidget* widget = item->widget();
-//        if (widget) {
-//            delete widget;
-//        };
-//        delete item;
-//    }
+    QString szEdition;
+    QString szVersion;
+#if defined(Q_OS_WIN)
+    QString edition = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
+    QString version = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
+    QString currentBuild = SYSINFO.getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
 
-    // gridLayout->setColumnStretch(0, 1);
-    // gridLayout->setColumnStretch(1, 2);
+    szEdition = edition;
+    szVersion = version + " " + currentBuild;
+#else
+    szEdition = QSysInfo::prettyProductName()
+    szVersion = QSysInfo::kernelVersion();
+#endif
 
-    ui->labSysteminfo->setFont(m_labFont);
-    ui->labSysteminfo->setText(SYSINFO.windowsVersionInfo());
+    QString grayCss = "QLabel { color : gray; }";
+    ui->labProject->setStyleSheet(grayCss);
+    ui->labBuildTime->setStyleSheet(grayCss);
+    ui->labBuildKits->setStyleSheet(grayCss);
+    ui->labQtVersion->setStyleSheet(grayCss);
+    ui->labEdition->setStyleSheet(grayCss);
+    ui->labVersion->setStyleSheet(grayCss);
+    ui->labMemory->setStyleSheet(grayCss);
+    ui->labCPU->setStyleSheet(grayCss);
 
-    // const auto& virGeomInfo = SYSINFO.virGeometryInfo();
-    // if (!virGeomInfo.isEmpty()) ui->labSysteminfo->setText(virGeomInfo.at(0));
+    ui->labProject->setText(QString("%1 %2").arg(XPROJECT_NAME).arg(XPROJECT_VERSION));
+    ui->labBuildTime->setText(XBUILD_TIME);
+    ui->labBuildKits->setText(QString("%1 %2").arg(XCOMPILER_ID).arg(XCOMPILER));
+    ui->labQtVersion->setText(QT_VERSION_STR);
+    ui->labEdition->setText(szEdition);
+    ui->labVersion->setText(szVersion);
+    ui->labMemory->setText(SYSINFO.getMemoryInfo());
+    ui->labCPU->setText(SYSINFO.getCPUInfo());
 
     insertLayout(SYSINFO.scrnsInfo());
 
     // connect(&DATAMAID, &DataMaid::sigLanguageChange, this, &AboutInfo::onLanguageChange);
     adjustSize();
     // onLanguageChange("");
+}
+
+const QString AboutInfo::getSystemInfo()
+{
+    QWidget* widgetSystemInfo = ui->widgetSystemInfo;
+    QString result;
+    QGridLayout* layout = qobject_cast<QGridLayout*>(widgetSystemInfo->layout());
+
+    if (!layout) {
+        return result;  // 如果不是 QGridLayout，则返回空字符串
+    }
+
+    int rows = layout->rowCount();
+    int cols = layout->columnCount();
+
+    for (int row = 0; row < rows; ++row) {
+        QStringList rowText;
+        for (int col = 0; col < cols; ++col) {
+            QLayoutItem* item = layout->itemAtPosition(row, col);
+            if (item) {
+                QLabel* label = qobject_cast<QLabel*>(item->widget());
+                if (label) {
+                    rowText << label->text();
+                }
+            }
+        }
+        if (!rowText.isEmpty()) {
+            result += rowText.join(" ") + "\n";
+        }
+    }
+
+    return result;
 }
 
 const QString AboutInfo::detailedInfo() const
@@ -154,7 +191,8 @@ const QString AboutInfo::detailedInfo() const
 
 void AboutInfo::on_pushButton_released()
 {
-    qApp->clipboard()->setText(detailedInfo());
+    const QString& text = getSystemInfo() +  "\n\n" + detailedInfo();
+    qApp->clipboard()->setText(text);
     close();
 }
 

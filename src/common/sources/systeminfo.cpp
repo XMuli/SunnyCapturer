@@ -46,57 +46,56 @@ const QStringList SystemInfo::detailedInfo() const
 }
 
 
-QString SystemInfo::windowsVersionInfo()
-{
-    QString ret;
+// QString SystemInfo::windowsVersionInfo()
+// {
+//     QString ret;
 
-    qInfo().noquote() << QString("bootUniqueId[%1]\n").arg(QSysInfo::bootUniqueId().data())
-                      << QString("buildAbi[%1]\n").arg(QSysInfo::buildAbi())
-                      << QString("buildCpuArchitecture[%1]\n").arg(QSysInfo::buildCpuArchitecture())
-                      << QString("currentCpuArchitecture[%1]\n").arg(QSysInfo::currentCpuArchitecture())
-                      << QString("kernelType[%1]\n").arg(QSysInfo::kernelType())
-                      << QString("kernelVersion[%1]\n").arg(QSysInfo::kernelVersion())
-                      << QString("machineHostName[%1]\n").arg(QSysInfo::machineHostName())
-                      << QString("machineUniqueId[%1]\n").arg(QSysInfo::machineUniqueId().data())
-                      << QString("prettyProductName[%1]\n").arg(QSysInfo::prettyProductName())
-                      << QString("productType[%1]\n").arg(QSysInfo::productType())
-                      << QString("productVersion[%1]\n").arg(QSysInfo::productVersion());
+//     qInfo().noquote() << QString("bootUniqueId[%1]\n").arg(QSysInfo::bootUniqueId().data())
+//                       << QString("buildAbi[%1]\n").arg(QSysInfo::buildAbi())
+//                       << QString("buildCpuArchitecture[%1]\n").arg(QSysInfo::buildCpuArchitecture())
+//                       << QString("currentCpuArchitecture[%1]\n").arg(QSysInfo::currentCpuArchitecture())
+//                       << QString("kernelType[%1]\n").arg(QSysInfo::kernelType())
+//                       << QString("kernelVersion[%1]\n").arg(QSysInfo::kernelVersion())
+//                       << QString("machineHostName[%1]\n").arg(QSysInfo::machineHostName())
+//                       << QString("machineUniqueId[%1]\n").arg(QSysInfo::machineUniqueId().data())
+//                       << QString("prettyProductName[%1]\n").arg(QSysInfo::prettyProductName())
+//                       << QString("productType[%1]\n").arg(QSysInfo::productType())
+//                       << QString("productVersion[%1]\n").arg(QSysInfo::productVersion());
 
-    QStringList lists;
-    lists << XPROJECT_NAME << XPROJECT_VERSION
-          << tr("Bulid Tits") << QString("%1 %2").arg(XCOMPILER_ID).arg(XARCH_BIT)
-          << tr("Operating System") << QString("%1").arg(QSysInfo::prettyProductName())
-          << tr("kernel") << QString("%1").arg(QSysInfo::kernelVersion());
-    qDebug() << lists;
+//     QStringList lists;
+//     lists << XPROJECT_NAME << XPROJECT_VERSION
+//           << tr("Bulid Tits") << QString("%1 %2").arg(XCOMPILER_ID).arg(XARCH_BIT)
+//           << tr("Operating System") << QString("%1").arg(QSysInfo::prettyProductName())
+//           << tr("kernel") << QString("%1").arg(QSysInfo::kernelVersion());
+//     qDebug() << lists;
 
-    const int fieldWidth = 20;
-    const QChar fillChar = ' ';
-    ret += QString(tr("Name: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XPROJECT_NAME).arg(XPROJECT_VERSION);
-    ret += QString(tr("Build Time: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(XBUILD_TIME);
-    ret += QString(tr("Build Kits: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XCOMPILER_ID).arg(XCOMPILER);
-    ret += QString(tr("Qt Version: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QT_VERSION_STR);
+//     const int fieldWidth = 20;
+//     const QChar fillChar = ' ';
+//     ret += QString(tr("Name: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XPROJECT_NAME).arg(XPROJECT_VERSION);
+//     ret += QString(tr("Build Time: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(XBUILD_TIME);
+//     ret += QString(tr("Build Kits: ")).leftJustified(fieldWidth, fillChar) + QString("%1 %2\n").arg(XCOMPILER_ID).arg(XCOMPILER);
+//     ret += QString(tr("Qt Version: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QT_VERSION_STR);
 
-#if defined(Q_OS_WIN)
-    // QString editionID = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "EditionID");     // Edition ID: "Professional"
-    QString edition = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
-    QString version = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
-    QString currentBuild = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
+// #if defined(Q_OS_WIN)
+//     QString edition = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName");     // Edition: "Windows 10 Pro"
+//     QString version = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");  // Version: "22H2"
+//     QString currentBuild = getRegistryValue("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
 
-    ret += QString(tr("Edition: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(edition);
-    ret += QString(tr("Version: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(version + " " + currentBuild);
-#else
-    ret += QString(tr("Operating System: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QSysInfo::prettyProductName());
-    ret += QString(tr("kernel: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(QSysInfo::kernelVersion());
-#endif
+//     ret += QString(tr("Edition: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(edition);
+//     ret += QString(tr("Version: ")).leftJustified(fieldWidth, fillChar)          + QString("%1\n").arg(version + " " + currentBuild);
+// #else
+//     ret += QString(tr("Operating System: ")).leftJustified(fieldWidth, fillChar) + QString("%1\n").arg(QSysInfo::prettyProductName());
+//     ret += QString(tr("kernel: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(QSysInfo::kernelVersion());
+// #endif
 
-    QString cpuInfo = getCPUInfo();          // CPU Info
-    QString memoryInfo = getMemoryInfo();    // Memory Info
-    ret += QString(tr("Memory: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(memoryInfo);
-    ret += QString(tr("CPU: ")).leftJustified(fieldWidth, fillChar)              + QString("%1\n").arg(cpuInfo);
+//     QString cpuInfo = getCPUInfo();          // CPU Info
+//     QString memoryInfo = getMemoryInfo();    // Memory Info
+//     ret += QString(tr("Memory: ")).leftJustified(fieldWidth, fillChar)           + QString("%1\n").arg(memoryInfo);
+//     ret += QString(tr("CPU: ")).leftJustified(fieldWidth, fillChar)              + QString("%1\n").arg(cpuInfo);
 
-    qDebug().noquote() << "ret:" << ret;
-    return ret;
-}
+//     qDebug().noquote() << "ret:" << ret;
+//     return ret;
+// }
 
 QStringList SystemInfo::scrnsInfo() const
 {

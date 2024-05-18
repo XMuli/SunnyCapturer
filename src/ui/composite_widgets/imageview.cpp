@@ -146,7 +146,7 @@ void ImageView::updateZoomLabel()
 
 void ImageView::onLoadImage(void)
 {
-    QString imageFile = QFileDialog::getOpenFileName(this, "Open Image", "./", tr("Images (*.png *.xpm *.jpg)"));
+    QString imageFile = QFileDialog::getOpenFileName(this, "Open Image", "./", tr("Images (*.png *.bpm *.jpg)"));
 
     QFile file(imageFile);
     if (!file.exists())

@@ -4,66 +4,84 @@
 <context>
     <name>About</name>
     <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Licenses</source>
         <translation>开源许可</translation>
-    </message>
-    <message>
-        <source>Version 1.0.0-msvc (yyyy.MM.dd)</source>
-        <translation>Version 1.0.0-msvc (yyyy.MM.dd)</translation>
     </message>
     <message>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Author: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;XMuli&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;作者: &lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;偕臧&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>System Info</source>
+        <translation>系统信息</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Feedback&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;反馈&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Website&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;官网&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;style&gt;a{text-decoration:none;color:black;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;版权所有 2023~2024 &lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;sunny.xmuli.tech&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Download&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;更新&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sunny&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:400;&quot;&gt;(64-bit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Author&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;作者&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Build Info</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussion &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translatorcomment>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;反饋: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;討論組 &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translatorcomment>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;反馈: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;讨论组 &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2023~2024 sunny.xmuli.tech</source>
+        <translation>版权所有 (C) 2023~2024 sunny.xmuli.tech</translation>
     </message>
 </context>
 <context>
     <name>AboutInfo</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source> Detailed</source>
-        <translation type="unfinished"></translation>
+        <translation> 详细</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <source>System Info</source>
+        <translation>系统信息</translation>
     </message>
-</context>
-<context>
-    <name>AbsSettingUI</name>
     <message>
-        <source>Form</source>
-        <translation></translation>
+        <source>CPU</source>
+        <translation>处理器</translation>
+    </message>
+    <message>
+        <source>Qt Version</source>
+        <translation>Qt 版本</translation>
+    </message>
+    <message>
+        <source>Edition</source>
+        <translation>版本</translation>
+    </message>
+    <message>
+        <source>Build Time</source>
+        <translation>构建时间</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>版本</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation>内存</translation>
+    </message>
+    <message>
+        <source>Build Kits</source>
+        <translation>构建套件</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>项目</translation>
     </message>
 </context>
 <context>
@@ -75,10 +93,6 @@
 </context>
 <context>
     <name>General</name>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
     <message>
         <source>Font:</source>
         <translation>界面字体:</translation>
@@ -107,10 +121,6 @@
 <context>
     <name>Hotkeys</name>
     <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Delay capture:</source>
         <translation>自定义截图:</translation>
     </message>
@@ -124,11 +134,11 @@
     </message>
     <message>
         <source>OCR:</source>
-        <translation type="unfinished"></translation>
+        <translation>提取文字:</translation>
     </message>
     <message>
         <source>Image translate:</source>
-        <translation type="unfinished"></translation>
+        <translation>图片翻译:</translation>
     </message>
 </context>
 <context>
@@ -146,35 +156,31 @@
     <name>ImageView</name>
     <message>
         <source>Load Image</source>
-        <translation type="unfinished"></translation>
+        <translation>加载图片</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>放大</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>缩小</translation>
     </message>
     <message>
         <source>Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>重置</translation>
     </message>
     <message>
         <source>Zoom: %1%</source>
-        <translation type="unfinished">缩放: %1%</translation>
+        <translation>缩放: %1%</translation>
     </message>
     <message>
-        <source>Images (*.png *.xpm *.jpg)</source>
-        <translation type="unfinished"></translation>
+        <source>Images (*.png *.bpm *.jpg)</source>
+        <translation>图片 (*.png *.bpm *.jpg)</translation>
     </message>
 </context>
 <context>
     <name>Interface</name>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
     <message>
         <source>Personalization</source>
         <translation>个性化</translation>
@@ -285,15 +291,11 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Your BaiDu [APIKey Or SecretKey] is empty, please check and re-enter it!</source>
-        <translation type="unfinished"></translation>
+        <translation>你的百度 [APIKey Or SecretKey] 为空，请检查后重试!</translation>
     </message>
 </context>
 <context>
     <name>Output</name>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
     <message>
         <source>Image quailty:</source>
         <translation>图像质量:</translation>
@@ -421,10 +423,6 @@ and specify -1 to let Sunny decide for you.</source>
 <context>
     <name>Pin</name>
     <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Maximum size:</source>
         <translation>默认最大窗口尺寸:</translation>
     </message>
@@ -446,10 +444,6 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Close</source>
         <translation>关闭</translation>
-    </message>
-    <message>
-        <source>Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)</source>
-        <translation>图片文件(*.png);;图片文件(*.jpg);;所有格式(*.*)</translation>
     </message>
     <message>
         <source>Save Files</source>
@@ -475,6 +469,10 @@ and specify -1 to let Sunny decide for you.</source>
         <source>Zoom: %1%</source>
         <translation>缩放: %1%</translation>
     </message>
+    <message>
+        <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
+        <translation>图片格式(*.png);;图片格式(*.jpg);;图片格式(*.jpeg);;图片格式(*.bmp);;图片格式(*.gif);;所有格式(*.*)</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -492,15 +490,11 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>主屏幕</translation>
     </message>
 </context>
 <context>
     <name>ResetUI</name>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
     <message>
         <source>Reset</source>
         <translation>重置</translation>
@@ -508,10 +502,6 @@ and specify -1 to let Sunny decide for you.</source>
 </context>
 <context>
     <name>ScreenShot</name>
-    <message>
-        <source>Image Files(*.png);;Image Files(*.jpg);;All Files(*.*)</source>
-        <translation>图片文件(*.png);;图片文件(*.jpg);;所有格式(*.*)</translation>
-    </message>
     <message>
         <source>Save Files</source>
         <translation>保存图片</translation>
@@ -531,6 +521,10 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Quick save feature is not enabled, please check.</source>
         <translation>快速保存功能未启用，请检查。</translation>
+    </message>
+    <message>
+        <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
+        <translation>图片格式(*.png);;图片格式(*.jpg);;图片格式(*.jpeg);;图片格式(*.bmp);;图片格式(*.gif);;所有格式(*.*)</translation>
     </message>
 </context>
 <context>
@@ -571,107 +565,51 @@ and specify -1 to let Sunny decide for you.</source>
 <context>
     <name>SystemInfo</name>
     <message>
-        <source>Bulid Tits</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kernel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Idx</source>
-        <translation type="unfinished"></translation>
+        <translation>序号</translation>
     </message>
     <message>
         <source>DevicePixelRatio</source>
-        <translation type="unfinished"></translation>
+        <translation>设备像素比</translation>
     </message>
     <message>
         <source>Logical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>逻辑 DPI</translation>
     </message>
     <message>
         <source>Physical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>物理 DPI</translation>
     </message>
     <message>
         <source>RefreshRate</source>
-        <translation type="unfinished"></translation>
+        <translation>刷新率</translation>
     </message>
     <message>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>可用区域</translation>
     </message>
     <message>
         <source>PhysicalSize</source>
-        <translation type="unfinished"></translation>
+        <translation>物理尺寸</translation>
     </message>
     <message>
         <source>VirtualGeometry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Build Time: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Build Kits: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Qt Version: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edition: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operating System: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kernel: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Memory: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CPU: </source>
-        <translation type="unfinished"></translation>
+        <translation>虚拟可用区域</translation>
     </message>
 </context>
 <context>
     <name>Tokens</name>
     <message>
-        <source>Form</source>
+        <source>APP ID:</source>
         <translation></translation>
     </message>
     <message>
-        <source>APP ID:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Secret Key:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Channel</source>
@@ -695,7 +633,7 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>Next Page</source>
-        <translation type="unfinished"></translation>
+        <translation>下一页</translation>
     </message>
     <message>
         <source>high location</source>
@@ -742,72 +680,88 @@ and specify -1 to let Sunny decide for you.</source>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished">关于</translation>
+        <translation>关于</translation>
+    </message>
+    <message>
+        <source>Screenshot</source>
+        <translation>截图</translation>
+    </message>
+    <message>
+        <source>Delay Capture</source>
+        <translation>延迟截图</translation>
+    </message>
+    <message>
+        <source>Custom Capture</source>
+        <translation>自定义截图</translation>
+    </message>
+    <message>
+        <source>OCR Capture</source>
+        <translation>OCR截图</translation>
+    </message>
+    <message>
+        <source>Image Translate Capture</source>
+        <translation>图片翻译截图</translation>
     </message>
 </context>
 <context>
     <name>XMagnifyingGlass</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; to copy color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;按 &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; 复制颜色值&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; to Switch betten RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;按 &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; 切换 RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>(%1, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>XMonitorLabel</name>
     <message>
         <source>Idx</source>
-        <translation type="unfinished"></translation>
+        <translation>序号</translation>
     </message>
     <message>
         <source>DevicePixelRatio</source>
-        <translation type="unfinished"></translation>
+        <translation>设备像素比</translation>
     </message>
     <message>
         <source>Logical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>逻辑 DPI</translation>
     </message>
     <message>
         <source>Physical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>物理 DPI</translation>
     </message>
     <message>
         <source>RefreshRate</source>
-        <translation type="unfinished"></translation>
+        <translation>刷新率</translation>
     </message>
     <message>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>可用区域</translation>
     </message>
     <message>
         <source>PhysicalSize</source>
-        <translation type="unfinished"></translation>
+        <translation>物理尺寸</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>主屏幕</translation>
     </message>
 </context>
 <context>
     <name>XOcrWidget</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
+        <source>OCR</source>
+        <translation>OCR</translation>
     </message>
 </context>
 </TS>

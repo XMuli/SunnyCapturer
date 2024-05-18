@@ -16,7 +16,7 @@ class SystemInfo : public QObject, public ISingleton<SystemInfo>
 public:
     const QStringList detailedInfo() const;
 
-    QString windowsVersionInfo();
+    // QString windowsVersionInfo();
 
     QStringList scrnsInfo() const;
     QString virGeometryInfo() const;

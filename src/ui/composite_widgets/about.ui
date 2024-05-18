@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
@@ -47,7 +47,7 @@
          <string notr="true"/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../../resources.qrc">:/resources/logo/logo.svg</pixmap>
+         <pixmap>:/resources/logo/logo.svg</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -134,15 +134,25 @@
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="labVersion">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>version 1.0.0-msvc (yyyy.MM.dd)</string>
+      <string notr="true">Version 1.0.0-msvc (yyyy.MM.dd)</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="labCopyright">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>copyright (C) 2023~2024 sunny.xmuli.tech</string>
+      <string>Copyright (C) 2023~2024 sunny.xmuli.tech</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -237,8 +247,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <property name="spacing">
@@ -56,7 +56,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../resources.qrc">
+         <iconset>
           <normaloff>:/resources/icons/setting/infomation.svg</normaloff>:/resources/icons/setting/infomation.svg</iconset>
         </property>
         <property name="autoRepeat">
@@ -89,8 +89,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
