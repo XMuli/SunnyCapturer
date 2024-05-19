@@ -84,11 +84,40 @@ void Tray::init()
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() { onLanguageChange("");});
     connect(&COMM, &Communication::sigShowSystemMessagebox, this, &Tray::onShowSystemMessagebox);
 
-
-
 #ifdef Q_OS_WIN  // Ensure proper removal of tray icon when program quits on Windows.
     connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
 #endif
+
+    m_dbAnalytics.sendData("start");
+}
+
+// // 是否满足发送时间： 时间至少属于第二天就行
+const bool Tray::isSendUserData()
+{
+    QString format = "yyyy-MM-dd HH:mm:ss";
+    QString lastTimeStr = CJ_GET_QSTR("advanced.non_ui_user_experience.time");
+    if (lastTimeStr.isEmpty())  // 如果 lastTimeStr 为空，直接返回 true
+        return true;
+
+    // 获取当前时间的QDateTime对象
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QDateTime lastDateTime = QDateTime::fromString(lastTimeStr, format);
+
+    // 检查解析是否成功
+    if (!lastDateTime.isValid()) {
+        qWarning() << "Invalid date format.";
+        return false;
+    }
+
+    // 计算日期差异
+    QDate lastDate = lastDateTime.date();
+    QDate currentDate = currentDateTime.date();
+
+    // 检查当前时间是否已经跨过了第二天的00:00
+    if (currentDate > lastDate)
+        return true;
+
+    return false;
 }
 
 void Tray::loadCustomQss(const QString &path)
@@ -181,6 +210,9 @@ void Tray::capture(const HotKeyType &type)
     if (m_scrnShot->actionType() == ActionType::AT_picking_detection_windows_rect)
         m_scrnShot->startEnumWindowsRect();
     m_scrnShot->showMagnifyingGlass();
+
+    if (isSendUserData())
+        m_dbAnalytics.sendData(hotKeyTypeToString(type).toStdString().data());
 }
 
 void Tray::onCapture()

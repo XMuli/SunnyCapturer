@@ -13,10 +13,10 @@ class DbAnalytics : public QObject {
 
 public:
     explicit DbAnalytics(QObject *parent = nullptr);
-    void sendData();
+    void sendData(const QString& mark = "");
 
 private slots:
-    const json creatorData();
+    const json creatorData(const QString& mark = "");
     QString getMotherboardUUID();
     void onReplyFinished(QNetworkReply *reply);
     void onErrorOccurred(QNetworkReply::NetworkError code);

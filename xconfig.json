@@ -88,7 +88,8 @@
         },
         "non_ui_user_experience": {
             "ocr_splitter_left": 3,
-            "ocr_splitter_right": 1
+            "ocr_splitter_right": 1,
+			"time": ""
         },
         "develpe_enginner": {
             "save_image_with_detail": false

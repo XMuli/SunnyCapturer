@@ -106,7 +106,8 @@ ordered_json ConfigJson::defaultConfigJson()
                                                      }},
                          { "non_ui_user_experience", {                                                            // 用户体验，不需要用户设置的
                                                            {"ocr_splitter_left", 3},                              // ocr 左侧图片比例
-                                                           {"ocr_splitter_right", 1}                              // ocr 右侧提取文字的比例
+                                                           {"ocr_splitter_right", 1},                              // ocr 右侧提取文字的比例
+                                                           {"time", ""},                                           // 数据上报时间
                                                        }
                          },
                          {"develpe_enginner", {

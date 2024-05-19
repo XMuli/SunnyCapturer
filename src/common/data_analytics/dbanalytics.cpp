@@ -4,16 +4,20 @@
 #include <QGuiApplication>
 #include <QDebug>
 #include <QFile>
+#include <QDateTime>
+#include <QString>
+#include <QDebug>
 #include <QProcess>
 #include "systeminfo.h"
 #include "../../data/configjson.h"
+
 
 DbAnalytics::DbAnalytics(QObject *parent) : QObject(parent) {
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &DbAnalytics::onReplyFinished);
 }
 
-void DbAnalytics::sendData() {
+void DbAnalytics::sendData(const QString& mark) {
     QString urlString = "https://47.110.40.198:5000/add_data";
     // QString urlString = "https://127.0.0.1:5000/add_data";
     QNetworkRequest request;
@@ -26,13 +30,16 @@ void DbAnalytics::sendData() {
     // sslConfig.setProtocol(QSsl::TlsV1_2);
     request.setSslConfiguration(sslConfig);
 
-    json data = creatorData();
+    json data = creatorData(mark);
     QByteArray jsonData = QByteArray::fromStdString(data.dump());
     QNetworkReply *reply = manager->post(request, jsonData);
     connect(reply, &QNetworkReply::errorOccurred, this, &DbAnalytics::onErrorOccurred);
+
+    QString format = "yyyy-MM-dd HH:mm:ss";
+    CJ_SET("advanced.non_ui_user_experience.time", QDateTime::currentDateTime().toString(format).toStdString());
 }
 
-const json DbAnalytics::creatorData()
+const json DbAnalytics::creatorData(const QString& mark)
 {
     auto rectToString = [](const QRect &rect) -> QString { return QString("(%1, %2 %3x%4)").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());};
 
@@ -90,7 +97,7 @@ const json DbAnalytics::creatorData()
     data["physical_dpi"] = priScren ? int(priScren->physicalDotsPerInch()) : 0;
     data["refresh_rate"] = priScren ? int(priScren->refreshRate()) : 0;
     data["physical_size"] = physicalSizeF.isValid() ?  physical_size.toStdString().data() : "";
-    data["mark"] = "";
+    data["mark"] = mark.toStdString().data();
     return data;
 }
 

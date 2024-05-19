@@ -1250,7 +1250,17 @@ void ScreenShot::rectNodesMapFromGlobal()
 void ScreenShot::firstRectNodesAssignmentNode()
 {
     if (m_rectNodes.size() == 0) return;
-    const auto& it = m_rectNodes.at(CJ_GET("advanced.customize_ui_parameters.auto_detection_windows_rect_top_level").get<bool>() ? 0 : m_rectNodes.size() - 1);
+
+    int level = 0;
+    const bool& bTopLevel = CJ_GET("advanced.customize_ui_parameters.auto_detection_windows_rect_top_level").get<bool>();
+#ifdef Q_OS_WIN
+    level = bTopLevel ? 0 : m_rectNodes.size() - 1;
+#elif defined(Q_OS_LINUX)
+    level = bTopLevel ? m_rectNodes.size() - 1 : 0;
+#elif defined(Q_OS_MAC)
+#endif
+
+    const auto& it = m_rectNodes.at(level);
     const auto& relativelyRect = xrectToQRect(it.relativelyRect);
 
     m_node.p1 = relativelyRect.topLeft();

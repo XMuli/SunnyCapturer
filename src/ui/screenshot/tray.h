@@ -14,6 +14,7 @@
 #include "screenshot.h"
 #include "tips.h"
 #include "../setting/sidesettingui.h"
+#include "../../common/data_analytics/dbanalytics.h"
 #include "../../common/google_analytics4/ganalytics4.h"
 #include "../../common/google_analytics4/google_geographic/googlegeo.h"
 
@@ -40,6 +41,7 @@ public slots:
 
 private:
     void init();
+    const bool isSendUserData();
 
 public:
     static Tray &instance() {
@@ -64,6 +66,7 @@ private:
     QPointer<Tips>                   m_countdownTips;  // 倒计时预览
     QPointer<QTimer>                 m_timerDelay;
     double                           m_remainingSeconds;
+    DbAnalytics                      m_dbAnalytics;
     // GoogleGeo*                       m_googleGeo;
 };
 

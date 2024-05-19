@@ -7,45 +7,42 @@
 #include <QCoreApplication>
 #include <QSystemSemaphore>
 #include <QSharedMemory>
+#include <QDir>
 #include <QDebug>
 #include "xapphelper.h"
 #include "ui/commom/ocr/networkocr.h"
-
-//#include "xlog.h"
+#include "xlog.h"
 #include "ui/screenshot/tray.h"
-//#include "xapphelper.h"
+#include "xapphelper.h"
 
 // test
-#include "data/configjson.h"
-#include <QCoreApplication>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QHttpMultiPart>
-#include <QHttpPart>
-#include <QUrlQuery>
-#include <QCoreApplication>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QHttpMultiPart>
-#include <QHttpPart>
-#include <QDebug>
-#include <QHttpMultiPart>
-#include <QHttpPart>
-#include <QUrl>
-#include "xlog.h"
-#include "aboutinfo.h"
-#include "xmonitorlabel.h"
-
-#include "common/google_analytics4/google_geographic/googlegeo.h"
-#include "common/google_analytics4/ganalytics4.h"
-
-
-#include "common/data_analytics/dbanalytics.h"
+// #include "data/configjson.h"
+// #include <QCoreApplication>
+// #include <QNetworkAccessManager>
+// #include <QNetworkRequest>
+// #include <QNetworkReply>
+// #include <QFile>
+// #include <QJsonDocument>
+// #include <QJsonObject>
+// #include <QHttpMultiPart>
+// #include <QHttpPart>
+// #include <QUrlQuery>
+// #include <QCoreApplication>
+// #include <QNetworkAccessManager>
+// #include <QNetworkRequest>
+// #include <QNetworkReply>
+// #include <QHttpMultiPart>
+// #include <QHttpPart>
+// #include <QDebug>
+// #include <QHttpMultiPart>
+// #include <QHttpPart>
+// #include <QUrl>
+// #include "xlog.h"
+// #include "aboutinfo.h"
+// #include "xmonitorlabel.h"
+// #include "common/google_analytics4/google_geographic/googlegeo.h"
+// #include "common/google_analytics4/ganalytics4.h"
+// #include "common/data_analytics/dbanalytics.h"
 #include "easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
@@ -113,10 +110,6 @@ int main(int argc, char* argv[])
 
     COMM.loadTranslation("");
     TRAY; // 启动托盘
-
-    DbAnalytics dbAnalytics;
-    dbAnalytics.sendData();
-
 
     // XColorPicker* colorPicker = new XColorPicker();
     // colorPicker->setWindowOpacity(0.75);
