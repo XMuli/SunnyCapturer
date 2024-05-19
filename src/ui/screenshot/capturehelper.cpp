@@ -388,13 +388,11 @@ void drawShape(const PaintNode &paintNode, QPainter &pa, const bool &isFinishScr
             const QRect rect(topLeft, image.size());
             pa.drawImage(rect, image);
 
-            static int i = 0;
-            image.save(QString("D:/textedit_%1.png").arg(i++));
-            qDebug() << "--->" << edit->rect() << doc->size() << image.rect() << rect << edit->toPlainText()
-                     << edit->mapToParent(QPoint(0,0))
-                     << edit->mapToGlobal(QPoint(0,0));
-
-
+            // static int i = 0;
+            // image.save(QString("D:/textedit_%1.png").arg(i++));
+            // qDebug() << "--->" << edit->rect() << doc->size() << image.rect() << rect << edit->toPlainText()
+            //          << edit->mapToParent(QPoint(0,0))
+            //          << edit->mapToGlobal(QPoint(0,0));
         }
     } else if (paintNode.pst == PaintShapeType::PST_serial) {
         QString str;

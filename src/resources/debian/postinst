@@ -50,7 +50,7 @@ for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
         fi
 
         # 打印文件权限
-        ls -l "$TARGET_DIR/$BASENAME"
+        # ls -l "$TARGET_DIR/$BASENAME"
     else
         echo "File $CONFIG_FILE does not exist, skipping."
     fi

@@ -1237,13 +1237,14 @@ void ScreenShot::prinftWindowsRects(QPainter& pa)
 
 void ScreenShot::rectNodesMapFromGlobal()
 {
+    const double& dpr = qGuiApp->primaryScreen()->devicePixelRatio();
     for (auto& it : m_rectNodes) {
         const auto& rect = xrectToQRect(it.rect);
         const auto& topLeft = mapFromGlobal(rect.topLeft());
-        it.relativelyRect.left = topLeft.x();
-        it.relativelyRect.top = topLeft.y();
-        it.relativelyRect.right = topLeft.x() + rect.width();
-        it.relativelyRect.bottom = topLeft.y() + rect.height();
+        it.relativelyRect.left = topLeft.x() / dpr;
+        it.relativelyRect.top = topLeft.y() / dpr;
+        it.relativelyRect.right = (topLeft.x() + rect.width()) / dpr;
+        it.relativelyRect.bottom = (topLeft.y() + rect.height()) / dpr;
     }
 }
 
