@@ -101,7 +101,10 @@ int main(int argc, char* argv[])
     }
 
 
-//    CJ.initPrepare();
+#if defined (Q_OS_LINUX)
+    CJ.initPrepare();
+#endif
+
     CJ.readFromFile();
     CJ.initOutputDefaulValue(); // 完整的 m_j = 读取 .josn + 填充为空 path 的一些路径
     CJ.writeToFile(); // 写入完整的 m_j

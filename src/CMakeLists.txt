@@ -498,14 +498,14 @@ elseif (UNIX)
     # 在 openKylin 1.0.1 1.0.2 系统下有些不一样，其值是 /usr/lib64，运行失败找不到库，解决方案需要将其替换，一共三处 ${CMAKE_INSTALL_LIBDIR} → "/usr/lib"
     # install /usr/lib/libWindowsRect.so
     install (FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libWindowsRect.so
-             DESTINATION ${CMAKE_INSTALL_LIBDIR}
+             DESTINATION "/usr/lib"           # "/usr/lib" -> ${CMAKE_INSTALL_LIBDIR}  一共三处
              )
     # [/usr/bin] -------------------------
     # install /usr/bin/Sunny
     install (TARGETS ${project_name}
              RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Devel
+             LIBRARY DESTINATION "/usr/lib"
+             ARCHIVE DESTINATION "/usr/lib" COMPONENT Devel
              )
 
     message("---------->:" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.so)
@@ -525,11 +525,12 @@ elseif (UNIX)
     set(CPACK_PACKAGE_VENDOR "https://github.com/XMuli")
     set(CPACK_PACKAGE_CONTACT "https://sunny.xmuli.tech")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "XMuli <xmulitech@gmail.com>")         # 设置维护者信息
-    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Sunny is simple and beautiful screenshot software with OCR and image translation; supports Windows, MacOS and Linux.")
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple and beautiful screenshot software that supports Windows, macOS, and Linux. It also supports OCR and image translation features.")
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}")
 
     # 指定 post-install 脚本文件;  ~/.config/Sunny 文件夹删除 → postinst-安装时删除;  postrm-卸载时删除
-    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postinst;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm")
+    # set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postinst;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm")
+    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm")
 
     # 设置Debian软件包的依赖关系
     set(CPACK_DEBIAN_PACKAGE_SHILIBDEPS ON)

@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QCryptographicHash>
 #include <QDir>
+#include <QVersionNumber>
 #include "qaesencryption.h"
 
 ordered_json ConfigJson::defaultConfigJson()
@@ -105,9 +106,10 @@ ordered_json ConfigJson::defaultConfigJson()
                                                          {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"}
                                                      }},
                          { "non_ui_user_experience", {                                                            // 用户体验，不需要用户设置的
+                                                           {"version", "1.6.2"},                                  // 当前的版本号
                                                            {"ocr_splitter_left", 3},                              // ocr 左侧图片比例
-                                                           {"ocr_splitter_right", 1},                              // ocr 右侧提取文字的比例
-                                                           {"time", ""},                                           // 数据上报时间
+                                                           {"ocr_splitter_right", 1},                             // ocr 右侧提取文字的比例
+                                                           {"time", ""}                                          // 数据上报时间
                                                        }
                          },
                          {"develpe_enginner", {
@@ -278,6 +280,18 @@ ConfigJson::ConfigJson(QObject *parent)
     m_jFilePath = xconfigDir + "/xconfig.json";
 }
 
+void ConfigJson::createDefaultConfigInLinux()
+{
+    const QString& str = QFileInfo(m_jFilePath).dir().path();
+    QDir dir(str);
+    dir.removeRecursively();  // 删除目录及其所有内容
+    dir.mkpath(str);          // 仅新创建文件夹
+
+    m_j = defaultConfigJson();
+    writeToFile();
+    m_j.clear();
+}
+
 
 void cdWritToFile(ContextData &cd)
 {
@@ -411,17 +425,30 @@ void ConfigJson::initJsonToFile()
     }
 }
 
+// first time init  xconfig.json write to linux "~/.config/Sunny"
 void ConfigJson::initPrepare()
 {
-    const QString& dir = QFileInfo(m_jFilePath).dir().path();
-    QDir().mkpath(dir );            // 确保路径存在，不存在就创建
-    QDir().mkpath(dir + "/logs");
+    bool needDefaultConfig = false; // 是否需要创建默认配置
 
-// #if defined (Q_OS_LINUX)   // fitst time init  xconfig.json write to linux "~/.config/Sunny"
-    if (!QFile::exists(m_jFilePath)) {
-        m_j = defaultConfigJson();
-        writeToFile();
+    if (QFile::exists(m_jFilePath)) {   // 有旧的配置文件
+
+        readFromFile();
+        auto j = CJ_GET("advanced.non_ui_user_experience.version");
+        if (j.empty()) {
+            needDefaultConfig = true; // 配置文件为空，需要创建默认配置
+        } else {
+            QVersionNumber vJson = QVersionNumber::fromString(QString::fromStdString(j.get<std::string>()));
+            QVersionNumber vSoft = QVersionNumber::fromString(QString(XPROJECT_VERSION));
+            if (vJson < vSoft) {
+                needDefaultConfig = true; // 配置文件版本低于当前软件版本，需要创建默认配置
+            }
+        }
+
         m_j.clear();
+    } else {
+        needDefaultConfig = true; // 没有配置文件，需要创建默认配置
     }
-// #endif
+
+    if (needDefaultConfig)
+        createDefaultConfigInLinux();
 }

@@ -87,6 +87,7 @@
             "crosshair_iridescence": "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"
         },
         "non_ui_user_experience": {
+			"version": "1.6.2",
             "ocr_splitter_left": 3,
             "ocr_splitter_right": 1,
 			"time": ""

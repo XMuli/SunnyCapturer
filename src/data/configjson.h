@@ -104,7 +104,8 @@ public:
    ContextData m_cd;           // 初始工具栏的状态  -> 当关闭时刻，需要写入一边到文本保存？; 可写也可以不写。嘎
 
 private:
-   ordered_json m_j;
+    void createDefaultConfigInLinux();
+    ordered_json m_j;
     explicit ConfigJson(QObject *parent = nullptr);
     virtual ~ConfigJson() = default;
 
