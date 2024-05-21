@@ -13,74 +13,74 @@
     </message>
     <message>
         <source>System Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações do sistema</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Website&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Site Web&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Download&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Download&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Author&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Autor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussion &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Questões&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussão &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Copyright (C) 2023~2024 sunny.xmuli.tech</source>
-        <translation type="unfinished"></translation>
+        <translation>Direitos autorais (C) 2023~2024 sunny.xmuli.tech</translation>
     </message>
 </context>
 <context>
     <name>AboutInfo</name>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source> Detailed</source>
-        <translation type="unfinished"></translation>
+        <translation>Detalhes</translation>
     </message>
     <message>
         <source>System Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações do Sistema</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Qt Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão Qt</translation>
     </message>
     <message>
         <source>Edition</source>
-        <translation type="unfinished"></translation>
+        <translation>Edição</translation>
     </message>
     <message>
         <source>Build Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo de Construção</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished">Versão</translation>
+        <translation>Versão</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Memória</translation>
     </message>
     <message>
         <source>Build Kits</source>
-        <translation type="unfinished"></translation>
+        <translation>Kits de Construção</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeto</translation>
     </message>
 </context>
 <context>
@@ -133,11 +133,11 @@
     </message>
     <message>
         <source>OCR:</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR:</translation>
     </message>
     <message>
         <source>Image translate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradutor de imagem:</translation>
     </message>
 </context>
 <context>
@@ -148,34 +148,34 @@
     </message>
     <message>
         <source>Image Translation</source>
-        <translation>Tradução de imagens</translation>
+        <translation>Tradutor de Imagem</translation>
     </message>
 </context>
 <context>
     <name>ImageView</name>
     <message>
         <source>Load Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregar Imagem</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Reduzir</translation>
     </message>
     <message>
         <source>Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Predefinido</translation>
     </message>
     <message>
         <source>Zoom: %1%</source>
-        <translation type="unfinished">Ampliar: %1%</translation>
+        <translation>Ampliar: %1%</translation>
     </message>
     <message>
         <source>Images (*.png *.bpm *.jpg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagens (*.png *.bpm *.jpg)</translation>
     </message>
 </context>
 <context>
@@ -281,7 +281,8 @@
     <message>
         <source>
 Reason Phrase: </source>
-        <translation>Frase de Razão</translation>
+        <translation>
+Frase de Razão: </translation>
     </message>
     <message>
         <source>Warning</source>
@@ -383,7 +384,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Serial</source>
-        <translation>Serial</translation>
+        <translation>Contador</translation>
     </message>
     <message>
         <source>Pin to screen</source>
@@ -433,7 +434,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     <name>PinWidget</name>
     <message>
         <source>Form</source>
-        <translation>Widget de fixação</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -461,7 +462,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Save Files</source>
-        <translation>Salvar arquivos</translation>
+        <translation>Salvar Arquivos</translation>
     </message>
     <message>
         <source>Zoom: %1%</source>
@@ -469,14 +470,14 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos de Iimagem(*.png);;Arquivos de Iimagem(*.jpg);;Arquivos de Iimagem(*.jpeg);;Arquivos de Iimagem(*.bmp);;Arquivos de Iimagem(*.gif);;Todos os Arquivos(*.*)</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>CRASH</source>
-        <translation>Crash</translation>
+        <translation>FALHA</translation>
     </message>
     <message>
         <source>Horizontal</source>
@@ -488,7 +489,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>Primário</translation>
     </message>
 </context>
 <context>
@@ -502,7 +503,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     <name>ScreenShot</name>
     <message>
         <source>Save Files</source>
-        <translation>Salvar arquivos</translation>
+        <translation>Salvar Arquivos</translation>
     </message>
     <message>
         <source>Success</source>
@@ -522,7 +523,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos de imagem(*.png);;Arquivos de imagem(*.jpg);;Arquivos de imagem(*.jpeg);;Arquivos de imagem(*.bmp);;Arquivos de imagem(*.gif);;Todos os Arquivos(*.*)</translation>
     </message>
 </context>
 <context>
@@ -564,35 +565,35 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     <name>SystemInfo</name>
     <message>
         <source>Idx</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificador X</translation>
     </message>
     <message>
         <source>DevicePixelRatio</source>
-        <translation type="unfinished"></translation>
+        <translation>Proporção de pixels do dispositivo</translation>
     </message>
     <message>
         <source>Logical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI Lógico</translation>
     </message>
     <message>
         <source>Physical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI Físico</translation>
     </message>
     <message>
         <source>RefreshRate</source>
-        <translation type="unfinished"></translation>
+        <translation>Taxa de Atualização</translation>
     </message>
     <message>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometria</translation>
     </message>
     <message>
         <source>PhysicalSize</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho Físico</translation>
     </message>
     <message>
         <source>VirtualGeometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometria Virtual</translation>
     </message>
 </context>
 <context>
@@ -603,7 +604,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Secret Key:</source>
-        <translation>Chave secreta:</translation>
+        <translation>Chave Secreta:</translation>
     </message>
     <message>
         <source>API Key:</source>
@@ -619,7 +620,7 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Image Translate：</source>
-        <translation>Tradução de imagens:</translation>
+        <translation>Tradução de Imagens:</translation>
     </message>
     <message>
         <source>BaiDu</source>
@@ -631,31 +632,31 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Next Page</source>
-        <translation>Próxima página</translation>
+        <translation>Próxima Página</translation>
     </message>
     <message>
         <source>high location</source>
-        <translation type="unfinished"></translation>
+        <translation>localização alta</translation>
     </message>
     <message>
         <source>standard location</source>
-        <translation type="unfinished"></translation>
+        <translation>localização padrão</translation>
     </message>
     <message>
         <source>high</source>
-        <translation type="unfinished"></translation>
+        <translation>alta</translation>
     </message>
     <message>
         <source>standard</source>
-        <translation type="unfinished"></translation>
+        <translation>padrão</translation>
     </message>
     <message>
         <source>baidu</source>
-        <translation type="unfinished"></translation>
+        <translation>baidu</translation>
     </message>
     <message>
         <source>youdao</source>
-        <translation type="unfinished"></translation>
+        <translation>youdao</translation>
     </message>
 </context>
 <context>
@@ -678,88 +679,88 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished">Sobre</translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <source>Screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Captura de Tela</translation>
     </message>
     <message>
         <source>Delay Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Captura Atrasada</translation>
     </message>
     <message>
         <source>Custom Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Captura Personalizada</translation>
     </message>
     <message>
         <source>OCR Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Captura OCR</translation>
     </message>
     <message>
         <source>Image Translate Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradutor</translation>
     </message>
 </context>
 <context>
     <name>XMagnifyingGlass</name>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Rótulo do Texto</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; to copy color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pressione &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; para copiar a cor&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; to Switch betten RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pressione &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; para alternar entre RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>(%1, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>(%1, %2)</translation>
     </message>
 </context>
 <context>
     <name>XMonitorLabel</name>
     <message>
         <source>Idx</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificador X</translation>
     </message>
     <message>
         <source>DevicePixelRatio</source>
-        <translation type="unfinished"></translation>
+        <translation>Proporção de pixels do dispositivo</translation>
     </message>
     <message>
         <source>Logical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI Lógico</translation>
     </message>
     <message>
         <source>Physical DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI Físico</translation>
     </message>
     <message>
         <source>RefreshRate</source>
-        <translation type="unfinished"></translation>
+        <translation>Taxa de Atualização</translation>
     </message>
     <message>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometria</translation>
     </message>
     <message>
         <source>PhysicalSize</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho Físico</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>Primário</translation>
     </message>
 </context>
 <context>
     <name>XOcrWidget</name>
     <message>
         <source>OCR</source>
-        <translation type="unfinished">OCR</translation>
+        <translation>OCR</translation>
     </message>
 </context>
 </TS>
