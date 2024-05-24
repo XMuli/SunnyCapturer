@@ -3,7 +3,11 @@ A screenshot tool, and to achieve the function of the general module encapsulati
 
 
 
+
 ```bash
+find ./ -type f -exec dos2unix {} \;        # 转 LF Linux
+find . -type f -exec unix2dos {} \;         # 转 CRLF windows
+
 # ****************** Linux 安装 qt5.15.x 环境和编译打包 .deb ******************
 sudo apt update
 sudo apt install git cmake gcc g++ wget tar dh-make lintian devscripts dos2unix   

@@ -177,10 +177,16 @@ QRect largestRect(const QRect &rect, const QPoint &pt)
 
 QRect largestRect(const QPoint &p1, const QPoint &p2, const QPoint &pt)
 {
-    const int& left = qMin(qMin(p1.x(), p2.x()), pt.x());
-    const int& right = qMax(qMax(p1.x(), p2.x()), pt.x());
-    const int& top = qMin(qMin(p1.y(), p2.y()), pt.y());
-    const int& bottom = qMax(qMax(p1.y(), p2.y()), pt.y());
+    // fix: #26 linux 中 debug，release, 使用 qMin(qMin, x) 这中形式会返回错误数值；
+//    const int& left = qMin(qMin(p1.x(), p2.x()), pt.x());
+//    const int& right = qMax(qMax(p1.x(), p2.x()), pt.x());
+//    const int& top = qMin(qMin(p1.y(), p2.y()), pt.y());
+//    const int& bottom = qMax(qMax(p1.y(), p2.y()), pt.y());
+
+    const int& left = std::min({p1.x(), p2.x(), pt.x()});
+    const int& right = std::max({p1.x(), p2.x(), pt.x()});
+    const int& top = std::min({p1.y(), p2.y(), pt.y()});
+    const int& bottom = std::max({p1.y(), p2.y(), pt.y()});
     return QRect(QPoint(left, top), QPoint(right, bottom));
 }
 
