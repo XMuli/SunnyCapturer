@@ -35,7 +35,6 @@ public slots:
     void onCountdownTips();
     void onLanguageChange(const QString qmName);
     void onShowSystemMessagebox(const QString &title, const QString &msg, const int &msecs = 6000); // 系统消息通知
-    // void onRecvGeoInfo(const GeoInfo& geoInfo);
 
 private:
     void init();
@@ -65,7 +64,6 @@ private:
     QPointer<QTimer>                 m_timerDelay;
     double                           m_remainingSeconds;
     DbAnalytics                      m_dbAnalytics;
-    // GoogleGeo*                       m_googleGeo;
 };
 
 #endif // TRAY_H
