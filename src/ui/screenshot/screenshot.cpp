@@ -140,7 +140,7 @@ void ScreenShot::showMagnifyingGlass()
     const bool b1 = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
     if (b1) {
         showCustomWidget(m_magnifyingGlass);
-        m_magnifyingGlass->setPixmap(QCursor::pos());
+        m_magnifyingGlass->setPixmap(QCursor::pos(), m_origPix);
     } else {
         m_magnifyingGlass->hide();
     }

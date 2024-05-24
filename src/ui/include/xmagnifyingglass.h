@@ -21,7 +21,7 @@ class XMagnifyingGlass : public QWidget
 public:
     explicit XMagnifyingGlass(QWidget *parent = nullptr);
     ~XMagnifyingGlass();
-    void setPixmap(const QPoint& pt);   // MagnifyingGlass
+    void setPixmap(const QPoint& pt, const QPixmap& origPix);   // MagnifyingGlass
     bool bHex() const;
     void setBHex(const bool& newBHex);
     const QString colorString() const;

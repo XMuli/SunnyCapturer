@@ -47,14 +47,23 @@ XMagnifyingGlass::~XMagnifyingGlass()
     delete ui;
 }
 
-void XMagnifyingGlass::setPixmap(const QPoint &pt)
+void XMagnifyingGlass::setPixmap(const QPoint &pt, const QPixmap& origPix)
 {
+
     const double& dpr = qGuiApp->primaryScreen()->devicePixelRatio();
 //    QRect rt = QRect(rect.topLeft() * dpr, rect.size() * dpr);
-
     const int rX = 12;  // 宽、高的一半
     const int rY = 9;   // 太大则会将其放大镜部分左上角也截图上来
+
+#if 1
+    // fix: 使用十字线被遮盖
+    if (origPix.isNull()) return;
+    QPixmap pix = origPix.copy(pt.x() - rX, pt.y() - rY, 2 * rX, 2 * rY);
+#else
+    // 最佳实现方式，占用最小
     QPixmap pix = qGuiApp->primaryScreen()->grabWindow(qApp->desktop()->winId(), pt.x() - rX, pt.y() - rY, 2 * rX, 2 * rY);
+#endif
+
     QLabel* lab = ui->labPixmap;
 
     const QScreen* screen = QGuiApplication::screenAt(QCursor::pos());

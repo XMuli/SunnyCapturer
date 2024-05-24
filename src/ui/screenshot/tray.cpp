@@ -46,27 +46,7 @@ void Tray::init()
 #endif
 
     m_trayIcon->setIcon(QIcon(":/resources/logo/logo" + suffix));
-    const auto& text = QString("%1 %2\n"
-                               "%3: %4\n"
-                               "%5: %6\n"
-                               "%7: %8\n"
-                               "%9: %10\n"
-                               "%11: %12\n")
-                           .arg(XPROJECT_NAME)
-                           .arg(tr("Screenshot"))
-                           .arg(tr("Capture"))
-                           .arg(CJ_GET_QSTR("hotkeys.capture"))
-                           .arg(tr("Delay Capture"))
-                           .arg(CJ_GET_QSTR("hotkeys.delay_capture"))
-                           .arg(tr("Custom Capture"))
-                           .arg(CJ_GET_QSTR("hotkeys.custom_capture"))
-                           .arg(tr("OCR Capture"))
-                           .arg(CJ_GET_QSTR("hotkeys.ocr_capture"))
-                           .arg(tr("Image Translate Capture"))
-                           .arg(CJ_GET_QSTR("hotkeys.image_transltae_capture"));
 
-
-    m_trayIcon->setToolTip(text);
     m_trayIcon->setContextMenu(m_trayMenu);
 
     onLanguageChange("");
@@ -88,7 +68,11 @@ void Tray::init()
     connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
 #endif
 
+#ifdef QT_DEBUG
+#else
     m_dbAnalytics.sendData("start");
+#endif
+
 }
 
 // // 是否满足发送时间： 时间至少属于第二天就行
@@ -162,9 +146,7 @@ void Tray::setAppFont(const QString &tFont)
 
 void Tray::capture(const HotKeyType &type)
 {
-
     qDebug() << "capture type:" << hotKeyTypeToString(type);
-
 
     const QString szOrie = CJ_GET_QSTR("interface.orientation");
     Qt::Orientation orie = Qt::Horizontal;
@@ -211,8 +193,10 @@ void Tray::capture(const HotKeyType &type)
         m_scrnShot->startEnumWindowsRect();
     m_scrnShot->showMagnifyingGlass();
 
-    if (isSendUserData())
-        m_dbAnalytics.sendData(hotKeyTypeToString(type).toStdString().data());
+#ifdef QT_DEBUG
+#else
+    if (isSendUserData()) m_dbAnalytics.sendData(hotKeyTypeToString(type).toStdString().data());
+#endif
 }
 
 void Tray::onCapture()
@@ -265,6 +249,26 @@ void Tray::onLanguageChange(const QString qmName)
     QAction * actRestart = findChild<QAction*>("actRestart");
     QAction * actQuit = findChild<QAction*>("actQuit");
 
+    const auto& text = QString("%1 %2\n"
+                               "%3: %4\n"
+                               "%5: %6\n"
+                               "%7: %8\n"
+                               "%9: %10\n"
+                               "%11: %12\n")
+                           .arg(XPROJECT_NAME)
+                           .arg(tr("Screenshot"))
+                           .arg(tr("Capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.capture"))
+                           .arg(tr("Delay Capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.delay_capture"))
+                           .arg(tr("Custom Capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.custom_capture"))
+                           .arg(tr("OCR Capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.ocr_capture"))
+                           .arg(tr("Image Translate Capture"))
+                           .arg(CJ_GET_QSTR("hotkeys.image_transltae_capture"));
+
+    m_trayIcon->setToolTip(text);
     if (actCapture) actCapture->setText(tr("Capture"));
     if (actSetting) actSetting->setText(tr("Setting"));
     if (actAbout)   actAbout->setText(tr("About"));
