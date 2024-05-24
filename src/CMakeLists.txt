@@ -8,11 +8,11 @@ cmake_minimum_required(VERSION 3.5)
 set(project_name Sunny)
 set(project_version_major 1)
 set(project_version_minor 6)
-set(project_version_path 2)
+set(project_version_path 3)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2024.05.20")
+add_definitions(-DXBUILD_TIME="2024.05.24")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

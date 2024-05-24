@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt_br">
+<TS version="2.1" language="de">
 <context>
     <name>About</name>
     <message>
         <source>Licenses</source>
-        <translation>Licenças</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation>Versão</translation>
+        <translation>Lizenzen</translation>
     </message>
     <message>
         <source>System Info</source>
-        <translation>Informações do sistema</translation>
+        <translation>System Info</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2023~2024 sunny.xmuli.tech</source>
+        <translation>Copyright (C) 2023~2024 sunny.xmuli.tech</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Website&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Site Web&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Website&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/releases&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Download&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -25,30 +25,22 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Author&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Autor&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/XMuli&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Author&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussion &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Questões&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussão &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Feedback: &amp;nbsp;&lt;a href=&quot;https://github.com/XMuli/SunnyPages/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Issues&lt;/span&gt;&lt;/a&gt; &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://txc.qq.com/products/649489&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#008000;&quot;&gt;Discussion &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Copyright (C) 2023~2024 sunny.xmuli.tech</source>
-        <translation>Direitos autorais (C) 2023~2024 sunny.xmuli.tech</translation>
+        <source>Version</source>
+        <translation>Version</translation>
     </message>
 </context>
 <context>
     <name>AboutInfo</name>
     <message>
-        <source>Copy</source>
-        <translation>Copiar</translation>
-    </message>
-    <message>
-        <source> Detailed</source>
-        <translation>Detalhes</translation>
-    </message>
-    <message>
         <source>System Info</source>
-        <translation>Informações do Sistema</translation>
+        <translation>System Info</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -56,157 +48,169 @@
     </message>
     <message>
         <source>Qt Version</source>
-        <translation>Versão Qt</translation>
+        <translation>Qt Version</translation>
     </message>
     <message>
         <source>Edition</source>
-        <translation>Edição</translation>
+        <translation>Edition</translation>
     </message>
     <message>
         <source>Build Time</source>
-        <translation>Tempo de Construção</translation>
+        <translation>Build Zeit</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation>Versão</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Memória</translation>
+        <translation>Arbeitsspeicher</translation>
     </message>
     <message>
         <source>Build Kits</source>
-        <translation>Kits de Construção</translation>
+        <translation>Build Kits</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation>Projeto</translation>
+        <translation>Projekt</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopieren</translation>
+    </message>
+    <message>
+        <source> Detailed</source>
+        <translation> Detailliert</translation>
     </message>
 </context>
 <context>
     <name>ColorPicker</name>
     <message>
         <source>select color</source>
-        <translation>Seletor de cores</translation>
+        <translation>wähle eine Farbe</translation>
     </message>
 </context>
 <context>
     <name>General</name>
     <message>
         <source>Autostart</source>
-        <translation>Início automatico</translation>
+        <translation>Autostart</translation>
     </message>
     <message>
         <source>Log Level:</source>
-        <translation>Nível de Log:</translation>
+        <translation>Protokollebene:</translation>
     </message>
     <message>
         <source>Font:</source>
-        <translation>Fonte:</translation>
+        <translation>Schriftart:</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation>Linguagem:</translation>
+        <translation>Sprache:</translation>
     </message>
     <message>
         <source>Themes:</source>
-        <translation>Temas:</translation>
+        <translation>Darstellung:</translation>
     </message>
     <message>
         <source>Select Font</source>
-        <translation>Selecione a Fonte</translation>
+        <translation>Wähle eine Schriftart</translation>
     </message>
 </context>
 <context>
     <name>Hotkeys</name>
     <message>
-        <source>Delay capture:</source>
-        <translation>Captura atrasada:</translation>
+        <source>Capture:</source>
+        <translation>Aufnahme:</translation>
     </message>
     <message>
-        <source>Capture:</source>
-        <translation>Capturar:</translation>
+        <source>Delay capture:</source>
+        <translation>Verzögerte Aufnahme:</translation>
     </message>
     <message>
         <source>Custom capture:</source>
-        <translation>Captura personalizada:</translation>
+        <translation>Benutzerdefinierte Aufnahme:</translation>
     </message>
     <message>
         <source>OCR:</source>
-        <translation>OCR:</translation>
+        <translation>Texterkennung:</translation>
     </message>
     <message>
         <source>Image translate:</source>
-        <translation>Tradutor de imagem:</translation>
+        <translation>Bild Übersetzung:</translation>
     </message>
 </context>
 <context>
     <name>ImageTranslateDlg</name>
     <message>
-        <source>To</source>
-        <translation>Para</translation>
+        <source>Image Translation</source>
+        <translation>Bild Übersetzung</translation>
     </message>
     <message>
-        <source>Image Translation</source>
-        <translation>Tradutor de Imagem</translation>
+        <source>To</source>
+        <translation>Zu</translation>
     </message>
 </context>
 <context>
     <name>ImageView</name>
     <message>
         <source>Load Image</source>
-        <translation>Carregar Imagem</translation>
+        <translation>Bild laden</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation>Ampliar</translation>
+        <translation>Reinzoomen</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation>Reduzir</translation>
+        <translation>Zoom Out</translation>
     </message>
     <message>
         <source>Preset</source>
-        <translation>Predefinido</translation>
+        <translation>Voreinstellung</translation>
     </message>
     <message>
         <source>Zoom: %1%</source>
-        <translation>Ampliar: %1%</translation>
+        <translation>Zoom: %1%</translation>
     </message>
     <message>
         <source>Images (*.png *.bpm *.jpg)</source>
-        <translation>Imagens (*.png *.bpm *.jpg)</translation>
+        <translation>Bilder (*.png *.bpm *.jpg)</translation>
     </message>
 </context>
 <context>
     <name>Interface</name>
     <message>
         <source>Personalization</source>
-        <translation>Personalização</translation>
+        <translation>Personalisierung</translation>
     </message>
     <message>
         <source>Crosshair:</source>
-        <translation>Mira:</translation>
+        <translation>Fadenkreuz:</translation>
     </message>
     <message>
         <source>Highlight:</source>
-        <translation>Borda:</translation>
+        <translation>Markierung:</translation>
     </message>
     <message>
         <source>Border Width:</source>
-        <translation>Largura da borda:</translation>
+        <translation>Rahmenbreite:</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation>Estilo:</translation>
+        <translation>Stil:</translation>
     </message>
     <message>
         <source>Crosshair Width:</source>
-        <translation>Largura da mira:</translation>
+        <translation>Fadenkreuzbreite:</translation>
     </message>
     <message>
         <source>Orientation:</source>
-        <translation>Orientação:</translation>
+        <translation>Stil:</translation>
+    </message>
+    <message>
+        <source>Custom capture size</source>
+        <translation>Benutzerdefinierte Aufnahmegröße</translation>
     </message>
     <message>
         <source>,</source>
@@ -214,15 +218,15 @@
     </message>
     <message>
         <source>Top left:</source>
-        <translation>Canto superior esquerdo:</translation>
+        <translation>Oben links:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation>Tamanho:</translation>
+        <translation>Größe:</translation>
     </message>
     <message>
         <source>Delay:</source>
-        <translation>Atraso:</translation>
+        <translation>Verzögerung:</translation>
     </message>
     <message>
         <source>x</source>
@@ -238,161 +242,153 @@
     </message>
     <message>
         <source>Acrylic effect</source>
-        <translation>Efeito acrílico</translation>
+        <translation>Acryl Effekt</translation>
     </message>
     <message>
         <source>Auto detect windows</source>
-        <translation>Detecção automática de janela</translation>
+        <translation>Fenster automatisch erkennen</translation>
     </message>
     <message>
         <source>Auto copy to clipboard</source>
-        <translation>Copiar automaticamente para a área de transferência</translation>
+        <translation>Automatisch in Zwischenablage kopieren</translation>
     </message>
     <message>
         <source>Crosshair show</source>
-        <translation>Mostrar mira</translation>
-    </message>
-    <message>
-        <source>Custom capture size</source>
-        <translation>Tamanho de captura personalizado</translation>
+        <translation>Fadenkreuz anzeigen</translation>
     </message>
 </context>
 <context>
     <name>LicenseUI</name>
     <message>
         <source>Open source licenses</source>
-        <translation>Licenças de código aberto</translation>
+        <translation>Open Source Lizenzen</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>Sobre Qt</translation>
+        <translation>Über Qt</translation>
     </message>
     <message>
         <source>Copyright (C) 2023~2024 %1. All rights reserved.&lt;br&gt;The birth of this project is inseparable from these open source software</source>
-        <translation>Direitos autorais (C) 2023~2024 %1. Todos os direitos reservados.&lt;br&gt;O nascimento deste projeto é inseparável desses softwares de código aberto</translation>
+        <translation>Copyright (C) 2023~2024 %1. Alle Rechte vorbehalten.&lt;br&gt;Die Erstellung dieses Projekts ist untrennbar mit dieser Open-Source-Software verbunden</translation>
     </message>
 </context>
 <context>
     <name>NetworkOCR</name>
     <message>
         <source>Status Code: </source>
-        <translation>Código de status: </translation>
+        <translation>Status Code: </translation>
     </message>
     <message>
         <source>
 Reason Phrase: </source>
-        <translation>
-Frase de Razão: </translation>
+        <translation type="unfinished">
+Grundphrase: </translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Aviso</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <source>Your BaiDu [APIKey Or SecretKey] is empty, please check and re-enter it!</source>
-        <translation>Seu BaiDu [APIKey ou SecretKey] está vazio, verifique e insira-o novamente!</translation>
+        <translation>Ihr BaiDu [APIKey oder SecretKey] ist leer, bitte überprüfen Sie ihn und geben Sie ihn erneut ein!</translation>
     </message>
 </context>
 <context>
     <name>Output</name>
     <message>
         <source>Image quailty:</source>
-        <translation>Qualidade da imagem:</translation>
+        <translation>Bildqualität:</translation>
     </message>
     <message>
         <source>Range: [0,100] or -1.
 Specify 0 to obtain small compressed files, 100 for large uncompressed files,
 and specify -1 to let Sunny decide for you.</source>
-        <translation>Faixa: [0,100] ou -1.
-Especifique 0 para obter arquivos compactados pequenos, 100 para arquivos grandes descompactados,
-e especifique -1 para deixar Sunny decidir por você.</translation>
+        <translation>Reichweite: [0,100] oder -1.
+Geben Sie 0 an, um kleine komprimierte Dateien zu erhalten, 100 für große unkomprimierte Dateien.
+und geben Sie -1 an, damit Sunny für Sie entscheiden kann.</translation>
     </message>
     <message>
         <source>Path</source>
-        <translation>Caminho</translation>
+        <translation>Pfad</translation>
     </message>
     <message>
         <source>File Name：</source>
-        <translation>Nome do arquivo:</translation>
+        <translation>Dateiname：</translation>
     </message>
     <message>
         <source>Config Path：</source>
-        <translation>Caminho da configuração:</translation>
+        <translation>Config Pfad：</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Abrir</translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <source>Quick save</source>
-        <translation>Salvamento rapido</translation>
+        <translation>Schnellspeichern</translation>
     </message>
     <message>
         <source>Path：</source>
-        <translation>Caminho:</translation>
+        <translation>Pfad：</translation>
     </message>
     <message>
         <source>Select</source>
-        <translation>Selecionar</translation>
+        <translation>Auswählen</translation>
     </message>
     <message>
         <source>Auto save</source>
-        <translation>Salvamento automático</translation>
+        <translation>Automatisch speichern</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation>Caminho:</translation>
+        <translation>Pfad:</translation>
     </message>
     <message>
         <source>Preview: </source>
-        <translation>Visualização:</translation>
+        <translation>Vorschau: </translation>
     </message>
     <message>
         <source>Select a path</source>
-        <translation>Selecione um caminho</translation>
+        <translation>Wähle den Pfad</translation>
     </message>
 </context>
 <context>
     <name>PaintToolBar</name>
     <message>
         <source>Rectangle</source>
-        <translation>Retângulo</translation>
+        <translation>Rechteck</translation>
     </message>
     <message>
         <source>Ellipse</source>
-        <translation>Elipse</translation>
+        <translation>Ellipse</translation>
     </message>
     <message>
         <source>Arrow</source>
-        <translation>Seta</translation>
+        <translation>Pfeil</translation>
     </message>
     <message>
         <source>Pencil</source>
-        <translation>Lápis</translation>
+        <translation>Stift</translation>
     </message>
     <message>
         <source>Marker pen</source>
-        <translation>Caneta de destaque</translation>
+        <translation>Textmarker</translation>
     </message>
     <message>
         <source>Mosaic/Blur</source>
-        <translation>Mosaico/Desfoque</translation>
+        <translation>Mosaik/Verwischen</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation>Texto</translation>
+        <translation>Text</translation>
     </message>
     <message>
         <source>Serial</source>
-        <translation>Contador</translation>
-    </message>
-    <message>
-        <source>Pin to screen</source>
-        <translation>Fixar na tela</translation>
+        <translation>Zahlenserie</translation>
     </message>
     <message>
         <source>translate</source>
-        <translation>Traduzir</translation>
+        <translation>Übersetzen</translation>
     </message>
     <message>
         <source>OCR</source>
@@ -400,57 +396,61 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Desfazer</translation>
+        <translation>Rückgängig</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Refazer</translation>
+        <translation>Wiederholen</translation>
     </message>
     <message>
         <source>Cancel Capture</source>
-        <translation>Cancelar captura</translation>
+        <translation>Aufnahme abbrechen</translation>
+    </message>
+    <message>
+        <source>Pin to screen</source>
+        <translation>An den Bildschirm anheften</translation>
     </message>
     <message>
         <source>Save to file</source>
-        <translation>Salvar em arquivo</translation>
+        <translation>In Datei speichern</translation>
     </message>
     <message>
         <source>copy to clipboard</source>
-        <translation>Copiar para área de transferência</translation>
+        <translation>In Zwischenablage kopieren</translation>
     </message>
 </context>
 <context>
     <name>Pin</name>
     <message>
         <source>Maximum size:</source>
-        <translation>Tamanho máximo:</translation>
+        <translation>Maximale Größe:</translation>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation>Opacidade:</translation>
+        <translation>Deckkraft:</translation>
     </message>
 </context>
 <context>
     <name>PinWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Copiar</translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salvar</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Shadow</source>
-        <translation>Sombra</translation>
+        <translation>Schatten</translation>
     </message>
     <message>
         <source>Opicaty</source>
-        <translation>Opacidade</translation>
+        <translation>Deckkraft</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -458,26 +458,26 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Fechar</translation>
-    </message>
-    <message>
-        <source>Save Files</source>
-        <translation>Salvar Arquivos</translation>
-    </message>
-    <message>
-        <source>Zoom: %1%</source>
-        <translation>Ampliar: %1%</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
-        <translation>Arquivos de Iimagem(*.png);;Arquivos de Iimagem(*.jpg);;Arquivos de Iimagem(*.jpeg);;Arquivos de Iimagem(*.bmp);;Arquivos de Iimagem(*.gif);;Todos os Arquivos(*.*)</translation>
+        <translation>Bilddateien(*.png);;Bilddateien(*.jpg);;Bilddateien(*.jpeg);;Bilddateien(*.bmp);;Bilddateien(*.gif);;Alle Dateien(*.*)</translation>
+    </message>
+    <message>
+        <source>Save Files</source>
+        <translation>Dateien speichern</translation>
+    </message>
+    <message>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>CRASH</source>
-        <translation>FALHA</translation>
+        <translation>ABSTURZ</translation>
     </message>
     <message>
         <source>Horizontal</source>
@@ -485,170 +485,170 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Vertical</source>
-        <translation>Vertical</translation>
+        <translation>Vertikal</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primário</translation>
+        <translation>Primär</translation>
     </message>
 </context>
 <context>
     <name>ResetUI</name>
     <message>
         <source>Reset</source>
-        <translation>Redefinir</translation>
+        <translation>Zurücksetzen</translation>
     </message>
 </context>
 <context>
     <name>ScreenShot</name>
     <message>
+        <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
+        <translation>Bilddateien(*.png);;Bilddateien(*.jpg);;Bilddateien(*.jpeg);;Bilddateien(*.bmp);;Bilddateien(*.gif);;Alle Dateien(*.*)</translation>
+    </message>
+    <message>
         <source>Save Files</source>
-        <translation>Salvar Arquivos</translation>
+        <translation>Dateien Speichern</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation>Sucesso</translation>
+        <translation>Erfolg</translation>
     </message>
     <message>
         <source>Failed</source>
-        <translation>Falhou</translation>
+        <translation>Fehlgeschlagen</translation>
     </message>
     <message>
         <source>Image save to </source>
-        <translation>Salvar imagem em</translation>
+        <translation>Bild speichern unter </translation>
     </message>
     <message>
         <source>Quick save feature is not enabled, please check.</source>
-        <translation>O recurso de salvamento rápido não está ativado, verifique.</translation>
-    </message>
-    <message>
-        <source>Image Files(*.png);;Image Files(*.jpg);;Image Files(*.jpeg);;Image Files(*.bmp);;Image Files(*.gif);;All Files(*.*)</source>
-        <translation>Arquivos de imagem(*.png);;Arquivos de imagem(*.jpg);;Arquivos de imagem(*.jpeg);;Arquivos de imagem(*.bmp);;Arquivos de imagem(*.gif);;Todos os Arquivos(*.*)</translation>
+        <translation>Die Schnellspeicherfunktion ist nicht aktiviert. Bitte überprüfen Sie dies.</translation>
     </message>
 </context>
 <context>
     <name>SideSettingUI</name>
     <message>
+        <source>Settings [Free]</source>
+        <translation>Einstellungen [Kostenlos]</translation>
+    </message>
+    <message>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <source>Interface</source>
-        <translation>Interface</translation>
+        <translation>Oberfläche</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Saída</translation>
+        <translation>Ausgabe</translation>
     </message>
     <message>
         <source>Pin</source>
-        <translation>Fixar</translation>
+        <translation>Pin</translation>
     </message>
     <message>
         <source>Hotkeys</source>
-        <translation>Teclas de atalho</translation>
+        <translation>Hotkeys</translation>
     </message>
     <message>
         <source>Tokens</source>
-        <translation>Chaves</translation>
+        <translation>Tokens</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Sobre</translation>
-    </message>
-    <message>
-        <source>Settings [Free]</source>
-        <translation>Configurações</translation>
+        <translation>Über</translation>
     </message>
 </context>
 <context>
     <name>SystemInfo</name>
     <message>
         <source>Idx</source>
-        <translation>Identificador X</translation>
+        <translation>Idx</translation>
     </message>
     <message>
         <source>DevicePixelRatio</source>
-        <translation>Proporção de pixels do dispositivo</translation>
+        <translation>Gerätepixelverhältnis</translation>
     </message>
     <message>
         <source>Logical DPI</source>
-        <translation>DPI Lógico</translation>
+        <translation>Logische DPI</translation>
     </message>
     <message>
         <source>Physical DPI</source>
-        <translation>DPI Físico</translation>
+        <translation>Physische DPI</translation>
     </message>
     <message>
         <source>RefreshRate</source>
-        <translation>Taxa de Atualização</translation>
+        <translation>Bildwiederholrate</translation>
     </message>
     <message>
         <source>Geometry</source>
-        <translation>Geometria</translation>
+        <translation>Geometrie</translation>
     </message>
     <message>
         <source>PhysicalSize</source>
-        <translation>Tamanho Físico</translation>
+        <translation>PhysischeGröße</translation>
     </message>
     <message>
         <source>VirtualGeometry</source>
-        <translation>Geometria Virtual</translation>
+        <translation>VirtuelleGeometrie</translation>
     </message>
 </context>
 <context>
     <name>Tokens</name>
     <message>
-        <source>APP ID:</source>
-        <translation>APP ID:</translation>
-    </message>
-    <message>
-        <source>Secret Key:</source>
-        <translation>Chave Secreta:</translation>
-    </message>
-    <message>
-        <source>API Key:</source>
-        <translation>Chave API:</translation>
-    </message>
-    <message>
         <source>Channel</source>
-        <translation>Canal</translation>
+        <translation>Kanal</translation>
     </message>
     <message>
         <source>OCR：</source>
-        <translation>OCR:</translation>
+        <translation>OCR：</translation>
     </message>
     <message>
         <source>Image Translate：</source>
-        <translation>Tradução de Imagens:</translation>
+        <translation>Bild Übersetzung：</translation>
+    </message>
+    <message>
+        <source>Next Page</source>
+        <translation>Nächste Seite</translation>
     </message>
     <message>
         <source>BaiDu</source>
         <translation>BaiDu</translation>
     </message>
     <message>
+        <source>API Key:</source>
+        <translation>API Key:</translation>
+    </message>
+    <message>
+        <source>Secret Key:</source>
+        <translation>Secret Key:</translation>
+    </message>
+    <message>
         <source>Youdao</source>
         <translation>Youdao</translation>
     </message>
     <message>
-        <source>Next Page</source>
-        <translation>Próxima Página</translation>
+        <source>APP ID:</source>
+        <translation>APP ID:</translation>
     </message>
     <message>
         <source>high location</source>
-        <translation>localização alta</translation>
+        <translation>Hohe Lage</translation>
     </message>
     <message>
         <source>standard location</source>
-        <translation>localização padrão</translation>
+        <translation>Standard Lage</translation>
     </message>
     <message>
         <source>high</source>
-        <translation>alta</translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>standard</source>
-        <translation>padrão</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>baidu</source>
@@ -662,98 +662,98 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
 <context>
     <name>Tray</name>
     <message>
-        <source>Capture</source>
-        <translation>Capturar</translation>
-    </message>
-    <message>
-        <source>Setting</source>
-        <translation>Configuração</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Reiniciar</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation>Sair</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation>Sobre</translation>
-    </message>
-    <message>
         <source>Screenshot</source>
-        <translation>Captura de Tela</translation>
+        <translation>Bildschirmaufnahme</translation>
+    </message>
+    <message>
+        <source>Capture</source>
+        <translation>Aufnahme</translation>
     </message>
     <message>
         <source>Delay Capture</source>
-        <translation>Captura Atrasada</translation>
+        <translation>Verzögerte Aufnahme</translation>
     </message>
     <message>
         <source>Custom Capture</source>
-        <translation>Captura Personalizada</translation>
+        <translation>Benutzerdefinierte Aufnahme</translation>
     </message>
     <message>
         <source>OCR Capture</source>
-        <translation>Captura OCR</translation>
+        <translation>OCR Aufnahme</translation>
     </message>
     <message>
         <source>Image Translate Capture</source>
-        <translation>Tradutor</translation>
+        <translation>Bild Übersetzen Aufnahme</translation>
+    </message>
+    <message>
+        <source>Setting</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>Über</translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation>Neu Starten</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>Beenden</translation>
     </message>
 </context>
 <context>
     <name>XMagnifyingGlass</name>
     <message>
         <source>TextLabel</source>
-        <translation>Rótulo do Texto</translation>
+        <translation>Textbeschriftung</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; to copy color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pressione &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; para copiar a cor&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; to Switch betten RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pressione &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; para alternar entre RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;C&lt;/span&gt; Farbe kopieren&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>(%1, %2)</source>
         <translation>(%1, %2)</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; to Switch betten RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press &lt;span style=&quot; font-weight:700;&quot;&gt;Shift&lt;/span&gt; Verbessern RGB/HEX&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>XMonitorLabel</name>
     <message>
         <source>Idx</source>
-        <translation>Identificador X</translation>
+        <translation>Idx</translation>
     </message>
     <message>
         <source>DevicePixelRatio</source>
-        <translation>Proporção de pixels do dispositivo</translation>
+        <translation>Gerätepixelverhältnis</translation>
     </message>
     <message>
         <source>Logical DPI</source>
-        <translation>DPI Lógico</translation>
+        <translation>Logische DPI</translation>
     </message>
     <message>
         <source>Physical DPI</source>
-        <translation>DPI Físico</translation>
+        <translation>Physische DPI</translation>
     </message>
     <message>
         <source>RefreshRate</source>
-        <translation>Taxa de Atualização</translation>
+        <translation>Bildwiederholrate</translation>
     </message>
     <message>
         <source>Geometry</source>
-        <translation>Geometria</translation>
+        <translation>Geometrie</translation>
     </message>
     <message>
         <source>PhysicalSize</source>
-        <translation>Tamanho Físico</translation>
+        <translation>PhysischeGröße</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primário</translation>
+        <translation>Primär</translation>
     </message>
 </context>
 <context>

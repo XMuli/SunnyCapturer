@@ -169,6 +169,7 @@ std::map<QString, QString> languageMap()
                                               , {"简体中文", "zh_cn"}
                                               , {"繁体中文", "zh_tw"}
                                               , {"Português Brasil", "pt_br"}     // Portuguese-Brazil 葡萄牙语-巴西
+                                              , {"Deutsch", "de"}                 // 德语
     };
     return map;
 }
