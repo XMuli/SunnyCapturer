@@ -53,17 +53,6 @@ set(common_files
     common/data_analytics/dbanalytics.h
     common/data_analytics/dbanalytics.cpp
 
-    # google_analytics4
-    common/google_analytics4/ganalytics4.h
-    common/google_analytics4/ganalytics4.cpp
-    common/google_analytics4/ganalytics/ganalytics.h
-    common/google_analytics4/ganalytics/ganalytics.cpp
-    common/google_analytics4/ganalytics/ganalytics_worker.h
-    common/google_analytics4/ganalytics/ganalytics_worker.cpp
-    # google Geolocation API
-    common/google_analytics4/google_geographic/googlegeo.h
-    common/google_analytics4/google_geographic/googlegeo.cpp
-
     data/config_global.h
     data/configmanager.h
     data/configmanager.cpp
@@ -515,8 +504,6 @@ elseif (UNIX)
     message("---------->CMAKE_INSTALL_BINDIR:" ${CMAKE_INSTALL_BINDIR})
     message("---------->CMAKE_INSTALL_LIBDIR:" ${CMAKE_INSTALL_LIBDIR})
     message("---------->qm:" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/translations")
-
-#    feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
     # CPACK: General Settings
     set(CPACK_GENERATOR "DEB")                                                 # 设置CPack生成DEB包

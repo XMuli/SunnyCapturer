@@ -15,8 +15,6 @@
 #include "tips.h"
 #include "../setting/sidesettingui.h"
 #include "../../common/data_analytics/dbanalytics.h"
-#include "../../common/google_analytics4/ganalytics4.h"
-#include "../../common/google_analytics4/google_geographic/googlegeo.h"
 
 #define TRAY Tray::instance()
 

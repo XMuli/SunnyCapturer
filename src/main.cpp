@@ -40,8 +40,6 @@
 // #include "xlog.h"
 // #include "aboutinfo.h"
 // #include "xmonitorlabel.h"
-// #include "common/google_analytics4/google_geographic/googlegeo.h"
-// #include "common/google_analytics4/ganalytics4.h"
 // #include "common/data_analytics/dbanalytics.h"
 #include "easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
@@ -128,12 +126,6 @@ int main(int argc, char* argv[])
     // lab->renderMonitorToPixmap();
     // lab->resize(lab->fixSize());
     // lab->show();
-
-    // 用法
-    // GoogleGeo m_googleGeo;
-    // GA4.sendEvent(GAnalytics4::E_geographic_info, GA4.setGeoJParams(m_googleGeo.geoInfo().toJson()));
-    // GA4.sendEvent(GAnalytics4::E_os_info, GAnalytics4::mapToJParams({{"windows 10", "x64 "}, {"t1", "t1"}}));
-    // GA4.sendEvent(GAnalytics4::E_os_info, std::map<std::string, std::string>({{"t11", "t1"}, {"t12", "t1"}}));
 
     // 释放系统信号量
     systemSemaphore.release();

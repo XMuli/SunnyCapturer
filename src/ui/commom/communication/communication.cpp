@@ -8,6 +8,11 @@
 #include <QKeySequence>
 #include <QLocale>
 #include <QDebug>
+#include <QDir>
+#include <QString>
+#include <QStringList>
+#include <QFileInfoList>
+#include <QStyleFactory>
 #include <QTranslator>
 #include "aboutinfo.h"
 #include "../../data/configmanager.h"
@@ -173,13 +178,6 @@ std::map<QString, QString> languageMap()
     };
     return map;
 }
-
-
-#include <QDir>
-#include <QString>
-#include <QStringList>
-#include <QFileInfoList>
-#include <QStyleFactory>
 
 // 获取主题的名称
 std::map<const QString, const bool> themesMap()
