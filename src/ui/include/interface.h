@@ -15,11 +15,12 @@ class Interface;
 
 enum class StyleType
 {
-    ST_sunny,
+    ST_concise,
+    ST_sunny,          // 带四个角落
     ST_macos,
     ST_dde
 };
-Q_DECLARE_METATYPE(StyleType)                     // 可以被 QVariant 类型存储
+Q_DECLARE_METATYPE(StyleType)  // 可以被 QVariant 类型存储
 
 class Interface : public QWidget
 {

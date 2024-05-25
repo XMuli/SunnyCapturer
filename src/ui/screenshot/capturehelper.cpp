@@ -565,12 +565,12 @@ XTextEdit* showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWid
 }
 
 
-void drawBorderSunny(QPainter &pa, const QRect &rt)
+void drawBorderSunny(QPainter &pa, const QRect &rt, const bool &bCorner)
 {
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing, true);
     QPen pen;
-    const int addFixWidth = 6;
+    const int addFixWidth = 3;
     pen.setWidth(borderWidth() + addFixWidth);
     QColor color = QColor(CJ_GET_QSTR("interface.highlight"));
     if (color == QColor("#0081FF"))
@@ -585,33 +585,34 @@ void drawBorderSunny(QPainter &pa, const QRect &rt)
     int y2 = rt.bottom();
 
     const int penWidth = pen.width();
-    const int cornerLength = 100;       // 四角周辅助的 ∟ 的长度
-    const int doubleCornerLength = 2 * cornerLength;
+    const int cornerLength = 90;       // 四角周辅助的 ∟ 的长度
+    const int maxCornerLength = 4 * cornerLength;
 
-#if 0  // 隐藏四个角落的特效
-    if (rt.width() >= doubleCornerLength && rt.height() >= doubleCornerLength) {
-        // hor 且补齐交叉角落的空缺的那一块
-        QLine l1(QPoint(x1 - penWidth / 2, y1), QPoint(x1 + cornerLength, y1));
-        QLine l2(QPoint(x1 - penWidth / 2, y2), QPoint(x1 + cornerLength, y2));
-        QLine l3(QPoint(x2 + penWidth / 2, y1), QPoint(x2 - cornerLength, y1));
-        QLine l4(QPoint(x2 + penWidth / 2, y2), QPoint(x2 - cornerLength, y2));
+    if (bCorner) {   // 隐藏四个角落的特效
+        if (rt.width() >= maxCornerLength && rt.height() >= maxCornerLength) {
+            // hor 且补齐交叉角落的空缺的那一块
+            const double& multiple = 1.34;
+            QLine l1(QPoint(x1 - penWidth / 2, y1), QPoint(x1 + cornerLength * multiple, y1));
+            QLine l2(QPoint(x1 - penWidth / 2, y2), QPoint(x1 + cornerLength * multiple, y2));
+            QLine l3(QPoint(x2 + penWidth / 2, y1), QPoint(x2 - cornerLength * multiple, y1));
+            QLine l4(QPoint(x2 + penWidth / 2, y2), QPoint(x2 - cornerLength * multiple, y2));
 
-        // ver
-        QLine l5(QPoint(x1, y1), QPoint(x1, y1 + cornerLength));
-        QLine l6(QPoint(x1, y2), QPoint(x1, y2 - cornerLength));
-        QLine l7(QPoint(x2, y1), QPoint(x2, y1 + cornerLength));
-        QLine l8(QPoint(x2, y2), QPoint(x2, y2 - cornerLength));
+            // ver
+            QLine l5(QPoint(x1, y1), QPoint(x1, y1 + cornerLength));
+            QLine l6(QPoint(x1, y2), QPoint(x1, y2 - cornerLength));
+            QLine l7(QPoint(x2, y1), QPoint(x2, y1 + cornerLength));
+            QLine l8(QPoint(x2, y2), QPoint(x2, y2 - cornerLength));
 
-        pa.drawLine(l1.translated(QPoint(0, -penWidth / 2)));
-        pa.drawLine(l2.translated(QPoint(0, penWidth / 2)));
-        pa.drawLine(l3.translated(QPoint(0, -penWidth / 2)));
-        pa.drawLine(l4.translated(QPoint(0, penWidth / 2)));
-        pa.drawLine(l5.translated(QPoint(-penWidth / 2, 0)));
-        pa.drawLine(l6.translated(QPoint(-penWidth / 2, 0)));
-        pa.drawLine(l7.translated(QPoint(penWidth / 2, 0)));
-        pa.drawLine(l8.translated(QPoint(penWidth / 2, 0)));
+            pa.drawLine(l1.translated(QPoint(0, -penWidth / 2)));
+            pa.drawLine(l2.translated(QPoint(0, penWidth / 2)));
+            pa.drawLine(l3.translated(QPoint(0, -penWidth / 2)));
+            pa.drawLine(l4.translated(QPoint(0, penWidth / 2)));
+            pa.drawLine(l5.translated(QPoint(-penWidth / 2, 0)));
+            pa.drawLine(l6.translated(QPoint(-penWidth / 2, 0)));
+            pa.drawLine(l7.translated(QPoint(penWidth / 2, 0)));
+            pa.drawLine(l8.translated(QPoint(penWidth / 2, 0)));
+        }
     }
-#endif
 
     pen.setWidth(borderWidth());
     pa.setPen(pen);
@@ -667,7 +668,7 @@ void drawBorderMacOS(QPainter &pa, const QRect &rt, int num)
     pa.restore();
 }
 
-void drawBorderDDE(QPainter &pa, const QRect &rt, int num)
+void drawBorderDeepin(QPainter &pa, const QRect &rt, int num)
 {
     pa.save();
 //    pa.setRenderHint(QPainter::Antialiasing, true);
@@ -706,12 +707,14 @@ void drawBorderDDE(QPainter &pa, const QRect &rt, int num)
 void drawBorder(QPainter &pa, const QRect &rt, int num)
 {
     const auto& style  = CJ_GET_QSTR("interface.style");
-    if (style == "Sunny") {
-        drawBorderSunny(pa, rt);
-    } else if (style == "MacOS") {
+    if (style == "Concise") {
+        drawBorderSunny(pa, rt, false);
+    } else if (style == "Sunny") {
+        drawBorderSunny(pa, rt, true);
+    } else if (style == "Mac") {
         drawBorderMacOS(pa, rt, num);
-    } else if (style == "DDE") {
-        drawBorderDDE(pa, rt, num);
+    } else if (style == "Deepin") {
+        drawBorderDeepin(pa, rt, num);
     } else {
         qDebug() << "other empty border style!";
     }

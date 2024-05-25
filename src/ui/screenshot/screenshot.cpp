@@ -1477,7 +1477,6 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
             }
         }
 
-
     } else if (m_actionType == ActionType::AT_move_drawn_shape) {
     } else if (m_actionType == ActionType::AT_move_picked_rect) {
     } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
@@ -1832,28 +1831,36 @@ void ScreenShot::showCollimatorCursor(QPainter &pa)
     pa.setRenderHint(QPainter::Antialiasing);
 
     const QPoint& pt = mapFromGlobal(QCursor::pos());
+    const auto& penColor = CJ.m_cd.pen.color();
     const int& width = CJ.m_cd.pen.width();
-    QPen pen(Qt::black, 1);
+    QPen pen(penColor, 1);
     pa.setPen(pen);
-    // 绘制中心点
-    pa.setBrush(CJ.m_cd.pen.color());
-    const int& r = qMax(1, width / 2);
-    pa.drawEllipse(pt, r, r);
+    pa.setBrush(penColor);
+    int r = qMax(1, width / 2);
+    if (width >= 4) {
+        pen.setColor(Qt::black);
+        pa.setPen(pen);
+    }
+    pa.drawEllipse(pt, r, r);  // 绘制中心点
 
     // 绘制十字准星光标
     const int& margin = 4 + r;
-    const int& length = 8 * qMax(1, r/5) + margin;
+    const int& length = 8 * qMax(1, r/6) + margin;
 
+    pen.setColor(Qt::black);
     pen.setWidthF(0.5);
     pa.setPen(pen);
-    const double height = 1 + r/10; // 十字线固定的长度
-    QVector<QRectF> rects = {
-        QRectF(QPointF(pt.x() - length, pt.y() - height), QPointF(pt.x() - margin, pt.y() + height)),
-        QRectF(QPointF(pt.x() + margin, pt.y() - height), QPointF(pt.x() + length, pt.y() + height)),
-        QRectF(QPointF(pt.x() - height, pt.y() - length), QPointF(pt.x() + height, pt.y() - margin)),
-        QRectF(QPointF(pt.x() - height, pt.y() + margin), QPointF(pt.x() + height, pt.y() + length))
-    };
-    pa.drawRects(rects);
+    const double height = 1 + r/6; // 十字线固定的长度
+    const double rX = 2;
+    const double rY = 2;
+    const QRectF rt1(QPointF(pt.x() - length, pt.y() - height), QPointF(pt.x() - margin, pt.y() + height));
+    const QRectF rt2(QPointF(pt.x() + margin, pt.y() - height), QPointF(pt.x() + length, pt.y() + height));
+    const QRectF rt3(QPointF(pt.x() - height, pt.y() - length), QPointF(pt.x() + height, pt.y() - margin));
+    const QRectF rt4(QPointF(pt.x() - height, pt.y() + margin), QPointF(pt.x() + height, pt.y() + length));
+    pa.drawRoundedRect(rt1, rX, rY);
+    pa.drawRoundedRect(rt2, rX, rY);
+    pa.drawRoundedRect(rt3, rX, rY);
+    pa.drawRoundedRect(rt4, rX, rY);
     pa.restore();
 }
 

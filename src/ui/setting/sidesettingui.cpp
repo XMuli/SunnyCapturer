@@ -67,14 +67,15 @@ void SideSettingUI::initUI()
     m_tokens->insertWidget(0, tokens);
 //    m_about->insertWidget(0, about);
 
+    const int width = 90;
     const int height = 32;
-    ui->tbGeneral->setMinimumHeight(height);
-    ui->tbInterface->setMinimumHeight(height);
-    ui->tbOutput->setMinimumHeight(height);
-    ui->tbPin->setMinimumHeight(height);
-    ui->tbHotkeys->setMinimumHeight(height);
-    ui->tbTokens->setMinimumHeight(height);
-    ui->tbAbout->setMinimumHeight(height);
+    ui->tbGeneral->setMinimumSize(width, height);
+    ui->tbInterface->setMinimumSize(width, height);
+    ui->tbOutput->setMinimumSize(width, height);
+    ui->tbPin->setMinimumSize(width, height);
+    ui->tbHotkeys->setMinimumSize(width, height);
+    ui->tbTokens->setMinimumSize(width, height);
+    ui->tbAbout->setMinimumSize(width, height);
 
     ui->stackedWidget->insertWidget(0, m_general);
     ui->stackedWidget->insertWidget(1, m_interface);

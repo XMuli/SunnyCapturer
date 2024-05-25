@@ -33,9 +33,10 @@ std::map<QString, QString> orientationMaps()
 
 void Interface::initUI()
 {
-    std::map<QString, StyleType> styles = {  {"Sunny", StyleType::ST_sunny}
-                                           , {"MacOS", StyleType::ST_macos}
-                                           , {"DDE", StyleType::ST_dde}};
+    std::map<QString, StyleType> styles = {  {"Concise", StyleType::ST_concise}
+                                           , {"Sunny", StyleType::ST_sunny}
+                                           , {"Mac", StyleType::ST_macos}
+                                           , {"Deepin", StyleType::ST_dde}};
 
     const auto& currStyle = CJ_GET_QSTR("interface.style");
     for (const auto& it : styles) ui->cbbStyle->addItem(it.first, QVariant::fromValue(it.second));

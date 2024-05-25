@@ -173,9 +173,9 @@ void pixelatedMosaic(QPixmap &pixmap, const int& px = 20);
 void smoothMosaic(QPixmap& pixmap, int radius = 10);
 QPixmap monitoredDesktopPixmap(const QRect& rect);
 
-void drawBorderSunny(QPainter& pa, const QRect& rt) ;
+void drawBorderSunny(QPainter& pa, const QRect& rt, const bool& bCorner) ;
 void drawBorderMacOS(QPainter& pa, const QRect& rt, int num = 8) ;
-void drawBorderDDE(QPainter& pa, const QRect& rt, int num = 8) ;
+void drawBorderDeepin(QPainter& pa, const QRect& rt, int num = 8) ;
 void drawBorder(QPainter& pa, const QRect& rt, int num = 8) ;
 void drawCrosshair(QPainter& pa, const QPoint& pt, const QRect& vdRt);
 

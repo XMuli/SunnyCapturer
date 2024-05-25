@@ -91,7 +91,7 @@ private:
     void setMovePickedRect();
     void showCustomWidget(QWidget* w);
     void showCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt) const;
-    void showCollimatorCursor(QPainter &pa); // 自定义准星的光标
+    void showCollimatorCursor(QPainter &pa);    // 自定义准星的光标
 
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
     void preDestruction();             // 销毁对象之前的清理工作
