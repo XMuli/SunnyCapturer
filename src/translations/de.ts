@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Orientation:</source>
-        <translation>Stil:</translation>
+        <translation>Ausrichtung:</translation>
     </message>
     <message>
         <source>Custom capture size</source>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>Copyright (C) 2023~2024 %1. All rights reserved.&lt;br&gt;The birth of this project is inseparable from these open source software</source>
-        <translation>Copyright (C) 2023~2024 %1. Alle Rechte vorbehalten.&lt;br&gt;Die Erstellung dieses Projekts ist untrennbar mit dieser Open-Source-Software verbunden</translation>
+        <translation>Copyright (C) 2023~2024 %1. Alle Rechte vorbehalten.&lt;br&gt;Die Entstehung dieses Projekts ist untrennbar mit dieser Open-Source-Software verbunden.</translation>
     </message>
 </context>
 <context>
@@ -281,8 +281,8 @@
     <message>
         <source>
 Reason Phrase: </source>
-        <translation type="unfinished">
-Grundphrase: </translation>
+        <translation>
+Grund: </translation>
     </message>
     <message>
         <source>Warning</source>

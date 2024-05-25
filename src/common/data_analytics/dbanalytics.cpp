@@ -18,8 +18,12 @@ DbAnalytics::DbAnalytics(QObject *parent) : QObject(parent) {
 }
 
 void DbAnalytics::sendData(const QString& mark) {
-    qDebug() << "not send user data!";
+
+#ifdef NO_SEND_USER_DATA
+    qDebug() << "not send user data! this is develop";
     return;
+#endif
+
     QString urlString = "https://47.110.40.198:5000/add_data";
     // QString urlString = "https://127.0.0.1:5000/add_data";
     QNetworkRequest request;

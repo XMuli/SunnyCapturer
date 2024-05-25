@@ -718,20 +718,40 @@ void drawBorder(QPainter &pa, const QRect &rt, int num)
 }
 
 
-void drawCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt)
-{
+void drawCrosshair(QPainter &pa, const QPoint &pt, const QRect &vdRt) {
     const bool& bDraw = CJ_GET("interface.crosshair_show");
-    if (!bDraw)  return;
+    if (!bDraw) return;
 
     pa.save();
     pa.setRenderHint(QPainter::Antialiasing, true);
-    pa.setPen(QPen(QColor(CJ_GET_QSTR("interface.crosshair")), CJ_GET("interface.crosshair_width").get<int>()));
-    pa.setBrush(Qt::NoBrush);
+
+    // 获取颜色和宽度配置
+    QColor crosshairColor = QColor(CJ_GET_QSTR("interface.crosshair"));
+    int crosshairWidth = CJ_GET("interface.crosshair_width").get<int>();
+
+    // 定义十字线
     const QLine l1(vdRt.left(), pt.y(), vdRt.right(), pt.y());
     const QLine l2(pt.x(), vdRt.top(), pt.x(), vdRt.bottom());
+
+    // 使用 XOR 模式绘制底线
+    QPen xorPen(Qt::black); // 可以是黑色或白色，XOR 模式会自动调整
+    xorPen.setWidth(crosshairWidth + 2); // 较宽的底线
+    pa.setPen(xorPen);
+    pa.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
     pa.drawLine(l1);
     pa.drawLine(l2);
+
+    // 恢复正常绘图模式
+    pa.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+    // 绘制彩色线条
+    QPen colorPen(crosshairColor, crosshairWidth);
+    pa.setPen(colorPen);
+    pa.drawLine(l1);
+    pa.drawLine(l2);
+
     pa.restore();
 }
+
 
 

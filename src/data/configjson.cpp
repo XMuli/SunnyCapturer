@@ -29,7 +29,7 @@ ordered_json ConfigJson::defaultConfigJson()
                           {"highlight", "#0081ff"},
                           {"border_width", 3},
                           {"crosshair", "#df4187"},
-                          {"crosshair_width", 2},
+                          {"crosshair_width", 1},
                           {"custom_size_enable", true},
                           {"topleft_enable", true},
                           {"size_enable", true},
@@ -106,7 +106,7 @@ ordered_json ConfigJson::defaultConfigJson()
                                                          {"crosshair_iridescence", "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"}
                                                      }},
                          { "non_ui_user_experience", {                                                            // 用户体验，不需要用户设置的
-                                                           {"version", "1.6.2"},                                  // 当前的版本号
+                                                           {"version", "1.6.3"},                                  // 当前的版本号
                                                            {"ocr_splitter_left", 3},                              // ocr 左侧图片比例
                                                            {"ocr_splitter_right", 1},                             // ocr 右侧提取文字的比例
                                                            {"time", ""}                                          // 数据上报时间

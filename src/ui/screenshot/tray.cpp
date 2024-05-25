@@ -68,11 +68,7 @@ void Tray::init()
     connect(qApp, &QCoreApplication::aboutToQuit, m_trayIcon, &QSystemTrayIcon::hide);
 #endif
 
-#ifdef QT_DEBUG
-#else
     m_dbAnalytics.sendData("start");
-#endif
-
 }
 
 // // 是否满足发送时间： 时间至少属于第二天就行
@@ -193,10 +189,8 @@ void Tray::capture(const HotKeyType &type)
         m_scrnShot->startEnumWindowsRect();
     m_scrnShot->showMagnifyingGlass();
 
-#ifdef QT_DEBUG
-#else
-    if (isSendUserData()) m_dbAnalytics.sendData(hotKeyTypeToString(type).toStdString().data());
-#endif
+    if (isSendUserData())
+        m_dbAnalytics.sendData(hotKeyTypeToString(type).toStdString().data());
 }
 
 void Tray::onCapture()

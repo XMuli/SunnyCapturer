@@ -49,7 +49,7 @@ void SideSettingUI::initUI()
         it->setAutoRaise(true);
         m_sideGroup->addButton(it, i++);
     }
-
+    setWindowFlags(Qt::WindowStaysOnTopHint);
 
     const auto& general = new General();
     const auto& interface = new Interface();
