@@ -17,6 +17,7 @@
 #include <QPointer>
 
 #include "tips.h"
+#include "xguidetips.h"
 #include "xtextedit.h"
 #include "capturehelper.h"
 #include "xmagnifyingglass.h"
@@ -92,6 +93,7 @@ private:
     void showCustomWidget(QWidget* w);
     void showCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt) const;
     void showCollimatorCursor(QPainter &pa);    // 自定义准星的光标
+    // void showSerialNumberCursor(QPainter &pa);  // 自定义数字序号
 
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
     void preDestruction();             // 销毁对象之前的清理工作
@@ -150,6 +152,8 @@ private:
     QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 
     QPointer<XMagnifyingGlass>    m_magnifyingGlass;     // 取色器+放大镜
+    QPointer<XGuideTips>          m_guideTips;            // 屏幕左下角的按键提示
+
     QPointer<Tips>                m_pointTips;
     QPointer<Tips>                m_pickedRectTips;
     QTimer*                       m_timerPoint;

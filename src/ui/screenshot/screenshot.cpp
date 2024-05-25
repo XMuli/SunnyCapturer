@@ -49,6 +49,7 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     , m_ocrWidget(new XOcrWidget(nullptr))
     , m_imgTranslateDlg(new ImageTranslateDlg(nullptr))
     , m_magnifyingGlass(new XMagnifyingGlass(this))
+    , m_guideTips(new XGuideTips(this))
     , m_pointTips(new Tips("", TipsType::TT_point_changed_tips, this))
     , m_pickedRectTips(new Tips("", TipsType::TT_picked_rect_tips, this))
     , m_timerPoint(new QTimer(this))
@@ -708,10 +709,14 @@ void ScreenShot::initUI()
     m_pickedRectTips->raise();
     m_pointTips->raise();
     m_magnifyingGlass->raise();
+    m_guideTips->raise();
 
     onPickedColor(CJ_CD.pen.color());
     m_paintNode.pen = CJ_CD.pen;
     m_paintNode.brush = CJ_CD.brush;
+
+    const QPoint ptGuide(qGuiApp->primaryScreen()->geometry().bottomLeft() + QPoint(20, -400) + QPoint(0, -m_guideTips->height()));
+    m_guideTips->move(mapFromGlobal(ptGuide));
 
     m_ocrWidget->hide();
     m_imgTranslateDlg->hide();
@@ -741,6 +746,7 @@ void ScreenShot::initUI()
     m_pointTips->hide();
     m_pickedRectTips->hide();
     m_magnifyingGlass->show();
+    m_guideTips->show();
 
     m_timerPoint->setInterval(5000);
     monitorsInfo();
@@ -1053,6 +1059,7 @@ void ScreenShot::preDestruction()
     if (m_bars) m_bars->deleteLater();
     if (m_rectNodes.size()) m_rectNodes.clear();
     if (m_magnifyingGlass) m_magnifyingGlass->deleteLater();
+    if (m_guideTips) m_guideTips->deleteLater();
     if (m_debugLog) m_debugLog->deleteLater(); // 仅调试用
 }
 

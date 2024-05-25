@@ -78,6 +78,7 @@ set(custom_ui_files
     ui/include/switchbutton.h
     ui/include/xmonitorlabel.h
     ui/include/imageview.h
+    ui/include/xguidebutton.h
     # h composite_widgets
     ui/include/xblureffect.h
     ui/include/colorpicker.h
@@ -92,6 +93,7 @@ set(custom_ui_files
     ui/include/tokens.h
     ui/include/aboutinfo.h
     ui/include/xmagnifyingglass.h
+    ui/include/xguidetips.h
     #  cpp common_widgets
     ui/composite_widgets/xblureffect.cpp
     ui/composite_widgets/xcolorbutton.cpp
@@ -104,6 +106,7 @@ set(custom_ui_files
     ui/composite_widgets/switchbutton.cpp
     ui/composite_widgets/xmonitorlabel.cpp
     ui/composite_widgets/imageview.cpp
+    ui/composite_widgets/xguidebutton.cpp
     #  cpp composite_widgets
     ui/composite_widgets/colorpicker.cpp
     ui/composite_widgets/resetui.cpp
@@ -128,6 +131,8 @@ set(custom_ui_files
     ui/composite_widgets/aboutinfo.ui
     ui/composite_widgets/xmagnifyingglass.cpp
     ui/composite_widgets/xmagnifyingglass.ui
+    ui/composite_widgets/xguidetips.cpp
+    ui/composite_widgets/xguidetips.ui
 
     ui/paint_bar/toolbar_level/common/absbtnsctrl.h
     ui/paint_bar/toolbar_level/common/absbtnsctrl.cpp
