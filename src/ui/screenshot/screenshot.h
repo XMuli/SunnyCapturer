@@ -17,13 +17,13 @@
 #include <QPointer>
 
 #include "tips.h"
-#include "xguidetips.h"
 #include "xtextedit.h"
 #include "capturehelper.h"
 #include "xmagnifyingglass.h"
 #include "../paint_bar/paintbar.h"
 #include "../commom/ocr/networkocr.h"
 #include "../paint_bar/toolbar_level/ocr_text/xocrwidget.h"
+#include "../paint_bar/toolbar_level/guide_tips/xguidetips.h"
 #include "../paint_bar/toolbar_level/img_translate/imagetranslatedlg.h"
 #include "../../commom/communication/communication.h"
 #include "windowsrect.h" // 引用位置在 Qt 库之后，避免 x11 库冲突
@@ -92,7 +92,8 @@ private:
     void setMovePickedRect();
     void showCustomWidget(QWidget* w);
     void showCrosshair(QPainter &pa, const QPoint &pt, const QRect& vdRt) const;
-    void showCollimatorCursor(QPainter &pa);    // 自定义准星的光标
+    void showCollimatorCursor(QPainter &pa);             // 自定义准星的光标
+    void showGuideTips();                                // 显示引导按键
     // void showSerialNumberCursor(QPainter &pa);  // 自定义数字序号
 
     QScreen* currentScreen(const QPoint &pos = QCursor::pos()) const;
@@ -152,7 +153,7 @@ private:
     QPointer<ImageTranslateDlg>   m_imgTranslateDlg;     // 图片翻译
 
     QPointer<XMagnifyingGlass>    m_magnifyingGlass;     // 取色器+放大镜
-    QPointer<XGuideTips>          m_guideTips;            // 屏幕左下角的按键提示
+    QPointer<XGuideTips>          m_guideTips;           // 屏幕左下角的按键提示
 
     QPointer<Tips>                m_pointTips;
     QPointer<Tips>                m_pickedRectTips;

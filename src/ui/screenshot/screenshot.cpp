@@ -710,6 +710,7 @@ void ScreenShot::initUI()
     m_pointTips->raise();
     m_magnifyingGlass->raise();
     m_guideTips->raise();
+    m_guideTips->setActionType(m_actionType);
 
     onPickedColor(CJ_CD.pen.color());
     m_paintNode.pen = CJ_CD.pen;
@@ -1871,12 +1872,20 @@ void ScreenShot::showCollimatorCursor(QPainter &pa)
     pa.restore();
 }
 
+void ScreenShot::showGuideTips()
+{
+    if (m_guideTips->actionType() != m_actionType) {
+        m_guideTips->setActionType(m_actionType);
+    }
+}
+
 void ScreenShot::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) return;
     dealMousePressEvent(e);
     showCustomWidget(m_bars);
     showPickedRectTips();
+    showGuideTips();
     update();
 }
 
@@ -1887,6 +1896,7 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
     showCustomWidget(m_bars);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
     showPickedRectTips();
     update();
+    showGuideTips();
 
     qDebug() << "mouseReleaseEvent m_redo:" << m_redo.size();
 }
@@ -1897,6 +1907,7 @@ void ScreenShot::mouseMoveEvent(QMouseEvent *e)
     showCustomWidget(m_bars);
     showMagnifyingGlass();
     showPickedRectTips();
+    showGuideTips();
     update();
 }
 
@@ -2005,7 +2016,9 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 
 #ifdef QT_DEBUG
         printfDevelopProjectInfo();
-        if (!m_debugLog->isVisible()) m_debugLog->show();
+        if (!m_debugLog->isVisible()) {
+            m_debugLog->show();
+        }
 #endif
 
     } else {
@@ -2013,6 +2026,9 @@ void ScreenShot::paintEvent(QPaintEvent *e)
         m_debugLog->hide();
 #endif
     }
+
+    if(isActiveWindow())
+        activateWindow();
 
     if (CJ.m_cd.isShowCollimatorCursor)
         showCollimatorCursor(pa);
