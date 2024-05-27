@@ -42,6 +42,7 @@ public:
     void loadTranslation(const QString& language);
     void loadCustomQss(const QString &path);
     void showBuildInfoWidget();            // 显示提供信息窗口
+    QString toLocaleName(const QString& language);
 
 signals:
     void sigLanguageChange(const QString qmFile);
@@ -53,7 +54,6 @@ signals:
     void sigImgTranslateCtrlHide();                                                     // OCR 翻译 隐藏
 
 private:
-    QString toLocaleName(const QString& language);
 
     explicit Communication(QObject *parent = nullptr);
     virtual ~Communication() = default;
@@ -76,6 +76,13 @@ std::map<QString, QString> languageMapCodeBaiDu();
 std::map<const QString, const bool> themesMap();
 QString findKeyByValue(const std::map<QString, QString>& myMap, const QString& value);
 QStringList getQSSFileNames(const QString& path = qApp->applicationDirPath() + "/resources/qss");
+
+
+const QScreen* cursorScrn(const QPoint &pos);      // 当前光标所在的屏幕，不存在则返回默主屏幕
+double cursorScrnScale(const QScreen *screen);     // 当前光标所在的屏幕的缩放比
+double cursorScrnScale(const bool& onlyPrimary);   //
+double cursorScrnDpr(const bool& onlyPrimary);
+double appGuiDpr();
 
 
 #endif // COMMUNICATION_H

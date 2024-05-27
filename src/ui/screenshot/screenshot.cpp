@@ -141,7 +141,7 @@ void ScreenShot::showMagnifyingGlass()
     const bool b1 = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
     if (b1) {
         showCustomWidget(m_magnifyingGlass);
-        m_magnifyingGlass->setPixmap(QCursor::pos(), m_origPix);
+        m_magnifyingGlass->setPixmap(mapFromGlobal(QCursor::pos()), m_origPix);
     } else {
         m_magnifyingGlass->hide();
     }
@@ -716,9 +716,6 @@ void ScreenShot::initUI()
     m_paintNode.pen = CJ_CD.pen;
     m_paintNode.brush = CJ_CD.brush;
 
-    const QPoint ptGuide(qGuiApp->primaryScreen()->geometry().bottomLeft() + QPoint(20, -400) + QPoint(0, -m_guideTips->height()));
-    m_guideTips->move(mapFromGlobal(ptGuide));
-
     m_ocrWidget->hide();
     m_imgTranslateDlg->hide();
     // 初始化上一次的效果
@@ -747,7 +744,7 @@ void ScreenShot::initUI()
     m_pointTips->hide();
     m_pickedRectTips->hide();
     m_magnifyingGlass->show();
-    m_guideTips->show();
+    m_guideTips->hide();
 
     m_timerPoint->setInterval(5000);
     monitorsInfo();
@@ -791,14 +788,16 @@ void ScreenShot::initUI()
     qDebug() << "#2-->" << m_vdRect << "   " << this->rect();
 #endif
 
-
-
-
-
-
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S),  this, [this](){
         qDebug() << "Press CTRL + SHIFT + S";
         imageQuickSave();
+    });
+
+    // 使用 QTimer::singleShot 实现一次性定时器
+    QTimer::singleShot(500, this, [this]() {
+        const QPoint ptGuide(cursorScrn(QCursor::pos())->geometry().bottomLeft() + QPoint(20, -400) + QPoint(0, -m_guideTips->height()));
+        m_guideTips->move(mapFromGlobal(ptGuide));
+        m_guideTips->show();
     });
 }
 
@@ -1877,6 +1876,16 @@ void ScreenShot::showGuideTips()
     if (m_guideTips->actionType() != m_actionType) {
         m_guideTips->setActionType(m_actionType);
     }
+
+    static QScreen* preScrn = nullptr;
+    const QScreen *scrn= cursorScrn(QCursor::pos());
+    if (scrn != preScrn) {
+        m_guideTips->setTextHeight(20 * cursorScrnScale(false));
+        m_guideTips->adjustSize();
+        const QPoint ptGuide(scrn->geometry().bottomLeft() + QPoint(20, -400) + QPoint(0, -m_guideTips->height()));
+        m_guideTips->move(mapFromGlobal(ptGuide));
+    }
+    preScrn = const_cast<QScreen *>(scrn);
 }
 
 void ScreenShot::mousePressEvent(QMouseEvent *e)
@@ -1895,8 +1904,8 @@ void ScreenShot::mouseReleaseEvent(QMouseEvent *e)
     dealMouseReleaseEvent(e);
     showCustomWidget(m_bars);   // 初次右下角的位置会有点错误，就很奇怪,因为初次show 时，其宽度不对，先show一下即可
     showPickedRectTips();
-    update();
     showGuideTips();
+    update();
 
     qDebug() << "mouseReleaseEvent m_redo:" << m_redo.size();
 }

@@ -1,6 +1,7 @@
 #include "xguidetips.h"
 #include "ui_xguidetips.h"
 #include <QDebug>
+#include "communication.h"
 
 XGuideTips::XGuideTips(QWidget *parent)
     : QWidget(parent)
@@ -35,27 +36,22 @@ void XGuideTips::initUI()
         return label;
     };
 
-    const QString& wsad_wait      = tr("Move the cursor by 1 pixel");
-    const QString& wsad_detection = tr("Move the snipping area by 1 pixel");
-    const QString& szTab          = tr("Toggle between window detection and element detection");
-    const QString& szQuoteleft    = tr("Display detailed information about this window's process");
-    const QString& szShift        = tr("Stretch reduction of the snipping area by 1 pixel");
-    const QString& szCtrl         = tr("Stretch enlargement of the snipping area by 1 pixel");
-
-    m_wsadLab           = createLabel(wsad_wait);
-    m_azimuthArrowLab   = createLabel(wsad_wait);
-    m_tabLab            = createLabel(szTab);
-    m_quoteleftLab      = createLabel(szQuoteleft);
-    m_shiftLab          = createLabel(szShift);
-    m_ctrlLab           = createLabel(szCtrl);
+    m_wsadLab           = createLabel("");
+    m_azimuthArrowLab   = createLabel("");
+    m_tabLab            = createLabel("");
+    m_quoteleftLab      = createLabel("");
+    m_shiftLab          = createLabel("");
+    m_ctrlLab           = createLabel("");
     m_debugLab          = createLabel(actionTypeToString(m_type));
+
+    onLanguageChange("");
 
     auto& layout = ui->gridLayout;
     int row = layout->rowCount();
     int colBtnTips = 0;
-    int colLabel = 2;  // 0-控件； 1为20px固定弹簧； 2 为 label 文案
+    int colLabel = 2;  // 0-控件； 1为10px * 缩放比的固定弹簧； 2 为 label 文案
 
-    layout->addItem(new QSpacerItem(20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed), 0, 1);  // 添加一个固定宽度为 20 px 的弹簧
+    layout->addItem(new QSpacerItem(10 * cursorScrnScale(false), 1, QSizePolicy::Fixed, QSizePolicy::Fixed), 0, 1);  // 添加一个固定宽度为 20 px 的弹簧
 
     layout->addWidget(m_wsad, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_wsadLab, row++, colLabel, Qt::AlignLeft);
@@ -77,8 +73,14 @@ void XGuideTips::initUI()
 
     layout->addWidget(m_debug, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_debugLab, row++, colLabel, Qt::AlignLeft);
-    adjustSize(); // 调整窗口大小以适应新布局
 
+
+    connect(&COMM, &Communication::sigLanguageChange, this, [this]() {
+        ui->retranslateUi(this);
+        onLanguageChange("");
+    });
+
+    adjustSize(); // 调整窗口大小以适应新布局
 }
 
 void XGuideTips::paintEvent(QPaintEvent *e)
@@ -94,6 +96,59 @@ void XGuideTips::paintEvent(QPaintEvent *e)
     pa.drawRect(rect());
 }
 
+void XGuideTips::onLanguageChange(const QString &qm)
+{
+    QString wsad_wait      = "";
+    QString wsad_detection = "";
+    if (m_type == ActionType::AT_picking_detection_windows_rect) {
+        wsad_wait      = tr("Move the cursor by 1 pixel");
+        wsad_detection = wsad_wait;
+    } else if (m_type == ActionType::AT_wait) {
+        wsad_wait      = tr("Move the snipping area by 1 pixel");
+        wsad_detection = wsad_wait;
+    } else {
+    }
+
+    const QString& szTab          = tr("Toggle between window detection and element detection");
+    const QString& szQuoteleft    = tr("Display detailed information about this window's process");
+    const QString& szShift        = tr("Stretch reduction of the snipping area by 1 pixel");
+    const QString& szCtrl         = tr("Stretch enlargement of the snipping area by 1 pixel");
+
+    m_wsadLab->setText(wsad_wait);
+    m_azimuthArrowLab->setText(wsad_detection);
+    m_tabLab->setText(szTab);
+    m_quoteleftLab->setText(szQuoteleft);
+    m_shiftLab->setText(szShift);
+    m_ctrlLab->setText(szCtrl);
+    m_debugLab->setText(actionTypeToString(m_type));
+}
+
+int XGuideTips::textHeight() const
+{
+    return m_textHeight;
+}
+
+void XGuideTips::setTextHeight(int newTextHeight)
+{
+    m_textHeight = newTextHeight;
+
+    m_wsad->setTextHeight(m_textHeight);
+    m_azimuthArrow->setTextHeight(m_textHeight);
+    m_tab->setTextHeight(m_textHeight);
+    m_quoteleft->setTextHeight(m_textHeight);
+    m_shift->setTextHeight(m_textHeight);
+    m_ctrl->setTextHeight(m_textHeight);
+    m_debug->setTextHeight(m_textHeight);
+
+    m_wsadLab->setFixedHeight(m_textHeight);
+    m_azimuthArrowLab->setFixedHeight(m_textHeight);
+    m_tabLab->setFixedHeight(m_textHeight);
+    m_quoteleftLab->setFixedHeight(m_textHeight);
+    m_shiftLab->setFixedHeight(m_textHeight);
+    m_ctrlLab->setFixedHeight(m_textHeight);
+    m_debugLab->setFixedHeight(m_textHeight);
+}
+
 ActionType XGuideTips::actionType() const
 {
     return m_type;
@@ -102,6 +157,7 @@ ActionType XGuideTips::actionType() const
 void XGuideTips::setActionType(const ActionType &newActionType)
 {
     m_type = newActionType;
+    onLanguageChange(COMM.toLocaleName(CJ_GET_QSTR("general.language")));
     autoShowGuideTips();
 }
 

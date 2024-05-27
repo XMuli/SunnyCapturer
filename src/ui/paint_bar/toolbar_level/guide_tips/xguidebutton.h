@@ -9,6 +9,7 @@
 #include <QColor>
 #include <QDebug>
 
+
 enum GuidTipsType {
     GTT_empty,
     GTT_WSAD,
@@ -23,6 +24,9 @@ class XGuideButton : public QWidget {
 public:
     XGuideButton(GuidTipsType type, QWidget *parent = nullptr);
 
+    int textHeight() const;
+    void setTextHeight(int newTextHeight);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -33,6 +37,7 @@ private:
 
 private:
     GuidTipsType m_type;
+    int m_textHeight;
     QRect m_margin;
     const int m_spaceStr;
     QColor m_white;

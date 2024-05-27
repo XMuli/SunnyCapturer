@@ -1,4 +1,5 @@
 #include "xguidebutton.h"
+#include "communication.h"
 
 XGuideButton::XGuideButton(GuidTipsType type, QWidget *parent)
     : QWidget(parent)
@@ -8,6 +9,7 @@ XGuideButton::XGuideButton(GuidTipsType type, QWidget *parent)
     , m_white(255, 255, 255, 0.7 * 255)
     , m_charSpacing(10)
 {
+    m_textHeight = 20 * cursorScrnScale(false); // 固定高度为 20 像素
     updateSize();
 }
 
@@ -18,7 +20,7 @@ void XGuideButton::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
 
     // 设置背景色
-    // painter.setBrush(QColor(255, 0, 0, 0.4 * 255)); // 0.4 的红色
+    painter.setBrush(QColor(255, 0, 0, 0.4 * 255)); // 0.4 的红色
 
     // 绘制整体的外边框
     QRect borderRect = rect();
@@ -30,7 +32,8 @@ void XGuideButton::paintEvent(QPaintEvent *e)
 
     QString text = getTextForType(m_type);
     QFontMetrics fm(font());
-    int textHeight = 30; // 固定高度为 30 像素
+
+    int textHeight = m_textHeight;
     int cubeSize = (textHeight - 2) / 2; // 每个小正方形的边长是文本高度减去 2 的一半
     int gap = 5; // 小正方形之间的间隙
 
@@ -80,20 +83,20 @@ void XGuideButton::updateSize()
 
     if (m_type == GTT_ctrl || m_type == GTT_shift) {
         int textWidth = fm.horizontalAdvance(text) + m_spaceStr;
-        int textHeight = 30; // 固定高度为 30 像素
+        int textHeight = m_textHeight; // 固定高度为 30 像素
         int cubeSize = (textHeight - 2) / 2;
         int gap = 5;
         int plusSize = fm.horizontalAdvance("+") + m_charSpacing;;
         int totalWidth = textWidth + gap * 4 + cubeSize * 3 + plusSize;
         setFixedSize(totalWidth + m_margin.left() + m_margin.right(), textHeight + m_margin.top() + m_margin.bottom());
     } else if (isSingleSquareLetter()) {
-        int charWidth = 30;
-        int charHeight = 30;
+        int charWidth = m_textHeight;
+        int charHeight = m_textHeight;
         int totalWidth = text.length() * charWidth + (text.length() - 1) * m_charSpacing + m_margin.left() + m_margin.right();
         setFixedSize(totalWidth, charHeight + m_margin.top() + m_margin.bottom());
     } else {
         int textWidth = fm.horizontalAdvance(text) + m_spaceStr;
-        int textHeight = 30;
+        int textHeight = m_textHeight;
         setFixedSize(textWidth + m_margin.left() + m_margin.right(), textHeight + m_margin.top() + m_margin.bottom());
     }
 }
@@ -122,4 +125,15 @@ QString XGuideButton::getTextForType(GuidTipsType type)
 bool XGuideButton::isSingleSquareLetter() const
 {
     return (m_type == GTT_WSAD || m_type == GTT_azimuth_arrow || m_type == GTT_quoteleft);
+}
+
+int XGuideButton::textHeight() const
+{
+    return m_textHeight;
+}
+
+void XGuideButton::setTextHeight(int newTextHeight)
+{
+    m_textHeight = newTextHeight;
+    updateSize();
 }

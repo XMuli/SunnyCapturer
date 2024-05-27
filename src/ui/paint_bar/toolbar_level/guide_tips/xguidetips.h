@@ -24,14 +24,21 @@ public:
     ActionType actionType() const;
     void setActionType(const ActionType &newActionType);
 
+    int textHeight() const;
+    void setTextHeight(int newTextHeight);
+
 protected:
     bool hideIfAllChildrenHidden();
     void autoShowGuideTips();
     void paintEvent(QPaintEvent *e) override;
 
+private slots:
+    void onLanguageChange(const QString& qm);
+
 private:
     Ui::XGuideTips *ui;
     ActionType      m_type;         // 当前的操作状态
+    int             m_textHeight;
 
     QPointer<XGuideButton> m_wsad;
     QPointer<XGuideButton> m_azimuthArrow;

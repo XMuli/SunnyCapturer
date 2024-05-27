@@ -269,3 +269,90 @@ QString findKeyByValue(const std::map<QString, QString> &myMap, const QString &v
     }
     return ""; // 如果没有找到匹配的值，则返回空字符串
 }
+
+const QScreen *cursorScrn(const QPoint &pos)
+{
+    QScreen* scrn = qGuiApp->screenAt(pos);
+
+#if defined(Q_OS_MACOS)
+    // In macos, mouse position at the bottom or right edge of the screen will crash
+    if (!scrn && (pos.x() >= m_vdRect.right() || pos.y() >= m_vdRect.bottom()))
+        scrn = qGuiApp->screenAt(m_vdRect.bottomRight() - QPoint(1, 1));
+#endif
+
+    if (!scrn) scrn = qGuiApp->primaryScreen();
+
+    if (!scrn) {
+        qDebug() << "[cursorScrn] Gets that the current screen is empty";
+    }
+
+    return scrn;
+}
+
+double cursorScrnScale(const QScreen *screen)
+{
+    double scale = 0;
+#if defined(Q_OS_WIN) ||  defined(Q_OS_LINUX)          // or defined(Q_WS_WIN) || defined(Q_WS_X11)
+    scale = screen->logicalDotsPerInch() / 96.0;
+    if (scale < 1.25)
+        return 1;
+    else if (1.25 <= scale && scale < 1.5)
+        return 1.25;
+    else if (1.5 <= scale && scale < 1.75)
+        return 1.5;
+    else if (1.75 <= scale && scale < 2)
+        return 1.75;
+    else if (2 <= scale && scale < 2.25)
+        return 2;
+    else if (2.25 <= scale && scale < 2.5)
+        return 2.25;
+    else if (2.5 <= scale && scale < 3)
+        return 2.5;
+    else if (3 <= scale && scale < 3.5)
+        return 3;
+    else if (3.5 <= scale && scale < 4)
+        return 3.5;
+    else
+        return scale;
+#elif  defined(Q_OS_MAC)
+    scale = screen->logicalDotsPerInch() / 72.0;
+    return scale;
+#endif
+}
+
+// true-仅一直是主屏的  false-光标所在屏幕的
+double cursorScrnScale(const bool& onlyPrimary)
+{
+    const QScreen* scrn = nullptr;
+    if (onlyPrimary)
+        scrn = qGuiApp->primaryScreen();
+    else
+        scrn = cursorScrn(QCursor::pos());
+
+    if (!scrn) {
+        qDebug() << "[cursorScrnScale] scrn is nullptr";
+    }
+
+    return cursorScrnScale(scrn);
+}
+
+double cursorScrnDpr(const bool &onlyPrimary)
+{
+    const QScreen* scrn = nullptr;
+    if (onlyPrimary)
+        scrn = qGuiApp->primaryScreen();
+    else
+        scrn = cursorScrn(QCursor::pos());
+
+    if (!scrn) {
+        qDebug() << "[cursorScrnDpr] scrn is nullptr";
+        return 1.0;
+    }
+
+    return scrn->devicePixelRatio();
+}
+
+double appGuiDpr()
+{
+    return qGuiApp->devicePixelRatio();
+}

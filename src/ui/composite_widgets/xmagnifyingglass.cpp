@@ -49,7 +49,6 @@ XMagnifyingGlass::~XMagnifyingGlass()
 
 void XMagnifyingGlass::setPixmap(const QPoint &pt, const QPixmap& origPix)
 {
-
     const double& dpr = qGuiApp->primaryScreen()->devicePixelRatio();
 //    QRect rt = QRect(rect.topLeft() * dpr, rect.size() * dpr);
     const int rX = 12;  // 宽、高的一半

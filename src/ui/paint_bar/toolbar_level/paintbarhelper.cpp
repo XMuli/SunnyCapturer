@@ -250,3 +250,5 @@ QString formatToFileName(const QString &name)
 
     return finalyName;
 }
+
+
