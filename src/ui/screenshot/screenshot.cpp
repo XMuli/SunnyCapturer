@@ -1744,9 +1744,14 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         bUpdate = true;
     }
 
+    // 截图区域选中为当前屏幕
+    if (ctrl && e->key() == Qt::Key_E) {
+            rt = cursorScrn(QCursor::pos())->geometry();
+            // rt = m_vdRect;
+    }
+
     const bool& showMagnifyingGlass = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
     if (showMagnifyingGlass) {
-
         QPoint currentPos = QCursor::pos();
         const int moveAmount = 1; // 设置移动像素数
         if (left) QCursor::setPos(currentPos.x() - moveAmount, currentPos.y());

@@ -721,15 +721,15 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Stretch reduction of the snipping area by 1 pixel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stretch enlargement of the snipping area by 1 pixel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Adjust the pen width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enlargement / Reduction of the snipping area by 1 pixel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the active screen / fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

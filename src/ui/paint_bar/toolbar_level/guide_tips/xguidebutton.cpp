@@ -38,20 +38,31 @@ void XGuideButton::paintEvent(QPaintEvent *e)
     int cubeSize = (textHeight - 2) / 2; // 每个小正方形的边长是文本高度减去 2 的一半
     int gap = 5; // 小正方形之间的间隙
 
-    if (m_type == GTT_ctrl || m_type == GTT_shift) {
-        // 绘制文字和边框
-        QRect textRect = QRect(borderRect.left() + m_margin.left(), borderRect.top() + m_margin.top(), fm.horizontalAdvance(text) + m_spaceStr, borderRect.height() - m_margin.top());
-        painter.drawRect(textRect);
-        painter.drawText(textRect, Qt::AlignCenter, text);
+    if (m_type == GTT_ctrl_shift) {
+        text = "Ctrl";
+        QRect ctrlRect = QRect(borderRect.left() + m_margin.left(), borderRect.top() + m_margin.top(), fm.horizontalAdvance(text) + m_spaceStr, borderRect.height() - m_margin.top());
+        painter.drawRect(ctrlRect);
+        painter.drawText(ctrlRect, Qt::AlignCenter, text);
+
+        // 绘制 / 反斜杠
+        int backslashSize = fm.horizontalAdvance("/") + m_charSpacing;
+        QRect backslashSizeRect(ctrlRect.right() + gap, ctrlRect.top(), backslashSize, borderRect.height() - m_margin.top());
+        // painter.drawRect(backslashSizeRect);
+        painter.drawText(backslashSizeRect, Qt::AlignCenter, "/");
+
+        text = "Shift";
+        QRect shiftRect = QRect(backslashSizeRect.right() + m_margin.left(), ctrlRect.top(), fm.horizontalAdvance(text) + m_spaceStr, borderRect.height() - m_margin.top());
+        painter.drawRect(shiftRect);
+        painter.drawText(shiftRect, Qt::AlignCenter, text);
 
         // 绘制加号
         int plusSize = fm.horizontalAdvance("+") + m_charSpacing;
-        QRect plusRect(textRect.right() + gap, textRect.top(), plusSize, textHeight);
+        QRect plusRect(shiftRect.right() + gap, ctrlRect.top(), plusSize, textHeight);
         // painter.drawRect(plusRect);
         painter.drawText(plusRect, Qt::AlignCenter, "+");
 
         // 绘制方位提示的小正方形
-        QRect topRect(plusRect.right() + cubeSize + gap * 2  , textRect.top(), cubeSize, cubeSize);
+        QRect topRect(plusRect.right() + cubeSize + gap * 2  , ctrlRect.top(), cubeSize, cubeSize);
         painter.drawRect(topRect);
 
         QRect leftRect(topRect.left() - cubeSize - gap, topRect.bottom() + gap, cubeSize, cubeSize);
@@ -61,6 +72,25 @@ void XGuideButton::paintEvent(QPaintEvent *e)
         painter.drawRect(leftRect);
         painter.drawRect(middleRect);
         painter.drawRect(rightRect);
+
+    } else if (m_type == GTT_ctrl_e) {
+        // 绘制文字和边框
+        text = "Ctrl";
+        QRect ctrlRect = QRect(borderRect.left() + m_margin.left(), borderRect.top() + m_margin.top(), fm.horizontalAdvance(text) + m_spaceStr, borderRect.height() - m_margin.top());
+        painter.drawRect(ctrlRect);
+        painter.drawText(ctrlRect, Qt::AlignCenter, text);
+
+        // 绘制加号
+        int plusSize = fm.horizontalAdvance("+") + m_charSpacing;
+        QRect plusRect(ctrlRect.right() + gap, ctrlRect.top(), plusSize, textHeight);
+        // painter.drawRect(plusRect);
+        painter.drawText(plusRect, Qt::AlignCenter, "+");
+
+        text = getTextForType(m_type);
+        QRect aRect = QRect(plusRect.right() + m_margin.left(), ctrlRect.top(), m_textHeight, borderRect.height() - m_margin.top());
+        painter.drawRect(aRect);
+        painter.drawText(aRect, Qt::AlignCenter, text);
+
     } else if (m_type == GTT_mouse_wheel) {
         // 计算基于 textHeight 的尺寸
         QRect rt = QRect(borderRect.left() + m_margin.left(), borderRect.top() + m_margin.top(), textHeight, textHeight);
@@ -90,14 +120,17 @@ void XGuideButton::updateSize()
     QString text = getTextForType(m_type);
     QFontMetrics fm(font());
 
-    if (m_type == GTT_ctrl || m_type == GTT_shift) {
-        int textWidth = fm.horizontalAdvance(text) + m_spaceStr;
-        int textHeight = m_textHeight; // 固定高度为 30 像素
-        int cubeSize = (textHeight - 2) / 2;
-        int gap = 5;
-        int plusSize = fm.horizontalAdvance("+") + m_charSpacing;
-        int totalWidth = textWidth + gap * 4 + cubeSize * 3 + plusSize;
-        setFixedSize(totalWidth + m_margin.left() + m_margin.right(), textHeight + m_margin.top() + m_margin.bottom());
+    int gap = 5;
+    if (m_type == GTT_ctrl_shift) {
+        int cubeSize = (m_textHeight - 2) / 2;
+        int width = fm.horizontalAdvance("Ctrl") + m_spaceStr + fm.horizontalAdvance("/") + m_charSpacing
+                    + fm.horizontalAdvance("Shift") + m_spaceStr + fm.horizontalAdvance("+") + m_charSpacing
+                    + cubeSize * 3 + gap * 5;
+        setFixedSize(width + m_margin.left() + m_margin.right(), m_textHeight + m_margin.top() + m_margin.bottom());
+    } else if (m_type == GTT_ctrl_e) {
+        int width = fm.horizontalAdvance("Ctrl") + m_spaceStr + fm.horizontalAdvance("+") + m_charSpacing
+                    + m_textHeight + gap;
+        setFixedSize(width + m_margin.left() + m_margin.right(), m_textHeight + m_margin.top() + m_margin.bottom());
     } else if (m_type == GTT_mouse_wheel) {
         int ellipseWidth = m_textHeight;
         int ellipseHeight = m_textHeight;
@@ -123,10 +156,12 @@ QString XGuideButton::getTextForType(GuidTipsType type)
         return "←↑→↓";
     case GTT_tab:
         return "Tab";
+    case GTT_ctrl_shift:
+        return "ShiftCtrl";
     case GTT_shift:
         return "Shift";
-    case GTT_ctrl:
-        return "Ctrl";
+    case GTT_ctrl_e:
+        return "E";
     case GTT_quoteleft:
         return "`";
     case GTT_mouse_wheel: // Added new case

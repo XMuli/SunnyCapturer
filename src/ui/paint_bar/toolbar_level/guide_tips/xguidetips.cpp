@@ -10,8 +10,8 @@ XGuideTips::XGuideTips(QWidget *parent)
     , m_azimuthArrow(new XGuideButton(GuidTipsType::GTT_azimuth_arrow, this))
     , m_tab(new XGuideButton(GuidTipsType::GTT_tab, this))
     , m_quoteleft(new XGuideButton(GuidTipsType::GTT_quoteleft, this))
-    , m_shift(new XGuideButton(GuidTipsType::GTT_shift, this))
-    , m_ctrl(new XGuideButton(GuidTipsType::GTT_ctrl, this))
+    , m_ctrlShift(new XGuideButton(GuidTipsType::GTT_ctrl_shift, this))
+    , m_ctrlE(new XGuideButton(GuidTipsType::GTT_ctrl_e, this))
     , m_mouseWheel(new XGuideButton(GuidTipsType::GTT_mouse_wheel, this))
     , m_debug(new XGuideButton(GuidTipsType::GTT_quoteleft, this))
 {
@@ -31,7 +31,7 @@ void XGuideTips::initUI()
         QLabel *label = new QLabel(text);
         label->setStyleSheet(
             "color: rgba(255, 255, 255, 1);"
-            "background-color: rgba(255, 0, 0, 0.4);"
+            // "background-color: rgba(255, 0, 0, 0.4);"
             );
         label->adjustSize();
         return label;
@@ -41,8 +41,8 @@ void XGuideTips::initUI()
     m_azimuthArrowLab   = createLabel("");
     m_tabLab            = createLabel("");
     m_quoteleftLab      = createLabel("");
-    m_shiftLab          = createLabel("");
-    m_ctrlLab           = createLabel("");
+    m_ctrlShiftLab      = createLabel("");
+    m_ctrlELab           = createLabel("");
     m_mouseWheelLab     = createLabel("");
     m_debugLab          = createLabel(actionTypeToString(m_type));
 
@@ -61,20 +61,20 @@ void XGuideTips::initUI()
     layout->addWidget(m_azimuthArrow, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_azimuthArrowLab, row++, colLabel, Qt::AlignLeft);
 
+    layout->addWidget(m_ctrlShift, row, colBtnTips, Qt::AlignRight);
+    layout->addWidget(m_ctrlShiftLab, row++, colLabel, Qt::AlignLeft);
+
     layout->addWidget(m_tab, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_tabLab, row++, colLabel, Qt::AlignLeft);
 
     layout->addWidget(m_quoteleft, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_quoteleftLab, row++, colLabel, Qt::AlignLeft);
 
-    layout->addWidget(m_shift, row, colBtnTips, Qt::AlignRight);
-    layout->addWidget(m_shiftLab, row++, colLabel, Qt::AlignLeft);
-
-    layout->addWidget(m_ctrl, row, colBtnTips, Qt::AlignRight);
-    layout->addWidget(m_ctrlLab, row++, colLabel, Qt::AlignLeft);
-
     layout->addWidget(m_mouseWheel, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_mouseWheelLab, row++, colLabel, Qt::AlignLeft);
+
+    layout->addWidget(m_ctrlE, row, colBtnTips, Qt::AlignRight);
+    layout->addWidget(m_ctrlELab, row++, colLabel, Qt::AlignLeft);
 
     layout->addWidget(m_debug, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_debugLab, row++, colLabel, Qt::AlignLeft);
@@ -108,26 +108,27 @@ void XGuideTips::onLanguageChange(const QString &qm)
     if (m_type == ActionType::AT_picking_detection_windows_rect) {
         wsad_wait      = tr("Move the cursor by 1 pixel");
         wsad_detection = wsad_wait;
-    } else if (m_type == ActionType::AT_wait) {
+    } else { // ActionType::AT_wait and else
         wsad_wait      = tr("Move the snipping area by 1 pixel");
         wsad_detection = wsad_wait;
-    } else {
     }
 
     const QString& szTab          = tr("Toggle between window detection and element detection");
     const QString& szQuoteleft    = tr("Display detailed information about this window's process");
-    const QString& szShift        = tr("Stretch reduction of the snipping area by 1 pixel");
-    const QString& szCtrl         = tr("Stretch enlargement of the snipping area by 1 pixel");
+    const QString& szCtrlShiftLab = tr("Enlargement / Reduction of the snipping area by 1 pixel");
+    const QString& szCtrlA        = tr("Select the active screen / fullscreen");
     const QString& szMouseWheel   = tr("Adjust the pen width");
 
     m_wsadLab->setText(wsad_wait);
     m_azimuthArrowLab->setText(wsad_detection);
     m_tabLab->setText(szTab);
     m_quoteleftLab->setText(szQuoteleft);
-    m_shiftLab->setText(szShift);
-    m_ctrlLab->setText(szCtrl);
+    m_ctrlShiftLab->setText(szCtrlShiftLab);
+    m_ctrlELab->setText(szCtrlA);
     m_mouseWheelLab->setText(szMouseWheel);
     m_debugLab->setText(actionTypeToString(m_type));
+
+    adjustSize();
 }
 
 int XGuideTips::textHeight() const
@@ -143,8 +144,8 @@ void XGuideTips::setTextHeight(int newTextHeight)
     m_azimuthArrow->setTextHeight(m_textHeight);
     m_tab->setTextHeight(m_textHeight);
     m_quoteleft->setTextHeight(m_textHeight);
-    m_shift->setTextHeight(m_textHeight);
-    m_ctrl->setTextHeight(m_textHeight);
+    m_ctrlShift->setTextHeight(m_textHeight);
+    m_ctrlE->setTextHeight(m_textHeight);
     m_mouseWheel->setTextHeight(m_textHeight);
     m_debug->setTextHeight(m_textHeight);
 
@@ -152,8 +153,8 @@ void XGuideTips::setTextHeight(int newTextHeight)
     m_azimuthArrowLab->setFixedHeight(m_textHeight);
     m_tabLab->setFixedHeight(m_textHeight);
     m_quoteleftLab->setFixedHeight(m_textHeight);
-    m_shiftLab->setFixedHeight(m_textHeight);
-    m_ctrlLab->setFixedHeight(m_textHeight);
+    m_ctrlShiftLab->setFixedHeight(m_textHeight);
+    m_ctrlELab->setFixedHeight(m_textHeight);
     m_mouseWheelLab->setFixedHeight(m_textHeight);
     m_debugLab->setFixedHeight(m_textHeight);
 }
@@ -207,10 +208,10 @@ void XGuideTips::autoShowGuideTips()
     }
 
     if (m_type == ActionType::AT_picking_detection_windows_rect) {
-        m_shift->hide();
-        m_ctrl->hide();
-        m_shiftLab->hide();
-        m_ctrlLab->hide();
+        m_ctrlShift->hide();
+        m_ctrlShiftLab->hide();
+        // m_ctrlE->hide();
+        // m_ctrlELab->hide();
     } else if (m_type == ActionType::AT_wait) {
 
     }

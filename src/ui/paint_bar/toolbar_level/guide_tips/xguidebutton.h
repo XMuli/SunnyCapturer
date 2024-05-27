@@ -14,8 +14,9 @@ enum GuidTipsType {
     GTT_WSAD,
     GTT_azimuth_arrow,
     GTT_tab,
+    GTT_ctrl_shift,
     GTT_shift,
-    GTT_ctrl,
+    GTT_ctrl_e,  // 当前广光标所在的单个屏幕 / 整个多个屏幕
     GTT_quoteleft,
     GTT_mouse_wheel // Added new enum type
 };

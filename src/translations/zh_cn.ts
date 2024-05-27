@@ -722,16 +722,16 @@ and specify -1 to let Sunny decide for you.</source>
         <translation>显示此窗口的进程详细信息</translation>
     </message>
     <message>
-        <source>Stretch reduction of the snipping area by 1 pixel</source>
-        <translation>缩小截屏区域 1 像素</translation>
-    </message>
-    <message>
-        <source>Stretch enlargement of the snipping area by 1 pixel</source>
-        <translation>扩大截屏区域 1 像素</translation>
-    </message>
-    <message>
         <source>Adjust the pen width</source>
         <translation>调整画笔粗细</translation>
+    </message>
+    <message>
+        <source>Enlargement / Reduction of the snipping area by 1 pixel</source>
+        <translation>扩大 / 缩小截屏区域 1 像素</translation>
+    </message>
+    <message>
+        <source>Select the active screen / fullscreen</source>
+        <translation>设置截屏区域为当前屏幕 / 全屏</translation>
     </message>
 </context>
 <context>

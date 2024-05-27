@@ -721,16 +721,16 @@ and specify -1 to let Sunny decide for you.</source>
         <translation>顯示此窗口的進程詳細信息</translation>
     </message>
     <message>
-        <source>Stretch reduction of the snipping area by 1 pixel</source>
-        <translation>縮小截屏區域 1 像素</translation>
-    </message>
-    <message>
-        <source>Stretch enlargement of the snipping area by 1 pixel</source>
-        <translation>擴大截屏區域 1 像素</translation>
-    </message>
-    <message>
         <source>Adjust the pen width</source>
         <translation>調整畫筆粗細</translation>
+    </message>
+    <message>
+        <source>Enlargement / Reduction of the snipping area by 1 pixel</source>
+        <translation>擴大 / 縮小截屏區域 1 像素</translation>
+    </message>
+    <message>
+        <source>Select the active screen / fullscreen</source>
+        <translation>設置截屏區域為當前屏幕 / 全屏</translation>
     </message>
 </context>
 <context>

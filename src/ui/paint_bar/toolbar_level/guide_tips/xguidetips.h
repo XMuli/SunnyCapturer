@@ -44,8 +44,8 @@ private:
     QPointer<XGuideButton> m_azimuthArrow;
     QPointer<XGuideButton> m_tab;
     QPointer<XGuideButton> m_quoteleft;
-    QPointer<XGuideButton> m_shift;
-    QPointer<XGuideButton> m_ctrl;
+    QPointer<XGuideButton> m_ctrlShift;
+    QPointer<XGuideButton> m_ctrlE;
     QPointer<XGuideButton> m_mouseWheel;
     QPointer<XGuideButton> m_debug;
 
@@ -53,8 +53,8 @@ private:
     QPointer<QLabel>       m_azimuthArrowLab;
     QPointer<QLabel>       m_tabLab;
     QPointer<QLabel>       m_quoteleftLab;
-    QPointer<QLabel>       m_shiftLab;
-    QPointer<QLabel>       m_ctrlLab;
+    QPointer<QLabel>       m_ctrlShiftLab;
+    QPointer<QLabel>       m_ctrlELab;
     QPointer<QLabel>       m_mouseWheelLab;
     QPointer<QLabel>       m_debugLab;
 };
