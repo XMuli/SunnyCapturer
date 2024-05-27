@@ -46,6 +46,7 @@ private:
     QPointer<XGuideButton> m_quoteleft;
     QPointer<XGuideButton> m_shift;
     QPointer<XGuideButton> m_ctrl;
+    QPointer<XGuideButton> m_mouseWheel;
     QPointer<XGuideButton> m_debug;
 
     QPointer<QLabel>       m_wsadLab;
@@ -54,6 +55,7 @@ private:
     QPointer<QLabel>       m_quoteleftLab;
     QPointer<QLabel>       m_shiftLab;
     QPointer<QLabel>       m_ctrlLab;
+    QPointer<QLabel>       m_mouseWheelLab;
     QPointer<QLabel>       m_debugLab;
 };
 

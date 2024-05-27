@@ -6,7 +6,7 @@ XGuideButton::XGuideButton(GuidTipsType type, QWidget *parent)
     , m_type(type)
     , m_margin(2, 2, 2, 2)
     , m_spaceStr(qMax(m_margin.left() + m_margin.right(), 14))
-    , m_white(255, 255, 255, 0.7 * 255)
+    , m_white(255, 255, 255, 0.9 * 255)
     , m_charSpacing(10)
 {
     m_textHeight = 20 * cursorScrnScale(false); // 固定高度为 20 像素
@@ -17,10 +17,11 @@ void XGuideButton::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    painter.save();
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
     // 设置背景色
-    painter.setBrush(QColor(255, 0, 0, 0.4 * 255)); // 0.4 的红色
+    // painter.setBrush(QColor(255, 0, 0, 0.4 * 255)); // 0.4 的红色
 
     // 绘制整体的外边框
     QRect borderRect = rect();
@@ -60,6 +61,12 @@ void XGuideButton::paintEvent(QPaintEvent *e)
         painter.drawRect(leftRect);
         painter.drawRect(middleRect);
         painter.drawRect(rightRect);
+    } else if (m_type == GTT_mouse_wheel) {
+        // 计算基于 textHeight 的尺寸
+        QRect rt = QRect(borderRect.left() + m_margin.left(), borderRect.top() + m_margin.top(), textHeight, textHeight);
+        QPixmap pix(":/resources/icons/guide_tips/wheel_mouse.svg");
+        painter.drawPixmap(rt, pix);
+
     } else if (isSingleSquareLetter()) {
         int charWidth = textHeight;
         int totalWidth = text.length() * charWidth + (text.length() - 1) * m_charSpacing;
@@ -74,6 +81,8 @@ void XGuideButton::paintEvent(QPaintEvent *e)
         painter.drawRect(textRect);
         painter.drawText(textRect, Qt::AlignCenter, text);
     }
+
+    painter.restore();
 }
 
 void XGuideButton::updateSize()
@@ -86,9 +95,13 @@ void XGuideButton::updateSize()
         int textHeight = m_textHeight; // 固定高度为 30 像素
         int cubeSize = (textHeight - 2) / 2;
         int gap = 5;
-        int plusSize = fm.horizontalAdvance("+") + m_charSpacing;;
+        int plusSize = fm.horizontalAdvance("+") + m_charSpacing;
         int totalWidth = textWidth + gap * 4 + cubeSize * 3 + plusSize;
         setFixedSize(totalWidth + m_margin.left() + m_margin.right(), textHeight + m_margin.top() + m_margin.bottom());
+    } else if (m_type == GTT_mouse_wheel) {
+        int ellipseWidth = m_textHeight;
+        int ellipseHeight = m_textHeight;
+        setFixedSize(ellipseWidth + m_margin.left() + m_margin.right(), ellipseHeight + m_margin.top() + m_margin.bottom());
     } else if (isSingleSquareLetter()) {
         int charWidth = m_textHeight;
         int charHeight = m_textHeight;
@@ -116,6 +129,8 @@ QString XGuideButton::getTextForType(GuidTipsType type)
         return "Ctrl";
     case GTT_quoteleft:
         return "`";
+    case GTT_mouse_wheel: // Added new case
+        return "Mouse Wheel";
     case GTT_empty:
     default:
         return "";

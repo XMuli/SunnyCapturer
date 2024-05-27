@@ -12,6 +12,7 @@ XGuideTips::XGuideTips(QWidget *parent)
     , m_quoteleft(new XGuideButton(GuidTipsType::GTT_quoteleft, this))
     , m_shift(new XGuideButton(GuidTipsType::GTT_shift, this))
     , m_ctrl(new XGuideButton(GuidTipsType::GTT_ctrl, this))
+    , m_mouseWheel(new XGuideButton(GuidTipsType::GTT_mouse_wheel, this))
     , m_debug(new XGuideButton(GuidTipsType::GTT_quoteleft, this))
 {
     ui->setupUi(this);
@@ -42,6 +43,7 @@ void XGuideTips::initUI()
     m_quoteleftLab      = createLabel("");
     m_shiftLab          = createLabel("");
     m_ctrlLab           = createLabel("");
+    m_mouseWheelLab     = createLabel("");
     m_debugLab          = createLabel(actionTypeToString(m_type));
 
     onLanguageChange("");
@@ -70,6 +72,9 @@ void XGuideTips::initUI()
 
     layout->addWidget(m_ctrl, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_ctrlLab, row++, colLabel, Qt::AlignLeft);
+
+    layout->addWidget(m_mouseWheel, row, colBtnTips, Qt::AlignRight);
+    layout->addWidget(m_mouseWheelLab, row++, colLabel, Qt::AlignLeft);
 
     layout->addWidget(m_debug, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_debugLab, row++, colLabel, Qt::AlignLeft);
@@ -113,6 +118,7 @@ void XGuideTips::onLanguageChange(const QString &qm)
     const QString& szQuoteleft    = tr("Display detailed information about this window's process");
     const QString& szShift        = tr("Stretch reduction of the snipping area by 1 pixel");
     const QString& szCtrl         = tr("Stretch enlargement of the snipping area by 1 pixel");
+    const QString& szMouseWheel   = tr("Adjust the pen width");
 
     m_wsadLab->setText(wsad_wait);
     m_azimuthArrowLab->setText(wsad_detection);
@@ -120,6 +126,7 @@ void XGuideTips::onLanguageChange(const QString &qm)
     m_quoteleftLab->setText(szQuoteleft);
     m_shiftLab->setText(szShift);
     m_ctrlLab->setText(szCtrl);
+    m_mouseWheelLab->setText(szMouseWheel);
     m_debugLab->setText(actionTypeToString(m_type));
 }
 
@@ -138,6 +145,7 @@ void XGuideTips::setTextHeight(int newTextHeight)
     m_quoteleft->setTextHeight(m_textHeight);
     m_shift->setTextHeight(m_textHeight);
     m_ctrl->setTextHeight(m_textHeight);
+    m_mouseWheel->setTextHeight(m_textHeight);
     m_debug->setTextHeight(m_textHeight);
 
     m_wsadLab->setFixedHeight(m_textHeight);
@@ -146,6 +154,7 @@ void XGuideTips::setTextHeight(int newTextHeight)
     m_quoteleftLab->setFixedHeight(m_textHeight);
     m_shiftLab->setFixedHeight(m_textHeight);
     m_ctrlLab->setFixedHeight(m_textHeight);
+    m_mouseWheelLab->setFixedHeight(m_textHeight);
     m_debugLab->setFixedHeight(m_textHeight);
 }
 

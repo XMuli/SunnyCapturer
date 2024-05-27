@@ -62,5 +62,6 @@
         <file>resources/icons/setting/tokens/youdao.svg</file>
         <file>resources/icons/setting/tokens/auto.svg</file>
         <file>resources/logo/logo.png</file>
+        <file>resources/icons/guide_tips/wheel_mouse.svg</file>
     </qresource>
 </RCC>

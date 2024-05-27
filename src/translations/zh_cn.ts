@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_cn">
+<TS version="2.1" language="zh_CN">
 <context>
     <name>About</name>
     <message>
@@ -701,6 +701,37 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Image Translate Capture</source>
         <translation>图片翻译截图</translation>
+    </message>
+</context>
+<context>
+    <name>XGuideTips</name>
+    <message>
+        <source>Move the cursor by 1 pixel</source>
+        <translation>将鼠标指针移动 1 像素</translation>
+    </message>
+    <message>
+        <source>Move the snipping area by 1 pixel</source>
+        <translation>将截屏区域移动 1 像素</translation>
+    </message>
+    <message>
+        <source>Toggle between window detection and element detection</source>
+        <translation>切换检测窗口/子控件元素</translation>
+    </message>
+    <message>
+        <source>Display detailed information about this window&apos;s process</source>
+        <translation>显示此窗口的进程详细信息</translation>
+    </message>
+    <message>
+        <source>Stretch reduction of the snipping area by 1 pixel</source>
+        <translation>缩小截屏区域 1 像素</translation>
+    </message>
+    <message>
+        <source>Stretch enlargement of the snipping area by 1 pixel</source>
+        <translation>扩大截屏区域 1 像素</translation>
+    </message>
+    <message>
+        <source>Adjust the pen width</source>
+        <translation>调整画笔粗细</translation>
     </message>
 </context>
 <context>
