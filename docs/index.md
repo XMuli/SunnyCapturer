@@ -55,7 +55,7 @@ features:
       light: /images/home/macos.svg
       dark:  /images/home/macos_blue.svg
   - title: Linux
-    details: Debian / Ubuntu / Deepin / UOS / OpenKylin / Kali / etc.
+    details: Debian / Ubuntu / Deepin / UOS / OpenKylin / ArchLinux / Mint / Kali / Fedora / Devuan / Pop!_OS / etc.
     icon: 
       light: /images/home/linux.svg
       dark:  /images/home/linux_blue.svg
@@ -65,3 +65,18 @@ features:
       light: /images/home/appstore.svg
       dark:  /images/home/appstore_blue.svg
 ---
+
+<br><br><br><br><br><br><br><br>
+
+[<img src="https://img.shields.io/github/release/XMuli/SunnyPages.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyPages/releases)
+
+[<img src="https://img.shields.io/github/downloads/XMuli/SunnyPages/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyPages/releases)  
+
+##### Supported Chips: 
+  - x86-64
+  - ARM64
+  - LOONGSON (龙芯)
+<!-- ##### Supported Operating Systems:
+  - **Windows:** 7 / 8 / 10 / 11
+  - **MacOS:** 10 / 11 / 12 / 13 / 14
+  - **Linux:** Debian / Ubuntu / Deepin / UOS / OpenKylin / Arch Linux / Linux Mint / Kali / Fedora / Devuan / Pop!_OS / etc. -->

@@ -22,13 +22,18 @@ The following platforms have been verified to run successfully, lower versions h
 
 
 ### Verified versions of Linux distributions：
-1. Ubuntu 22.04 / 22.04
-2. Debian 12
+1. Ubuntu 22.04 / 23.10 / 24.04 / Oracular Oriole
+2. Debian 11 / 12 / trixie
 3. Deepin V20-23 
 4. UOS 1010
 5. OpenKylin 1.0.1 / 1.0.2
-6. Kali 24.1
-7. etc.
+6. Arch Linux
+7. Linux Mint 21.3
+8. Kali GNU/Linux Rolling / 24.1
+9. Fedora Linux 40 (KDE Plasma)
+10. Devuan GNU/Linux 5 (daedalus)
+11. Pop!_OS 22.04 LTS
+12. etc.
 
 
 ### Validated chip architecture versions:
