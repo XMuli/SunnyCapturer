@@ -104,6 +104,7 @@ private:
     QPoint customWidgetShowPositionRule(const CustomWidgetType& cwt);
     void showPointTips(const QString &text);
     void showPickedRectTips();
+    void autoHideGuideTips(const bool& isInit = false);  // 自动隐藏引导提示
 
     void printfDevelopProjectInfo();
     void prinftWindowsRects(QPainter &pa);
@@ -159,6 +160,7 @@ private:
     QPointer<Tips>                m_pickedRectTips;
     QTimer*                       m_timerPoint;
     static QFont                  m_textFont;            // 绘画字体的时候，显示的
+
 };
 
 const QRect xrectToQRect(const XRECT &rect);

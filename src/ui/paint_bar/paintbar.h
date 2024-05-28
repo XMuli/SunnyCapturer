@@ -24,6 +24,7 @@ public:
     void setLowerBlurEffect(const QPixmap &pix, int radius);
     void disableBlurEffect();
     void runImgTranslate();
+    Qt::Orientation orie() const;
 
 private:
     void initUI();

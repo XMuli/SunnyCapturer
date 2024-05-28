@@ -215,3 +215,8 @@ void PaintBar::paintEvent(QPaintEvent *e)
         pa.drawLine(line);
     }
 }
+
+Qt::Orientation PaintBar::orie() const
+{
+    return m_orie;
+}

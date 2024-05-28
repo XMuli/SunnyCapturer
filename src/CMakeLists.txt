@@ -12,7 +12,7 @@ set(project_version_path 3)
 set(project_version ${project_version_major}.${project_version_minor}.${project_version_path})
 project(${project_name} VERSION ${project_version} LANGUAGES CXX)
 
-add_definitions(-DXBUILD_TIME="2024.05.25")
+add_definitions(-DXBUILD_TIME="2024.05.29")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -26,7 +26,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # add_compile_definitions(HIDE_TOOL_BAR_BLUR_EFFECT)   # 开启-隐藏 PaintToolBar 的跨平台模糊效果
 endif()
 
-add_compile_definitions(NO_SEND_USER_DATA)             # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
+# add_compile_definitions(NO_SEND_USER_DATA)             # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 add_compile_definitions(LOG_MORE_INFO_DEVELOP)         # 便于调试，打印更多的信息，包含文件名，行数函数名 等信息到日志里面
 add_compile_definitions(QT_MESSAGELOGCONTEXT)          # Release 日志也可以输出 文件名 和 路径
 
@@ -524,7 +524,6 @@ elseif (UNIX)
 
     # 指定 post-install 脚本文件;  ~/.config/Sunny 文件夹删除 → postinst-安装时删除;  postrm-卸载时删除
     # set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postinst;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm")
-    set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debian/postrm")
 
     # 设置Debian软件包的依赖关系
     set(CPACK_DEBIAN_PACKAGE_SHILIBDEPS ON)

@@ -34,8 +34,8 @@
         "quick_save_enable": true,
         "auto_save_enable": false,
         "config_path": "",
-        "quick_save_path": "",
-        "auto_save_path": ""
+        "quick_save_path": "F1",
+        "auto_save_path": "Alt+F1"
     },
     "pin": {
         "opacity": 100,

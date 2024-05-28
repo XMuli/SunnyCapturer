@@ -794,10 +794,11 @@ void ScreenShot::initUI()
     });
 
     // 使用 QTimer::singleShot 实现一次性定时器
-    QTimer::singleShot(500, this, [this]() {
-        const QPoint ptGuide(cursorScrn(QCursor::pos())->geometry().bottomLeft() + QPoint(20, -400) + QPoint(0, -m_guideTips->height()));
-        m_guideTips->move(mapFromGlobal(ptGuide));
+    QTimer::singleShot(50, this, [this]() {
         m_guideTips->show();
+        autoHideGuideTips(true);
+        const QPoint ptGuide(cursorScrn(QCursor::pos())->geometry().bottomLeft() + QPoint(20, -20) + QPoint(0, -m_guideTips->height()));
+        m_guideTips->move(mapFromGlobal(ptGuide));
     });
 }
 
@@ -1123,6 +1124,7 @@ void ScreenShot::printfDevelopProjectInfo()
         QPoint tPt = m_node.pt;
         QRect tPickedRect = m_node.pickedRect;
         QRect absoluteRect = m_node.absoluteRect;
+        QRect guideTipsRect = QRect((m_guideTips->mapTo(this, m_guideTips->rect().topLeft())), m_guideTips->rect().size());
 
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
                                                                        .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
@@ -1135,6 +1137,11 @@ void ScreenShot::printfDevelopProjectInfo()
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("m_bars Rect:(%3, %4, %5 * %6) m_pickedRectTips Rect:(%7, %8, %9 * %10)")
                                                                        .arg(m_bars->rect().x()).arg(m_bars->rect().y()).arg(m_bars->rect().width()).arg(m_bars->rect().height())
                                                                        .arg(m_pickedRectTips->rect().x()).arg(m_pickedRectTips->rect().y()).arg(m_pickedRectTips->rect().width()).arg(m_pickedRectTips->rect().height()));
+
+
+        pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("guideTipsRect: p1:(%1, %2 %3 x %4) \n")
+                                                                       .arg(guideTipsRect.x()).arg(guideTipsRect.y()).arg(guideTipsRect.width()).arg(guideTipsRect.height()));
+
 
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("//[m_paintNode]----------------------------------------------------"));
         tP1 = m_paintNode.node.p1;
@@ -1746,8 +1753,16 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
 
     // 截图区域选中为当前屏幕
     if (ctrl && e->key() == Qt::Key_E) {
-            rt = cursorScrn(QCursor::pos())->geometry();
-            // rt = m_vdRect;
+        static bool turn = true;
+
+        if (turn) {
+            const auto curRt = cursorScrn(QCursor::pos())->geometry();
+            rt = QRect(mapFromGlobal(curRt.topLeft()), curRt.size());
+        } else {
+            rt = QRect(QPoint(0, 0), m_vdRect.size());
+        }
+
+        turn = !turn;
     }
 
     const bool& showMagnifyingGlass = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
@@ -1876,20 +1891,45 @@ void ScreenShot::showCollimatorCursor(QPainter &pa)
     pa.restore();
 }
 
+void ScreenShot::autoHideGuideTips(const bool& isInit)
+{
+    const auto& rt1 = QRect((m_guideTips->mapTo(this, m_guideTips->rect().topLeft())), m_guideTips->rect().size());
+    // 判断两个矩形是否相交
+    QRect nodeRt = isInit ? m_node.pickedRect : m_node.absoluteRect;
+    int margin = 8;
+    if (m_bars->orie() == Qt::Horizontal) {
+        margin += m_bars->height();
+        nodeRt.adjust(0, -margin, 0, margin);
+    } else {
+        margin += m_bars->width();
+        nodeRt.adjust(-margin, 0, margin, 0);
+    }
+
+    if (rt1.intersects(nodeRt)) {
+        m_guideTips->hide();
+    } else {
+        m_guideTips->show();
+    }
+}
+
 void ScreenShot::showGuideTips()
 {
     if (m_guideTips->actionType() != m_actionType) {
         m_guideTips->setActionType(m_actionType);
     }
 
+    // 显示所在的位置
     static QScreen* preScrn = nullptr;
     const QScreen *scrn= cursorScrn(QCursor::pos());
     if (scrn != preScrn) {
         m_guideTips->setTextHeight(20 * cursorScrnScale(false));
         m_guideTips->adjustSize();
-        const QPoint ptGuide(scrn->geometry().bottomLeft() + QPoint(20, -400) + QPoint(0, -m_guideTips->height()));
-        m_guideTips->move(mapFromGlobal(ptGuide));
     }
+
+    autoHideGuideTips(false);
+    const QPoint ptGuide(scrn->geometry().bottomLeft() + QPoint(20, -20) + QPoint(0, -m_guideTips->height()));
+    m_guideTips->move(mapFromGlobal(ptGuide));
+
     preScrn = const_cast<QScreen *>(scrn);
 }
 

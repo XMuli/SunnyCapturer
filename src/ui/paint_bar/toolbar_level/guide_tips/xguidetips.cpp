@@ -79,7 +79,6 @@ void XGuideTips::initUI()
     layout->addWidget(m_debug, row, colBtnTips, Qt::AlignRight);
     layout->addWidget(m_debugLab, row++, colLabel, Qt::AlignLeft);
 
-
     connect(&COMM, &Communication::sigLanguageChange, this, [this]() {
         ui->retranslateUi(this);
         onLanguageChange("");
@@ -92,7 +91,7 @@ void XGuideTips::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
     const QColor wihte(255, 255, 255, 0.4 * 255);
-    const QColor black(0, 0, 0, 0.8 * 255);        // 灰色透明
+    const QColor black(0, 0, 0, 0.7 * 255);        // 灰色透明
 
     QPainter pa(this);
     pa.setRenderHint(QPainter::Antialiasing);
@@ -129,6 +128,7 @@ void XGuideTips::onLanguageChange(const QString &qm)
     m_debugLab->setText(actionTypeToString(m_type));
 
     adjustSize();
+
 }
 
 int XGuideTips::textHeight() const
@@ -194,7 +194,6 @@ bool XGuideTips::hideIfAllChildrenHidden()
 
 void XGuideTips::autoShowGuideTips()
 {
-    m_debugLab->setText(actionTypeToString(m_type));
     auto& layout = ui->gridLayout;
 
     // 将所有子控件设置父对象为空，并隐藏
@@ -215,6 +214,12 @@ void XGuideTips::autoShowGuideTips()
     } else if (m_type == ActionType::AT_wait) {
 
     }
+
+#ifdef QT_DEBUG
+#else
+    m_debug->hide();
+    m_debugLab->hide();
+#endif
 
     adjustSize();
     hideIfAllChildrenHidden();
