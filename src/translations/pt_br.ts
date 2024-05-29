@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt_br">
+<TS version="2.1" language="pt_BR">
 <context>
     <name>About</name>
     <message>
@@ -706,31 +706,31 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     <name>XGuideTips</name>
     <message>
         <source>Move the cursor by 1 pixel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover o cursor por 1 pixel</translation>
     </message>
     <message>
         <source>Move the snipping area by 1 pixel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover a área de captura em 1 pixel</translation>
     </message>
     <message>
         <source>Toggle between window detection and element detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternar entre detecção de janela e detecção de elemento</translation>
     </message>
     <message>
         <source>Display detailed information about this window&apos;s process</source>
-        <translation type="unfinished"></translation>
+        <translation>Exibir informações detalhadas sobre o processo desta janela</translation>
     </message>
     <message>
         <source>Adjust the pen width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajustar a largura da ferramenta</translation>
     </message>
     <message>
         <source>Enlargement / Reduction of the snipping area by 1 pixel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliação / Redução da área de captura em 1 pixel</translation>
     </message>
     <message>
         <source>Select the active screen / fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione a tela ativa / tela cheia</translation>
     </message>
 </context>
 <context>

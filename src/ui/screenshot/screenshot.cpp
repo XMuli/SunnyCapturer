@@ -2081,9 +2081,6 @@ void ScreenShot::paintEvent(QPaintEvent *e)
 #endif
     }
 
-    if(isActiveWindow())
-        activateWindow();
-
     if (CJ.m_cd.isShowCollimatorCursor)
         showCollimatorCursor(pa);
 }
