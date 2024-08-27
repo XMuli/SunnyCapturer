@@ -32,15 +32,15 @@ QFont ScreenShot::m_textFont = QFont("Microsoft YaHei", 16);
 
 ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWidget *parent)
     : QWidget(parent)
-    , m_primaryScreen(qGuiApp->primaryScreen())
+    , m_mainScrn(qGuiApp->primaryScreen())
     , m_screens(qGuiApp->screens())
     , m_origPix()
     , m_vdRect()
     , m_debugLog(new QLabel(nullptr))
-    , m_bFistPressed(false)
+    , m_bFistUse(false)
     , m_bAutoDetectRect(CJ_GET("interface.auto_detect_windows").get<bool>())
     , m_HotKeyType(type)
-    , m_actionType(ActionType::AT_wait)
+    , m_actType(ActionType::AT_wait)
     , m_bars(new PaintBar(orie, this))
     , m_networkOCR(new NetworkOCR(this))
     , m_stretchPickedRectOrieType(OrientationType::OT_empty)
@@ -57,12 +57,12 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
     initUI();
     initConnect();
 
-    if (m_actionType == ActionType::AT_wait) {
+    if (m_actType == ActionType::AT_wait) {
         if (m_bAutoDetectRect) {
-            m_actionType = ActionType::AT_picking_detection_windows_rect;
+            m_actType = ActionType::AT_picking_detection_windows_rect;
             setMouseTracking(true);
         } else {
-            m_actionType = ActionType::AT_picking_custom_rect;
+            m_actType = ActionType::AT_picking_custom_rect;
             setMouseTracking(true);
         }
     }
@@ -85,12 +85,12 @@ ScreenShot::ScreenShot(const HotKeyType &type, const Qt::Orientation &orie, QWid
                 m_node.pickedRect = QRect(m_node.p1, QSize(CJ_GET("interface.custom_rect_width").get<int>(), CJ_GET("interface.custom_rect_height").get<int>()));
                 m_node.absoluteRect = m_node.pickedRect;
                 m_node.p2 = m_node.p3 = m_node.pickedRect.bottomRight();
-                m_actionType = ActionType::AT_wait;
+                m_actType = ActionType::AT_wait;
                 setMouseTracking(false);
             }
 
             if (topleftEnable || sizeEnable)
-                m_bFistPressed = true;
+                m_bFistUse = true;
         }
 
     } else {
@@ -138,7 +138,7 @@ void ScreenShot::startEnumWindowsRect()
 void ScreenShot::showMagnifyingGlass()
 {
     // 同时显示放大镜
-    const bool b1 = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
+    const bool b1 = m_actType == ActionType::AT_picking_detection_windows_rect || m_actType == ActionType::AT_picking_custom_rect;
     if (b1) {
         showCustomWidget(m_magnifyingGlass);
         m_magnifyingGlass->setPixmap(mapFromGlobal(QCursor::pos()), m_origPix);
@@ -304,7 +304,7 @@ QPixmap ScreenShot::finishDrewPixmap(const QRect &rect, const bool& isDrawOnOrig
 void ScreenShot::showPointTips(const QString &text)
 {
     const QScreen *scrn = currentScreen();
-    if (!scrn) scrn = m_primaryScreen;
+    if (!scrn) scrn = m_mainScrn;
 
     m_pointTips->setText(text);
     m_pointTips->move(mapFromGlobal(scrn->geometry().topLeft()));
@@ -327,7 +327,7 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
             setMouseTracking(true);
 
             if (type != PaintType::PT_ocr && type != PaintType::PT_img_translate) {
-                m_actionType = ActionType::AT_drawing_shap; // 结合能够被按下的，默认假设为此，若是 text 下面单独赋值
+                m_actType = ActionType::AT_drawing_shap_without_text; // 结合能够被按下的，默认假设为此，若是 text 下面单独赋值
                 setCursor(Qt::BlankCursor);  // 隐藏光标
                 CJ.m_cd.isShowCollimatorCursor = true;
             }
@@ -346,14 +346,14 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
             } else if (type == PaintType::PT_arrow) {
                 m_paintNode.pst = PaintShapeType::PST_arrow;
             } else if (type == PaintType::PT_pencil) {
-                m_paintNode.pst = PaintShapeType::PST_pen;
+                m_paintNode.pst = PaintShapeType::PST_manual_curve;
             } else if (type == PaintType::PT_marker_pen) {
                 m_paintNode.pst = PaintShapeType::PST_marker_pen;
             } else if (type == PaintType::PT_mosaic) {
                 m_paintNode.pst = PaintShapeType::PST_mosaic;
             } else if (type == PaintType::PT_text) {
                 m_paintNode.pst = PaintShapeType::PST_text;
-                m_actionType = ActionType::AT_drawing_text; // 其它都默认是 ActionType::AT_drawing_shap， 故特殊，需要补一下
+                m_actType = ActionType::AT_drawing_only_text; // 其它都默认是 ActionType::AT_drawing_shap_without_text， 故特殊，需要补一下
                 setCursor(Qt::IBeamCursor);
                 CJ.m_cd.isShowCollimatorCursor = false;
             } else if (type == PaintType::PT_serial) {
@@ -366,7 +366,7 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
 
             // fix: 文本编辑框有内容，但点击了取消绘画文本
             if (type == PaintType::PT_text && m_edit->isVisible()) {
-                    m_paintNode.xTextEditType = XTextEditType::XTET_finish;
+                    m_paintNode.editType = EditType::ET_finish;
                     m_edit->clearFocus();
                     if (!m_edit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
 
@@ -381,7 +381,7 @@ void ScreenShot::onPaintBtnRelease(const PaintType &type, const bool &isCheckabl
                     m_edit->hide();
             }
 
-            m_actionType = ActionType::AT_wait;
+            m_actType = ActionType::AT_wait;
             setMouseTracking(true);
         }
 
@@ -704,13 +704,13 @@ void ScreenShot::onOcrTranslateCtrlHide()
 void ScreenShot::initUI()
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
-    m_vdRect = m_primaryScreen->virtualGeometry();
+    m_vdRect = m_mainScrn->virtualGeometry();
     m_bars->raise();
     m_pickedRectTips->raise();
     m_pointTips->raise();
     m_magnifyingGlass->raise();
     m_guideTips->raise();
-    m_guideTips->setActionType(m_actionType);
+    m_guideTips->setActionType(m_actType);
 
     onPickedColor(CJ_CD.pen.color());
     m_paintNode.pen = CJ_CD.pen;
@@ -876,7 +876,7 @@ void ScreenShot::stashMosaicPixmap()
 void ScreenShot::originalPixmap()
 {
     if (m_origPix.isNull()) {
-        m_origPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
+        m_origPix =  m_mainScrn->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
 
         qDebug() << "originalPixmap()， &m_origPix:" << &m_origPix << "m_origPix:" << m_origPix;
     }
@@ -884,7 +884,7 @@ void ScreenShot::originalPixmap()
 
 void ScreenShot::setMosaicPix()
 {
-    m_mosaicPix =  m_primaryScreen->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
+    m_mosaicPix =  m_mainScrn->grabWindow(qApp->desktop()->winId(), m_vdRect.x(), m_vdRect.y(), m_vdRect.width(), m_vdRect.height());
     qDebug() << "m_mosaicPix()， &m_mosaicPix:" << &m_mosaicPix << "m_mosaicPix:" << m_mosaicPix;
 }
 
@@ -1007,7 +1007,7 @@ void ScreenShot::autoDisableUndoAndRedo()
 void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
 {
     CJ.m_cd.isShowCollimatorCursor = false;
-    if (m_actionType == ActionType::AT_wait) {
+    if (m_actType == ActionType::AT_wait) {
         if (type == OrientationType::OT_internal) {
             setCursor(Qt::SizeAllCursor);
         } else if (type == OrientationType::OT_left || type == OrientationType::OT_right) {
@@ -1019,13 +1019,13 @@ void ScreenShot::setCursorShape(const OrientationType &type, const QPoint &pt)
         } else if (type == OrientationType::OT_topRight || type == OrientationType::OT_bottomLeft) {
             setCursor(Qt::SizeBDiagCursor);
         } else {
-            // qDebug() << "---->" << int(m_actionType);
+            // qDebug() << "---->" << int(m_actType);
             setCursor(Qt::WhatsThisCursor); // 一般都不会触发
         }
-    } else if (m_actionType == ActionType::AT_drawing_shap) {
+    } else if (m_actType == ActionType::AT_drawing_shap_without_text) {
         setCursor(Qt::BlankCursor);  // 隐藏光标
         CJ.m_cd.isShowCollimatorCursor = true;
-    } else if (m_actionType == ActionType::AT_drawing_text) {
+    } else if (m_actType == ActionType::AT_drawing_only_text) {
         setCursor(Qt::IBeamCursor);
         CJ.m_cd.isShowCollimatorCursor = false;
     }
@@ -1053,7 +1053,7 @@ QScreen *ScreenShot::currentScreen(const QPoint &pos) const
 
 void ScreenShot::preDestruction()
 {
-    m_primaryScreen = nullptr;
+    m_mainScrn = nullptr;
     if (m_screens.size()) m_screens.clear();
     if (!m_origPix.isNull()) m_origPix = QPixmap();
     if (!m_mosaicPix.isNull()) m_mosaicPix = QPixmap();
@@ -1068,8 +1068,8 @@ void ScreenShot::monitorsInfo() const
 {
     qInfo() << "---------------QApplication::desktop() Info BEGIN----------------";
     qInfo() << "所有可用区域 m_vdRect:" << m_vdRect << Qt::endl
-        << "主屏可用区域 m_primaryScreen->geometry():" << m_primaryScreen->geometry()
-        << "是否开启虚拟桌面 isVirtualDesktop:" << (m_primaryScreen->virtualSiblings().size() > 1 ? true : false) << Qt::endl;
+        << "主屏可用区域 m_mainScrn->geometry():" << m_mainScrn->geometry()
+        << "是否开启虚拟桌面 isVirtualDesktop:" << (m_mainScrn->virtualSiblings().size() > 1 ? true : false) << Qt::endl;
     qInfo() << "---------------QApplication::desktop() Info END----------------";
 
     qInfo() << "---------------m_screens[] Info BEGIN----------------";
@@ -1127,7 +1127,7 @@ void ScreenShot::printfDevelopProjectInfo()
         QRect guideTipsRect = QRect((m_guideTips->mapTo(this, m_guideTips->rect().topLeft())), m_guideTips->rect().size());
 
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
-                                                                       .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+                                                                       .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actType)));
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
                                                                        .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
@@ -1152,7 +1152,7 @@ void ScreenShot::printfDevelopProjectInfo()
         absoluteRect = m_node.absoluteRect;
 
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("hasMouseTracking:%1 ActionType:%2")
-                                                                       .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actionType)));
+                                                                       .arg(hasMouseTracking() ? "true" : "false").arg(actionTypeToString(m_actType)));
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("p1:(%1, %2)  p2:(%3, %4) \n p3:(%5, %6)")
                                                                        .arg(tP1.x()).arg(tP1.y()).arg(tP2.x()).arg(tP2.y()).arg(tP3.x()).arg(tP3.y()));
         pa.drawText(QPoint(tTextX, tTextY + tAddHight * tCount++), QString("pt:(%1, %2) pickedRect:(%3, %4, %5 * %6) absoluteRect:(%7, %8, %9 * %10)")
@@ -1371,7 +1371,7 @@ QPoint ScreenShot::customWidgetShowPositionRule(const CustomWidgetType &cwt)
         // 同上
         if (mapToGlobal(pt).x() <= m_vdRect.left()) pt.setX(mapFromGlobal(m_vdRect.topLeft()).x());
         else if (mapToGlobal(pt).x() + m_pickedRectTips->width() >= m_vdRect.right()) pt.setX(mapFromGlobal(m_vdRect.topRight()).x() - m_pickedRectTips->width());
-    } else if (cwt == CustomWidgetType::CWT_magnifyingGlass) {
+    } else if (cwt == CustomWidgetType::CWT_color_lens) {
 
         const int margin = space * 3.5;
         const auto& pos = QCursor::pos();
@@ -1417,23 +1417,23 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
     m_node.p3 = e->pos();
 //    qDebug() << "MousePressEvent, m_node.p1:" << m_node.p1;
 
-    if (m_actionType == ActionType::AT_wait) {
+    if (m_actType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p1);
 
         if (orieType == OrientationType::OT_internal) {
-            m_actionType = ActionType::AT_move_picked_rect;
+            m_actType = ActionType::AT_move_picked_rect;
             m_node.pt = e->pos();
             setMouseTracking(true);
         } else {
-            m_actionType = ActionType::AT_stretch_picked_rect;
+            m_actType = ActionType::AT_stretch_picked_rect;
             m_stretchPickedRectOrieType = orieType;
             m_node.pickedRect = largestRect(m_node.pickedRect, m_node.p1);
             setMouseTracking(true);
         }
 
-    } else if (m_actionType == ActionType::AT_picking_custom_rect) {
+    } else if (m_actType == ActionType::AT_picking_custom_rect) {
         setMouseTracking(true);
-        m_bFistPressed = true;
+        m_bFistUse = true;
 
         if (m_HotKeyType == HotKeyType::HKT_custom_capture) {
             const bool& customSizeEnable = CJ_GET("interface.custom_size_enable");
@@ -1453,13 +1453,12 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
             }
         }
 
-    } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+    } else if (m_actType == ActionType::AT_picking_detection_windows_rect) {
         m_node.pt = e->pos();
         setMouseTracking(true);
-        m_bFistPressed = true;
-    } else if (m_actionType == ActionType::AT_select_picked_rect) {
-    } else if (m_actionType == ActionType::AT_select_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) {
+        m_bFistUse = true;
+    } else if (m_actType == ActionType::AT_select_drawn_shape) {
+    } else if (m_actType == ActionType::AT_drawing_shap_without_text || m_actType == ActionType::AT_drawing_only_text) {
         setMouseTracking(false);
         m_node.trackPos.clear();
         m_node.trackPos.emplace_back(m_node.p3);
@@ -1478,23 +1477,23 @@ void ScreenShot::dealMousePressEvent(QMouseEvent *e)
             setMosaicPix();  // 此刻需要准备好马赛克的原始素材，无论是 move/release 都是需要它
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
-            if (m_paintNode.xTextEditType == XTextEditType::XTET_nullptr) { // 为 nullptr， 则初次创建
+            if (m_paintNode.editType == EditType::ET_nullptr) { // 为 nullptr， 则初次创建
 //                m_edit = new XTextEdit(this);
 
                 qDebug() << "----#3.0----->m_edit:" << m_edit;
                 m_edit->show();
                 m_edit->move(m_node.p1);
                 m_edit->setFocus();
-                m_paintNode.xTextEditType = XTextEditType::XTET_generated;
+                m_paintNode.editType = EditType::ET_generated;
 
                 qDebug() << "----#3.1----->m_edit->hasFocus():" << m_edit->hasFocus();
             }
         }
 
-    } else if (m_actionType == ActionType::AT_move_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_move_picked_rect) {
-    } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
+    } else if (m_actType == ActionType::AT_move_drawn_shape) {
+    } else if (m_actType == ActionType::AT_move_picked_rect) {
+    } else if (m_actType == ActionType::AT_stretch_drawn_shape) {
+    } else if (m_actType == ActionType::AT_stretch_picked_rect) {
     }
 
     m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
@@ -1506,18 +1505,18 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
     m_node.p3 = e->pos();
 //    qDebug() << "MouseReleaseEvent, m_node.p2:" << m_node.p2 << "m_node.pickedRect:" << m_node.pickedRect;
 
-    if (m_actionType == ActionType::AT_wait) {
+    if (m_actType == ActionType::AT_wait) {
 
     // case HotKeyType::HKT_ocr_capture:
     // case HotKeyType::HKT_image_transltae_capture:
         if (m_node.pickedRect.isValid() && m_HotKeyType == HotKeyType::HKT_ocr_capture) {
             btnOCR();
         }
-    } else if (m_actionType == ActionType::AT_picking_custom_rect) {
+    } else if (m_actType == ActionType::AT_picking_custom_rect) {
         m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p2);
         m_node.trackPos.emplace_back(m_node.p3);
-        m_actionType = ActionType::AT_wait;
-    } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
+        m_actType = ActionType::AT_wait;
+    } else if (m_actType == ActionType::AT_picking_detection_windows_rect) {
 
         m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p2);
         // 此时已经滑动和已经被按下过了，所以一定是结束的标记
@@ -1525,10 +1524,9 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
             firstRectNodesAssignmentNode();
         }
 
-        m_actionType = ActionType::AT_wait;
-    } else if (m_actionType == ActionType::AT_select_picked_rect) {
-    } else if (m_actionType == ActionType::AT_select_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) {
+        m_actType = ActionType::AT_wait;
+    } else if (m_actType == ActionType::AT_stretch_picked_rect) {
+    } else if (m_actType == ActionType::AT_drawing_shap_without_text || m_actType == ActionType::AT_drawing_only_text) {
         m_node.trackPos.emplace_back(m_node.p3);
         // 点位确定了之后，再来 push_bach
         m_paintNode.node = m_node;
@@ -1539,14 +1537,14 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
 
-            if (m_paintNode.xTextEditType == XTextEditType::XTET_generated) {
+            if (m_paintNode.editType == EditType::ET_generated) {
                 m_node.pt = m_node.p2; // 保留之前的位置位置
-                m_paintNode.xTextEditType = XTextEditType::XTET_editing;
-            } else if (m_paintNode.xTextEditType == XTextEditType::XTET_editing) {
+                m_paintNode.editType = EditType::ET_editing;
+            } else if (m_paintNode.editType == EditType::ET_editing) {
 
                 if (!m_edit->rect().contains(m_node.p2)) { // 点击在其外面，则此是旧的已经完成;
 
-                    m_paintNode.xTextEditType = XTextEditType::XTET_finish;
+                    m_paintNode.editType = EditType::ET_finish;
                     m_edit->clearFocus();
                     if (!m_edit->toPlainText().isEmpty()) {  // 不为空, 此时则直接入栈 push_back
 
@@ -1566,9 +1564,9 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
                     m_edit->move(m_node.pt);
                 }
 
-            } else if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) {
+            } else if (m_paintNode.editType == EditType::ET_finish) {
             } else {
-                qDebug() << "m_paintNode.xTextEditType is XTET_nullptr or other?";
+                qDebug() << "m_paintNode.editType is ET_nullptr or other?";
             }
         }
 
@@ -1582,25 +1580,25 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
         // 归零可能会干扰下次操作的一些参数
         m_node.trackPos.clear();
-        if (m_paintNode.xTextEditType == XTextEditType::XTET_finish) m_paintNode.xTextEditType = XTextEditType::XTET_nullptr;
+        if (m_paintNode.editType == EditType::ET_finish) m_paintNode.editType = EditType::ET_nullptr;
         m_paintNode.pixmap = QPixmap();    // fix: push_back 时候永远是最新的一个
         qDebug() << "m_redo:" << m_redo.size();
 
         setMouseTracking(m_paintNode.pst == PaintShapeType::PST_text ? false : true);
-    } else if (m_actionType == ActionType::AT_move_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_move_picked_rect) {
+    } else if (m_actType == ActionType::AT_move_drawn_shape) {
+    } else if (m_actType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
         setMouseTracking(true);
-        m_actionType = ActionType::AT_wait;
-    } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
+        m_actType = ActionType::AT_wait;
+    } else if (m_actType == ActionType::AT_stretch_drawn_shape) {
+    } else if (m_actType == ActionType::AT_stretch_picked_rect) {
         m_node.p3 = e->pos();
         qDebug() << "----@MouseReleas0->" << m_node.p1 << m_node.p2 << m_node.p3 << m_node.pickedRect;
         stretchRect(m_node.pickedRect, m_node.p3, m_stretchPickedRectOrieType);
         ensurePositiveSize(m_node.pickedRect);
         m_node.p1 = m_node.pickedRect.topLeft();
         m_node.p2 = m_node.pickedRect.bottomRight();
-        m_actionType = ActionType::AT_wait;
+        m_actType = ActionType::AT_wait;
     }
 
     m_node.absoluteRect = toAbsoluteRect(m_node.pickedRect);
@@ -1608,14 +1606,14 @@ void ScreenShot::dealMouseReleaseEvent(QMouseEvent *e)
 
 
     // OCR 和 ImgTrans 也具有这两个快捷键，所以在这里判断一次
-    if (m_actionType == ActionType::AT_wait && m_node.pickedRect.isValid()) {
+    if (m_actType == ActionType::AT_wait && m_node.pickedRect.isValid()) {
         if (m_HotKeyType == HotKeyType::HKT_ocr_capture) {
             btnOCR();
         } else if (m_HotKeyType == HotKeyType::HKT_image_transltae_capture) {
             m_bars->runImgTranslate();
             // onPaintBtnRelease(PaintType::PT_img_translate, true);
         } else {
-            qDebug() << "m_actionType is not HKT_ocr_capture or HKT_image_transltae_capture!";
+            qDebug() << "m_actType is not HKT_ocr_capture or HKT_image_transltae_capture!";
         }
     }
 
@@ -1627,22 +1625,22 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
     m_node.p3 = e->pos();
 //    qDebug() << "MouseMoveEvent, m_node.p3:" << m_node.p3 << "m_node.pickedRect:" << m_node.pickedRect;
 
-    if (m_actionType == ActionType::AT_wait) {
+    if (m_actType == ActionType::AT_wait) {
         const auto& orieType = containsForRect(m_node.pickedRect, m_node.p3);
         setCursorShape(orieType, m_node.p3);
-    } else if (m_actionType == ActionType::AT_picking_custom_rect) {
+    } else if (m_actType == ActionType::AT_picking_custom_rect) {
 
-        if (m_bFistPressed) {
+        if (m_bFistUse) {
             m_node.pickedRect = CaptureHelper::rectFromTowPos(m_node.p1, m_node.p3);
             m_node.trackPos.emplace_back(m_node.p3);
         } else {
             m_node.p1 = e->pos();
         }
 
-    } else if (m_actionType == ActionType::AT_picking_detection_windows_rect) {
-        if (m_bFistPressed) {
+    } else if (m_actType == ActionType::AT_picking_detection_windows_rect) {
+        if (m_bFistUse) {
             if (!allowableRangeErrorForPoint(m_node.p3, m_node.pt)) {
-                m_actionType = ActionType::AT_picking_custom_rect;
+                m_actType = ActionType::AT_picking_custom_rect;
             }
         } else {
 
@@ -1663,9 +1661,9 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
             // firstRectNodesAssignmentNode();
 
         }
-    } else if (m_actionType == ActionType::AT_select_picked_rect) {
-    } else if (m_actionType == ActionType::AT_select_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) {
+    } else if (m_actType == ActionType::AT_stretch_picked_rect) {
+    } else if (m_actType == ActionType::AT_select_drawn_shape) {
+    } else if (m_actType == ActionType::AT_drawing_shap_without_text || m_actType == ActionType::AT_drawing_only_text) {
         if (m_paintNode.bShow)
             m_node.trackPos.emplace_back(m_node.p3);
 
@@ -1679,16 +1677,16 @@ void ScreenShot::dealMouseMoveEvent(QMouseEvent *e)
         } else if (m_paintNode.pst == PaintShapeType::PST_text) {
 
             if (!m_edit || !m_edit->isVisible()) return;
-            if (m_paintNode.xTextEditType == XTextEditType::XTET_generated)
+            if (m_paintNode.editType == EditType::ET_generated)
                 m_edit->move(m_node.p3);
         }
 
         // qDebug() << "----->m_node.trackPos:" << m_node.trackPos.size();
-    } else if (m_actionType == ActionType::AT_move_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_move_picked_rect) {
+    } else if (m_actType == ActionType::AT_move_drawn_shape) {
+    } else if (m_actType == ActionType::AT_move_picked_rect) {
         setMovePickedRect();
-    } else if (m_actionType == ActionType::AT_stretch_drawn_shape) {
-    } else if (m_actionType == ActionType::AT_stretch_picked_rect) {
+    } else if (m_actType == ActionType::AT_stretch_drawn_shape) {
+    } else if (m_actType == ActionType::AT_stretch_picked_rect) {
         stretchRect(m_node.pickedRect, m_node.p3, m_stretchPickedRectOrieType);
         m_node.p1 = m_node.pickedRect.topLeft();
         m_node.p2 = m_node.pickedRect.bottomRight();
@@ -1718,15 +1716,15 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
     QRect& rt = m_node.absoluteRect;
     // if (!rt.isValid()) return;
 
-    if (m_actionType == ActionType::AT_wait) {
-        if (ctrl | shift) m_actionType = ActionType::AT_stretch_picked_rect;
-        else m_actionType = ActionType::AT_move_picked_rect;
+    if (m_actType == ActionType::AT_wait) {
+        if (ctrl | shift) m_actType = ActionType::AT_stretch_picked_rect;
+        else m_actType = ActionType::AT_move_picked_rect;
     } else {
         // return;
     }
 
     bool bUpdate = false;
-    if (m_actionType == ActionType::AT_stretch_picked_rect) {
+    if (m_actType == ActionType::AT_stretch_picked_rect) {
         if (ctrl) {
             if (left) rt.setLeft(rt.left() - totalPos);
             if (top) rt.setTop(rt.top() - totalPos);
@@ -1738,11 +1736,11 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
             if (right) rt.setRight(rt.right() - totalPos);
             if (down) rt.setBottom(rt.bottom() - totalPos);
         } else {
-            qDebug() << "m_actionType == ActionType::AT_stretch_picked_rect, but none Modifier!";
+            qDebug() << "m_actType == ActionType::AT_stretch_picked_rect, but none Modifier!";
         }
 
         bUpdate = true;
-    } else if (m_actionType == ActionType::AT_move_picked_rect) {
+    } else if (m_actType == ActionType::AT_move_picked_rect) {
         if (left) rt.moveLeft(rt.left() - totalPos);
         if (top) rt.moveTop(rt.top() - totalPos);
         if (right) rt.moveRight(rt.right() + totalPos);
@@ -1765,7 +1763,7 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         turn = !turn;
     }
 
-    const bool& showMagnifyingGlass = m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect;
+    const bool& showMagnifyingGlass = m_actType == ActionType::AT_picking_detection_windows_rect || m_actType == ActionType::AT_picking_custom_rect;
     if (showMagnifyingGlass) {
         QPoint currentPos = QCursor::pos();
         const int moveAmount = 1; // 设置移动像素数
@@ -1792,8 +1790,8 @@ void ScreenShot::adjustPickedRect(QKeyEvent *e)
         if (showMagnifyingGlass) return;
     }
 
-    if (m_actionType == ActionType::AT_drawing_shap || m_actionType == ActionType::AT_drawing_text) return;
-    m_actionType = ActionType::AT_wait;
+    if (m_actType == ActionType::AT_drawing_shap_without_text || m_actType == ActionType::AT_drawing_only_text) return;
+    m_actType = ActionType::AT_wait;
 }
 
 // 对 m_node.pickedRect 进行偏移，且  pickedRect 同步给 p1，p2
@@ -1815,7 +1813,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
     const QRect& pickedRect(m_node.absoluteRect);
     QPoint pt;
 
-    const bool& isShow = m_actionType != ActionType::AT_picking_custom_rect && m_actionType != ActionType::AT_picking_detection_windows_rect;
+    const bool& isShow = m_actType != ActionType::AT_picking_custom_rect && m_actType != ActionType::AT_picking_detection_windows_rect;
     if (w == m_bars) {
 
         pt = customWidgetShowPositionRule(CustomWidgetType::CWT_tools_bar);
@@ -1830,7 +1828,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         }
 
         w->move(pt);
-//        qDebug() << "m_actionType:" << actionTypeToString(m_actionType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
+//        qDebug() << "m_actType:" << actionTypeToString(m_actType) << "pt" << pt << "pickedRect:" << pickedRect << "wRect:" << wRect;
         isShow ? w->show() : w->hide();
     } else if (w == m_pickedRectTips) {
 
@@ -1839,7 +1837,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
         pickedRect.isValid() && isShow ? w->show() : w->hide();
     } else if (w == m_magnifyingGlass) {
 
-        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_magnifyingGlass);
+        pt = customWidgetShowPositionRule(CustomWidgetType::CWT_color_lens);
         w->move(pt);
         // pickedRect.isValid() && isShow ? w->show() : w->hide();
     }
@@ -1848,7 +1846,7 @@ void ScreenShot::showCustomWidget(QWidget *w)
 
 void ScreenShot::showCrosshair(QPainter &pa, const QPoint &pt, const QRect &vdRt) const
 {
-    if (m_actionType == ActionType::AT_picking_detection_windows_rect || m_actionType == ActionType::AT_picking_custom_rect)
+    if (m_actType == ActionType::AT_picking_detection_windows_rect || m_actType == ActionType::AT_picking_custom_rect)
         drawCrosshair(pa, pt, vdRt);
 }
 
@@ -1914,8 +1912,8 @@ void ScreenShot::autoHideGuideTips(const bool& isInit)
 
 void ScreenShot::showGuideTips()
 {
-    if (m_guideTips->actionType() != m_actionType) {
-        m_guideTips->setActionType(m_actionType);
+    if (m_guideTips->actionType() != m_actType) {
+        m_guideTips->setActionType(m_actType);
     }
 
     // 显示所在的位置
@@ -1995,7 +1993,7 @@ void ScreenShot::wheelEvent(QWheelEvent *e)
         update();
     }
 
-    if (m_actionType == ActionType::AT_wait) {
+    if (m_actType == ActionType::AT_wait) {
         setCursor(Qt::BlankCursor);  // 隐藏光标
         CJ.m_cd.isShowCollimatorCursor = true;
     }
@@ -2094,7 +2092,7 @@ void ScreenShot::closeEvent(QCloseEvent *e)
 
 ActionType ScreenShot::actionType() const
 {
-    return m_actionType;
+    return m_actType;
 }
 
 

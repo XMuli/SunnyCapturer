@@ -22,10 +22,9 @@ enum class ActionType {
     AT_wait,
     AT_picking_detection_windows_rect,   // 采摘自动检测到的矩形
     AT_picking_custom_rect,              // 采摘自定义的矩形
-    AT_select_picked_rect,               // 选中当前 框选的边框 矩形
     AT_select_drawn_shape,               // 选择已绘画的图形(不算当前正在绘画中的)
-    AT_drawing_shap,                     // 绘画各种图形，除了文字编辑
-    AT_drawing_text,                     // 仅仅文字编辑，因为涉及到图标的改变，需要修改
+    AT_drawing_shap_without_text,                     // 绘画各种图形，除了文字编辑
+    AT_drawing_only_text,                     // 仅仅文字编辑，因为涉及到图标的改变，需要修改
     AT_move_drawn_shape,
     AT_move_picked_rect,                 // 移动采摘的矩形
     AT_stretch_drawn_shape,
@@ -40,7 +39,7 @@ enum class PaintShapeType {
     PST_rect,
     PST_ellipse,
     PST_arrow,
-    PST_pen,
+    PST_manual_curve,  // 手绘曲线
     PST_marker_pen,
     PST_mosaic,
     PST_text,
@@ -70,7 +69,7 @@ enum class OrientationType {
 // 自定义控件
 enum class CustomWidgetType {
     CWT_tools_bar,                // 一二级的绘画工具栏
-    CWT_magnifyingGlass,          // 放大镜 + 取色器
+    CWT_color_lens,          // 放大镜 + 取色器
     CWT_picked_rect_tooptip,      // 选中矩形尺寸预览
     CWT_point_changed_tooptip     // 线宽 px 改变
 };
@@ -119,11 +118,11 @@ struct SerialNode
 };
 
 // 完成一次操作, 需要执行两步骤: 1. 初次点击创建填写文字时候，可以随意拖曳位置 2. 必须掉此一次其外部窗口，才能够成为保存成功入栈
-enum class XTextEditType {
-    XTET_nullptr,    // 为空，此时还没有被创建 1 step
-    XTET_generated,  // 已 first 生成此对象  1 step
-    XTET_editing,    // 编辑文字中           2 step（分界点，用于判断使用）
-    XTET_finish      // 已经编辑完成且入栈    2 step
+enum class EditType {
+    ET_nullptr,    // 为空，此时还没有被创建 1 step
+    ET_generated,  // 已 first 生成此对象  1 step
+    ET_editing,    // 编辑文字中           2 step（分界点，用于判断使用）
+    ET_finish      // 已经编辑完成且入栈    2 step
 };
 
 struct PaintNode
@@ -132,7 +131,7 @@ struct PaintNode
     PaintShapeType pst = PaintShapeType::PST_empty;             // 当前绘画的图案枚举
     bool bShow = false;                                         // true-在 paintEvent 中绘画;反之则不绘画
 
-    int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_pen?/PST_marker_pen/PST_mosaic/PST_serial
+    int     id = -1;                                            // PST_rect/PST_ellipse/PST_arrow/PST_manual_curve?/PST_marker_pen/PST_mosaic/PST_serial
     int     pixelatedFuzzy;                                     // PST_mosaic: mosaic、 blur    模糊值
     int     smoothFuzzy;
     int     markerPenWidth;                                     // 记号笔的宽度
@@ -142,7 +141,7 @@ struct PaintNode
     SerialNode   serialNode;                                    // PST_serial 序号相关
 //
     XTextEdit *xTextEdit = nullptr;                             // true-显示； false-（如被撤销）就隐藏了
-    XTextEditType xTextEditType = XTextEditType::XTET_nullptr;
+    EditType editType = EditType::ET_nullptr;
 
     QPen pen;
     QBrush brush;
@@ -156,7 +155,7 @@ struct PaintNode
         , pixelatedFuzzy(10)
         , smoothFuzzy(10)
         , markerPenWidth(25)
-        , xTextEditType(XTextEditType::XTET_nullptr)
+        , editType(EditType::ET_nullptr)
         , pen(Qt::red, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin)
         , brush(Qt::red, Qt::SolidPattern)
     {

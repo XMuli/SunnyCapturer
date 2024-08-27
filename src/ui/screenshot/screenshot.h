@@ -125,7 +125,7 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 private:
-    QScreen*                      m_primaryScreen;
+    QScreen*                      m_mainScrn;
     QList<QScreen *>              m_screens;
     QPixmap                       m_origPix;            // 原始象图, 初次赋值后，设计为只读模式
     QPixmap                       m_mosaicPix;          // 准备使用马赛克/完成截图相关功能时候
@@ -133,10 +133,10 @@ private:
     QRect                         m_vdRect;             // virtual Desktop Rect;
     QPointer<QLabel>              m_debugLog;           // 调试时候显示部分日志使用
 
-    bool                          m_bFistPressed;       // true-已经按下; false-还没有按过 是否按下过第一次
+    bool                          m_bFistUse;       // true-已经按下; false-还没有按过 是否按下过第一次
     bool                          m_bAutoDetectRect;    // 是否自动监测矩形
     HotKeyType                    m_HotKeyType;         // 初始化进来的状态，采用何用截图方式
-    ActionType                    m_actionType;         // 当前的操作状态
+    ActionType                    m_actType;         // 当前的操作状态
     Node                          m_node;               // 一次操作的集合
     QPointer<PaintBar>            m_bars;               // Paint Tools Bar
     QPointer<NetworkOCR>          m_networkOCR;         // OCR 翻译类

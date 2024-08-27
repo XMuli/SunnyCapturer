@@ -150,7 +150,7 @@ void PaintBar::enterEvent(QEvent *e)
     setCursor(Qt::ArrowCursor);
     ScreenShot* widget = qobject_cast<ScreenShot*>(parent());
     if (widget) {
-        if (widget->actionType() == ActionType::AT_drawing_shap || widget->actionType() == ActionType::AT_drawing_text) {
+        if (widget->actionType() == ActionType::AT_drawing_shap_without_text || widget->actionType() == ActionType::AT_drawing_only_text) {
             CJ.m_cd.isShowCollimatorCursor = false;
         }
     }
@@ -162,9 +162,9 @@ void PaintBar::leaveEvent(QEvent *e)
 {
     ScreenShot* widget = qobject_cast<ScreenShot*>(parent());
     if (widget) {
-        if (widget->actionType() == ActionType::AT_drawing_shap) {
+        if (widget->actionType() == ActionType::AT_drawing_shap_without_text) {
             CJ.m_cd.isShowCollimatorCursor = true;
-        } else if (widget->actionType() == ActionType::AT_drawing_text) {
+        } else if (widget->actionType() == ActionType::AT_drawing_only_text) {
             CJ.m_cd.isShowCollimatorCursor = false;
         }
     }

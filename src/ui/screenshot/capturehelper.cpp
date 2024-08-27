@@ -59,14 +59,12 @@ QString actionTypeToString(ActionType actionType)
         return "AT_picking_custom_rect";
     case ActionType::AT_picking_detection_windows_rect:
         return "AT_picking_detection_windows_rect";
-    case ActionType::AT_select_picked_rect:
-        return "AT_select_picked_rect";
     case ActionType::AT_select_drawn_shape:
         return "AT_select_drawn_shape";
-    case ActionType::AT_drawing_shap:
-        return "AT_drawing_shap";
-    case ActionType::AT_drawing_text:
-        return "AT_drawing_text";
+    case ActionType::AT_drawing_shap_without_text:
+        return "AT_drawing_shap_without_text";
+    case ActionType::AT_drawing_only_text:
+        return "AT_drawing_only_text";
     case ActionType::AT_move_drawn_shape:
         return "AT_move_drawn_shape";
     case ActionType::AT_move_picked_rect:
@@ -91,8 +89,8 @@ QString paintShapeTypeToString(PaintShapeType pst)
         return "PST_ellipse";
     case PaintShapeType::PST_arrow:
         return "PST_arrow";
-    case PaintShapeType::PST_pen:
-        return "PST_pen";
+    case PaintShapeType::PST_manual_curve:
+        return "PST_manual_curve";
     case PaintShapeType::PST_marker_pen:
         return "PST_marker_pen";
     case PaintShapeType::PST_mosaic:
@@ -307,7 +305,7 @@ void drawShape(const PaintNode &paintNode, QPainter &pa, const bool &isFinishScr
         } else if (paintNode.id == 2) {
         }
 
-    } else if (paintNode.pst == PaintShapeType::PST_pen) {
+    } else if (paintNode.pst == PaintShapeType::PST_manual_curve) {
         pa.setPen(paintNode.pen);
         pa.setBrush(Qt::NoBrush);
         const auto& trackPos = paintNode.node.trackPos;
@@ -546,7 +544,7 @@ void PaintNode::printf() const
 XTextEdit* showCreatorRichText(const QTextDocument* doc, const QRect& rect, QWidget *w)
 {
     XTextEdit* newEdit = nullptr;
-    if (!doc || doc->isEmpty()) return newEdit;      //    if (paintNode.xTextEditType != XTextEditType::XTET_finish) return;
+    if (!doc || doc->isEmpty()) return newEdit;      //    if (paintNode.editType != EditType::ET_finish) return;
     newEdit = new XTextEdit(w);   // 改用关联或者 std::智能指针，对哦， w 作主窗口，也是已经实现了的回收； 但是会这个位置重复 new， qdebug 看下，不然会有不断地 new 照成内存泄露
     newEdit->setDocument(doc->clone());      // 最关键的一个一行，对 QTextDocument 进行 1:1 的文本拷贝
 
