@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>Save Image</source>
-        <translation>SalvarImagem</translation>
+        <translation>Salvar Imagem</translation>
     </message>
 </context>
 <context>
@@ -147,20 +147,20 @@ O nascimento deste projeto é inseparável desses softwares de código aberto</t
     <name>NetTencent</name>
     <message>
         <source>Status Code: </source>
-        <translation type="unfinished"></translation>
+        <translation>Código de Status:</translation>
     </message>
     <message>
         <source>
 Reason Phrase: </source>
-        <translation type="unfinished"></translation>
+        <translation>Frase de razão:</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Aviso</translation>
     </message>
     <message>
         <source>Your Baidu Yun API Secret [ID Or Key] is empty, please check and re-enter it!</source>
-        <translation type="unfinished"></translation>
+        <translation>Seu segredo da API do Baidu Yun [ID ou chave] está vazio. Verifique e digite-o novamente!</translation>
     </message>
 </context>
 <context>
@@ -187,11 +187,11 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Zoom</source>
-        <translation>Zoom</translation>
+        <translation>Mais zoom</translation>
     </message>
     <message>
         <source>Shrink</source>
-        <translation>Encolher</translation>
+        <translation>Menos zoom</translation>
     </message>
     <message>
         <source>Original Size</source>
@@ -320,435 +320,435 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Tencent Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvem Tencent</translation>
     </message>
     <message>
         <source>Baidu Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvem Baidu</translation>
     </message>
     <message>
         <source>Offline Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Off-line Local</translation>
     </message>
     <message>
         <source>Youdao Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvem Youdao</translation>
     </message>
     <message>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinês simplificado</translation>
     </message>
     <message>
         <source>Traditional Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinês tradicional</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Inglês</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japonês</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Coreano</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Russo</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Francês</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Alemão</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiano</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Espanhol</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Português</translation>
     </message>
     <message>
         <source>Malay</source>
-        <translation type="unfinished"></translation>
+        <translation>Malaio</translation>
     </message>
     <message>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>Tailandês</translation>
     </message>
     <message>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>Vietnamita</translation>
     </message>
     <message>
         <source>Auto detect</source>
-        <translation type="unfinished"></translation>
+        <translation>Detecção automática</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Holandês</translation>
     </message>
     <message>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Dinamarquês</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Sueco</translation>
     </message>
     <message>
         <source>Indonesian</source>
-        <translation type="unfinished"></translation>
+        <translation>Indonésio</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polonês</translation>
     </message>
     <message>
         <source>Romanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Romeno</translation>
     </message>
     <message>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Turco</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Grego</translation>
     </message>
     <message>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Húngaro</translation>
     </message>
     <message>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Árabe</translation>
     </message>
     <message>
         <source>Hindi</source>
-        <translation type="unfinished"></translation>
+        <translation>Hindi</translation>
     </message>
     <message>
         <source>Afrikaans</source>
-        <translation type="unfinished"></translation>
+        <translation>Africano</translation>
     </message>
     <message>
         <source>Azeerbaijani</source>
-        <translation type="unfinished"></translation>
+        <translation>Azerbaijão</translation>
     </message>
     <message>
         <source>Belarusian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bielorrusso</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Búlgaro</translation>
     </message>
     <message>
         <source>Bangla</source>
-        <translation type="unfinished"></translation>
+        <translation>Bengali</translation>
     </message>
     <message>
         <source>Bosnian (Latin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bósnio (Latin)</translation>
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation>Catalão</translation>
     </message>
     <message>
         <source>Cebuano</source>
-        <translation type="unfinished"></translation>
+        <translation>Cebuano</translation>
     </message>
     <message>
         <source>Corsican</source>
-        <translation type="unfinished"></translation>
+        <translation>Córsega</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Checo</translation>
     </message>
     <message>
         <source>Welsh</source>
-        <translation type="unfinished"></translation>
+        <translation>Galês</translation>
     </message>
     <message>
         <source>Esperanto</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperanto</translation>
     </message>
     <message>
         <source>Estonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperanto</translation>
     </message>
     <message>
         <source>Basque</source>
-        <translation type="unfinished"></translation>
+        <translation>Basco</translation>
     </message>
     <message>
         <source>Persian</source>
-        <translation type="unfinished"></translation>
+        <translation>Persa</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation type="unfinished"></translation>
+        <translation>Finlandês</translation>
     </message>
     <message>
         <source>Frisian</source>
-        <translation type="unfinished"></translation>
+        <translation>Frísio</translation>
     </message>
     <message>
         <source>Irish</source>
-        <translation type="unfinished"></translation>
+        <translation>Irlandês</translation>
     </message>
     <message>
         <source>Scots Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>Gaélico Escocês</translation>
     </message>
     <message>
         <source>Galician</source>
-        <translation type="unfinished"></translation>
+        <translation>Galego</translation>
     </message>
     <message>
         <source>Gujarati</source>
-        <translation type="unfinished"></translation>
+        <translation>Gujarati</translation>
     </message>
     <message>
         <source>Hausa</source>
-        <translation type="unfinished"></translation>
+        <translation>Hausa</translation>
     </message>
     <message>
         <source>Hawaiian</source>
-        <translation type="unfinished"></translation>
+        <translation>Havaiano</translation>
     </message>
     <message>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Hebraico</translation>
     </message>
     <message>
         <source>Croatian</source>
-        <translation type="unfinished"></translation>
+        <translation>Croata</translation>
     </message>
     <message>
         <source>Haitian Creole</source>
-        <translation type="unfinished"></translation>
+        <translation>Crioulo Haitiano</translation>
     </message>
     <message>
         <source>Armenian</source>
-        <translation type="unfinished"></translation>
+        <translation>Armênio</translation>
     </message>
     <message>
         <source>Igbo</source>
-        <translation type="unfinished"></translation>
+        <translation>Igbo</translation>
     </message>
     <message>
         <source>Icelandic</source>
-        <translation type="unfinished"></translation>
+        <translation>Islandês</translation>
     </message>
     <message>
         <source>Javanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Javanês</translation>
     </message>
     <message>
         <source>Georgian</source>
-        <translation type="unfinished"></translation>
+        <translation>Georgiano</translation>
     </message>
     <message>
         <source>Kazakh</source>
-        <translation type="unfinished"></translation>
+        <translation>Cazaque</translation>
     </message>
     <message>
         <source>Khmer</source>
-        <translation type="unfinished"></translation>
+        <translation>Khmer</translation>
     </message>
     <message>
         <source>Kannada</source>
-        <translation type="unfinished"></translation>
+        <translation>Canarês</translation>
     </message>
     <message>
         <source>Kurdish</source>
-        <translation type="unfinished"></translation>
+        <translation>Curdo</translation>
     </message>
     <message>
         <source>Kyrgyz</source>
-        <translation type="unfinished"></translation>
+        <translation>Quirguiz</translation>
     </message>
     <message>
         <source>Latin</source>
-        <translation type="unfinished"></translation>
+        <translation>Latim</translation>
     </message>
     <message>
         <source>Luxembourgish</source>
-        <translation type="unfinished"></translation>
+        <translation>Luxemburguês</translation>
     </message>
     <message>
         <source>Lao</source>
-        <translation type="unfinished"></translation>
+        <translation>Lao</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Lituana</translation>
     </message>
     <message>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation>Letão</translation>
     </message>
     <message>
         <source>Malagasy</source>
-        <translation type="unfinished"></translation>
+        <translation>Malgaxe</translation>
     </message>
     <message>
         <source>Maori</source>
-        <translation type="unfinished"></translation>
+        <translation>Maori</translation>
     </message>
     <message>
         <source>Macedonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Macedônio</translation>
     </message>
     <message>
         <source>Malayalam</source>
-        <translation type="unfinished"></translation>
+        <translation>Malayalam</translation>
     </message>
     <message>
         <source>Mongolian</source>
-        <translation type="unfinished"></translation>
+        <translation>Mongol</translation>
     </message>
     <message>
         <source>Marathi</source>
-        <translation type="unfinished"></translation>
+        <translation>Marathi</translation>
     </message>
     <message>
         <source>Maltese</source>
-        <translation type="unfinished"></translation>
+        <translation>Maltês</translation>
     </message>
     <message>
         <source>Myanmar (Burmese)</source>
-        <translation type="unfinished"></translation>
+        <translation>Myanmar (Birmanês)</translation>
     </message>
     <message>
         <source>Nepali</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepali</translation>
     </message>
     <message>
         <source>Norwegian</source>
-        <translation type="unfinished"></translation>
+        <translation>Norueguês</translation>
     </message>
     <message>
         <source>Nyanja (Chichewa)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyanja (Chichewa)</translation>
     </message>
     <message>
         <source>Punjabi</source>
-        <translation type="unfinished"></translation>
+        <translation>Punjabi</translation>
     </message>
     <message>
         <source>Pashto</source>
-        <translation type="unfinished"></translation>
+        <translation>Pashto</translation>
     </message>
     <message>
         <source>Sindhi</source>
-        <translation type="unfinished"></translation>
+        <translation>Sindi</translation>
     </message>
     <message>
         <source>Sinhala (Sinhalese)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cingalês (Cingalês)</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Eslovaco</translation>
     </message>
     <message>
         <source>Slovenian</source>
-        <translation type="unfinished"></translation>
+        <translation>Esloveno</translation>
     </message>
     <message>
         <source>Samoan</source>
-        <translation type="unfinished"></translation>
+        <translation>Samoana</translation>
     </message>
     <message>
         <source>Shona</source>
-        <translation type="unfinished"></translation>
+        <translation>Shona</translation>
     </message>
     <message>
         <source>Somali</source>
-        <translation type="unfinished"></translation>
+        <translation>Somali</translation>
     </message>
     <message>
         <source>Albanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Albanês</translation>
     </message>
     <message>
         <source>Serbian (Cyrillic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sérvio (Cirílico)</translation>
     </message>
     <message>
         <source>Serbian (Latin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sérvio (Latim)</translation>
     </message>
     <message>
         <source>Sesotho</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesotho</translation>
     </message>
     <message>
         <source>Sundanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Sudanês</translation>
     </message>
     <message>
         <source>Kiswahili</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiswahili</translation>
     </message>
     <message>
         <source>Tamil</source>
-        <translation type="unfinished"></translation>
+        <translation>Tâmil</translation>
     </message>
     <message>
         <source>Telugu</source>
-        <translation type="unfinished"></translation>
+        <translation>Telugu</translation>
     </message>
     <message>
         <source>Tajik</source>
-        <translation type="unfinished"></translation>
+        <translation>Tajique</translation>
     </message>
     <message>
         <source>Filipino</source>
-        <translation type="unfinished"></translation>
+        <translation>Filipino</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ucraniana</translation>
     </message>
     <message>
         <source>Urdu</source>
-        <translation type="unfinished"></translation>
+        <translation>Urdu</translation>
     </message>
     <message>
         <source>Uzbek</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzbeque</translation>
     </message>
     <message>
         <source>Xhosa</source>
-        <translation type="unfinished"></translation>
+        <translation>Xhosa</translation>
     </message>
     <message>
         <source>Yiddish</source>
-        <translation type="unfinished"></translation>
+        <translation>Líndiche</translation>
     </message>
     <message>
         <source>Yoruba</source>
-        <translation type="unfinished"></translation>
+        <translation>Iorubá</translation>
     </message>
     <message>
         <source>Zulu</source>
-        <translation type="unfinished"></translation>
+        <translation>Zulu</translation>
     </message>
 </context>
 <context>
@@ -787,7 +787,7 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>colours</source>
-        <translation>cores</translation>
+        <translation>colorido</translation>
     </message>
     <message>
         <source>balck</source>
@@ -831,7 +831,7 @@ Reason Phrase: </source>
     </message>
     <message>
         <source> Account</source>
-        <translation type="unfinished"></translation>
+        <translation> Conta</translation>
     </message>
 </context>
 <context>
@@ -868,23 +868,23 @@ Reason Phrase: </source>
     <name>SubExtractText</name>
     <message>
         <source>Engine:</source>
-        <translation type="unfinished"></translation>
+        <translation>Motor:</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation type="unfinished">Conta</translation>
+        <translation>Conta</translation>
     </message>
     <message>
         <source>Secret ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID Secreto:</translation>
     </message>
     <message>
         <source>Secret Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chave Secreta:</translation>
     </message>
     <message>
         <source>If it is empty, the built-in account is used by default (stability is not guaranteed); if it is not empty, the filled-in key is preferred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se estiver vazio, a conta interna será usada por padrão (a estabilidade não é garantida); se não estiver vazio, a chave preenchida será preferida.</translation>
     </message>
 </context>
 <context>
@@ -914,58 +914,58 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Extract text</source>
-        <translation type="unfinished">Extrair texto</translation>
+        <translation>Extrair texto</translation>
     </message>
     <message>
         <source>Picture translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução de imagem</translation>
     </message>
 </context>
 <context>
     <name>SubImageTranslate</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Engine:</source>
-        <translation type="unfinished"></translation>
+        <translation>Motor:</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation type="unfinished">Conta</translation>
+        <translation>Conta</translation>
     </message>
     <message>
         <source>Secret ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID Secreto</translation>
     </message>
     <message>
         <source>Secret Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chave Secreta</translation>
     </message>
     <message>
         <source>Tenent Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvem Tenent</translation>
     </message>
     <message>
         <source>Source language：</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma de origem:</translation>
     </message>
     <message>
         <source>Target language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma de destino:</translation>
     </message>
     <message>
         <source>Baidu Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvem Baidu</translation>
     </message>
     <message>
         <source>Youdao Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvem Youdao</translation>
     </message>
     <message>
         <source>If it is empty, the built-in account is used by default (stability is not guaranteed); if it is not empty, the filled-in key is preferred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se estiver vazio, a conta interna será usada por padrão (a estabilidade não é garantida); se não estiver vazio, a chave preenchida será preferida.</translation>
     </message>
 </context>
 <context>
@@ -1032,19 +1032,19 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>Auto detect windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Detectar janelas automaticamente</translation>
     </message>
     <message>
         <source>Classical algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Algoritmo clássico</translation>
     </message>
     <message>
         <source>Depth algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Algoritmo profundo</translation>
     </message>
     <message>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar</translation>
     </message>
 </context>
 <context>
@@ -1150,15 +1150,15 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Open ocr window:</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir janela OCR</translation>
     </message>
     <message>
         <source>Extract text:</source>
-        <translation type="unfinished"></translation>
+        <translation>Extrair texto:</translation>
     </message>
     <message>
         <source>Image translation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução de imagem:</translation>
     </message>
 </context>
 <context>
@@ -1365,11 +1365,11 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     </message>
     <message>
         <source>Image translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradução de imagem</translation>
     </message>
     <message>
         <source>Open OCR Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir Janela OCR</translation>
     </message>
 </context>
 <context>
