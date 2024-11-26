@@ -2,6 +2,53 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_TW">
 <context>
+    <name>AboutInfo</name>
+    <message>
+        <source>System Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Kits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">複製</translation>
+    </message>
+    <message>
+        <source> Detailed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BottomBar</name>
     <message>
         <source>Form</source>
@@ -754,86 +801,86 @@ Reason Phrase: </source>
     </message>
 </context>
 <context>
-    <name>SettingUI</name>
+    <name>SettingNavUI</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>General</source>
-        <translation>常規</translation>
+        <translation type="unfinished">常規</translation>
     </message>
     <message>
         <source>Interface</source>
-        <translation>界面</translation>
+        <translation type="unfinished">界面</translation>
     </message>
     <message>
-        <source>Recognition</source>
-        <translation>識別</translation>
+        <source>Extract text</source>
+        <translation type="unfinished">提取文本</translation>
+    </message>
+    <message>
+        <source>Image translation</source>
+        <translation type="unfinished">圖片翻譯</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>輸出</translation>
+        <translation type="unfinished">輸出</translation>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation>快捷鍵</translation>
+        <translation type="unfinished">快捷鍵</translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation>更新</translation>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About</source>
-        <translation>關於</translation>
+        <translation type="unfinished">關於</translation>
     </message>
     <message>
         <source>auto</source>
-        <translation>自動</translation>
+        <translation type="unfinished">自動</translation>
     </message>
     <message>
         <source>colours</source>
-        <translation>彩色</translation>
+        <translation type="unfinished">彩色</translation>
     </message>
     <message>
         <source>balck</source>
-        <translation>黑色</translation>
+        <translation type="unfinished">黑色</translation>
     </message>
     <message>
         <source>white</source>
-        <translation>白色</translation>
+        <translation type="unfinished">白色</translation>
     </message>
     <message>
         <source>No Proxy</source>
-        <translation>不使用代理</translation>
+        <translation type="unfinished">不使用代理</translation>
     </message>
     <message>
         <source>System Proxy</source>
-        <translation>系统代理</translation>
-    </message>
-    <message>
-        <source>%1-bit</source>
-        <translation>%1-位</translation>
-    </message>
-    <message>
-        <source>Version %1 (%2) - %3 %4</source>
-        <translation>版本 %1 (%2) - %3 %4</translation>
+        <translation type="unfinished">系统代理</translation>
     </message>
     <message>
         <source>%1 Setting</source>
-        <translation>%1 設置</translation>
+        <translation type="unfinished">%1 設置</translation>
     </message>
     <message>
         <source>Select Font</source>
-        <translation>選擇字體</translation>
-    </message>
-    <message>
-        <source>Select Quick Save Directory</source>
-        <translation>選擇快速保存目錄</translation>
-    </message>
-    <message>
-        <source>Select Auto Save Directory</source>
-        <translation>選擇自動保存目錄</translation>
+        <translation type="unfinished">選擇字體</translation>
     </message>
     <message>
         <source> Account</source>
-        <translation> 賬號</translation>
+        <translation type="unfinished"> 賬號</translation>
+    </message>
+    <message>
+        <source>Select Quick Save Directory</source>
+        <translation type="unfinished">選擇快速保存目錄</translation>
+    </message>
+    <message>
+        <source>Select Auto Save Directory</source>
+        <translation type="unfinished">選擇自動保存目錄</translation>
     </message>
 </context>
 <context>
@@ -854,16 +901,64 @@ Reason Phrase: </source>
         <translation>我的應用程序(模板)</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023-2024 &lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;sunny.xmuli.tech&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;版權所有 (C) 2023-2024 &lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;sunny.xmuli.tech&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>64 bit</source>
-        <translation>64 位</translation>
-    </message>
-    <message>
         <source>Licenses</source>
         <translation>開源許可</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;https://sunny.xmuli.tech/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>labVersion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Software</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compiler ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OS Edition:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OS Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>64 GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compiler:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hardware</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1118,10 +1213,6 @@ and specify -1 to let Sunny decide for you.</source>
     <message>
         <source>Automatically save every screenshot will be saved to this folder.</source>
         <translation>所有截圖將會自動被保存到該文件夾。</translation>
-    </message>
-    <message>
-        <source>Naming Rules</source>
-        <translation>命令規則</translation>
     </message>
 </context>
 <context>

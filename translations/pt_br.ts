@@ -2,6 +2,53 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="pt_BR">
 <context>
+    <name>AboutInfo</name>
+    <message>
+        <source>System Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build Kits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copiar</translation>
+    </message>
+    <message>
+        <source> Detailed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BottomBar</name>
     <message>
         <source>Form</source>
@@ -752,86 +799,86 @@ Reason Phrase: </source>
     </message>
 </context>
 <context>
-    <name>SettingUI</name>
+    <name>SettingNavUI</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Forma</translation>
+    </message>
     <message>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="unfinished">Geral</translation>
     </message>
     <message>
         <source>Interface</source>
-        <translation>Interface</translation>
+        <translation type="unfinished">Interface</translation>
     </message>
     <message>
-        <source>Recognition</source>
-        <translation>Reconhecimento</translation>
+        <source>Extract text</source>
+        <translation type="unfinished">Extrair texto</translation>
+    </message>
+    <message>
+        <source>Image translation</source>
+        <translation type="unfinished">Tradução de imagem</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Saída</translation>
+        <translation type="unfinished">Saída</translation>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation>Atalhos</translation>
+        <translation type="unfinished">Atalhos</translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation>Atualizar</translation>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation type="unfinished">Sobre</translation>
     </message>
     <message>
         <source>auto</source>
-        <translation>auto</translation>
+        <translation type="unfinished">auto</translation>
     </message>
     <message>
         <source>colours</source>
-        <translation>colorido</translation>
+        <translation type="unfinished">colorido</translation>
     </message>
     <message>
         <source>balck</source>
-        <translation>preto</translation>
+        <translation type="unfinished">preto</translation>
     </message>
     <message>
         <source>white</source>
-        <translation>branco</translation>
+        <translation type="unfinished">branco</translation>
     </message>
     <message>
         <source>No Proxy</source>
-        <translation>Sem Proxy</translation>
+        <translation type="unfinished">Sem Proxy</translation>
     </message>
     <message>
         <source>System Proxy</source>
-        <translation>Proxy do Sistema</translation>
-    </message>
-    <message>
-        <source>%1-bit</source>
-        <translation>%1-bit</translation>
-    </message>
-    <message>
-        <source>Version %1 (%2) - %3 %4</source>
-        <translation>Versão %1 (%2) - %3 %4</translation>
+        <translation type="unfinished">Proxy do Sistema</translation>
     </message>
     <message>
         <source>%1 Setting</source>
-        <translation>%1 Configuração</translation>
+        <translation type="unfinished">%1 Configuração</translation>
     </message>
     <message>
         <source>Select Font</source>
-        <translation>Selecione a Fonte</translation>
-    </message>
-    <message>
-        <source>Select Quick Save Directory</source>
-        <translation>Selecione Diretório de Salvamento Rápido</translation>
-    </message>
-    <message>
-        <source>Select Auto Save Directory</source>
-        <translation>Selecione Diretório de Salvamento Automático</translation>
+        <translation type="unfinished">Selecione a Fonte</translation>
     </message>
     <message>
         <source> Account</source>
-        <translation> Conta</translation>
+        <translation type="unfinished"> Conta</translation>
+    </message>
+    <message>
+        <source>Select Quick Save Directory</source>
+        <translation type="unfinished">Selecione Diretório de Salvamento Rápido</translation>
+    </message>
+    <message>
+        <source>Select Auto Save Directory</source>
+        <translation type="unfinished">Selecione Diretório de Salvamento Automático</translation>
     </message>
 </context>
 <context>
@@ -852,16 +899,64 @@ Reason Phrase: </source>
         <translation>Meu Aplicativo</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2023-2024 &lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;sunny.xmuli.tech&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Direitos autorais (C) 2023-2024 &lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;sunny.xmuli.tech&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>64 bit</source>
-        <translation>64 bit</translation>
-    </message>
-    <message>
         <source>Licenses</source>
         <translation>Licenças</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;https://sunny.xmuli.tech/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>labVersion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Software</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compiler ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OS Edition:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OS Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>64 GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compiler:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hardware</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1116,10 +1211,6 @@ e especifique -1 para deixar Sunny decidir por você.</translation>
     <message>
         <source>Automatically save every screenshot will be saved to this folder.</source>
         <translation>Salvamento automático, todas as capturas de tela serão salvas automaticamente nesta pasta.</translation>
-    </message>
-    <message>
-        <source>Naming Rules</source>
-        <translation>Regras de nomenclatura</translation>
     </message>
 </context>
 <context>
