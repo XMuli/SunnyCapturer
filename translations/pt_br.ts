@@ -5,47 +5,47 @@
     <name>AboutInfo</name>
     <message>
         <source>System Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações do Sistema</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Qt Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão Qt</translation>
     </message>
     <message>
         <source>Edition</source>
-        <translation type="unfinished"></translation>
+        <translation>Edição</translation>
     </message>
     <message>
         <source>Build Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo de Construção</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Memória</translation>
     </message>
     <message>
         <source>Build Kits</source>
-        <translation type="unfinished"></translation>
+        <translation>Kits de Construção</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeto</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source> Detailed</source>
-        <translation type="unfinished"></translation>
+        <translation> Detalhar</translation>
     </message>
 </context>
 <context>
@@ -802,83 +802,83 @@ Reason Phrase: </source>
     <name>SettingNavUI</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Geral</translation>
+        <translation>Geral</translation>
     </message>
     <message>
         <source>Interface</source>
-        <translation type="unfinished">Interface</translation>
+        <translation>Interface</translation>
     </message>
     <message>
         <source>Extract text</source>
-        <translation type="unfinished">Extrair texto</translation>
+        <translation>Extrair texto</translation>
     </message>
     <message>
         <source>Image translation</source>
-        <translation type="unfinished">Tradução de imagem</translation>
+        <translation>Tradução de imagem</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Saída</translation>
+        <translation>Saída</translation>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation type="unfinished">Atalhos</translation>
+        <translation>Atalhos</translation>
     </message>
     <message>
         <source>Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizações</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished">Sobre</translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <source>auto</source>
-        <translation type="unfinished">auto</translation>
+        <translation>auto</translation>
     </message>
     <message>
         <source>colours</source>
-        <translation type="unfinished">colorido</translation>
+        <translation>colorido</translation>
     </message>
     <message>
         <source>balck</source>
-        <translation type="unfinished">preto</translation>
+        <translation>preto</translation>
     </message>
     <message>
         <source>white</source>
-        <translation type="unfinished">branco</translation>
+        <translation>branco</translation>
     </message>
     <message>
         <source>No Proxy</source>
-        <translation type="unfinished">Sem Proxy</translation>
+        <translation>Sem Proxy</translation>
     </message>
     <message>
         <source>System Proxy</source>
-        <translation type="unfinished">Proxy do Sistema</translation>
+        <translation>Proxy do Sistema</translation>
     </message>
     <message>
         <source>%1 Setting</source>
-        <translation type="unfinished">%1 Configuração</translation>
+        <translation>%1 Configuração</translation>
     </message>
     <message>
         <source>Select Font</source>
-        <translation type="unfinished">Selecione a Fonte</translation>
+        <translation>Selecione a Fonte</translation>
     </message>
     <message>
         <source> Account</source>
-        <translation type="unfinished"> Conta</translation>
+        <translation> Conta</translation>
     </message>
     <message>
         <source>Select Quick Save Directory</source>
-        <translation type="unfinished">Selecione Diretório de Salvamento Rápido</translation>
+        <translation>Selecione Diretório de Salvamento Rápido</translation>
     </message>
     <message>
         <source>Select Auto Save Directory</source>
-        <translation type="unfinished">Selecione Diretório de Salvamento Automático</translation>
+        <translation>Selecione Diretório de Salvamento Automático</translation>
     </message>
 </context>
 <context>
@@ -904,59 +904,59 @@ Reason Phrase: </source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;https://sunny.xmuli.tech/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://sunny.xmuli.tech/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#57a73f;&quot;&gt;https://sunny.xmuli.tech/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Bit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquitetura:</translation>
     </message>
     <message>
         <source>Qt Version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão Qt:</translation>
     </message>
     <message>
         <source>labVersion</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão do laboratório</translation>
     </message>
     <message>
         <source>Version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão:</translation>
     </message>
     <message>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Programa</translation>
     </message>
     <message>
         <source>Compiler ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID do Compilador:</translation>
     </message>
     <message>
         <source>Memory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Memória:</translation>
     </message>
     <message>
         <source>OS Edition:</source>
-        <translation type="unfinished"></translation>
+        <translation>OS Edição</translation>
     </message>
     <message>
         <source>OS Version:</source>
-        <translation type="unfinished"></translation>
+        <translation>OS Versão</translation>
     </message>
     <message>
         <source>Processors:</source>
-        <translation type="unfinished"></translation>
+        <translation>Processador:</translation>
     </message>
     <message>
         <source>64 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>64 GB</translation>
     </message>
     <message>
         <source>Compiler:</source>
-        <translation type="unfinished"></translation>
+        <translation>Compilador:</translation>
     </message>
     <message>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware</translation>
     </message>
 </context>
 <context>
