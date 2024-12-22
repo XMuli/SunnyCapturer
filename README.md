@@ -24,6 +24,6 @@ This site is built using [docsify](https://docsify.js.org); anyone is welcome to
 
 ```bash
 docsify serve docs
-docsify serve .\sunny-docs\
+docsify serve .\SunnyPages\
 ```
 
