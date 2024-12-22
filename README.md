@@ -14,10 +14,7 @@ This site is built using [docsify](https://docsify.js.org); anyone is welcome to
 
 
 
-- Offline Installer Download | 安装包下载：[GitHub](https://github.com/XMuli/SunnyPages/releases)
-
-- Official Website | 唯一官网：[https://sunny.xmuli.tech](https://sunny.xmuli.tech/)
-- User manual | 用户手册：[http://sunnycapturer-docs.xmuli.tech](http://sunnycapturer-docs.xmuli.tech/)
+- Official Website & Download  & Doc | 官网 & 下载 & 用户手册：[http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)
 - open source Code | 代码开源：[https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)
 
 
