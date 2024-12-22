@@ -8,7 +8,7 @@ hero:
   tagline: "截图 / 钉图 / 提取文字 / 图片翻译 / 多主题 / ..."
   image:
     src: /images/logo/home.jpg
-    alt: Sunny Screenshot
+    alt: SunnyCapturer
   actions:
     - theme: brand
       text: 官网下载

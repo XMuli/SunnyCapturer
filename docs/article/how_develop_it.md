@@ -10,7 +10,7 @@
 | :-----------------------------------------------------: | :-----------: | :----------------------------------------------------------: |
 |  [FLIPPED](https://github.com/SunnyScreenshot/FLIPPED)  |      MIT      | 简洁且漂亮的截图的软件工具，支持 Windows，MacOS，Linux 平台，亦一个极佳练手的截图完整项目；适合已有经验的工程师 |
 |    [ShotX](https://github.com/SunnyScreenshot/ShotX)    |      MIT      |            一款极简的跨平台截图工具，适合新手学习            |
-| [Sunny Screenshot](https://github.com/SunnyScreenshot/) | Organizations |                              -                               |
+| [SunnyCapturer](https://github.com/SunnyScreenshot/) | Organizations |                              -                               |
 
 <br>
 

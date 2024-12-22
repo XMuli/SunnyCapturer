@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: "Sunny Screenshot",
-  description: "Sunny Screenshot / Pinning / OCR / Image Translation / Capture / Linux / 截图 / 推荐", // seo 的优化
+  title: "SunnyCapturer",
+  description: "SunnyCapturer / Pinning / OCR / Image Translation / Capture / Linux / 截图 / 推荐", // seo 的优化
   // base: '/SunnyPages/',    // https://xmuli.tech/SunnyPages 且去掉 CNAME 文件后
   base: '/',                  // https://sunny.xmuli.tech 和 CNAME 文件
   head: [['link', { rel: 'icon', href: 'images/favicon.ico' }]],

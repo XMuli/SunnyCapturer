@@ -3,12 +3,12 @@
 layout: home
 
 hero:
-  name: "Sunny Screenshot"
+  name: "SunnyCapturer"
   # text: "Text"
   tagline: "Screenshot / Pinning / OCR / Image Translation"
   image:
     src: /images/logo/home.jpg
-    alt: Sunny Screenshot
+    alt: SunnyCapturer
   actions:
     - theme: brand
       text: Download
