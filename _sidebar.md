@@ -3,10 +3,10 @@
   - [FAQ](/faq)
   - [Troubleshooting](/troubleshooting)
 - Advanced
-  - [Extract Text (OCR)](/extract-text-ocr)
+  - [Extract Text(OCR)](/extract-text-ocr)
   - [Image Translation](/image-translation)
 - Document
-  - [Support System](/support-platform)
+  - [Supported OS](/supported-OS)
   - [Technology Share](/development-technology)
 - Contribution
   - [Translation](/translation)
@@ -14,5 +14,5 @@
 - More
   - [Official Site](/office-site)
   - [Changelog](/changelog)
-  - [Donate](/donate)
+  <!-- - [Donate](/donate) -->
 

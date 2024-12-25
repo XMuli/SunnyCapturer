@@ -12,8 +12,8 @@
 - OCR Extract text | 提取文本
 - Image Translation | 图片翻译
 
-[Download](https://github.com/XMuli/SunnyPages/releases)
-[Feedback](https://github.com/XMuli/SunnyPages/issues)
+[Download](https://github.com/XMuli/SunnyCapturer/releases)
+[Feedback](https://github.com/XMuli/SunnyCapturer/issues)
 [Documentation](#sunnycapturer)
 
 
