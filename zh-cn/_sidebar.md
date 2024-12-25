@@ -13,6 +13,6 @@
   - [鸣谢](/zh-cn/acknowledgement)
 - 更多
   - [官网&下载](/zh-cn/office-site)
-  - [日志](/zh-cn/changelog)
+  - [更新日志](/zh-cn/changelog)
   <!-- - [捐助](/zh-cn/donate) -->
 
