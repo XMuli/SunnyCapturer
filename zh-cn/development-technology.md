@@ -1,16 +1,26 @@
-# 如何开发一款截图软件呢？
 
-在写和发布的后的期间，也遇到很多私聊请教 、 邮件沟通某个功能实现？反馈 Bug 和给出使用心得和建议；都给答疑了，但想来可写为一整篇，中间遇到的困难点都写出来，公开出来提供后来者参考。
-
+?> 在写和发布的后的期间，也遇到很多私聊请教、进QQ群、或邮件沟通某个功能实现？反馈 Bug 和给出使用心得和建议；大多都给答疑了，但想来可写为一整篇合集，彼时遇到的困难点记录下，公开出来提供后来者开发者参考。
 
 
-## 开源代码
 
-|                          Name                           |    License    |                           Describe                           |
-| :-----------------------------------------------------: | :-----------: | :----------------------------------------------------------: |
-|  [FLIPPED](https://github.com/SunnyScreenshot/FLIPPED)  |      MIT      | 简洁且漂亮的截图的软件工具，支持 Windows，MacOS，Linux 平台，亦一个极佳练手的截图完整项目；适合已有经验的工程师 |
-|    [ShotX](https://github.com/SunnyScreenshot/ShotX)    |      MIT      |            一款极简的跨平台截图工具，适合新手学习            |
-| [Sunny Screenshot](https://github.com/SunnyScreenshot/) | Organizations |                              -                               |
+## 系列地址
+
+[QtExamples](https://github.com/XMuli/QtExamples)  欢迎 `star` ⭐ 和 `fork` 🍴 这个系列的 `C++ / QT / DTK` 学习，附学习由浅入深的目录，这里你可以学到如何亲自编写此类软件的经验，这是一系列完整的教程，并且**永久免费**！
+
+
+
+## 相关代码开源
+
+- 官网 & 下载 & 用户手册：[http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)
+- 相关代码开源：[https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)
+
+分享一些自己写过的完整截图软件的项目，作为指北
+
+|                             Name                             |    License    |                           Describe                           |
+| :----------------------------------------------------------: | :-----------: | :----------------------------------------------------------: |
+|     [FLIPPED](https://github.com/SunnyCapturer/FLIPPED)      |      MIT      | 一个跨平台的简洁且漂亮的截图 & 钉图的软件<br />Sunny 前身之作，麻雀虽小，登堂入室 |
+|       [ShotX](https://github.com/SunnyCapturer/ShotX)        |      MIT      |                极简的跨平台截图工具，渐入佳境                |
+| [SunnyCapturer](https://github.com/orgs/SunnyCapturer/repositories) | Organizations |  SunnyCapturer 开源的相关项目合集：如自定义控件和项目思路等  |
 
 <br>
 
@@ -22,7 +32,7 @@
 
 　　💻  `Win10 22H2` 📎 `Qt 5.15.x` 📎  `Visual Studio 2022` 📎 `C++17`
 
-<img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2024/202405112034475.png" width="100%"/>
+<img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2024/202405112034475.png" width="80%"/>
 
 <img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2023/202402281723559.png" width="80%"/>
 
@@ -322,10 +332,8 @@
 
 <!-- <details>
     <summary> <b>"当然，你也可以送我一听冰凉的可乐 [捐赠/打赏 ← 点击展开二维码]"</b></summary>
+
   <p> 如果对您有帮助，或者觉得有用，**您可以点击该仓库的⭐ Star 🍴 Fork 两个图标，方便抬手之间，说点赞的手，** 手留余香；其次可以我喝一杯冰的快乐水 - </p>
   <pre><img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2022/202302282339037.png" width="80%"/></pre>
 </details> -->
 
-## 系列地址
-
-[QtExamples](https://github.com/XMuli/QtExamples)  欢迎 `star` ⭐ 和 `fork` 🍴 这个系列的 `C++ / QT / DTK` 学习，附学习由浅入深的目录，这里你可以学到如何亲自编写这类软件的经验，这是一系列完整的教程，并且**永久免费**！
