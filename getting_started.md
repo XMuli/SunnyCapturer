@@ -1,9 +1,6 @@
-# SunnyCapturer  
-
 [<img src="https://img.shields.io/github/release/XMuli/SunnyCapturer.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)   [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 
-SunnyCapturer is a visually appealing and practical cross-platform screenshot software, offering features like `OCR text extraction`, `image translation`, `numbered annotations`, and `image pinning`.
-
+SunnyCapturer is a simple and beautiful cross-platform screenshot software that supports `OCR for extracting text from images`, `image translation`, `custom stickers`, and `pinning images to the screen`.
 
 
 ## Screenshots  

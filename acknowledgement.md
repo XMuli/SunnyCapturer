@@ -11,7 +11,7 @@ Gladly, we extend heartfelt thanks to all contributors who have provided assista
 #### International Translations  
 
 - [Thiago Dalsoto](https://github.com/thiagodalsoto): Portuguese (Brazil) Translation  
-- [Kthargas](https://github.com/Kthargas): German Translation  
+- [Toms Photoart](https://github.com/tomsphotoart): German Translation  
 
 
 

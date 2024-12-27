@@ -11,7 +11,7 @@
 #### 国际化翻译
 
 - [Thiago Dalsoto](https://github.com/thiagodalsoto): 提供 葡萄牙-巴西 翻译
-- [Kthargas](https://github.com/Kthargas): 提供 德语 翻译
+- [Toms Photoart](https://github.com/tomsphotoart): 提供 德语 翻译
 
 
 

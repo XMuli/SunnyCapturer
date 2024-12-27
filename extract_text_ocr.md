@@ -1,4 +1,4 @@
-? > One of the advanced features: extracting the desired text from the image, supporting both online API and local offline modes. For local offline mode: support any CPU model and only GPU of NVIDIA graphics card to parse; and the image text can be parsed both horizontally and vertically.
+?> One of the advanced features: extracting the desired text from the image, supporting both online API and local offline modes. For local offline mode: support any CPU model and only GPU of NVIDIA graphics card to parse; and the image text can be parsed both horizontally and vertically.
 
 
 
@@ -211,5 +211,5 @@ Currently, the following cloud API platforms and one offline local engine are su
 > - Baidu Cloud-Privacy Policy: https://cloud.baidu.com/doc/Agreements/s/Plr0fi68q
 > - Baidu Cloud-SDK Privacy Policy: https://ai.baidu.com/ai-doc/REFERENCE/Ckdym0tc9
 > - Wealth Cloud-Privacy Policy: https://c.youdao.com/dict/law/youdaofanyi_pc_privacy.html
-> - Wealth Cloud-Image Translation SDK Privacy Policy: [https://ai.youdao.com/DOCSIRMA/html/trans/sdk_privacy/tpfy/index.html](https://ai.youdao.com/DOCSIRMA/html/trans /sdk_privacy/tpfy/index.html)
+> - Wealth Cloud-Image Translation SDK Privacy Policy: [https://ai.youdao.com/DOCSIRMA/html/trans/sdk_privacy/tpfy/index.html](https://ai.youdao.com/DOCSIRMA/html/trans/sdk_privacy/tpfy/index.html)
 

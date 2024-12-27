@@ -1,6 +1,6 @@
  [<img src="https://img.shields.io/github/release/XMuli/SunnyCapturer.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)   [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 
-SunnyCapturer 是一个漂亮和实用的跨平台截图软件，亦支持`OCR 文字提取`、 `图片翻译`、`序号标注`、`钉图`等功能。
+SunnyCapturer 是一款简单且漂亮的跨平台截图软件工具，支持 `OCR 从图片中提取文本`、`图片翻译`、`自定义贴图`、以及`图片钉在屏幕上`等功能。
 
 
 

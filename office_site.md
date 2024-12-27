@@ -1,4 +1,4 @@
-?> SunnyCapturer is a simple and beautiful cross-platform screenshot software tool that supports OCR to extract text from images, image translation, and pinning images to the screen, among other features
+?> SunnyCapturer is a simple and beautiful cross-platform screenshot software that supports OCR for extracting text from images, image translation, custom stickers, and pinning images to the screen.
 
 
 

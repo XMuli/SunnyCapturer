@@ -1,5 +1,5 @@
 
-? > In the period after the writing and release, also encountered a lot of private chat please teach, into the QQ group, or e-mail communication of a function to achieve? Feedback Bug and give tips and suggestions; most of them are given to the Q&A, but I think it can be written as a whole collection, he encountered difficulties in the point of record, open out to provide later developers reference.
+?> In the period after the writing and release, also encountered a lot of private chat please teach, into the QQ group, or e-mail communication of a function to achieve? Feedback Bug and give tips and suggestions; most of them are given to the Q&A, but I think it can be written as a whole collection, he encountered difficulties in the point of record, open out to provide later developers reference.
 
 
 

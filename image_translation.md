@@ -1,4 +1,4 @@
-? > One of the advanced features: translate the screenshot content into any 100+ languages to get the language of another picture.
+?> One of the advanced features: translate the screenshot content into any 100+ languages to get the language of another picture.
 
 
 
@@ -708,5 +708,5 @@ The following cloud API platforms are currently supported, with a total of 100+ 
 > - Baidu Cloud-Privacy Policy: https://cloud.baidu.com/doc/Agreements/s/Plr0fi68q
 > - Baidu Cloud-SDK Privacy Policy: https://ai.baidu.com/ai-doc/REFERENCE/Ckdym0tc9
 > - Wealth Cloud - Privacy Policy: https://c.youdao.com/dict/law/youdaofanyi_pc_privacy.html
-> - Wealth Cloud-Image Translation-Privacy Agreement: [https://ai.youdao.com/DOCSIRMA/html/trans/sdk_privacy/tpfy/index.html](https://ai.youdao.com/DOCSIRMA/html/trans/ sdk_privacy/tpfy/index.html)
+> - Wealth Cloud-Image Translation-Privacy Agreement: [https://ai.youdao.com/DOCSIRMA/html/trans/sdk_privacy/tpfy/index.html](https://ai.youdao.com/DOCSIRMA/html/trans/sdk_privacy/tpfy/index.html)
 
