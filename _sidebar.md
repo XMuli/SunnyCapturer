@@ -1,18 +1,18 @@
 - Guide
-  - [Getting Started](/getting-started)
-  - [FAQ](/faq)
+  - [Getting Started](/getting_started)
+  <!-- - [FAQ](/faq) -->
   - [Troubleshooting](/troubleshooting)
 - Advanced
-  - [Extract Text(OCR)](/extract-text-ocr)
-  - [Image Translation](/image-translation)
+  - [Extract Text(OCR)](/extract_text_ocr)
+  - [Image Translation](/image_translation)
 - Document
-  - [Supported OS](/supported-OS)
-  - [Technology Share](/development-technology)
+  - [Supported OS](/supported_os)
+  - [Technology Share](/development_technology)
 - Contribution
   - [Translation](/translation)
   - [Acknowledgement](/acknowledgement)
 - More
-  - [Official Site](/office-site)
+  - [Official Site](/office_site)
   - [Changelog](/changelog)
   <!-- - [Donate](/donate) -->
 
