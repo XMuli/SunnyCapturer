@@ -15,7 +15,7 @@
 **Windows SmartScreen 筛选器已阻止启动一个未识别的应用**
 
 - 请点击“更多信息”，然后点击“仍要运行”
-- 这只是因为 SunnyCapturer 未使用企业证书进行数字签名，只要是从 [官网下载](https://sunnycapturer.xmuli.tech) 的，可以放心使用
+- 这只是因为 SunnyCapturer 未使用企业证书进行数字签名，只要是从 [官网下载](https://sunnycapturer.xmuli.tech) 的，可以放心使用；但是使用了个人代码签名证书签名，当在 Microsoft Windows 上积累了足够多的用户量，此版本便不会再弹出
 
 
 

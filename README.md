@@ -1,26 +1,23 @@
-# SunnyCapturer  [<img src="https://img.shields.io/github/release/XMuli/SunnyCapturer.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)   [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
+# SunnyCapturer  
 
-SunnyCapturer is a simple and beautiful cross-platform screenshot software tool that supports OCR to extract text from images, image translation, and pinning images to the screen, among other features.
+[<img src="https://img.shields.io/github/release/XMuli/SunnyCapturer.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)   [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 
-SunnyCapturer 是一款简单且漂亮的跨平台截图软件工具，支持 OCR 从图片中提取文本，图片翻译，以及将图片钉在屏幕上等功能。
+SunnyCapturer is a versatile and aesthetically pleasing cross-platform screenshot software. It offers a range of features, including OCR for extracting text from images, image translation, customizable sticky notes, and pinning images to your screen.
 
+- Official Website & Downloads & User Guide: [http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)  
+- Source Code Repository: [https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)  
+- Contribute Translations: [translations](https://github.com/SunnyCapturer/translations)  
 
+<br><br><br>
 
-- Official Website & Download  & Doc | 官网 & 下载 & 用户手册：[http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)
-- open source Code | 代码开源：[https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)
+# Feedback & Suggestions  
 
+If you encounter any bugs, have improvement suggestions, or wish to propose new features, please check the closed issues first.  
 
+If you don’t find anything similar, feel free to open a new [issue](https://github.com/XMuli/SunnyCapturer/issues) to help track and resolve problems effectively.  
 
-<br>
+<br><br><br>
 
+# Contact  
 
-
-This site is built using [docsify](https://docsify.js.org); anyone is welcome to help modify or improve this user manual!
-
-本网站使用 [docsify](https://docsify.js.org) 搭建；欢迎任何人帮助修改或完善此用户手册。
-
-```bash
-docsify serve docs
-docsify serve .\SunnyPages\
-```
-
+[![alt text](https://img.shields.io/badge/QQ_User_Group-418103279-brightgreen)](https://qm.qq.com/cgi-bin/qm/qr?authKey=5pYNrJL7%2F8biKzT5LMj8dbjkpPvUvdLVbAOcNTydiqTDNc49yg0wtVcub8Cu3Pqa&k=OluWZhjVMhwP-6RO9Y7FFkJcXGiS4CVk&noverify=0)        [![alt text](https://img.shields.io/badge/GitHub-XMuli-brightgreen)](https://github.com/XMuli)        [![alt text](https://img.shields.io/badge/Email-xmulitech@gmail-117dd3)](mailto:xmulitech@gmail.com)        
