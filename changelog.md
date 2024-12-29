@@ -1,3 +1,20 @@
+## v3.0
+
+> 2025.01.01
+
+New year, new version upgrade, bring different feeling 🎀; new official website and user manual [https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)
+
+**Features:**
+
+- OCR text extraction, online and offline mode
+- Image translation, support 100+ languages
+- Customizable stickers
+- Pin images to desktop
+- Light and dark themes
+- New logo activation
+
+
+
 ## v2.4
 
 > 2024.12.02
