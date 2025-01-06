@@ -1,3 +1,18 @@
+## v3.1
+
+> 2025.01.06
+
+**Version Optimization:**
+
+- Added translation: Japanese, thanks to [coolvitto](https://github.com/coolvitto)
+- Fix multi-screen capture exception on Linux #64
+- Fixed shortcut key to repeat last screenshot area not working #64
+- Fix theme color effect in Tooltop #63
+- Optimize runtime detection logic for installers
+- Build scripts to automate Win and Linux packaging.
+
+
+
 ## v3.0
 
 > 2025.01.01
