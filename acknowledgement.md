@@ -10,8 +10,13 @@ Gladly, we extend heartfelt thanks to all contributors who have provided assista
 
 #### International Translations  
 
-- [Thiago Dalsoto](https://github.com/thiagodalsoto): Portuguese (Brazil) Translation  
-- [Toms Photoart](https://github.com/tomsphotoart): German Translation  
+see 👉 [translations](https://github.com/SunnyCapturer/translations)
+
+- [Thiago Dalsoto](https://github.com/thiagodalsoto): Portuguese (Brazil) Translation `(pt_br)`
+- [Toms Photoart](https://github.com/tomsphotoart): German Translation  `(de)`
+- [coolvitto](https://github.com/coolvitto): Japanese Translation  `(ja_jp)`
+
+
 
 
 

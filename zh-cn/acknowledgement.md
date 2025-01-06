@@ -10,8 +10,11 @@
 
 #### 国际化翻译
 
-- [Thiago Dalsoto](https://github.com/thiagodalsoto): 提供 葡萄牙-巴西 翻译
-- [Toms Photoart](https://github.com/tomsphotoart): 提供 德语 翻译
+参与👉 [translations](https://github.com/SunnyCapturer/translations)
+
+- [Thiago Dalsoto](https://github.com/thiagodalsoto): 提供 葡萄牙-巴西 翻译 `(pt_br)`
+- [Toms Photoart](https://github.com/tomsphotoart): 提供 德语 翻译  `(de)`
+- [coolvitto](https://github.com/coolvitto): 提供日本语 翻译  `(ja_jp)`
 
 
 
