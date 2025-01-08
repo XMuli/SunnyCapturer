@@ -10,12 +10,22 @@
 
 - 您的操作系统缺乏基础的微软 VC++ 基础运行库，请根据你的操作系统版本（32位/64位），下载和安装对应版本 `微软 Visual C++ 2015-2022 可再发行组件包`： [32位](https://aka.ms/vs/17/release/vc_redist.x86.exe) | [64位](https://aka.ms/vs/17/release/vc_redist.x64.exe) 
 
-  
 
-**Windows SmartScreen 筛选器已阻止启动一个未识别的应用**
+
+
+**Windows 已保护你的电脑**
 
 - 请点击“更多信息”，然后点击“仍要运行”
 - 这只是因为 SunnyCapturer 未使用企业证书进行数字签名，只要是从 [官网下载](https://sunnycapturer.xmuli.tech) 的，可以放心使用；但是使用了个人代码签名证书签名，当在 Microsoft Windows 上积累了足够多的用户量，此版本便不会再弹出
+
+<img src="./../_media/images/zh_windows_protected_your_PC_and_run.jpg" width="50%"/>
+
+
+
+**Windows SmartScreen 筛选器已阻止启动一个未识别的应用**
+
+- 请点击“更息”，然后点击“仍要运行”
+- 这只是因为 SunnyCapturer 未使用任何企业、或个人证书进行数字签名，只要是从 [官网下载](https://sunnycapturer.xmuli.tech) 的，可以放心使用；
 
 
 

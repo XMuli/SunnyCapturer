@@ -10,10 +10,19 @@ Below are common errors you might encounter while using SunnyCapturer and their 
 
 
 
-**Windows SmartScreen has blocked an unrecognized app**  
+**Windows protected your PC**  
 
 - Click "More Info" and then "Run Anyway."  
 - This occurs because SunnyCapturer is not digitally signed with an enterprise certificate. If you downloaded it from the [official website](https://sunnycapturer.xmuli.tech), it is safe to use.  However, a personal code signing certificate has been applied. Once this version accumulates a sufficient number of users on Microsoft Windows, this prompt will no longer appear.
+
+<img src="./_media/images/en_windows_protected_your_PC_and_run.jpg" width="50%"/>
+
+
+
+**Windows SmartScreen has blocked an unrecognized app**  
+
+- Click "More Info" and then "Run Anyway."  
+- This occurs because SunnyCapturer is not digitally signed with an certificate. If you downloaded it from the [official website](https://sunnycapturer.xmuli.tech), it is safe to use.  
 
 
 
