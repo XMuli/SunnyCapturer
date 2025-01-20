@@ -1,3 +1,15 @@
+## v3.1.1
+
+> 2025.01.20
+
+**Version Optimization:**
+
+- Updated Portuguese-Brazilian language translation
+- Optimize packaged file size
+- Fixed and optimized some bugs
+
+
+
 ## v3.1
 
 > 2025.01.06
