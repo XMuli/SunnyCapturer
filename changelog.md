@@ -1,3 +1,20 @@
+## v3.1.2
+
+> 2025.02.06
+
+**Version optimization:**
+
+- Appimage version of Linux cannot change language [#32](https://github.com/XMuli/SunnyCapturer/issues/32) 
+- Linux supports packages from native ArchLinux distributions `*.pkg.tar.zst` [#41](https://github.com/XMuli/SunnyCapturer/issues/41)
+- Why Linux Appimage configuration is not persistent [#60](https://github.com/XMuli/SunnyCapturer/issues/60)
+- Default language after boot is English, need to exit and reboot to show Chinese [#68](https://github.com/XMuli/SunnyCapturer/issues/68)
+- Maps have limited zoom ratio [#71](https://github.com/XMuli/SunnyCapturer/issues/71)
+- Output image quality setting not working [#73](https://github.com/XMuli/SunnyCapturer/issues/73)
+- Fixed border color switching failure
+- Optimize the window for detecting software updates
+
+
+
 ## v3.1.1
 
 > 2025.01.20

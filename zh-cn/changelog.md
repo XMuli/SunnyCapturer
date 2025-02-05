@@ -1,3 +1,21 @@
+## v3.1.2
+
+> 2025.02.06
+
+**版本优化:**
+
+- Linux 的 Appimage 版本不能修改语言 [#32](https://github.com/XMuli/SunnyCapturer/issues/32) 
+- Linux 支持原生 ArchLinux 发行版的包 `*.pkg.tar.zst`  [#41](https://github.com/XMuli/SunnyCapturer/issues/41)
+- Linux 的 Appimage 的配置为什么不能持久化 [#60](https://github.com/XMuli/SunnyCapturer/issues/60)
+- 开机后的默认语言都是英文，需要退出后重启才显示中文  [#68](https://github.com/XMuli/SunnyCapturer/issues/68)
+- 贴图的放大比例有限 [#71](https://github.com/XMuli/SunnyCapturer/issues/71)
+- 输出的图像质量设置失效 [#73](https://github.com/XMuli/SunnyCapturer/issues/73)
+- 修复边框颜色切换失效
+- 优化检测软件更新窗口
+- 添加初次使用的引导提示
+
+
+
 ## v3.1.1
 
 > 2025.01.20
