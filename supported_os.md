@@ -1,6 +1,6 @@
 ?> Verified OS versions, others have not been verified, but that doesn't mean they won't work!
 
-[<img src="https://img.shields.io/github/release/XMuli/SunnyCapturer.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)    
+[<img src="https://img.shields.io/github/v/release/XMuli/SunnyCapturer.svg?include_prereleases&label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)    
 
 [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 

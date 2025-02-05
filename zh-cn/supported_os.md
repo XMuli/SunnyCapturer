@@ -1,6 +1,6 @@
 ?> 已验证过的操作系统版本，其它版本尚未验证，但这并不意味着它们不能运行
 
-[<img src="https://img.shields.io/github/release/XMuli/SunnyCapturer.svg?label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)    
+[<img src="https://img.shields.io/github/v/release/XMuli/SunnyCapturer.svg?include_prereleases&label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)    
 
 [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 
