@@ -1,3 +1,14 @@
+## v3.1.3
+
+> 2025.02.18
+
+**Version optimization:**
+
+- Some models may fail to boot up [#76](https://github.com/XMuli/SunnyCapturer/issues/76)
+- Some experience optimizations
+
+
+
 ## v3.1.2
 
 > 2025.02.06
