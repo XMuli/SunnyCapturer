@@ -8,8 +8,8 @@ SunnyCapturer 是一款简单且漂亮的跨平台截图软件工具，支持 OC
 - 官网 & 下载 & 用户手册：[http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)
 - 相关代码开源：[https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)
 - 参与翻译：[translations](https://github.com/SunnyCapturer/translations)
-
-
+- 微软商店下载：[SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL)
+  [<img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2024/202503032129726.svg" width="300"/>](https://apps.microsoft.com/detail/9N1TPFK4NCBL)
 
 <br><br><br>
 

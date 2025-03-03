@@ -1,3 +1,39 @@
+## v3.2
+
+> 2025.03.03
+
+**Version Optimization:**
+
+- Available on Microsoft Store [SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL), welcome to download and experience!
+- Offline OCR performance upgrade: CPU and GPU recognition libraries have higher and faster accuracy.
+- Add OCR window to tray menu, support batch drag-and-drop image folder recognition.
+- Fix the bug that GPU feedback fails to run on some models  [#72](https://github.com/XMuli/SunnyCapturer/issues/72)  [#78](https://github.com/XMuli/SunnyCapturer/issues/78)
+
+📢PS: GPU only supports NVIDIA, CUDA >= 12.3, recommended to use the latest version. 
+
+
+
+```bash
+[ENV Test model details]
+CPU：13th Gen Intel(R) Core(TM) i5-13600KF
+GPU: NVIDIA GeForce RTX 3060 Ti
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 566.36                 Driver Version: 566.36         CUDA Version: 12.7     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3060 Ti   WDDM  |   00000000:01:00.0  On |                  N/A |
+|  0%   44C    P8             12W /  225W |    1498MiB /   8192MiB |      6%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+```
+
+20 test images natively, CPU took 52 seconds 113 milliseconds, <u>**while GPU recognition took 3 seconds 678 milliseconds**,</u> very scary speed, great(๑-̀ㅂ-́)و✧ experience 🚀🚀🚀 🚀
+
+
+
 ## v3.1.3
 
 > 2025.02.18
