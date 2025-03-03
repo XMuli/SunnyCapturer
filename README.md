@@ -9,11 +9,14 @@ SunnyCapturer is a simple and beautiful cross-platform screenshot software that 
 - Contribute Translations: [translations](https://github.com/SunnyCapturer/translations)  
 
 - Microsoft Store Download：[SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL)
-  [<img src="https://fastly.jsdelivr.net/gh/XMuli/xmuliPic@pic/2024/202503032129726.svg" width="300"/>](https://apps.microsoft.com/detail/9N1TPFK4NCBL)
 
-  <br>
+[<img src="https://get.microsoft.com/images/zh-cn%20dark.svg" width="35%"/>](https://apps.microsoft.com/detail/9N1TPFK4NCBL?mode=direct)
 
-  <br><br>
+
+
+<br>
+
+<br><br>
 
 # Feedback & Suggestions  
 
