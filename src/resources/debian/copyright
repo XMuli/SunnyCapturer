@@ -1,0 +1,26 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: sunny
+Upstream-Contact: https://sunny.xmuli.tech
+Source: https://sunny.xmuli.tech
+
+Files: *
+Copyright: 2023 XMuli <xmulitech@gmail.com>
+License: Sunny License
+
+Files: debian/*
+Copyright: 2023 XMuli <xmulitech@gmail.com>
+License: Sunny License
+
+License: Sunny License
+1. This software allows free personal use in perpetuity.
+2. Teams or companies are allowed to use this software for commercial purposes, but they must contact us by email to obtain authorization in advance.
+3. If you need any customized features or other commercial cooperation, please feel free to contact me by email or official website to discuss more
+
+# Please also look if there are files or directories which have a
+# different copyright/license attached and list them here.
+# Please avoid picking licenses with terms that are more restrictive than the
+# packaged work, as it may make Debian's contributions unacceptable upstream.
+#
+# If you need, there are some extra license texts available in two places:
+#   /usr/share/debhelper/dh_make/licenses/
+#   /usr/share/common-licenses/

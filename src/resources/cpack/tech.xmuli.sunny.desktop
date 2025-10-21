@@ -1,0 +1,18 @@
+[Desktop Entry]
+Categories=Graphics;
+Comment=Sunny is a simple and beautiful screenshot software tool for Windows, MacOS and Linux
+Comment[zh_CN]=Sunny(桑尼)是一款简洁且漂亮的截图的软件工具，支持 Windows，MacOS，Linux 平台
+Comment[pt_BR]=Sunny é uma ferramenta de software de captura de tela simples e bonita para Windows, MacOS e Linux
+Exec=Sunny
+GenericName=Sunny ScreenShot
+GenericName[zh_CN]=Sunny 截图
+GenericName[pt_BR]=Sunny Captura de Tela
+Icon=tech.xmuli.sunny
+Keywords=Sunny;桑尼;Image;ScreenShot;Snapshot;XMuli;偕臧
+MimeType=image/bmp;image/bmp24;image/jpg;image/jpe;image/jpeg;image/jpeg24;image/jng;image/pcd;image/pcx;image/png;image/tif;image/tiff;image/tiff24;image/dds;image/gif;image/sgi;image/j2k;image/jp2;image/pct;image/wdp;image/arw;image/icb;image/dng;image/vda;image/vst;image/svg;image/ptif;image/mef;image/xbm;image/svg+xml;
+Name=Sunny
+Name[zh_CN]=Sunny
+Name[pt_BR]=Sunny
+StartupNotify=false
+Type=Application
+Terminal=false

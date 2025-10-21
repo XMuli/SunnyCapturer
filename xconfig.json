@@ -1,0 +1,99 @@
+{
+    "general": {
+        "language": "English",
+        "themes": "default",
+        "log_level": "Debug",
+        "font": "Microsoft YaHei,9",
+        "autostart": false
+    },
+    "interface": {
+        "style": "Sunny",
+        "orientation": "Horizontal",
+        "highlight": "#0081ff",
+        "border_width": 3,
+        "crosshair": "#df4187",
+        "crosshair_width": 1,
+        "custom_size_enable": true,
+        "topleft_enable": true,
+        "size_enable": true,
+        "delay_enable": true,
+        "custom_rect_left": 100,
+        "custom_rect_top": 100,
+        "custom_rect_width": 640,
+        "custom_rect_height": 480,
+        "custom_dealy": 6,
+        "acrylic_effect": false,
+        "auto_detect_windows": true,
+        "auto_copy_to_clipbaoard": true,
+        "crosshair_show": false
+    },
+    "output": {
+        "image_quailty": -1,
+        "flie_name": "Sunny_$yyyyMMdd_hhmmss$",
+        "flie_suffix": "png",
+        "quick_save_enable": true,
+        "auto_save_enable": false,
+        "config_path": "",
+        "quick_save_path": "F1",
+        "auto_save_path": "Alt+F1"
+    },
+    "pin": {
+        "opacity": 100,
+        "maximum_size": 10000
+    },
+    "hotkeys": {
+        "capture": "F6",
+        "delay_capture": "Ctrl+F6",
+        "custom_capture": "Shift+F6",
+        "ocr_capture": "",
+        "image_transltae_capture": ""
+    },
+    "tokens": {
+        "account": {
+            "youdao": {
+                "app_id": "nz5WM7YTCl/G1PvcB1mmhA==",
+                "secret_key": "/2UctgC3X+91xuLjZF/ktQOtgVzQQuH10QGNdi5jK0A="
+            },
+            "baidu": {
+                "api_key": "hchdmuPxSnZTcE7FtykjqVPYi44RW+EsBHhXwiyFD1I=",
+                "secret_key": "bQvOX2TltlvdynBre01BKqYSHJ7MEhIviS1mMKgim3U="
+            }
+        },
+        "ocr": {
+            "channel_auto": true,
+            "channel": 0
+        },
+        "iamge_translate": {
+            "channel_auto": true,
+            "channel": 0,
+            "youdao": {
+                "from": "auto",
+                "to": "zh-CHS"
+            },
+            "baidu": {
+                "from": "auto",
+                "to": "zh"
+            }
+        }
+    },
+    "advanced": {
+        "customize_ui_parameters": {
+            "blur_effect_adius": 20,
+            "manual_save_image_dir": "",
+            "ocr_bottom_align_rang": 5,
+            "auto_detection_windows_rect_top_level": true,
+            "show_windows_detial_info": true,
+            "highlight_iridescence": "#DF4187, #FF5D00, #F8CB00, #23C400, #00A48A, #0081FF, #3C02FF, #8C00D4, #4D4D4D",
+            "crosshair_iridescence": "#000000, #7f7f7f, #880015, #ed1c24, #ff7f27, #fff200, #22b14c, #00a2e8, #3f48cc, #a349a4, #ffffff, #c3c3c3, #b97a57, #ffaec9, #ffc90e, #efe4b0, #b5e61d, #99d9ea, #7092be, #c8bfe7"
+        },
+        "non_ui_user_experience": {
+			"version": "1.6.3",
+            "ocr_splitter_left": 3,
+            "ocr_splitter_right": 1,
+			"time": ""
+        },
+        "develpe_enginner": {
+            "save_image_with_detail": false
+        }
+    }
+}

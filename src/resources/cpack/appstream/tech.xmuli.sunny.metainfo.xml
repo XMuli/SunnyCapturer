@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop-application">
+  <id>tech.xmuli.sunny</id>
+  <launchable type="desktop-id">tech.xmuli.sunny.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Sunny License</project_license>
+  <name>Sunny</name>
+  <name xml:lang="zh-CN">Sunny</name>
+  <summary>Sunny ScreenShot</summary>
+  <summary xml:lang="zh-CN">Sunny</summary>
+  <description>
+    <p>Sunny is a simple and beautiful screenshot software tool for Windows, MacOS and Linux</p>
+    <p xml:lang="zh-CN">Sunny是一款简洁且漂亮的截图的软件工具，支持 Windows，MacOS，Linux 平台</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Sunny run preview</caption>
+      <caption xml:lang="zh-CN">截图运行预览</caption>
+      <image type="source" width="3840" height="2160">https://github.com/XMuli/SunnyPages/blob/master/docs/snapshot/snapshoot-windows-01.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://sunny.xmuli.tech/</url>
+  <url type="bugtracker">https://github.com/XMuli/SunnyPages/issues</url>
+  <developer_name>XMuli</developer_name>
+  <developer_name xml:lang="zh-CN">XMuli(偕臧)</developer_name>
+  <provides>
+    <binary>Sunny</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.0.0" date="2023-10-18"/>
+  </releases>
+</component>

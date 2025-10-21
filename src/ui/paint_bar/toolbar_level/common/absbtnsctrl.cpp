@@ -1,0 +1,92 @@
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023-2024 XMuli
+// SPDX-GitHub: https://github.com/XMuli/Sunny
+// SPDX-Author: XMuli <xmulitech@gmail.com>
+
+#include "absbtnsctrl.h"
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include "horspacerline.h"
+#include "verspacerline.h"
+#include "../paintbarhelper.h"
+
+AbsBtnsCtrl::AbsBtnsCtrl(const Qt::Orientations &orien, QWidget *parent)
+    : QWidget(parent)
+    , m_orien(orien)
+    , m_layout(nullptr)
+{
+    if (m_orien == Qt::Horizontal) m_layout = new QHBoxLayout(this);
+    else if (m_orien == Qt::Vertical) m_layout =  new QVBoxLayout(this);
+
+    setContentsMargins(0, 0, 0, 0);
+    m_layout->setMargin(0);
+    m_layout->setSpacing(0);
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    setLayout(m_layout);
+}
+
+void AbsBtnsCtrl::addWidget(QWidget *w, const bool& bAddSpacer)
+{
+    if (w) {
+        m_layout->addWidget(w, Qt::AlignCenter);
+
+        if (bAddSpacer)
+            addSpacerLine(); // 使用了默认参数
+    }
+}
+
+void AbsBtnsCtrl::addSpacerLine(const int& length)
+{
+    if (!m_layout) return;
+    if (m_orien == Qt::Horizontal) m_layout->addWidget(new VerSpacerLine(length, this), 0, Qt::AlignCenter);
+    else if (m_orien == Qt::Vertical) m_layout->addWidget(new HorSpacerLine(length + 5, this), 0, Qt::AlignCenter);
+
+}
+
+void AbsBtnsCtrl::addSpacerItem(const int &length)
+{
+    // 子控件里面有弹簧拉伸，所以最父亲层的弹簧就也就不能尽情的压缩子控件， 虽然不影响效果，以后再回头【直接用】 design 来看看这个点
+    QSpacerItem *spacer = nullptr;
+    if (m_orien == Qt::Horizontal)  {
+        spacer = new QSpacerItem(length, 1, QSizePolicy::Expanding, QSizePolicy::Minimum); // Expanding 替换看效果
+    } else if (m_orien == Qt::Vertical) {
+        spacer = new QSpacerItem(1, length, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    }
+
+    m_layout->addSpacerItem(spacer);
+}
+
+void AbsBtnsCtrl::setFixSpacing(const int &val)
+{
+    if (m_layout) m_layout->setSpacing(val);
+}
+
+XToolButton *AbsBtnsCtrl::creatorXToolButton(const QString& dir, const QString& name, const bool& defaultChecked)
+{
+    XToolButton* btn = new XToolButton();
+    btn->setStyleSheet(szIconBtnCSS);
+    const double& scal = dpiScale();
+    const QSize size(ICON_SIZE * scal, ICON_SIZE * scal);
+    btn->setIconSize(size);
+    btn->setFixedSize(size);
+    btn->setObjectName(name);
+    const QString& path = dir + name + ".svg";
+    btn->setIcon(QIcon(path));
+    btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    btn->setAutoRaise(true);
+    btn->setCheckable(true);
+    btn->setChecked(defaultChecked);
+
+    if (defaultChecked) {
+        const QIcon icon(changedSVGColor(path, highlightColor(), btn->iconSize()));
+        btn->setIcon(icon);
+    }
+
+    QObject::connect(btn, &XToolButton::toggled, [btn, path]() {
+        const QIcon origIcon(path);
+        const QIcon newIcon(changedSVGColor(path, highlightColor(), btn->iconSize()));
+        btn->setIcon(btn->isChecked() ? newIcon : origIcon);
+    });
+
+    return btn;
+}

@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# 获取当前登录的非 root 用户
+TARGET_USER=$(logname)
+
+# 获取目标用户的主目录
+TARGET_HOME=$(getent passwd $TARGET_USER | cut -d: -f6)
+
+# 定义目标目录和配置文件路径
+TARGET_DIR="$TARGET_HOME/.config/Sunny"
+CONFIG_FILES=("/usr/local/Sunny/config/xconfig.json" "/usr/local/Sunny/config/log.conf")
+TMP_DIR="/tmp/sunny_install"
+
+# 删除目标目录
+if [ -d "$TARGET_DIR" ]; then
+    if rm -rf "$TARGET_DIR"; then
+        echo "Successfully deleted $TARGET_DIR"
+    else
+        echo "Failed to delete $TARGET_DIR"
+    fi
+else
+    echo "Directory $TARGET_DIR does not exist, skipping deletion."
+fi
+
+# 创建临时目录
+mkdir -p "$TMP_DIR"
+
+# 将配置文件复制到临时目录并设置权限
+for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+    if [ -f "$CONFIG_FILE" ]; then
+        BASENAME=$(basename "$CONFIG_FILE")
+        cp "$CONFIG_FILE" "$TMP_DIR"
+        chown $TARGET_USER:$TARGET_USER "$TMP_DIR/$BASENAME"
+        chmod 644 "$TMP_DIR/$BASENAME"
+
+        # 确保目标目录存在并设置权限
+        if [ ! -d "$TARGET_DIR" ]; then
+            sudo -u $TARGET_USER mkdir -p "$TARGET_DIR"
+        fi
+        chown $TARGET_USER:$TARGET_USER "$TARGET_DIR"
+        chmod 755 "$TARGET_DIR"
+
+        # 移动文件到目标目录并设置权限
+        if mv "$TMP_DIR/$BASENAME" "$TARGET_DIR"; then
+            chown $TARGET_USER:$TARGET_USER "$TARGET_DIR/$BASENAME"
+            chmod 644 "$TARGET_DIR/$BASENAME"
+            echo "Successfully copied $BASENAME to $TARGET_DIR"
+        else
+            echo "Failed to copy $BASENAME to $TARGET_DIR"
+        fi
+
+        # 打印文件权限
+        # ls -l "$TARGET_DIR/$BASENAME"
+    else
+        echo "File $CONFIG_FILE does not exist, skipping."
+    fi
+done
+
+# 清理临时目录
+rmdir "$TMP_DIR" >/dev/null 2>&1  # 使用重定向以防止出现 rmdir: failed to remove '/tmp/sunny_install': Directory not empty 的警告信息

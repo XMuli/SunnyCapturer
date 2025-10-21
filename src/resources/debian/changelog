@@ -1,0 +1,63 @@
+Sunny (1.5.0) UNRELEASED; urgency=medium
+  It is also in its own use, actively developing and improving its experience; Fix many bugs and optimize some UI styles to improve user experience. (Lots of improvements)
+  Fixes
+  * Shortcut keys for the first level toolbar are not working
+  * Auto Window Detection that mistakenly catches non-displayed system windows
+  * Exception logic of auto-save and quick-save
+  UI enhancement
+  * The first and second level toolbars adopt highlight color; and there are acrylic frosted and common border effects.
+  * The style of ToolTip in the primary toolbar is white background.
+  * Support zoom tip percentage in pinning window, default 2 seconds.
+  * Design Tokens UI with QStackedWidget effect.
+  * Hide the corners of the Sunny border
+  * Highlight color effect for checkboxes
+  Optimization
+  * Optimize auto-detect window size without shadow area
+  * Optimize backend data storage, .ini changed to .json format.
+  * OCR with _local option, the extracted text has a neat layout format.
+  * OCR provides configuration parameters to customize the error data to fine-tune the layout accuracy.
+  * New "Engineer Advanced" switch: save image with window details.
+  Other etc.
+
+ -- XMuli <xmulitech@gmail.com>  Sat, 20 Apr 2024 13:02:31 +0800
+
+Sunny (1.4.0) UNRELEASED; urgency=medium
+
+  * Support line switching, "OCR" and "Images Translate".
+  * OCR times increased to 3500 times/month 
+  * Increase the number of picture recognition to **10000 times/year** + Others
+  * Adopt new style pop-up window design.
+  * more: [Wiki: 6. Image Translation & OCR](https://github.com/XMuli/SunnyPages/wiki/6.-Image-Translation-&-OCR-%7C-%E5%9B%BE%E7%89%87%E7%BF%BB%E8%AF%91-&-%E6%96%87%E5%AD%97%E6%8F%90%E5%8F%96)
+
+ -- XMuli <Vincent@Vincent-PC.localdomain>  Wed, 27 Mar 2024 19:16:41 +0800
+
+
+Sunny (1.3.0) UNRELEASED; urgency=medium
+
+  * Support for image translation and OCR
+  * Updated translations for Simplified Chinese and Traditional Chinese.
+
+ -- XMuli <Vincent@Vincent-PC.localdomain>  Sat, 03 Feb 2024 00:58:28 +0800
+ 
+Sunny (1.1.0) UNRELEASED; urgency=medium
+
+  * Support to Deepin V20.9-V23 compiled and ran successfully.
+  * Added the shadow effect of pins on the screen
+  * Updated translations (Chinese-Simplified, Chinese-Traditional).
+  
+ -- XMuli <xmulitech@gmail.com>  Sun, 29 Oct 2023 15:41:53 +0800
+
+Sunny (1.0.0) UNRELEASED; urgency=medium
+
+  * Support for various system style themes.
+  * Customizable transparent frosted glass effect (acrylic).
+  * Switchable orientation for the drawing toolbar: horizontal or vertical.
+  * Support for high-contrast color theme switching (via configuration file modification).
+  * Capabilities for regular screenshots, delayed screenshots, and custom screenshots.
+  * Quick and automatic saving options.
+  * Screen detection for capturing window content (window information and window depth).
+  * Ability to pin images to the screen with scaling and transparency settings.
+  * Simultaneous support for multiple text formats during editing.
+  * And more.  
+
+ -- XMuli <xmulitech@gmail.com>  Tue, 24 Oct 2023 11:17:53 +0800
