@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>钉住</title>
+    <g id="钉住" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="矩形" x="0" y="0" width="24" height="24"></rect>
+        <g id="编组" transform="translate(12.500000, 12.500000) rotate(45.000000) translate(-12.500000, -12.500000) translate(6.500000, 4.000000)">
+            <path d="M4,2 C3.18480884,0.841887694 3.01814217,0.175221028 3.5,0 C5,0 7.5,0 8.5,0 C8.97217852,0.171701279 8.80551185,0.838367946 8,2 L9,7.5 L11.5547002,9.20313346 C11.8328989,9.38859924 12,9.70083057 12,10.0351838 L12,10.5 C12,11.0522847 11.5522847,11.5 11,11.5 L1,11.5 C0.44771525,11.5 -5.67757835e-14,11.0522847 -5.68434189e-14,10.5 L-5.68434189e-14,10.0351838 C-5.68843653e-14,9.70083057 0.167101135,9.38859924 0.445299804,9.20313346 L3,7.5 L3,7.5 L4,2 Z" id="路径-12" stroke="#FFFFFF" stroke-width="1.2" stroke-linejoin="round"></path>
+            <rect id="矩形" fill="#FFFFFF" x="5.4" y="11" width="1.2" height="6" rx="0.5"></rect>
+        </g>
+    </g>
+</svg>

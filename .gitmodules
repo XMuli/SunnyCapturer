@@ -1,0 +1,6 @@
+[submodule "3rdparty/QHotkey"]
+	path = 3rdparty/QHotkey
+	url = https://github.com/Skycoder42/QHotkey.git
+[submodule "3rdparty/spdlog"]
+	path = 3rdparty/spdlog
+	url = https://github.com/gabime/spdlog.git

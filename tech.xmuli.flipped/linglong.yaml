@@ -1,0 +1,24 @@
+package:
+  id: tech.xmuli.flipped
+  name: flipped
+  version: 1.5.0
+  kind: app
+  description: |
+    Simple and beautiful cross-platform screenshot software.
+
+runtime:
+  id: org.deepin.Runtime
+  version: 23.0.0
+
+depends:
+  - id: icu
+    version: 63.1
+    type: runtime
+
+source:
+  kind: git
+  url: "https://github.com/XMuli/Flipped.git"
+  commit: efbb6a5769b2d1c638fa95a2cfcd656580b99ab7
+
+build:
+  kind: cmake

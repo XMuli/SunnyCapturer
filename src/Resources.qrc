@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/tool/arrow.svg</file>
+        <file>resources/tool/cancel.svg</file>
+        <file>resources/tool/ellipse.svg</file>
+        <file>resources/tool/finish.svg</file>
+        <file>resources/tool/gif.svg</file>
+        <file>resources/tool/mosaic.svg</file>
+        <file>resources/tool/rectangle.svg</file>
+        <file>resources/tool/renewal.svg</file>
+        <file>resources/tool/revocation.svg</file>
+        <file>resources/tool/save.svg</file>
+        <file>resources/tool/smooth.svg</file>
+        <file>resources/tool/text.svg</file>
+        <file>resources/tool/serialnumber.svg</file>
+        <file>resources/tool_para/ellipses/ellipse.svg</file>
+        <file>resources/tool_para/ellipses/ellipse_fill.svg</file>
+        <file>resources/tool_para/mosaics/pixelated.svg</file>
+        <file>resources/tool_para/mosaics/smooth.svg</file>
+        <file>resources/tool_para/rectangles/rectangle.svg</file>
+        <file>resources/tool_para/rectangles/rectangle_fill.svg</file>
+        <file>resources/tool_para/arrows/arrow_1.svg</file>
+        <file>resources/tool_para/arrows/arrow_2.svg</file>
+        <file>resources/tool_para/arrows/arrow_3.svg</file>
+        <file>resources/tool_para/line_width/line_width_1.svg</file>
+        <file>resources/tool_para/line_width/line_width_2.svg</file>
+        <file>resources/tool_para/line_width/line_width_3.svg</file>
+        <file>resources/tool_para/arrows/arrow_4.svg</file>
+        <file>resources/tool/pin.svg</file>
+        <file>resources/tool_para/serialnumber/ellipse_fill.svg</file>
+        <file>resources/tool_para/serialnumber/letters.svg</file>
+        <file>resources/tool_para/serialnumber/numbers.svg</file>
+        <file>resources/tool_para/serialnumber/rectangle_fill.svg</file>
+        <file>resources/tool_para/text/bold.svg</file>
+        <file>resources/tool_para/text/italic.svg</file>
+        <file>resources/tool_para/text/outline.svg</file>
+        <file>resources/tool/custompath.svg</file>
+        <file>resources/border_style/light_blue/boardPoint.svg</file>
+        <file>resources/logo/logo.ico</file>
+        <file>resources/logo/logo.png</file>
+        <file>resources/logo/logo.svg</file>
+        <file>resources/logo/resources.rc</file>
+    </qresource>
+</RCC>
