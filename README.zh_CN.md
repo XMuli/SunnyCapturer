@@ -62,7 +62,7 @@ Note：支持平台版本、芯片，版本可以参考历史日志；GitHub Rel
 - 源码：
 
   1. 官网介绍：[https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)
-  2. 源码镜像地址： [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code)
+  2. 源码镜像地址： [5th-SunnyCapturer-v5.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/5th-SunnyCapturer-v5.x-Code) TBD
   3. 原始仓库地址： GitHub
   4. 累计发布版本： [Release](https://github.com/XMuli/SunnyCapturer/releases) V5.0.0 - 至今（截至当前累计 ≥ 2个版本）
 
@@ -95,7 +95,7 @@ Note：支持平台版本、芯片，版本可以参考历史日志；GitHub Rel
 - 源码：
 
   1. 官网介绍：[https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)
-  2. 源码镜像地址： [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code)
+  2. 源码镜像地址： [4th-SunnyCapturer-v3.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/4th-SunnyCapturer-v3.x-Code) TBD
   3. 原始仓库地址： GitHub
   4. 累计发布版本： [Release](https://github.com/XMuli/SunnyCapturer/releases) V3.0 - V3.2（累计 ≥ 6个版本）
 
@@ -143,7 +143,7 @@ Note：支持平台版本、芯片，版本可以参考历史日志；GitHub Rel
 - 源码：
 
   1. 官网介绍：[https://sunny.xmuli.tech](https://sunny.xmuli.tech/#/)
-  2. 源码镜像地址： [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code)
+  2. 源码镜像地址： [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code) TBD
   3. 原始仓库地址： GitHub
   4. 累计发布版本： [Release](https://github.com/XMuli/SunnyCapturer/releases) V2.0 - V2.4（累计 ≥ 5个版本）
 

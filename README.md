@@ -58,7 +58,7 @@ Note: For supported platform versions and chips, refer to the changelog; GitHub 
 - Source code:
 
   1. Official intro: [https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)
-  2. Source mirror: [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code)
+  2. Source mirror:   [5th-SunnyCapturer-v5.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/5th-SunnyCapturer-v5.x-Code) TBD
   3. Original repo: GitHub
   4. Total released versions: [Release](https://github.com/XMuli/SunnyCapturer/releases) V5.0.0 - Present (≥ 2 versions so far)
 
@@ -95,7 +95,7 @@ Note: For supported platform versions and chips, refer to the changelog; GitHub 
 - Source code:
 
   1. Official intro: [https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)
-  2. Source mirror: [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code)
+  2. Source mirror:  [4th-SunnyCapturer-v3.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/4th-SunnyCapturer-v3.x-Code) TBD
   3. Original repo: GitHub
   4. Total released versions: [Release](https://github.com/XMuli/SunnyCapturer/releases) V3.0 - V3.2 (≥ 6 versions)
 
@@ -145,7 +145,7 @@ Note: For supported platform versions and chips, refer to the changelog; GitHub 
 - Source code:
 
   1. Official intro: [https://sunny.xmuli.tech](https://sunny.xmuli.tech/#/)
-  2. Source mirror: [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code)
+  2. Source mirror: [3rd-SunnyCapturer-v2.x-Code](https://github.com/XMuli/SunnyCapturer/tree/master/3rd-SunnyCapturer-v2.x-Code) TBD
   3. Original repo: GitHub
   4. Total released versions: [Release](https://github.com/XMuli/SunnyCapturer/releases) V2.0 - V2.4 (≥ 5 versions)
 
