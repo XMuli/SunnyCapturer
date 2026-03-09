@@ -1,3 +1,97 @@
+## v5.2.0
+
+> 2026.03.10
+
+**What's New in v5.2.0**
+
+**Bug Fixes**
+
+  - **Multi-monitor window geometry restore** — The Settings window now correctly
+    restores its position and size across sessions. When the saved monitor is no
+    longer connected, the window gracefully centers itself on the primary display
+    instead of appearing at an unpredictable OS-default position. (#114)
+
+  - **File dialog freeze on Windows 11 25H2** — Resolved a hang that occurred
+    when opening native file dialogs (`QFileDialog`) on Windows 11 25H2 in
+    several locations: the Settings "Browse" button, Screenshot "Save As",
+    Edit Menu "Insert Image", Video Player "Add Subtitle", OCR "Import PDF", and
+    Image Viewer "Save / Load". (#109)
+
+**Improvements**
+
+  - **Localization** — Updated Japanese (ja_JP) and Russian (ru_RU) translations;
+    removed entries marked `[type="unfinished"]` to improve translation quality.
+
+  - **QHotkey dependency** — Updated the QHotkey submodule to the latest upstream
+    commit for improved global hotkey reliability.
+
+
+
+## v5.1.0
+
+> 2026.02.09
+
+**What's New in v5.1.0**
+
+Thank you for your continued support and anticipation — we're excited to bring you SunnyCapturer v5.1.0 with important improvements across reliability, usability, and platform compatibility.
+
+**New Features**
+
+- **Redesigned Hotkey Editor**: Rebuilt the hotkey editing control using a low-level keyboard hook (`WH_KEYBOARD_LL`), enabling reliable capture of all key combinations including `Print Screen` and modifier keys (Ctrl, Alt, Shift, Win).
+- **Additional Keyboard Shortcuts**: Added `Ctrl+C` as an alternative shortcut for confirming a screenshot capture, and `Ctrl+Y` for redo operations, improving workflow efficiency.
+- **Startup Behavior Optimized**: The application no longer auto-starts on boot by default, giving you full control over your startup configuration.
+
+**Bug Fixes**
+
+- **Pinned Window Dragging Beyond Screen Top** (#75): Pinned (sticky) windows can now be freely dragged above the top edge of the screen, removing a previous boundary restriction.
+- **Startup Registration on Certain Windows Devices** (#83): Resolved an issue where auto-start failed to register correctly on specific Windows hardware configurations. The startup approval flag is now properly synchronized with the Windows registry.
+- **File Dialog Freeze on Windows 11 25H2** (#109): Worked around a system-level issue in Windows 11 version 25H2 where native file dialogs could become unresponsive.
+- **Update Check Settings Not Persisting**: Fixed a critical issue where update preferences — including check interval, auto-check toggle, insider opt-in, and proxy settings — were reset to defaults on every launch.
+- **Update Checker Error Handling**: Corrected inverted network error handling logic that could cause connectivity test results to be silently discarded.
+- **Changelog Version Mismatch**: The update dialog now displays the changelog corresponding to the matched release version, rather than always showing the most recent entry.
+- **Build Script & Resource Paths** (#111): Updated build scripts and corrected resource icon paths.
+
+**Localization**
+
+- Updated Brazilian Portuguese (`pt_br`) translation.
+- Added Russian (`ru_ru`) translation.
+
+**Optimization**
+
+- Default update check interval changed from every day to every 3 days, reducing unnecessary interruptions.
+- Beta (pre-release) update notifications are now opt-in rather than on by default — stable release users will no longer receive beta prompts unless explicitly enabled.
+
+
+
+## v5.0.0(Pre)
+
+> 2025.09.11
+
+Thank you all for your continued enthusiastic support and anticipation. Today, version v5.0.0 is officially released! 🎉🎉🎉
+
+**Version Optimization:**
+
+**New Features**
+- Supports video recording
+- Supports GIF recording
+- Supports camera photo capture
+- Supports quick preview of multiple file types
+- Switch current microphone, speaker, and camera when using multiple devices
+- Support for selecting global local or current-user-only installation paths
+
+**Bug Fixes & Other Improvements**
+- Fixed misspelled letters in filenames #94
+- Fixed rare cases where auto-start failed to activate #83 
+- Addressed several minor bugs and issues
+- Updated Brazilian Portuguese localization, thanks to @thiagodalsoto
+  
+
+Note: For recording and GIF functions, after selecting an area, manually press the `Enter` key to display the control panel and timer.
+
+📢PS: GPU support is limited to NVIDIA graphics cards. CUDA >= 12.0.0 is required (lower versions untested). The latest version is recommended. Download from the official site: [cuda-toolkit-archive](https://developer.nvidia.com/cuda-toolkit-archive); The Linux version installation package will be released together once it becomes stable.
+
+
+
 ## v3.2
 
 > 2025.03.03
