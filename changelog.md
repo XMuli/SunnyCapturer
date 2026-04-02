@@ -1,3 +1,66 @@
+## v5.3.0
+
+> 2026.04.02
+
+**Highlights**
+
+  v5.3.0 focuses on improving localization, language switching, and
+  overall stability around settings and update-related behavior. This
+  release expands internationalization coverage so more UI text can
+  follow language changes correctly and consistently.
+
+**New and Improved**
+
+  - Improved localization support and translation coverage across the
+    application.
+  - Enhanced language switching behavior, with more UI text updating
+    correctly after a language change.
+  - Added internationalization support for more window titles, tray menu
+    items, and file dialog filters.
+  - Continued translation updates across supported languages for better
+    consistency.
+  - Cleaned up part of the historical unfinished translation entries.
+
+**Supported Languages**
+
+  - Simplified Chinese `zh_cn`
+  - Traditional Chinese `zh_tw`
+  - English `en_us`
+  - Japanese `ja_jp`
+  - Korean `ko_kr`
+  - Russian `ru_ru`
+  - French `fr_fr`
+  - German `de_de`
+  - Italian `it_it`
+  - Spanish `es_es`
+  - Portuguese (Brazil) `pt_br`
+  - Arabic `ar_sa`
+
+**Fixes**
+
+  - Fixed settings window geometry restoration issues in multi-monitor
+    environments.
+  - Fixed several problems in the update check logic and improved
+    default configuration behavior.
+  - Fixed multiple UI strings that were not properly connected to the
+    translation system.
+  - Fixed cases where some interface text did not refresh correctly
+    after switching languages.
+
+**Other Improvements**
+
+  - Updated parts of the build and packaging scripts for the `v5.3.0`
+    release workflow.
+  - Updated the QHotkey submodule to a newer revision.
+  - Included general internal cleanup and maintainability improvements.
+
+**Notes**
+
+  - If you notice untranslated text, awkward wording, or UI text not
+      refreshing after switching languages, feedback is welcome.
+
+
+
 ## v5.2.0
 
 > 2026.03.10
