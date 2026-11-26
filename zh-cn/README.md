@@ -1,12 +1,14 @@
 # SunnyCapturer  
 
+> **SunnyCapturer 是早期的截图工具。** [官网](https://sunnycapturer.xmuli.tech/zh-cn/) · [源码](https://github.com/XMuli/SunnyCapturer) · [SnipArc 下载](https://sniparc.mosuzo.com/zh-cn/download)
+
 [<img src="https://img.shields.io/github/v/release/XMuli/SunnyCapturer.svg?include_prereleases&label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)   [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 
 SunnyCapturer 是一款简单且漂亮的跨平台截图软件工具，支持 OCR 从图片中提取文本、图片翻译、自定义贴图、以及图片钉在屏幕上等功能。
 
 
-- 官网 & 下载 & 用户手册：[http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)
-- 相关代码开源：[https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)
+- 官网 & 下载 & 用户手册：[https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)
+- 相关代码开源：[XMuli/SunnyCapturer](https://github.com/XMuli/SunnyCapturer)
 - 参与翻译：[translations](https://github.com/SunnyCapturer/translations)
 - 微软商店下载：[SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL)
 

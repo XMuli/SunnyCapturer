@@ -1,11 +1,13 @@
 # SunnyCapturer  
 
+> **SunnyCapturer is a legacy screenshot tool.** [Website](https://sunnycapturer.xmuli.tech/) · [Source](https://github.com/XMuli/SunnyCapturer) · [SnipArc downloads](https://sniparc.mosuzo.com/download)
+
 [<img src="https://img.shields.io/github/v/release/XMuli/SunnyCapturer.svg?include_prereleases&label=version" alt="tags"/>](https://github.com/XMuli/SunnyCapturer/releases)   [<img src="https://img.shields.io/github/downloads/XMuli/SunnyCapturer/total" alt="Total Downloads" />](https://github.com/XMuli/SunnyCapturer/releases)  
 
 SunnyCapturer is a simple and beautiful cross-platform screenshot software that supports OCR for extracting text from images, image translation, custom stickers, and pinning images to the screen.
 
-- Official Website & Downloads & User Guide: [http://sunnycapturer.xmuli.tech](http://sunnycapturer.xmuli.tech/)  
-- Source Code Repository: [https://github.com/SunnyCapturer](https://github.com/SunnyCapturer)  
+- Official Website & Downloads & User Guide: [https://sunnycapturer.xmuli.tech](https://sunnycapturer.xmuli.tech/)  
+- Source Code Repository: [XMuli/SunnyCapturer](https://github.com/XMuli/SunnyCapturer)  
 - Contribute Translations: [translations](https://github.com/SunnyCapturer/translations)  
 
 - Microsoft Store Download：[SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL)

@@ -1,77 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>SunnyCapturer</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="icon" href="./favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  <script defer src="https://umami.xmuli.tech/script.js"
-    data-website-id="339e5efc-3f1e-4f4b-b245-691b6ce12a88"></script>
-</head>
-
-<body>
-  <nav>
-    <a href="#/">EN</a>
-    <a href="#/zh-cn/">中文</a>
-  </nav>
-  <div id="app"></div>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="From captures and pins to OCR, recordings, and GIFs, many SunnyCapturer improvements started with a note from a user. Thank you to everyone who tried it, sent feedback, or helped translate it.">
+  <title>SunnyCapturer farewell · Mosuzo Studio</title>
+  <link rel="stylesheet" href="farewell.css">
   <script>
-    window.$docsify = {
-      repo: 'https://github.com/XMuli/SunnyCapturer',
-      logo: 'logo.svg height="32px"',
-      name: 'Sunny Capturer',
-      nameLink: {
-        '/zh-cn/': '#/zh-cn/',
-        '/': '/'
-      },
-      maxLevel: 3,
-      subMaxLevel: 2,
-      auto2top: true,
-      loadSidebar: true,      // 定制侧边栏
-      autoHeader: true,       // 根据 _sidebar.md 的内容自动为每个页面增加标题
-      routerMode: 'hash', // default: 'hash'
-      coverpage: true,      // 封面
-      // externalLinkTarget: '_self', // default: '_blank'   
-      // themeColor: '#3F51B5',
-      // ga: 'UA-XXXXX-Y'
-      formatUpdated: '{YYYY}.{MM}.{DD} {HH}:{mm}',
-      count: {
-        countable: true,
-        fontsize: '0.9em',
-        color: 'rgb(90,90,90)',
-        language: 'chinese'
-      },
-      search: {
-        maxAge: 43200000, // 过期时间，单位毫秒，半天，默认为一天
-        placeholder: {
-          '/zh-cn/': '搜索',
-          '/': 'Search'
-        },
-        noData: {
-          '/zh-cn/': '找不到结果',
-          '/': 'No Results'
-        },
-      }
+    const route = window.location.hash;
+    if (route === "#/zh-cn" || route === "#/zh-cn/") {
+      window.location.replace("zh-cn/index.html");
+    } else if (route.startsWith("#/") && route !== "#/") {
+      window.location.replace("legacy-site.html" + route);
     }
   </script>
-  <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script> -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <!-- 谷歌统计 - Google Analytics -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/ga.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
-
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
-
+  <link rel="canonical" href="https://sunnycapturer.xmuli.tech/">
+  <link rel="alternate" hreflang="zh-CN" href="https://sunnycapturer.xmuli.tech/zh-cn/">
+</head>
+<body class="legacy sunnycapturer">
+<header class="top wrap">
+  <a class="wordmark" href="index.html"><span class="logo-mark" aria-hidden="true"></span>Mosuzo Studio</a>
+  <nav aria-label="Page navigation"><a class="language" href="zh-cn/index.html" lang="zh-CN">简体中文</a></nav>
+</header>
+<main class="wrap">
+  <section class="legacy-hero">
+    <div class="hero-copy">
+      <p class="eyebrow"><span></span>SunnyCapturer · 2025–2026</p>
+      <h1>You helped it<br> go further.</h1>
+      <p class="lead">From captures and pins to OCR, recordings, and GIFs, many SunnyCapturer improvements started with a note from a user. Thank you to everyone who tried it, sent feedback, or helped translate it.</p>
+      <p class="follow">SunnyCapturer is now archived. We recommend SnipArc for ongoing updates on Windows.</p>
+      <div class="actions"><a class="button" href="https://sniparc.mosuzo.com/download">Go to SnipArc downloads<span aria-hidden="true">↗</span></a></div>
+    </div>
+    <figure class="art capturer-art"><div class="capturer-orbit"></div><div class="capturer-window"><div class="window-bar" aria-hidden="true"><i></i><i></i><i></i></div><img src="farewell-assets/sunnycapturer.webp" alt="The original SunnyCapturer website" width="920" height="353"></div><figcaption>The original SunnyCapturer website</figcaption></figure>
+  </section>
+  <details class="archive-links">
+    <summary>Explore historical builds and source</summary>
+    <p>If you use macOS or Linux, look for a compatible historical build on the original project’s release page.</p>
+    <div><a href="https://github.com/XMuli/SunnyCapturer/releases">Historical releases<span aria-hidden="true">↗</span></a><a href="https://github.com/XMuli/SunnyCapturer">Source<span aria-hidden="true">↗</span></a><a href="legacy-site.html#/">Legacy documentation<span aria-hidden="true">↗</span></a></div>
+  </details>
+</main>
+<footer class="footer wrap"><span>© <a href="https://github.com/XMuli">XMuli</a> · All rights reserved.</span></footer>
 </body>
-
 </html>
