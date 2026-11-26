@@ -37,7 +37,7 @@ SunnyCapturer is archived and no longer receives feature updates. Use **SnipArc*
 | **Website** | https://sunnycapturer.xmuli.tech/ |
 | **Full compatibility list** | https://sunnycapturer.xmuli.tech/legacy-site.html#/supported_os |
 | **Archive entry** | https://screenshot-archive.xmuli.tech/sunnycapturer/ |
-| **Source** | https://github.com/XMuli/SunnyCapturer |
+| **GitHub** | https://github.com/XMuli/SunnyCapturer |
 | **Releases** | https://github.com/XMuli/SunnyCapturer/releases |
 
 ## The screenshot series

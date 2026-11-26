@@ -37,7 +37,7 @@ SunnyCapturer 已归档，不再进行功能更新。Windows 上的后续开发�
 | **官网** | https://sunnycapturer.xmuli.tech/ |
 | **完整兼容清单** | https://sunnycapturer.xmuli.tech/legacy-site.html#/zh-cn/supported_os |
 | **作品档案条目** | https://screenshot-archive.xmuli.tech/sunnycapturer/ |
-| **源码** | https://github.com/XMuli/SunnyCapturer |
+| **GitHub** | https://github.com/XMuli/SunnyCapturer |
 | **历史发布** | https://github.com/XMuli/SunnyCapturer/releases |
 
 ## 截图作品系列
