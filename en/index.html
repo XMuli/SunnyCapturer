@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="From captures and pins to OCR, recordings, and GIFs, many SunnyCapturer improvements started with a note from a user. Thank you to everyone who tried it, sent feedback, or helped translate it.">
+  <title>SunnyCapturer farewell · Mosuzo Studio</title>
+  <link rel="stylesheet" href="farewell.css">
+  <script>
+    const route = window.location.hash;
+    if (route === "#/zh-cn" || route === "#/zh-cn/") {
+      window.location.replace("zh-cn/index.html");
+    } else if (route.startsWith("#/") && route !== "#/") {
+      window.location.replace("legacy-site.html" + route);
+    }
+  </script>
+  <link rel="canonical" href="https://sunnycapturer.xmuli.tech/en/">
+  <link rel="alternate" hreflang="zh-CN" href="https://sunnycapturer.xmuli.tech/">
+</head>
+<body class="legacy sunnycapturer">
+<header class="top wrap">
+  <a class="wordmark" href="index.html"><span class="logo-mark" aria-hidden="true"></span>Mosuzo Studio</a>
+  <nav aria-label="Page navigation"><a class="language" href="../index.html" lang="zh-CN">简体中文</a></nav>
+</header>
+<main class="wrap">
+  <section class="legacy-hero">
+    <div class="hero-copy">
+      <p class="eyebrow"><span></span>SunnyCapturer · 2025–2026</p>
+      <h1>You helped it<br> go further.</h1>
+      <p class="lead">From captures and pins to OCR, recordings, and GIFs, many SunnyCapturer improvements started with a note from a user. Thank you to everyone who tried it, sent feedback, or helped translate it.</p>
+      <p class="follow">SunnyCapturer is now archived. We recommend SnipArc for ongoing updates on Windows.</p>
+      <div class="actions"><a class="button" href="https://sniparc.mosuzo.com/download">Go to SnipArc downloads<span aria-hidden="true">↗</span></a></div>
+    </div>
+    <figure class="art capturer-art"><div class="capturer-orbit"></div><div class="capturer-window"><div class="window-bar" aria-hidden="true"><i></i><i></i><i></i></div><img src="farewell-assets/sunnycapturer.webp" alt="The original SunnyCapturer website" width="920" height="353"></div><figcaption>The original SunnyCapturer website</figcaption></figure>
+  </section>
+  <details class="archive-links">
+    <summary>Explore historical builds and source</summary>
+    <p>If you use macOS or Linux, look for a compatible historical build on the original project’s release page.</p>
+    <div><a href="https://github.com/XMuli/SunnyCapturer/releases">Historical releases<span aria-hidden="true">↗</span></a><a href="https://github.com/XMuli/SunnyCapturer">Source<span aria-hidden="true">↗</span></a><a href="legacy-site.html#/">Legacy documentation<span aria-hidden="true">↗</span></a></div>
+  </details>
+</main>
+<footer class="footer wrap"><span>© <a href="https://github.com/XMuli">XMuli</a> · All rights reserved.</span></footer>
+</body>
+</html>
