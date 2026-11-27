@@ -11,7 +11,7 @@
 
 A screenshot tool for Windows, macOS, and Linux with annotation, image pinning, offline OCR, image translation, screen recording, and GIF export.
 
-**Archived** · **v5.3.0** · Qt / C++ · About 40,000 GitHub downloads
+**Latest release v5.3.0** · Qt / C++ · About 40,000 GitHub downloads
 
 [Original project website](https://sunnycapturer.xmuli.tech/) · [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) · [Project archive](https://screenshot-archive.xmuli.tech/sunnycapturer/) · [简体中文](README.zh_CN.md)
 
@@ -99,7 +99,7 @@ Select a screenshot to view it at full size. See [supported operating systems](.
 
 ## Status
 
-SunnyCapturer is archived and no longer receives feature updates. Use **SnipArc** for ongoing development on Windows.
+SunnyCapturer no longer receives feature updates. Use **SnipArc** for ongoing development on Windows.
 
 ## Links
 
@@ -115,6 +115,12 @@ SunnyCapturer is archived and no longer receives feature updates. Use **SnipArc*
 
 ShotX → FLIPPED → Sunny → SunnyCapturer → SnipArc.  
 [Full visual archive](https://screenshot-archive.xmuli.tech/)
+
+## License
+
+Copyright (c) 2023–2026 WENGENG ZHANG
+
+Original SunnyCapturer code and documentation are available under the [GNU GPL v3.0](./LICENSE) (GPL-3.0-only). Historical source snapshots and third-party components retain their own license notices.
 
 ## Contact
 

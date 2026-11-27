@@ -11,7 +11,7 @@
 
 适用于 Windows、macOS 和 Linux 的截图工具，支持标注、贴图、离线 OCR、图片翻译、录屏和 GIF 导出。
 
-**已归档** · **v5.3.0** · Qt / C++ · GitHub 历史下载约 4 万次
+**最新版本 v5.3.0** · Qt / C++ · GitHub 历史下载约 4 万次
 
 [原项目官网](https://sunnycapturer.xmuli.tech/) · [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) · [作品档案](https://screenshot-archive.xmuli.tech/sunnycapturer/) · [English](README.md)
 
@@ -99,7 +99,7 @@ Windows 7 仅适用于 1.x–2.x 旧版。系统与架构的组合请以各版�
 
 ## 状态
 
-SunnyCapturer 已归档，不再进行功能更新。Windows 上的后续开发请使用 **SnipArc**。
+SunnyCapturer 不再进行功能更新。Windows 上的后续开发请使用 **SnipArc**。
 
 ## 链接
 
@@ -115,6 +115,12 @@ SunnyCapturer 已归档，不再进行功能更新。Windows 上的后续开发�
 
 ShotX → FLIPPED → Sunny → SunnyCapturer → SnipArc。  
 [完整作品档案](https://screenshot-archive.xmuli.tech/)
+
+## 许可证
+
+Copyright (c) 2023–2026 WENGENG ZHANG
+
+SunnyCapturer 的原创代码与文档采用 [GNU GPL v3.0](./LICENSE)（GPL-3.0-only）。历史源码快照与第三方组件保留各自的许可声明。
 
 ## 联系
 
