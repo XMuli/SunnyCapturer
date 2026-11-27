@@ -1,4 +1,13 @@
-# SunnyCapturer
+﻿> [!IMPORTANT]
+> <a href="https://sniparc.mosuzo.com/"><img src="https://sniparc.mosuzo.com/_astro/apple-touch-icon.C6XTi3Vw_1WrNIh.png" width="32" height="32" alt="SnipArc Logo"></a> **从这里迁移到 SnipArc**
+>
+> **2026.11.28** · 欢迎迁移到下一代截图与标注工具 **SnipArc**。我们会持续更新和维护 SnipArc，欢迎下载体验。
+>
+> **[下载 SnipArc](https://sniparc.mosuzo.com/)** · [探索 Mosuzo Studio 的更多作品](https://mosuzo.com/)
+
+---
+
+ SunnyCapturer
 
 <p align="right"><a href="README.zh_CN.md">简体中文</a> · <a href="README.md">English</a></p>
 

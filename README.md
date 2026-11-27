@@ -1,4 +1,13 @@
-# SunnyCapturer
+﻿> [!IMPORTANT]
+> <a href="https://sniparc.mosuzo.com/"><img src="https://sniparc.mosuzo.com/_astro/apple-touch-icon.C6XTi3Vw_1WrNIh.png" width="32" height="32" alt="SnipArc Logo"></a> **Move to SnipArc**
+>
+> **November 28, 2026** · Switch to **SnipArc**, our next-generation screenshot and annotation app. We’ll continue to maintain and improve it.
+>
+> **[Download SnipArc](https://sniparc.mosuzo.com/)** · [Explore more from Mosuzo Studio](https://mosuzo.com/)
+
+---
+
+ SunnyCapturer
 
 <p align="right"><a href="README.md">English</a> · <a href="README.zh_CN.md">简体中文</a></p>
 
