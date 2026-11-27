@@ -37,6 +37,31 @@ It shipped on Windows, macOS and Linux, reached the Microsoft Store and several 
 - Around 40K GitHub downloads
 - Latest release v5.3.0
 
+## Operating system compatibility
+
+| Platform | Versions recorded in the compatibility list | Architectures |
+| --- | --- | --- |
+| Windows | 7, 8, 8.1, 10, 11, and selected Windows Server editions from 2008 R2 to 2025 | x86-64 and ARM64, depending on the build |
+| macOS | 13 Ventura, 14 Sonoma, and 15 Sequoia | Intel; Apple Silicon support varies by release |
+| Linux | See the distribution list below | x86-64, AArch64, and LoongArch64, depending on the build |
+
+The [full compatibility list](./supported_os.md) covers releases across the project's history. Windows 7 support is limited to the 1.x–2.x releases. Check the [release assets](https://github.com/XMuli/SunnyCapturer/releases) for the architecture and package available for each version.
+
+### Linux distributions
+
+- **Version examples:** Debian 11 and 12, Ubuntu 20.04, 22.04 and 24.04 LTS, Deepin 20.7–20.9, 23 and 25, openKylin 1.0.2 and 2.0, and CentOS 7.
+- **Other entries in the compatibility list:** Arch Linux, BigLinux, CachyOS, Desktop Linux, Devuan, elementary OS, Fatdog64, Fedora, Gentoo, GXDE OS, Kali Linux, Kamuriki, KDE neon, Linux Mint, LMDE 6, Manjaro, NFSDesktop, Nobara, openEuler, openSUSE Leap, Parrot Security, Pop!_OS, Salix, Tongwandou, TUXEDO, UOS, Windows Ubuntu, and Zorin OS.
+
+### App stores and downloads
+
+| Platform | Documented distribution channels |
+| --- | --- |
+| Windows | [Microsoft Store — SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL) |
+| Linux | Deepin Store, UOS Store, and Spark Store. Search for **SunnyCapturer** or **Sunny** in the store client. |
+| Windows, macOS, and Linux | [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) |
+
+The compatibility page also lists openKylin Store, but a published listing could not be verified.
+
 ## Screenshots by operating system
 
 Select a screenshot to view it at full size. See [supported operating systems](./supported_os.md) for the full compatibility list.

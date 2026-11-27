@@ -37,6 +37,31 @@ SunnyCapturer 是系列里功能最完整的一代：保留截图、标注与贴
 - GitHub 下载约 4 万次
 - 最新版本 v5.3.0
 
+## 操作系统兼容性
+
+| 平台 | 兼容清单记录的版本 | 架构 |
+| --- | --- | --- |
+| Windows | 7、8、8.1、10、11，以及 Windows Server 2008 R2 至 2025 的部分版本 | x86-64 和 ARM64，具体以发行包为准 |
+| macOS | 13 Ventura、14 Sonoma、15 Sequoia | Intel，Apple Silicon 支持因版本而异 |
+| Linux | 见下方发行版列表 | x86-64、AArch64 和 LoongArch64，具体以发行包为准 |
+
+[完整兼容清单](./zh-cn/supported_os.md)涵盖项目历代版本。Windows 7 仅适用于 1.x–2.x 旧版。各版本可用的架构和安装包请查看 [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases)。
+
+### Linux 发行版
+
+- **有具体版本记录的示例：** Debian 11 和 12、Ubuntu 20.04／22.04／24.04 LTS、Deepin 20.7–20.9／23／25、openKylin 1.0.2 和 2.0、CentOS 7。
+- **清单中的其他发行版：** Arch Linux、BigLinux、CachyOS、Desktop Linux、Devuan、elementary OS、Fatdog64、Fedora、Gentoo、GXDE OS、Kali Linux、Kamuriki、KDE neon、Linux Mint、LMDE 6、Manjaro、NFSDesktop、Nobara、openEuler、openSUSE Leap、Parrot Security、Pop!_OS、Salix、铜豌豆（Tongwandou）、TUXEDO、统信 UOS、Windows Ubuntu、Zorin OS。
+
+### 应用商店与下载
+
+| 平台 | 有发布记录的渠道 |
+| --- | --- |
+| Windows | [微软应用商店 · SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL) |
+| Linux | 深度应用商店、统信应用商店、星火应用商店。可在商店客户端搜索 **SunnyCapturer** 或 **Sunny**。 |
+| Windows、macOS 和 Linux | [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) |
+
+兼容清单也列有 openKylin 应用商店，暂未查到可核实的上架记录。
+
 ## 各系统运行截图
 
 点击截图可查看原图。完整兼容清单见[支持的操作系统](./zh-cn/supported_os.md)。
