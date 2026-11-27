@@ -3,11 +3,13 @@
 >
 > **2026.11.28** · 欢迎迁移到下一代截图与标注工具 **SnipArc**。我们会持续更新和维护 SnipArc，欢迎下载体验。
 >
-> **[下载 SnipArc](https://sniparc.mosuzo.com/)** · [探索 Mosuzo Studio 的更多作品](https://mosuzo.com/) · [原项目官网](https://sunnycapturer.xmuli.tech/)
+> **[下载 SnipArc](https://sniparc.mosuzo.com/)** · [探索 Mosuzo Studio 的更多作品](https://mosuzo.com/)
 
 ---
 
- SunnyCapturer
+# SunnyCapturer
+
+[原项目官网](https://sunnycapturer.xmuli.tech/)
 
 <p align="right"><a href="README.zh_CN.md">简体中文</a> · <a href="README.md">English</a></p>
 
