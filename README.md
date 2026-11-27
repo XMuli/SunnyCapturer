@@ -9,58 +9,43 @@
 
 # SunnyCapturer
 
-[Original project website](https://sunnycapturer.xmuli.tech/)
+A screenshot tool for Windows, macOS, and Linux with annotation, image pinning, offline OCR, image translation, screen recording, and GIF export.
 
-<p align="right"><a href="README.md">English</a> · <a href="README.zh_CN.md">简体中文</a></p>
+**Archived** · **v5.3.0** · Qt / C++ · About 40,000 GitHub downloads
 
-<p><img alt="archived" src="https://img.shields.io/badge/status-archived-6b7280?logo=github&logoColor=white"> <img alt="v5.3.0" src="https://img.shields.io/badge/version-v5.3.0-7c5cff"> <img alt="OCR" src="https://img.shields.io/badge/OCR-offline-6f42c1"> <img alt="translation" src="https://img.shields.io/badge/translation-20%2B%20languages-0f766e"> <img alt="recording" src="https://img.shields.io/badge/recording-GIF-111827"> <img alt="Qt" src="https://img.shields.io/badge/Qt-41CD52?logo=qt&logoColor=white"> <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-00599C?logo=cplusplus&logoColor=white"> <img alt="Windows" src="https://img.shields.io/badge/Windows-0078D4?logo=windows&logoColor=white"> <img alt="macOS" src="https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white"> <img alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black"> <img alt="stars" src="https://img.shields.io/github/stars/XMuli/SunnyCapturer?style=flat&logo=github&label=stars"></p>
+[Original project website](https://sunnycapturer.xmuli.tech/) · [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) · [Project archive](https://screenshot-archive.xmuli.tech/sunnycapturer/) · [简体中文](README.zh_CN.md)
 
-> **Archived.** The 5.x generation: screenshot, annotation, pinning, OCR, translation, recording and GIF in one tool.
->
-> Latest release **v5.3.0** · Qt / C++ · Windows, macOS, Linux
+![SunnyCapturer interface](_media/images/readme-sunnycapturer.jpg)
 
-![SunnyCapturer screenshot](_media/images/readme-sunnycapturer.jpg)
+## App store history
 
-## Overview
+| Store | Platform and listing |
+| --- | --- |
+| <img src="./_media/images/readme-brands/store.svg" width="22" height="22" alt="Microsoft Store" title="Microsoft Store"> **Microsoft Store** | Windows · [SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL) |
+| <img src="./_media/images/readme-brands/deepin.svg" width="22" height="22" alt="Deepin" title="Deepin"> **Deepin Store** | Linux · Search for SunnyCapturer or Sunny in the store |
+| **UOS Store** | Linux · Search for SunnyCapturer or Sunny in the store |
+| **Spark Store** | Linux · Search for SunnyCapturer or Sunny in the store |
 
-SunnyCapturer is the most complete tool in the series. It keeps the screenshot, annotation and pinning workflow, adds offline OCR and image translation, and extends capture into screen recording and GIF export.
-
-It shipped on Windows, macOS and Linux, reached the Microsoft Store and several Linux app stores, and gathered roughly 40K GitHub downloads. v5.3.0 is the latest release; the project is now archived.
-
-## Highlights
-
-- Screenshot, annotation, pinning and image editing
-- Offline OCR and image translation
-- Screen recording and GIF export
-- Cross-platform: Windows, macOS and Linux
-- Listed in Microsoft Store, Deepin/UOS and Spark stores
-- Around 40K GitHub downloads
-- Latest release v5.3.0
+The compatibility list also mentions openKylin Store. A published listing could not be verified.
 
 ## Operating system compatibility
 
-| Platform | Versions recorded in the compatibility list | Architectures |
+| Platform | Versions in the compatibility list | Architectures |
 | --- | --- | --- |
-| Windows | 7, 8, 8.1, 10, 11, and selected Windows Server editions from 2008 R2 to 2025 | x86-64 and ARM64, depending on the build |
-| macOS | 13 Ventura, 14 Sonoma, and 15 Sequoia | Intel; Apple Silicon support varies by release |
-| Linux | See the distribution list below | x86-64, AArch64, and LoongArch64, depending on the build |
+| <img src="./_media/images/readme-brands/windows.svg" width="24" height="24" alt="Windows" title="Windows"> **Windows** | 7, 8, 8.1, 10, 11, and selected Windows Server editions from 2008 R2 to 2025 | x86-64 · ARM64 |
+| <img src="./_media/images/readme-brands/macos.svg" width="24" height="24" alt="macOS" title="macOS"> **macOS** | 13 Ventura · 14 Sonoma · 15 Sequoia | Intel · Apple Silicon (release-dependent) |
+| <img src="./_media/images/readme-brands/linux.svg" width="24" height="24" alt="Linux" title="Linux"> **Linux** | See the distributions below | x86-64 · AArch64 · LoongArch64 |
 
-The [full compatibility list](./supported_os.md) covers releases across the project's history. Windows 7 support is limited to the 1.x–2.x releases. Check the [release assets](https://github.com/XMuli/SunnyCapturer/releases) for the architecture and package available for each version.
+Windows 7 support is limited to releases 1.x–2.x. See the assets for each release for available platform and architecture combinations.
 
 ### Linux distributions
 
+<p><img src="./_media/images/readme-brands/ubuntu.svg" width="26" height="26" alt="Ubuntu" title="Ubuntu"> &nbsp; <img src="./_media/images/readme-brands/deepin.svg" width="26" height="26" alt="Deepin" title="Deepin"> &nbsp; <img src="./_media/images/readme-brands/debian.svg" width="26" height="26" alt="Debian" title="Debian"> &nbsp; <img src="./_media/images/readme-brands/archlinux.svg" width="26" height="26" alt="Arch Linux" title="Arch Linux"> &nbsp; <img src="./_media/images/readme-brands/fedora.svg" width="26" height="26" alt="Fedora" title="Fedora"> &nbsp; <img src="./_media/images/readme-brands/linuxmint.svg" width="26" height="26" alt="Linux Mint" title="Linux Mint"> &nbsp; <img src="./_media/images/readme-brands/manjaro.svg" width="26" height="26" alt="Manjaro" title="Manjaro"> &nbsp; <img src="./_media/images/readme-brands/opensuse.svg" width="26" height="26" alt="openSUSE" title="openSUSE"></p>
+
+<p><img src="./_media/images/readme-brands/kalilinux.svg" width="26" height="26" alt="Kali Linux" title="Kali Linux"> &nbsp; <img src="./_media/images/readme-brands/gentoo.svg" width="26" height="26" alt="Gentoo" title="Gentoo"> &nbsp; <img src="./_media/images/readme-brands/centos.svg" width="26" height="26" alt="CentOS" title="CentOS"> &nbsp; <img src="./_media/images/readme-brands/elementary.svg" width="26" height="26" alt="elementary OS" title="elementary OS"> &nbsp; <img src="./_media/images/readme-brands/popos.svg" width="26" height="26" alt="Pop!_OS" title="Pop!_OS"> &nbsp; <img src="./_media/images/readme-brands/parrotsecurity.svg" width="26" height="26" alt="Parrot Security" title="Parrot Security"> &nbsp; <img src="./_media/images/readme-brands/zorin.svg" width="26" height="26" alt="Zorin OS" title="Zorin OS"></p>
+
 - **Version examples:** Debian 11 and 12, Ubuntu 20.04, 22.04 and 24.04 LTS, Deepin 20.7–20.9, 23 and 25, openKylin 1.0.2 and 2.0, and CentOS 7.
 - **Other entries in the compatibility list:** Arch Linux, BigLinux, CachyOS, Desktop Linux, Devuan, elementary OS, Fatdog64, Fedora, Gentoo, GXDE OS, Kali Linux, Kamuriki, KDE neon, Linux Mint, LMDE 6, Manjaro, NFSDesktop, Nobara, openEuler, openSUSE Leap, Parrot Security, Pop!_OS, Salix, Tongwandou, TUXEDO, UOS, Windows Ubuntu, and Zorin OS.
-
-### App stores and downloads
-
-| Platform | Documented distribution channels |
-| --- | --- |
-| Windows | [Microsoft Store — SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL) |
-| Linux | Deepin Store, UOS Store, and Spark Store. Search for **SunnyCapturer** or **Sunny** in the store client. |
-| Windows, macOS, and Linux | [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) |
-
-The compatibility page also lists openKylin Store, but a published listing could not be verified.
 
 ## Screenshots by operating system
 

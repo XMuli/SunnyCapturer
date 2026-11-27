@@ -9,58 +9,43 @@
 
 # SunnyCapturer
 
-[原项目官网](https://sunnycapturer.xmuli.tech/)
+适用于 Windows、macOS 和 Linux 的截图工具，支持标注、贴图、离线 OCR、图片翻译、录屏和 GIF 导出。
 
-<p align="right"><a href="README.zh_CN.md">简体中文</a> · <a href="README.md">English</a></p>
+**已归档** · **v5.3.0** · Qt / C++ · GitHub 历史下载约 4 万次
 
-<p><img alt="archived" src="https://img.shields.io/badge/status-archived-6b7280?logo=github&logoColor=white"> <img alt="v5.3.0" src="https://img.shields.io/badge/version-v5.3.0-7c5cff"> <img alt="OCR" src="https://img.shields.io/badge/OCR-offline-6f42c1"> <img alt="translation" src="https://img.shields.io/badge/translation-20%2B%20languages-0f766e"> <img alt="recording" src="https://img.shields.io/badge/recording-GIF-111827"> <img alt="Qt" src="https://img.shields.io/badge/Qt-41CD52?logo=qt&logoColor=white"> <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-00599C?logo=cplusplus&logoColor=white"> <img alt="Windows" src="https://img.shields.io/badge/Windows-0078D4?logo=windows&logoColor=white"> <img alt="macOS" src="https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white"> <img alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black"> <img alt="stars" src="https://img.shields.io/github/stars/XMuli/SunnyCapturer?style=flat&logo=github&label=stars"></p>
-
-> **已归档。** 5.x 一代：把截图、标注、贴图、OCR、翻译、录屏与 GIF 收进同一个工具。
->
-> 最新版本 **v5.3.0** · Qt / C++ · Windows、macOS、Linux
+[原项目官网](https://sunnycapturer.xmuli.tech/) · [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) · [作品档案](https://screenshot-archive.xmuli.tech/sunnycapturer/) · [English](README.md)
 
 ![SunnyCapturer 界面](_media/images/readme-sunnycapturer.jpg)
 
-## 简介
+## 历史上架商店
 
-SunnyCapturer 是系列里功能最完整的一代：保留截图、标注与贴图流程，加入离线 OCR 与图片翻译，并把记录屏幕的方式扩展到录屏与 GIF。
+| 商店 | 平台与入口 |
+| --- | --- |
+| <img src="./_media/images/readme-brands/store.svg" width="22" height="22" alt="Microsoft Store" title="Microsoft Store"> **Microsoft Store** | Windows · [SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL) |
+| <img src="./_media/images/readme-brands/deepin.svg" width="22" height="22" alt="Deepin" title="Deepin"> **深度应用商店** | Linux · 商店内搜索 SunnyCapturer 或 Sunny |
+| **统信应用商店（UOS）** | Linux · 商店内搜索 SunnyCapturer 或 Sunny |
+| **星火应用商店（Spark Store）** | Linux · 商店内搜索 SunnyCapturer 或 Sunny |
 
-它覆盖 Windows、macOS 与 Linux，上架 Microsoft Store 与多个 Linux 应用商店，GitHub 下载约 4 万次。v5.3.0 为最新版本，项目现已归档。
-
-## 亮点
-
-- 截图、标注、贴图与图片编辑
-- 离线 OCR 与图片翻译
-- 录屏与 GIF 导出
-- 跨平台：Windows、macOS 与 Linux
-- 上架 Microsoft Store、深度/统信商店与星火商店
-- GitHub 下载约 4 万次
-- 最新版本 v5.3.0
+兼容清单也列有 openKylin 应用商店，暂未查到可核实的上架记录。
 
 ## 操作系统兼容性
 
 | 平台 | 兼容清单记录的版本 | 架构 |
 | --- | --- | --- |
-| Windows | 7、8、8.1、10、11，以及 Windows Server 2008 R2 至 2025 的部分版本 | x86-64 和 ARM64，具体以发行包为准 |
-| macOS | 13 Ventura、14 Sonoma、15 Sequoia | Intel，Apple Silicon 支持因版本而异 |
-| Linux | 见下方发行版列表 | x86-64、AArch64 和 LoongArch64，具体以发行包为准 |
+| <img src="./_media/images/readme-brands/windows.svg" width="24" height="24" alt="Windows" title="Windows"> **Windows** | 7、8、8.1、10、11，以及 Windows Server 2008 R2 至 2025 的部分版本 | x86-64 · ARM64 |
+| <img src="./_media/images/readme-brands/macos.svg" width="24" height="24" alt="macOS" title="macOS"> **macOS** | 13 Ventura · 14 Sonoma · 15 Sequoia | Intel · Apple Silicon（视版本） |
+| <img src="./_media/images/readme-brands/linux.svg" width="24" height="24" alt="Linux" title="Linux"> **Linux** | 见下方发行版列表 | x86-64 · AArch64 · LoongArch64 |
 
-[完整兼容清单](./zh-cn/supported_os.md)涵盖项目历代版本。Windows 7 仅适用于 1.x–2.x 旧版。各版本可用的架构和安装包请查看 [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases)。
+Windows 7 仅适用于 1.x–2.x 旧版。系统与架构的组合请以各版本发行包为准。
 
 ### Linux 发行版
 
-- **有具体版本记录的示例：** Debian 11 和 12、Ubuntu 20.04／22.04／24.04 LTS、Deepin 20.7–20.9／23／25、openKylin 1.0.2 和 2.0、CentOS 7。
+<p><img src="./_media/images/readme-brands/ubuntu.svg" width="26" height="26" alt="Ubuntu" title="Ubuntu"> &nbsp; <img src="./_media/images/readme-brands/deepin.svg" width="26" height="26" alt="Deepin" title="Deepin"> &nbsp; <img src="./_media/images/readme-brands/debian.svg" width="26" height="26" alt="Debian" title="Debian"> &nbsp; <img src="./_media/images/readme-brands/archlinux.svg" width="26" height="26" alt="Arch Linux" title="Arch Linux"> &nbsp; <img src="./_media/images/readme-brands/fedora.svg" width="26" height="26" alt="Fedora" title="Fedora"> &nbsp; <img src="./_media/images/readme-brands/linuxmint.svg" width="26" height="26" alt="Linux Mint" title="Linux Mint"> &nbsp; <img src="./_media/images/readme-brands/manjaro.svg" width="26" height="26" alt="Manjaro" title="Manjaro"> &nbsp; <img src="./_media/images/readme-brands/opensuse.svg" width="26" height="26" alt="openSUSE" title="openSUSE"></p>
+
+<p><img src="./_media/images/readme-brands/kalilinux.svg" width="26" height="26" alt="Kali Linux" title="Kali Linux"> &nbsp; <img src="./_media/images/readme-brands/gentoo.svg" width="26" height="26" alt="Gentoo" title="Gentoo"> &nbsp; <img src="./_media/images/readme-brands/centos.svg" width="26" height="26" alt="CentOS" title="CentOS"> &nbsp; <img src="./_media/images/readme-brands/elementary.svg" width="26" height="26" alt="elementary OS" title="elementary OS"> &nbsp; <img src="./_media/images/readme-brands/popos.svg" width="26" height="26" alt="Pop!_OS" title="Pop!_OS"> &nbsp; <img src="./_media/images/readme-brands/parrotsecurity.svg" width="26" height="26" alt="Parrot Security" title="Parrot Security"> &nbsp; <img src="./_media/images/readme-brands/zorin.svg" width="26" height="26" alt="Zorin OS" title="Zorin OS"></p>
+
+- **版本示例：** Debian 11 和 12、Ubuntu 20.04／22.04／24.04 LTS、Deepin 20.7–20.9／23／25、openKylin 1.0.2 和 2.0、CentOS 7。
 - **清单中的其他发行版：** Arch Linux、BigLinux、CachyOS、Desktop Linux、Devuan、elementary OS、Fatdog64、Fedora、Gentoo、GXDE OS、Kali Linux、Kamuriki、KDE neon、Linux Mint、LMDE 6、Manjaro、NFSDesktop、Nobara、openEuler、openSUSE Leap、Parrot Security、Pop!_OS、Salix、铜豌豆（Tongwandou）、TUXEDO、统信 UOS、Windows Ubuntu、Zorin OS。
-
-### 应用商店与下载
-
-| 平台 | 有发布记录的渠道 |
-| --- | --- |
-| Windows | [微软应用商店 · SunnyCapturer](https://apps.microsoft.com/detail/9N1TPFK4NCBL) |
-| Linux | 深度应用商店、统信应用商店、星火应用商店。可在商店客户端搜索 **SunnyCapturer** 或 **Sunny**。 |
-| Windows、macOS 和 Linux | [GitHub Releases](https://github.com/XMuli/SunnyCapturer/releases) |
-
-兼容清单也列有 openKylin 应用商店，暂未查到可核实的上架记录。
 
 ## 各系统运行截图
 
