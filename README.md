@@ -3,7 +3,7 @@
 >
 > **November 28, 2026** · Switch to **SnipArc**, our next-generation screenshot and annotation app. We’ll continue to maintain and improve it.
 >
-> **[Download SnipArc](https://sniparc.mosuzo.com/)** · [Explore more from Mosuzo Studio](https://mosuzo.com/)
+> **[Download SnipArc](https://sniparc.mosuzo.com/)** · [Explore more from Mosuzo Studio](https://mosuzo.com/) · [Original project website](https://sunnycapturer.xmuli.tech/)
 
 ---
 
