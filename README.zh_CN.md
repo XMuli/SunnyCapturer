@@ -37,6 +37,56 @@ SunnyCapturer 是系列里功能最完整的一代：保留截图、标注与贴
 - GitHub 下载约 4 万次
 - 最新版本 v5.3.0
 
+## 各系统运行截图
+
+点击截图可查看原图。完整兼容清单见[支持的操作系统](./zh-cn/supported_os.md)。
+
+### Windows 11
+
+<p><a href="./_media/images/run_exhibition/win11_01.jpg"><img src="./_media/images/run_exhibition/win11_01.jpg" alt="SunnyCapturer 在 Windows 11 上的运行截图 1" width="420"></a> <a href="./_media/images/run_exhibition/win11_02.jpg"><img src="./_media/images/run_exhibition/win11_02.jpg" alt="SunnyCapturer 在 Windows 11 上的运行截图 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/win11_03.jpg"><img src="./_media/images/run_exhibition/win11_03.jpg" alt="SunnyCapturer 在 Windows 11 上的运行截图 3" width="420"></a></p>
+
+### macOS 13
+
+<p><a href="./_media/images/run_exhibition/macOS13_01.jpg"><img src="./_media/images/run_exhibition/macOS13_01.jpg" alt="SunnyCapturer 在 macOS 13 上的运行截图 1" width="420"></a> <a href="./_media/images/run_exhibition/macOS13_02.jpg"><img src="./_media/images/run_exhibition/macOS13_02.jpg" alt="SunnyCapturer 在 macOS 13 上的运行截图 2" width="420"></a></p>
+
+### Debian 12
+
+<p><a href="./_media/images/run_exhibition/Debian12_01.jpg"><img src="./_media/images/run_exhibition/Debian12_01.jpg" alt="SunnyCapturer 在 Debian 12 上的运行截图 1" width="420"></a> <a href="./_media/images/run_exhibition/Debian12_02.jpg"><img src="./_media/images/run_exhibition/Debian12_02.jpg" alt="SunnyCapturer 在 Debian 12 上的运行截图 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Debian12_03.jpg"><img src="./_media/images/run_exhibition/Debian12_03.jpg" alt="SunnyCapturer 在 Debian 12 上的运行截图 3" width="420"></a></p>
+
+### Ubuntu 20.04
+
+<p><a href="./_media/images/run_exhibition/Ubuntu20.04_01.jpg"><img src="./_media/images/run_exhibition/Ubuntu20.04_01.jpg" alt="SunnyCapturer 在 Ubuntu 20.04 上的运行截图 1" width="420"></a> <a href="./_media/images/run_exhibition/Ubuntu20.04_02.jpg"><img src="./_media/images/run_exhibition/Ubuntu20.04_02.jpg" alt="SunnyCapturer 在 Ubuntu 20.04 上的运行截图 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Ubuntu20.04_03.jpg"><img src="./_media/images/run_exhibition/Ubuntu20.04_03.jpg" alt="SunnyCapturer 在 Ubuntu 20.04 上的运行截图 3" width="420"></a></p>
+
+### Ubuntu 24.04
+
+<p><a href="./_media/images/run_exhibition/Ubuntu24.04_01.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_01.jpg" alt="SunnyCapturer 在 Ubuntu 24.04 上的运行截图 1" width="420"></a> <a href="./_media/images/run_exhibition/Ubuntu24.04_02.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_02.jpg" alt="SunnyCapturer 在 Ubuntu 24.04 上的运行截图 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Ubuntu24.04_03.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_03.jpg" alt="SunnyCapturer 在 Ubuntu 24.04 上的运行截图 3" width="420"></a> <a href="./_media/images/run_exhibition/Ubuntu24.04_04.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_04.jpg" alt="SunnyCapturer 在 Ubuntu 24.04 上的运行截图 4" width="420"></a></p>
+
+### Deepin V23
+
+<p><a href="./_media/images/run_exhibition/Deepin23_01.jpg"><img src="./_media/images/run_exhibition/Deepin23_01.jpg" alt="SunnyCapturer 在 Deepin V23 上的运行截图 1" width="420"></a> <a href="./_media/images/run_exhibition/Deepin23_02.jpg"><img src="./_media/images/run_exhibition/Deepin23_02.jpg" alt="SunnyCapturer 在 Deepin V23 上的运行截图 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Deepin23_03.jpg"><img src="./_media/images/run_exhibition/Deepin23_03.jpg" alt="SunnyCapturer 在 Deepin V23 上的运行截图 3" width="420"></a></p>
+
+### openKylin 2.0
+
+<p><a href="./_media/images/run_exhibition/OpenKylin2.0_01.jpg"><img src="./_media/images/run_exhibition/OpenKylin2.0_01.jpg" alt="SunnyCapturer 在 openKylin 2.0 上的运行截图 1" width="420"></a></p>
+
+### Deepin V23 · ARM64
+
+<p><a href="./_media/images/run_exhibition/ARM64_Deepin_V23.jpg"><img src="./_media/images/run_exhibition/ARM64_Deepin_V23.jpg" alt="SunnyCapturer 在 Deepin V23 · ARM64 上的运行截图 1" width="420"></a></p>
+
+### Deepin V23 · Loongson
+
+<p><a href="./_media/images/run_exhibition/Loongson_Deepin_V23.jpg"><img src="./_media/images/run_exhibition/Loongson_Deepin_V23.jpg" alt="SunnyCapturer 在 Deepin V23 · Loongson 上的运行截图 1" width="420"></a></p>
+
 ## 状态
 
 SunnyCapturer 已归档，不再进行功能更新。Windows 上的后续开发请使用 **SnipArc**。

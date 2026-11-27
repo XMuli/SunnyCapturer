@@ -37,6 +37,56 @@ It shipped on Windows, macOS and Linux, reached the Microsoft Store and several 
 - Around 40K GitHub downloads
 - Latest release v5.3.0
 
+## Screenshots by operating system
+
+Select a screenshot to view it at full size. See [supported operating systems](./supported_os.md) for the full compatibility list.
+
+### Windows 11
+
+<p><a href="./_media/images/run_exhibition/win11_01.jpg"><img src="./_media/images/run_exhibition/win11_01.jpg" alt="SunnyCapturer on Windows 11, screenshot 1" width="420"></a> <a href="./_media/images/run_exhibition/win11_02.jpg"><img src="./_media/images/run_exhibition/win11_02.jpg" alt="SunnyCapturer on Windows 11, screenshot 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/win11_03.jpg"><img src="./_media/images/run_exhibition/win11_03.jpg" alt="SunnyCapturer on Windows 11, screenshot 3" width="420"></a></p>
+
+### macOS 13
+
+<p><a href="./_media/images/run_exhibition/macOS13_01.jpg"><img src="./_media/images/run_exhibition/macOS13_01.jpg" alt="SunnyCapturer on macOS 13, screenshot 1" width="420"></a> <a href="./_media/images/run_exhibition/macOS13_02.jpg"><img src="./_media/images/run_exhibition/macOS13_02.jpg" alt="SunnyCapturer on macOS 13, screenshot 2" width="420"></a></p>
+
+### Debian 12
+
+<p><a href="./_media/images/run_exhibition/Debian12_01.jpg"><img src="./_media/images/run_exhibition/Debian12_01.jpg" alt="SunnyCapturer on Debian 12, screenshot 1" width="420"></a> <a href="./_media/images/run_exhibition/Debian12_02.jpg"><img src="./_media/images/run_exhibition/Debian12_02.jpg" alt="SunnyCapturer on Debian 12, screenshot 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Debian12_03.jpg"><img src="./_media/images/run_exhibition/Debian12_03.jpg" alt="SunnyCapturer on Debian 12, screenshot 3" width="420"></a></p>
+
+### Ubuntu 20.04
+
+<p><a href="./_media/images/run_exhibition/Ubuntu20.04_01.jpg"><img src="./_media/images/run_exhibition/Ubuntu20.04_01.jpg" alt="SunnyCapturer on Ubuntu 20.04, screenshot 1" width="420"></a> <a href="./_media/images/run_exhibition/Ubuntu20.04_02.jpg"><img src="./_media/images/run_exhibition/Ubuntu20.04_02.jpg" alt="SunnyCapturer on Ubuntu 20.04, screenshot 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Ubuntu20.04_03.jpg"><img src="./_media/images/run_exhibition/Ubuntu20.04_03.jpg" alt="SunnyCapturer on Ubuntu 20.04, screenshot 3" width="420"></a></p>
+
+### Ubuntu 24.04
+
+<p><a href="./_media/images/run_exhibition/Ubuntu24.04_01.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_01.jpg" alt="SunnyCapturer on Ubuntu 24.04, screenshot 1" width="420"></a> <a href="./_media/images/run_exhibition/Ubuntu24.04_02.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_02.jpg" alt="SunnyCapturer on Ubuntu 24.04, screenshot 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Ubuntu24.04_03.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_03.jpg" alt="SunnyCapturer on Ubuntu 24.04, screenshot 3" width="420"></a> <a href="./_media/images/run_exhibition/Ubuntu24.04_04.jpg"><img src="./_media/images/run_exhibition/Ubuntu24.04_04.jpg" alt="SunnyCapturer on Ubuntu 24.04, screenshot 4" width="420"></a></p>
+
+### Deepin V23
+
+<p><a href="./_media/images/run_exhibition/Deepin23_01.jpg"><img src="./_media/images/run_exhibition/Deepin23_01.jpg" alt="SunnyCapturer on Deepin V23, screenshot 1" width="420"></a> <a href="./_media/images/run_exhibition/Deepin23_02.jpg"><img src="./_media/images/run_exhibition/Deepin23_02.jpg" alt="SunnyCapturer on Deepin V23, screenshot 2" width="420"></a></p>
+
+<p><a href="./_media/images/run_exhibition/Deepin23_03.jpg"><img src="./_media/images/run_exhibition/Deepin23_03.jpg" alt="SunnyCapturer on Deepin V23, screenshot 3" width="420"></a></p>
+
+### openKylin 2.0
+
+<p><a href="./_media/images/run_exhibition/OpenKylin2.0_01.jpg"><img src="./_media/images/run_exhibition/OpenKylin2.0_01.jpg" alt="SunnyCapturer on openKylin 2.0, screenshot 1" width="420"></a></p>
+
+### Deepin V23 · ARM64
+
+<p><a href="./_media/images/run_exhibition/ARM64_Deepin_V23.jpg"><img src="./_media/images/run_exhibition/ARM64_Deepin_V23.jpg" alt="SunnyCapturer on Deepin V23 · ARM64, screenshot 1" width="420"></a></p>
+
+### Deepin V23 · Loongson
+
+<p><a href="./_media/images/run_exhibition/Loongson_Deepin_V23.jpg"><img src="./_media/images/run_exhibition/Loongson_Deepin_V23.jpg" alt="SunnyCapturer on Deepin V23 · Loongson, screenshot 1" width="420"></a></p>
+
 ## Status
 
 SunnyCapturer is archived and no longer receives feature updates. Use **SnipArc** for ongoing development on Windows.
